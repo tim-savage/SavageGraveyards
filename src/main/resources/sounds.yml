@@ -1,0 +1,29 @@
+# Sound configuration file for ${project.name} v${project.version}
+
+COMMAND_FAIL:
+  enabled: true
+  player-only: true
+  sound: ENTITY_VILLAGER_NO
+  volume: 1
+  pitch: 1
+
+COMMAND_SUCCESS_DELETE:
+  enabled: true
+  player-only: true
+  sound: ENTITY_IRON_GOLEM_HURT
+  volume: 1
+  pitch: 1
+
+COMMAND_SUCCESS_SET:
+  enabled: true
+  player-only: true
+  sound: ENTITY_PLAYER_LEVELUP
+  volume: 1
+  pitch: 1.5
+
+ACTION_DISCOVERY:
+  enabled: true
+  player-only: true
+  sound: ENTITY_PLAYER_LEVELUP
+  volume: 1
+  pitch: 1.5

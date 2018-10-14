@@ -1,0 +1,43 @@
+# Configuration file for ${project.name} v${project.version}
+
+# localized language support
+language: en-US
+
+# Note: If no worlds are listed in enabled-worlds, then all worlds are enabled
+# enabled worlds list (use this list for a default-deny world policy)
+
+enabled-worlds:
+#  - enabled_world1
+#  - enabled_world2
+
+# disabled worlds list (use this list for a default-allow world policy)
+
+disabled-worlds:
+#  - disabled_world1
+#  - disabled_world2
+
+# default enabled setting for new graveyards
+default-enabled: true
+
+# default hidden setting for new graveyards
+default-hidden: true
+
+# default player respawn safety time (in seconds)
+safety-time: 15
+
+# default distance from graveyard for discovery
+discovery-range: 50
+
+# interval to check for discovery (in ticks)
+discovery-interval: 40
+
+# number of DeathSpawns shown per page in list command
+list-page-size: 5
+
+# respawn listener priority ( LOWEST | LOW | NORMAL | HIGH | HIGHEST )
+# NOTE: priority LOWEST happens before all others, HIGHEST happens after all others
+# this should only be changed if you are experiencing a conflict with another plugin
+respawn-priority: NORMAL
+
+# play sound effects
+sound-effects: true

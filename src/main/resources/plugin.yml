@@ -1,0 +1,163 @@
+name: ${project.name}
+main: com.winterhaven_mc.savagegraveyards.PluginMain
+author: ${project.author}
+version: ${project.version}
+softdepend: [Multiverse-Core]
+api-version: 1.13
+
+commands:
+  graveyard:
+    description: This is the Graveyard command.
+    aliases: gy
+    usage: /graveyard [command]
+
+permissions:
+  graveyard.respawn:
+    description: Allow player to respawn after death at nearest graveyard location.
+    default: true
+        
+  graveyard.closest:
+    description: View the closest graveyard to player's current location.
+    default: op
+    
+  graveyard.create:
+    description: Create a new graveyard at current location.
+    default: op
+
+  graveyard.delete:
+    description: Allows deleting a graveyard location.
+    default: op
+
+  graveyard.discover:
+    description: Allow player to discover hidden graveyards.
+    default: true
+        
+  graveyard.help:
+    description: Display help for graveyard commands.
+    default: true
+
+  graveyard.list:
+    description: Allow use of the list command to show graveyard names.
+    default: true
+
+  graveyard.list.disabled:
+    description: Allow disabled graveyards to be displayed by the list command.
+    default: op
+
+  graveyard.list.hidden:
+    description: Allow hidden graveyards to be displayed by the list command.
+    default: op
+
+  graveyard.reload:
+    description: Allows reloading the config file.
+    default: op
+
+  graveyard.set:
+    description: Allows use of the set command.
+    default: op
+
+  graveyard.set.enabled:
+    description: Allows setting a graveyard enabled status.
+    default: op
+    children:
+      graveyard.set: true
+
+  graveyard.set.group:
+    description: Allows setting graveyard group.
+    default: op
+    children:
+      graveyard.set: true
+
+  graveyard.set.hidden:
+    description: Allows setting a graveyard hidden status.
+    default: op
+    children:
+      graveyard.set: true
+
+  graveyard.set.location:
+    description: Allows setting a graveyard location.
+    default: op
+    children:
+      graveyard.set: true
+
+  graveyard.set.displayname:
+    description: Allows setting a graveyard name.
+    default: op
+    children:
+      graveyard.set: true
+
+  graveyard.set.discoveryrange:
+    description: Allows setting a graveyard range.
+    default: op
+    children:
+      graveyard.set: true
+
+  graveyard.set.discoverymessage:
+    description: Allows setting graveyard discovery message.
+    default: op
+    children:
+      graveyard.set: true
+
+  graveyard.set.respawnmessage:
+    description: Allows setting graveyard respawn message.
+    default: op
+    children:
+      graveyard.set: true
+
+  graveyard.set.safetytime:
+    description: Allows setting graveyard safety time.
+    default: op
+    children:
+      graveyard.set: true
+
+  graveyard.show:
+    description: Display named graveyard attributes.
+    default: op
+
+  graveyard.status:
+    description: Allows display of config settings.
+    default: op
+
+  graveyard.teleport:
+    description: Allows player to teleport to a graveyard location.
+    default: op
+
+  graveyard.set.*:
+    description: Allows setting all attributes.
+    default: op
+    children:
+      graveyard.set: true
+      graveyard.set.name: true
+      graveyard.set.location: true
+      graveyard.set.range: true
+      graveyard.set.enabled: true
+      graveyard.set.group: true
+      graveyard.set.hidden: true
+      graveyard.set.discoverymessage: true
+      graveyard.set.respawnmessage: true
+      graveyard.set.safetytime: true
+
+  graveyard.admin:
+    description: Allows all admin commands
+    default: op
+    children:
+      graveyard.closest: true
+      graveyard.create: true
+      graveyard.delete: true
+      graveyard.list.disabled: true
+      graveyard.list.hidden: true
+      graveyard.reload: true
+      graveyard.set: true
+      graveyard.set.enabled: true
+      graveyard.set.group: true
+      graveyard.set.hidden: true
+      graveyard.set.location: true
+      graveyard.set.name: true
+      graveyard.set.discoveryrange: true
+      graveyard.set.discoverymessage: true
+      graveyard.set.respawnmessage: true
+      graveyard.set.safetytime: true
+      graveyard.show: true
+      graveyard.status: true
+      graveyard.teleport: true
+      

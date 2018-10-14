@@ -1,0 +1,182 @@
+# Custom Messages
+#
+# Variable substitutions:
+# %playername%          Player's name
+# %playernickname%      Player's nickname
+# %worldname%           World name that player is in
+# %displayname%			display name of graveyard
+#
+# %PLAYERNAME%          Player's name, with no color codes
+# %PLAYERNICKNAME%      Player's nickname, with no color codes
+# %WORLDNAME%           World name that player is in, with no color codes
+# %DISPLAYNAME%			display name of graveyard, with no color codes
+
+
+# repeat-delay is the number of seconds to wait before
+# displaying a message again (only used on appropriate messages)
+
+messages:
+  COMMAND_FAIL_ARGS_COUNT_UNDER:
+    enabled: true
+    string: '&3[Graveyards]&c Too few arguments!'
+  COMMAND_FAIL_ARGS_COUNT_OVER:
+    enabled: true
+    string: '&3[Graveyards]&c Too many arguments!'
+  COMMAND_FAIL_CONSOLE:
+    enabled: true
+    string: '&3[Graveyards]&c You must be in game to use this command!'
+  COMMAND_FAIL_CREATE_ARGS_COUNT_OVER:
+    enabled: true
+    string: '&3[Graveyards]&c Use underscores in place of spaces for graveyard names.'
+  COMMAND_FAIL_CREATE_EXISTS:
+    enabled: true
+    string: '&3[Graveyards]&c A graveyard with that name already exists!'
+  COMMAND_FAIL_CLOSEST_NO_MATCH:
+    enabled: true
+    string: '&3[Graveyards]&c A valid graveyard could not be found in your current world!'
+  COMMAND_FAIL_INVALID_ATTRIBUTE:
+    enabled: true
+    string: '&3[Graveyards]&c That is not a valid graveyard attribute!'
+  COMMAND_FAIL_SET_INVALID_BOOLEAN:
+    enabled: true
+    string: '&3[Graveyards]&c Value must be true or false!'
+  COMMAND_FAIL_INVALID_COMMAND:
+    enabled: true
+    string: '&3[Graveyards]&c That is not a valid command!'
+  COMMAND_FAIL_SET_INVALID_INTEGER:
+    enabled: true
+    string: '&3[Graveyards]&c Value must be an integer!'
+  COMMAND_FAIL_NO_RECORD:
+    enabled: true
+    string: '&3[Graveyards]&c That is not an existing graveyard!'
+
+  COMMAND_SUCCESS_CLOSEST:
+    enabled: true
+    string: '&3[Graveyards]&b %displayname% is the closest graveyard to your current location.'
+  COMMAND_SUCCESS_CREATE:
+    enabled: true
+    string: '&3[Graveyards]&b %displayname% created!'
+  COMMAND_SUCCESS_DELETE:
+    enabled: true
+    string: '&3[Graveyards]&b %displayname% removed!'
+  COMMAND_SUCCESS_RELOAD:
+    enabled: true
+    string: '&3[Graveyards]&b configuration reloaded.'
+  COMMAND_SUCCESS_SET:
+    enabled: true
+    string: '&3[Graveyards]&b Set %attribute%: &2%value%&b for &2%displayname%&b.'
+  COMMAND_SUCCESS_SET_DISCOVERYMESSAGE:
+    enabled: true
+    string: '&3[Graveyards]&b Set custom discovery message for &2%displayname%&b.'
+  COMMAND_SUCCESS_SET_DISCOVERYRANGE:
+    enabled: true
+    string: '&3[Graveyards]&b Set discovery range: &2%value%&b for &2%displayname%&b.'
+  COMMAND_SUCCESS_SET_NAME:
+    enabled: true
+    string: '&3[Graveyards]&b Renamed &2%displayname%&b to &2%value%&b.'
+  COMMAND_SUCCESS_SET_ENABLED:
+    enabled: true
+    string: '&3[Graveyards]&b Set enabled: &2%value%&b for &2%displayname%&b.'
+  COMMAND_SUCCESS_SET_GROUP:
+    enabled: true
+    string: '&3[Graveyards]&b Set group: &2%value%&b for &2%displayname%&b.'
+  COMMAND_SUCCESS_SET_HIDDEN:
+    enabled: true
+    string: '&3[Graveyards]&b Set hidden: &2%value%&b for &2%displayname%&b.'
+  COMMAND_SUCCESS_SET_LOCATION:
+    enabled: true
+    string: '&3[Graveyards]&b Location for &2%displayname%&b set to your current position.'
+  COMMAND_SUCCESS_SET_RESPAWNMESSAGE:
+    enabled: true
+    string: '&3[Graveyards]&b Set custom respawn message for &2%displayname%&b.'
+  COMMAND_SUCCESS_SET_SAFETYTIME:
+    enabled: true
+    string: '&3[Graveyards]&b Set safety time: &2%value%&b for &2%displayname%&b.'
+
+  DEFAULT_DISCOVERY:
+    enabled: true
+    string: '&3You have discovered %displayname%!'
+  DEFAULT_RESPAWN:
+    enabled: true
+    string: '&3You''ve been resurrected at %displayname%!'
+
+  SAFETY_COOLDOWN_START:
+    enabled: true
+    string: '&3You are protected from monsters for %DURATION% seconds.'
+  SAFETY_COOLDOWN_END:
+    enabled: true
+    string: '&3You are no longer protected from monsters!'
+
+  PERMISSION_DENIED_CLOSEST:
+    enabled: true
+    string: '&cYou do not have permission to view the closest graveyard location!'
+  PERMISSION_DENIED_CREATE:
+    enabled: true
+    string: '&cYou do not have permission to create graveyard locations!'
+  PERMISSION_DENIED_DELETE:
+    enabled: true
+    string: '&cYou do not have permission to delete graveyards!'
+  PERMISSION_DENIED_HELP:
+    enabled: true
+    string: '&cYou do not have permission to view Graveyard help!'
+  PERMISSION_DENIED_LIST:
+    enabled: true
+    string: '&cYou do not have permission to list graveyards!'
+  PERMISSION_DENIED_OVERWRITE:
+    enabled: true
+    string: '&cYou do not have permission to overwrite graveyard locations!'
+  PERMISSION_DENIED_RELOAD:
+    enabled: true
+    string: '&cYou do not have permission to reload the configuration!'
+  PERMISSION_DENIED_SET_LOCATION:
+    enabled: true
+    string: '&cYou do not have permission to set graveyard locations!'
+  PERMISSION_DENIED_SET_NAME:
+    enabled: true
+    string: '&cYou do not have permission to set graveyard display names!'
+  PERMISSION_DENIED_SET_ENABLED:
+    enabled: true
+    string: '&cYou do not have permission to set graveyard enabled status!'
+  PERMISSION_DENIED_SET_GROUP:
+    enabled: true
+    string: '&cYou do not have permission to set graveyard groups!'
+  PERMISSION_DENIED_SET_HIDDEN:
+    enabled: true
+    string: '&cYou do not have permission to set graveyard hidden status!'
+  PERMISSION_DENIED_SET_DISCOVERYRANGE:
+    enabled: true
+    string: '&cYou do not have permission to set graveyard discovery range!'
+  PERMISSION_DENIED_SET_DISCOVERYMESSAGE:
+    enabled: true
+    string: '&cYou do not have permission to set graveyard discovery message!'
+  PERMISSION_DENIED_SET_RESPAWNMESSAGE:
+    enabled: true
+    string: '&cYou do not have permission to set graveyard respawn message!'
+  PERMISSION_DENIED_SET_SAFETYTIME:
+    enabled: true
+    string: '&cYou do not have permission to set graveyard safety cooldown time!'
+  PERMISSION_DENIED_STATUS:
+    enabled: true
+    string: '&cYou do not have permission to view graveyard settings!'
+  PERMISSION_DENIED_TELEPORT:
+    enabled: true
+    string: '&cYou do not have permission to teleport to graveyard locations!'
+
+  LIST_HEADER:
+    enabled: true
+    string: '&3Page &b%page%&3 of &b%pagecount%'
+  LIST_FOOTER:
+    enabled: false
+    string: '&3Page &b%page%&3 of &b%pagecount%'
+  LIST_ITEM:
+    enabled: true
+    string: '&a%DISPLAYNAME%'
+  LIST_ITEM_DISABLED:
+    enabled: true
+    string: '&8%DISPLAYNAME% &r[ DISABLED ]'
+  LIST_ITEM_UNDISCOVERED:
+    enabled: true
+    string: '&c%DISPLAYNAME% &r[ UNDISCOVERED ]'
+  LIST_EMPTY:
+    enabled: true
+    string: '&bThere are no graveyards to list!'
