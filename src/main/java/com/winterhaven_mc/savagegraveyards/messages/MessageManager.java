@@ -1,8 +1,7 @@
-package com.winterhaven_mc.savagegraveyards.util;
+package com.winterhaven_mc.savagegraveyards.messages;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
 import com.winterhaven_mc.util.LanguageManager;
-import com.winterhaven_mc.util.SoundManager;
 import com.winterhaven_mc.util.StringUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -32,9 +31,6 @@ public class MessageManager {
 	// language manager
 	private LanguageManager languageManager;
 
-	// sound manager
-	private SoundManager soundManager;
-
 	// custom configuration for messages
 	private YamlConfiguration messages;
 
@@ -54,9 +50,6 @@ public class MessageManager {
 
 		// instantiate language manager
 		this.languageManager = new LanguageManager(plugin);
-
-		// instantiate sound manager
-		this.soundManager = new SoundManager(plugin);
 
 		// load messages from file
 		this.messages = languageManager.loadMessages();
@@ -295,25 +288,12 @@ public class MessageManager {
 
 
 	/**
-	 * Play sound
-	 * @param sender command sender (player) to play sound
-	 * @param soundId unique identifier that refers to sound in sounds.yml
-	 */
-	public final void sendPlayerSound(final CommandSender sender, final SoundId soundId) {
-		this.soundManager.playerSound(sender,soundId.toString());
-	}
-
-
-	/**
 	 * Reload messages and sounds config files
 	 */
 	public void reload() {
 
 		// reload messages
 		this.messages = languageManager.loadMessages();
-
-		// reload sounds
-		this.soundManager.reload();
 	}
 
 }

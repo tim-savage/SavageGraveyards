@@ -5,9 +5,11 @@ import com.winterhaven_mc.savagegraveyards.listeners.PlayerEventListener;
 import com.winterhaven_mc.savagegraveyards.storage.DataStore;
 import com.winterhaven_mc.savagegraveyards.storage.DataStoreFactory;
 import com.winterhaven_mc.savagegraveyards.tasks.DiscoveryTask;
-import com.winterhaven_mc.savagegraveyards.util.MessageManager;
+import com.winterhaven_mc.savagegraveyards.messages.MessageManager;
 import com.winterhaven_mc.savagegraveyards.util.SafetyManager;
+import com.winterhaven_mc.util.SoundConfiguration;
 import com.winterhaven_mc.util.WorldManager;
+import com.winterhaven_mc.util.YamlSoundConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -30,7 +32,7 @@ public final class PluginMain extends JavaPlugin {
 	public DataStore dataStore;
 	public WorldManager worldManager;
 	public MessageManager messageManager;
-//	public SoundManager soundManager;
+	public SoundConfiguration soundConfig;
 	public SafetyManager safetyManager;
 	private BukkitTask discoveryTask;
 	
@@ -53,8 +55,8 @@ public final class PluginMain extends JavaPlugin {
 		// instantiate message manager
 		messageManager = new MessageManager(this);
 
-		// instantiate sound manager
-//		soundManager = new SoundManager(this);
+		// instantiate sound configuration
+		soundConfig = new YamlSoundConfiguration(this);
 
 		// instantiate safety manager
 		safetyManager = new SafetyManager(this);

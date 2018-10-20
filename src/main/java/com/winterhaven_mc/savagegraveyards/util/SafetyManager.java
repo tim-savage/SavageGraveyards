@@ -1,6 +1,7 @@
 package com.winterhaven_mc.savagegraveyards.util;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
+import com.winterhaven_mc.savagegraveyards.messages.MessageId;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -82,7 +83,7 @@ public class SafetyManager {
 	 * @param player the player for whom to retrieve duration from the safety cooldown map
 	 * @return the duration of the player's safety cooldown, or zero if they player is not in the safety cooldown map
 	 */
-	int getDuration(final Player player) {
+	public int getDuration(final Player player) {
 		
 		int duration = 0;
 		if (isPlayerProtected(player)) {

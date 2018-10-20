@@ -2,7 +2,7 @@ package com.winterhaven_mc.savagegraveyards.listeners;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
 import com.winterhaven_mc.savagegraveyards.storage.Graveyard;
-import com.winterhaven_mc.savagegraveyards.util.MessageId;
+import com.winterhaven_mc.savagegraveyards.messages.MessageId;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

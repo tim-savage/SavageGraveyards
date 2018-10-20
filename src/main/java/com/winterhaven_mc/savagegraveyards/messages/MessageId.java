@@ -1,4 +1,4 @@
-package com.winterhaven_mc.savagegraveyards.util;
+package com.winterhaven_mc.savagegraveyards.messages;
 
 public enum MessageId {
 

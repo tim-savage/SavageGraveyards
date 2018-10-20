@@ -2,8 +2,8 @@ package com.winterhaven_mc.savagegraveyards.tasks;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
 import com.winterhaven_mc.savagegraveyards.storage.Graveyard;
-import com.winterhaven_mc.savagegraveyards.util.MessageId;
-import com.winterhaven_mc.savagegraveyards.util.SoundId;
+import com.winterhaven_mc.savagegraveyards.messages.MessageId;
+import com.winterhaven_mc.savagegraveyards.sounds.SoundId;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -69,7 +69,7 @@ public class DiscoveryTask extends BukkitRunnable {
 							}
 							
 							// play discovery sound
-							plugin.messageManager.sendPlayerSound(player, SoundId.ACTION_DISCOVERY);
+							plugin.soundConfig.playSound(player, SoundId.ACTION_DISCOVERY);
 						}
 					}
 				}
