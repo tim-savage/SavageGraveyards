@@ -90,7 +90,7 @@
 									<include>com.winterhaven-mc:string-util-lib</include>
 									<include>com.winterhaven-mc:world-manager-lib</include>
 									<include>com.winterhaven-mc:language-manager-lib</include>
-									<include>com.winterhaven-mc:sound-manager-lib</include>
+									<include>com.winterhaven-mc:sound-config-lib</include>
 								</includes>
 							</artifactSet>
 						</configuration>
