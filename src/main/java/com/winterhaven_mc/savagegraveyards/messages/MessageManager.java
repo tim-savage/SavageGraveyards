@@ -1,9 +1,10 @@
 package com.winterhaven_mc.savagegraveyards.messages;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
-import com.winterhaven_mc.util.LanguageManager;
 import com.winterhaven_mc.util.StringUtil;
+import com.winterhaven_mc.util.LanguageManager;
 import com.winterhaven_mc.util.YamlLanguageManager;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.Configuration;
