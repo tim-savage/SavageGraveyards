@@ -3,9 +3,10 @@ package com.winterhaven_mc.savagegraveyards.messages;
 import com.winterhaven_mc.savagegraveyards.PluginMain;
 import com.winterhaven_mc.util.LanguageManager;
 import com.winterhaven_mc.util.StringUtil;
+import com.winterhaven_mc.util.YamlLanguageManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 
 import java.util.EnumMap;
@@ -32,7 +33,7 @@ public class MessageManager {
 	private LanguageManager languageManager;
 
 	// custom configuration for messages
-	private YamlConfiguration messages;
+	private Configuration messages;
 
 
 	/**
@@ -49,7 +50,7 @@ public class MessageManager {
 		this.messageCooldownMap = new ConcurrentHashMap<>();
 
 		// instantiate language manager
-		this.languageManager = new LanguageManager(plugin);
+		this.languageManager = new YamlLanguageManager(plugin);
 
 		// load messages from file
 		this.messages = languageManager.loadMessages();
