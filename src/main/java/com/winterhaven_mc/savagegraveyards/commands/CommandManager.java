@@ -401,7 +401,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		
 		// check player permission
 		if (!player.hasPermission("graveyard.set.location")) {
-			plugin.messageManager.sendMessage(player, MessageId.PERMISSION_DENIED_SET_LOCATION,graveyard.getDisplayName());
+			plugin.messageManager.sendMessage(player, MessageId.PERMISSION_DENIED_SET_LOCATION);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -410,7 +410,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		
 		plugin.dataStore.updateGraveyard(graveyard);
 		
-		plugin.messageManager.sendMessage(player, MessageId.COMMAND_SUCCESS_SET_LOCATION,graveyard.getDisplayName());
+		plugin.messageManager.sendMessage(player, MessageId.COMMAND_SUCCESS_SET_LOCATION, graveyard);
 		plugin.soundConfig.playSound(player,SoundId.COMMAND_SUCCESS_SET);
 		return true;	
 	}
@@ -420,7 +420,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.name")) {
-			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SET_NAME,graveyard.getDisplayName());
+			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SET_NAME);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -435,8 +435,12 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		plugin.dataStore.updateGraveyard(graveyard);
 		
 		// send success message
-		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_SET_NAME,
-				originalName,newName.replace('_', ' '));
+		plugin.messageManager.sendMessage(sender,
+				MessageId.COMMAND_SUCCESS_SET_NAME,
+				graveyard,
+				originalName);
+
+		// play sound
 		plugin.soundConfig.playSound(sender,SoundId.COMMAND_SUCCESS_SET);
 		return true;
 	}
@@ -446,7 +450,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.enabled")) {
-			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SET_ENABLED,graveyard.getDisplayName());
+			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SET_ENABLED);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -478,8 +482,11 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		
 		// update record in data store
 		plugin.dataStore.updateGraveyard(graveyard);
-		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_SET_ENABLED,
-				graveyard.getDisplayName(),value);
+
+		// send success message
+		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_SET_ENABLED, graveyard,	value);
+
+		// play success sound
 		plugin.soundConfig.playSound(sender,SoundId.COMMAND_SUCCESS_SET);
 		return true;
 	}
@@ -489,7 +496,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.hidden")) {
-			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SET_HIDDEN,graveyard.getDisplayName());
+			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SET_HIDDEN);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -521,8 +528,11 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		
 		// update record in data store
 		plugin.dataStore.updateGraveyard(graveyard);
-		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_SET_HIDDEN,
-				graveyard.getDisplayName(),value);
+
+		// send success message
+		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_SET_HIDDEN, graveyard, value);
+
+		// play success sound
 		plugin.soundConfig.playSound(sender,SoundId.COMMAND_SUCCESS_SET);
 		return true;
 	}
@@ -532,7 +542,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.discoveryrange")) {
-			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SET_DISCOVERYRANGE,graveyard.getDisplayName());
+			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SET_DISCOVERYRANGE);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -567,8 +577,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		if (discoveryRange > 0) {
 			graveyard.setDiscoveryRange(discoveryRange);
 			plugin.dataStore.updateGraveyard(graveyard);
-			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_SET_DISCOVERYRANGE,
-					graveyard.getDisplayName(),String.valueOf(discoveryRange));
+			plugin.messageManager.sendMessage(sender,
+					MessageId.COMMAND_SUCCESS_SET_DISCOVERYRANGE,
+					graveyard,
+					String.valueOf(discoveryRange));
 			plugin.soundConfig.playSound(sender,SoundId.COMMAND_SUCCESS_SET);
 		}
 		return true;
@@ -579,7 +591,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.discoverymessage")) {
-			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SET_DISCOVERYMESSAGE,graveyard.getDisplayName());
+			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SET_DISCOVERYMESSAGE);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -594,7 +606,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		
 		// update record in data store
 		plugin.dataStore.updateGraveyard(graveyard);
-		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_SET_DISCOVERYMESSAGE,graveyard.getDisplayName());
+		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_SET_DISCOVERYMESSAGE, graveyard);
 		plugin.soundConfig.playSound(sender,SoundId.COMMAND_SUCCESS_SET);
 		return true;
 	}
@@ -604,7 +616,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.respawnmessage")) {
-			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SET_RESPAWNMESSAGE,graveyard.getDisplayName());
+			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SET_RESPAWNMESSAGE);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -619,8 +631,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		
 		// update record in data store
 		plugin.dataStore.updateGraveyard(graveyard);
-		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_SET_RESPAWNMESSAGE,graveyard.getDisplayName());
-		plugin.soundConfig.playSound(sender,SoundId.COMMAND_SUCCESS_SET);
+		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_SET_RESPAWNMESSAGE, graveyard);
+		plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
 		return true;
 	}
 	
@@ -629,7 +641,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.group")) {
-			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SET_GROUP,graveyard.getDisplayName());
+			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SET_GROUP);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -639,7 +651,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		
 		// update record in data store
 		plugin.dataStore.updateGraveyard(graveyard);
-		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_SET_GROUP,group);
+		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_SET_GROUP, graveyard);
 		plugin.soundConfig.playSound(sender,SoundId.COMMAND_SUCCESS_SET);
 		return true;
 	}
@@ -649,7 +661,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.safetytime")) {
-			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SET_SAFETYTIME,graveyard.getDisplayName());
+			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SET_SAFETYTIME);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -674,8 +686,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// set new range
 		graveyard.setSafetyTime(safetyTime);
 		plugin.dataStore.updateGraveyard(graveyard);
-		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_SET_SAFETYTIME,
-				graveyard.getDisplayName(),String.valueOf(safetyTime));
+		plugin.messageManager.sendMessage(sender,
+				MessageId.COMMAND_SUCCESS_SET_SAFETYTIME,
+				graveyard,
+				String.valueOf(safetyTime));
 		plugin.soundConfig.playSound(sender,SoundId.COMMAND_SUCCESS_SET);
 		return true;
 	}
@@ -734,12 +748,12 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 		// check if death spawn already exists
 		if (graveyard != null) {
-				plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_CREATE_EXISTS,displayName);
+				plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_CREATE_EXISTS, graveyard);
 				plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 				return true;
 		}
 		
-		// create death spawn object
+		// create graveyard object
 		graveyard = new Graveyard();
 		graveyard.setSearchKey(Graveyard.deriveKey(displayName));
 		graveyard.setDisplayName(displayName);
@@ -751,7 +765,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		plugin.dataStore.insertGraveyard(graveyard);
 
 		// send success message to player
-		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_CREATE,displayName);
+		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_CREATE, graveyard);
 		
 		// play sound effect
 		plugin.soundConfig.playSound(sender,SoundId.COMMAND_SUCCESS_SET);
@@ -800,13 +814,20 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		
 		// if result is null, send not found error message
 		if (result == null) {
-			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_NO_RECORD,displayName);
+
+			// create dummy graveyard to send to message manager
+			Graveyard notGraveyard = new Graveyard(displayName);
+
+			// send message
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_NO_RECORD, notGraveyard);
+
+			// play sound
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 		
 		// send success message to player
-		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_DELETE,displayName);
+		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_DELETE, result);
 		
 		// play sound effect
 		plugin.soundConfig.playSound(sender,SoundId.COMMAND_SUCCESS_DELETE);
@@ -860,9 +881,15 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		
 		// if retrieved deathspawn is null, display error and usage messages and return
 		if (graveyard == null) {
-			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_NO_RECORD, displayName);
+
+			// create dummy graveyard to send to message manager
+			Graveyard notGraveyard = new Graveyard(displayName);
+
+			// send message
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_NO_RECORD, notGraveyard);
+
+			// play sound
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
-			displayUsage(sender, subcommand);
 			return true;
 		}
 
@@ -1047,18 +1074,18 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			
 			// display disabled list item
 			if (!graveyard.isEnabled()) {
-				plugin.messageManager.sendMessage(sender, MessageId.LIST_ITEM_DISABLED,graveyard.getDisplayName());
+				plugin.messageManager.sendMessage(sender, MessageId.LIST_ITEM_DISABLED, graveyard);
 				continue;
 			}
 			
 			// display undiscovered list item
 			if (graveyard.isHidden() && undiscoveredIds.contains(graveyard.getKey())) {
-				plugin.messageManager.sendMessage(sender, MessageId.LIST_ITEM_UNDISCOVERED,graveyard.getDisplayName());
+				plugin.messageManager.sendMessage(sender, MessageId.LIST_ITEM_UNDISCOVERED, graveyard);
 				continue;
 			}
 			
 			// display normal list item
-			plugin.messageManager.sendMessage(sender, MessageId.LIST_ITEM,graveyard.getDisplayName());
+			plugin.messageManager.sendMessage(sender, MessageId.LIST_ITEM, graveyard);
 		}
 		
 		// display list footer
@@ -1097,7 +1124,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			return true;
 		}
 
-		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_CLOSEST,closest.getDisplayName());
+		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_CLOSEST, closest);
 		return true;
 	}
 	
@@ -1150,19 +1177,26 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		Graveyard graveyard = plugin.dataStore.selectGraveyard(key);
 		
 		if (graveyard == null) {
-			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_NO_RECORD, displayName);
+
+			// create dummy graveyard to send to message manager
+			Graveyard notGraveyard = new Graveyard(displayName);
+
+			// send message
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_NO_RECORD, notGraveyard);
+
+			// play sound
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
-			displayUsage(sender, subcommand);
 			return true;
 		}
 
 		// teleport player to death spawn location
 		Location destination = graveyard.getLocation();
 		player.teleport(destination, TeleportCause.COMMAND);
-		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_TELEPORT, displayName);
+		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_TELEPORT, graveyard);
 		return true;
 	}
 	
+
 	/**
 	 * Display help message for commands
 	 * @param sender the command sender
