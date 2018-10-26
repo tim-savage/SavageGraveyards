@@ -1,19 +1,10 @@
-# Messages for ${project.name} v${project.version}
+# Message configuration file for ${project.name} v${project.version}
 #
 # Variable substitutions:
-# %playername%          Player's name
-# %playernickname%      Player's nickname
-# %worldname%           World name that player is in
-# %displayname%			display name of graveyard
-#
-# %PLAYERNAME%          Player's name, with no color codes
-# %PLAYERNICKNAME%      Player's nickname, with no color codes
-# %WORLDNAME%           World name that player is in, with no color codes
-# %DISPLAYNAME%			display name of graveyard, with no color codes
+# %PLAYER_NAME%         Player's name
+# %WORLD_NAME%          Player world name
+# %GRAVEYARD_NAME%    display name of graveyard
 
-
-# repeat-delay is the number of seconds to wait before
-# displaying a message again (only used on appropriate messages)
 
 messages:
   COMMAND_FAIL_ARGS_COUNT_UNDER:
@@ -63,68 +54,64 @@ messages:
 
   COMMAND_SUCCESS_CLOSEST:
     enabled: true
-    string: '&3[Graveyards]&b %displayname% is the closest graveyard to your current location.'
+    string: '&3[Graveyards]&b %GRAVEYARD_NAME% is the closest graveyard to your current location.'
 
   COMMAND_SUCCESS_CREATE:
     enabled: true
-    string: '&3[Graveyards]&b %displayname% created!'
+    string: '&3[Graveyards]&b %GRAVEYARD_NAME% created!'
 
   COMMAND_SUCCESS_DELETE:
     enabled: true
-    string: '&3[Graveyards]&b %displayname% removed!'
+    string: '&3[Graveyards]&b %GRAVEYARD_NAME% removed!'
 
   COMMAND_SUCCESS_RELOAD:
     enabled: true
     string: '&3[Graveyards]&b configuration reloaded.'
 
-  COMMAND_SUCCESS_SET:
-    enabled: true
-    string: '&3[Graveyards]&b Set %attribute%: &2%value%&b for &2%displayname%&b.'
-
   COMMAND_SUCCESS_SET_DISCOVERYMESSAGE:
     enabled: true
-    string: '&3[Graveyards]&b Set custom discovery message for &2%displayname%&b.'
+    string: '&3[Graveyards]&b Set custom discovery message for &2%GRAVEYARD_NAME%&b.'
 
   COMMAND_SUCCESS_SET_DISCOVERYRANGE:
     enabled: true
-    string: '&3[Graveyards]&b Set discovery range: &2%value%&b for &2%displayname%&b.'
+    string: '&3[Graveyards]&b Set discovery range: &2%VALUE%&b for &2%GRAVEYARD_NAME%&b.'
 
   COMMAND_SUCCESS_SET_NAME:
     enabled: true
-    string: '&3[Graveyards]&b Renamed &2%displayname%&b to &2%value%&b.'
+    string: '&3[Graveyards]&b Renamed &2%VALUE%&b to &2%GRAVEYARD_NAME%&b.'
 
   COMMAND_SUCCESS_SET_ENABLED:
     enabled: true
-    string: '&3[Graveyards]&b Set enabled: &2%value%&b for &2%displayname%&b.'
+    string: '&3[Graveyards]&b Set enabled: &2%VALUE%&b for &2%GRAVEYARD_NAME%&b.'
 
   COMMAND_SUCCESS_SET_GROUP:
     enabled: true
-    string: '&3[Graveyards]&b Set group: &2%value%&b for &2%displayname%&b.'
+    string: '&3[Graveyards]&b Set group: &2%VALUE%&b for &2%GRAVEYARD_NAME%&b.'
 
   COMMAND_SUCCESS_SET_HIDDEN:
     enabled: true
-    string: '&3[Graveyards]&b Set hidden: &2%value%&b for &2%displayname%&b.'
+    string: '&3[Graveyards]&b Set hidden: &2%VALUE%&b for &2%GRAVEYARD_NAME%&b.'
 
   COMMAND_SUCCESS_SET_LOCATION:
     enabled: true
-    string: '&3[Graveyards]&b Location for &2%displayname%&b set to your current position.'
+    string: '&3[Graveyards]&b Location for &2%GRAVEYARD_NAME%&b set to your current position.'
 
   COMMAND_SUCCESS_SET_RESPAWNMESSAGE:
     enabled: true
-    string: '&3[Graveyards]&b Set custom respawn message for &2%displayname%&b.'
+    string: '&3[Graveyards]&b Set custom respawn message for &2%GRAVEYARD_NAME%&b.'
 
   COMMAND_SUCCESS_SET_SAFETYTIME:
     enabled: true
-    string: '&3[Graveyards]&b Set safety time: &2%value%&b for &2%displayname%&b.'
+    string: '&3[Graveyards]&b Set safety time: &2%VALUE%&b for &2%GRAVEYARD_NAME%&b.'
 
 
   DEFAULT_DISCOVERY:
     enabled: true
-    string: '&3You have discovered %displayname%!'
+    string: '&3You have discovered %GRAVEYARD_NAME%!'
 
   DEFAULT_RESPAWN:
     enabled: true
-    string: '&3You''ve been resurrected at %displayname%!'
+    string: '&3You''ve been resurrected at %GRAVEYARD_NAME%!'
 
 
   SAFETY_COOLDOWN_START:
@@ -211,23 +198,23 @@ messages:
 
   LIST_HEADER:
     enabled: true
-    string: '&3Page &b%page%&3 of &b%pagecount%'
+    string: '&3Page &b%PAGE%&3 of &b%PAGE_COUNT%'
 
   LIST_FOOTER:
     enabled: false
-    string: '&3Page &b%page%&3 of &b%pagecount%'
+    string: '&3Page &b%PAGE%&3 of &b%PAGE_COUNT%'
 
   LIST_ITEM:
     enabled: true
-    string: '&a%DISPLAYNAME%'
+    string: '&a%GRAVEYARD_NAME%'
 
   LIST_ITEM_DISABLED:
     enabled: true
-    string: '&8%DISPLAYNAME% &r[ DISABLED ]'
+    string: '&8%GRAVEYARD_NAME% &r[ DISABLED ]'
 
   LIST_ITEM_UNDISCOVERED:
     enabled: true
-    string: '&c%DISPLAYNAME% &r[ UNDISCOVERED ]'
+    string: '&c%GRAVEYARD_NAME% &r[ UNDISCOVERED ]'
 
   LIST_EMPTY:
     enabled: true
