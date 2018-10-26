@@ -26,18 +26,11 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- WorldManagerLib -->
+		<!-- MessageManagerLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
-			<artifactId>world-manager-lib</artifactId>
-			<version>1.0.5</version>
-		</dependency>
-
-		<!-- LanguageManagerLib -->
-		<dependency>
-			<groupId>com.winterhaven-mc</groupId>
-			<artifactId>language-manager-lib</artifactId>
-			<version>1.1.0</version>
+			<artifactId>message-manager-lib</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 
 		<!-- SoundConfigLib -->
@@ -47,10 +40,10 @@
 			<version>1.0.0</version>
 		</dependency>
 
-		<!-- StringUtilLib -->
+		<!-- WorldManagerLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
-			<artifactId>string-util-lib</artifactId>
+			<artifactId>world-manager-lib</artifactId>
 			<version>1.0.5</version>
 		</dependency>
 	</dependencies>
@@ -87,10 +80,9 @@
 							<minimizeJar>true</minimizeJar>
 							<artifactSet>
 								<includes>
-									<include>com.winterhaven-mc:string-util-lib</include>
-									<include>com.winterhaven-mc:world-manager-lib</include>
-									<include>com.winterhaven-mc:language-manager-lib</include>
+									<include>com.winterhaven-mc:message-manager-lib</include>
 									<include>com.winterhaven-mc:sound-config-lib</include>
+									<include>com.winterhaven-mc:world-manager-lib</include>
 								</includes>
 							</artifactSet>
 						</configuration>
