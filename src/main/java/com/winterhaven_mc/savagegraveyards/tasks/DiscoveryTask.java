@@ -28,7 +28,7 @@ public class DiscoveryTask extends BukkitRunnable {
 
 		// iterate through online players
 		for (Player player : ImmutableList.copyOf(plugin.getServer().getOnlinePlayers())) {
-			
+
 			// get player location
 			Location playerLocation = player.getLocation();
 			
@@ -39,7 +39,7 @@ public class DiscoveryTask extends BukkitRunnable {
 				Location dsLocation = graveyard.getLocation();
 
 				// check that player has deathspawn.discover permission
-				if (player.hasPermission("graveyards.discover")) {
+				if (player.hasPermission("graveyard.discover")) {
 
 					// check if player is in death spawn group
 					if (graveyard.getGroup() == null
