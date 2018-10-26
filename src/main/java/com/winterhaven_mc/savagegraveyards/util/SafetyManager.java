@@ -83,6 +83,7 @@ public class SafetyManager {
 	 * @param player the player for whom to retrieve duration from the safety cooldown map
 	 * @return the duration of the player's safety cooldown, or zero if they player is not in the safety cooldown map
 	 */
+	@SuppressWarnings("unused")
 	public Integer getDuration(final Player player) {
 		
 		int duration = 0;
