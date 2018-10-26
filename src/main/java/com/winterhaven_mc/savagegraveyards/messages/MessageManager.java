@@ -53,7 +53,7 @@ public class MessageManager extends AbstractMessageManager {
 	 *  Send message to player
 	 * 
 	 * @param recipient			player receiving message
-	 * @param messageId			message identifier in messages file
+	 * @param messageId			message identifier
 	 */
 	public void sendMessage(final CommandSender recipient, final MessageId messageId) {
 
@@ -68,7 +68,7 @@ public class MessageManager extends AbstractMessageManager {
 	/** Send message to player
 	 *
 	 * @param recipient		Player receiving message
-	 * @param messageId		message identifier in messages file
+	 * @param messageId		message identifier
 	 * @param graveyard		graveyard object
 	 */
 	public void sendMessage(final CommandSender recipient,
@@ -133,7 +133,7 @@ public class MessageManager extends AbstractMessageManager {
 	/** Send message to player
 	 * 
 	 * @param recipient		Player receiving message
-	 * @param messageId		message identifier in messages file
+	 * @param messageId		message identifier
 	 * @param page 			page number to display for multi-page messages
 	 * @param pageCount 	total number of pages for multi-page messages
 	 */
