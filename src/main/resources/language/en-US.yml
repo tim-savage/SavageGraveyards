@@ -19,10 +19,6 @@ messages:
     enabled: true
     string: '&3[Graveyards]&c You must be in game to use this command!'
 
-  COMMAND_FAIL_CREATE_ARGS_COUNT_OVER:
-    enabled: true
-    string: '&3[Graveyards]&c Use underscores in place of spaces for graveyard names.'
-
   COMMAND_FAIL_CREATE_EXISTS:
     enabled: true
     string: '&3[Graveyards]&c A graveyard with that name already exists!'
