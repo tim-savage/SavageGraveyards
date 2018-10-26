@@ -139,7 +139,7 @@ public class PlayerEventListener implements Listener {
 			}
 			// else send default respawn message
 			else {
-				plugin.messageManager.sendMessage(player, MessageId.DEFAULT_RESPAWN,closest.getDisplayName());
+				plugin.messageManager.sendMessage(player, MessageId.DEFAULT_RESPAWN, closest);
 			}
 			
 			// if death spawn safety time is not null, use to set duration
