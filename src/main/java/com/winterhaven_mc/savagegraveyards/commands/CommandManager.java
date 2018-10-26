@@ -719,19 +719,11 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// remove subcommand from ArrayList
 		arguments.remove(0);
 
-		int minArgs = 2;
-		int maxArgs = 2;
+		int minArgs = 1;
 
 		// check min arguments
-		if (args.length < minArgs) {
+		if (arguments.size() < minArgs) {
 			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER);
-			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
-			displayUsage(sender, subcommand);
-			return true;
-		}
-		// check max arguments
-		if (args.length > maxArgs) {
-			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_CREATE_ARGS_COUNT_OVER);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender, subcommand);
 			return true;
