@@ -65,7 +65,7 @@ public class DiscoveryTask extends BukkitRunnable {
 										.translateAlternateColorCodes('&', graveyard.getDiscoveryMessage()));
 							}
 							else {
-								plugin.messageManager.sendPlayerMessage(player, MessageId.DEFAULT_DISCOVERY, graveyard.getDisplayName());
+								plugin.messageManager.sendMessage(player, MessageId.DEFAULT_DISCOVERY, graveyard.getDisplayName());
 							}
 							
 							// play discovery sound
