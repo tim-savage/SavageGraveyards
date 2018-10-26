@@ -4,7 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 
 /**
- * Death spawn object
+ * Graveyard object
  */
 @SuppressWarnings("WeakerAccess")
 public class Graveyard {
@@ -21,13 +21,13 @@ public class Graveyard {
 	private Integer safetyRange;
 	private Integer safetyTime;
 	private Location location;
-	
-	
+
+
 	/**
 	 * Class constructor
 	 */
 	public Graveyard() {
-		
+
 		// set some default values
 		this.setDiscoveryRange(-1);
 		this.setDiscoveryMessage("");
@@ -36,8 +36,18 @@ public class Graveyard {
 		this.setSafetyRange(-1);
 		this.setSafetyTime(-1);
 	}
-	
-	
+
+
+	/**
+	 * Class constructor
+	 */
+	public Graveyard(String displayName) {
+
+		// set some default values
+		this.displayName = displayName;
+	}
+
+
 	public static String deriveKey(String displayName) {
 		displayName = ChatColor.translateAlternateColorCodes('&', displayName);
 		return ChatColor.stripColor(displayName.replace(' ', '_'));
