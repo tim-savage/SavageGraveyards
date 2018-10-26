@@ -45,14 +45,14 @@ public class SafetyManager {
 		
 		safetyCooldownMap.put(player.getUniqueId(), duration);
 		
-		plugin.messageManager.sendPlayerMessage(player, MessageId.SAFETY_COOLDOWN_START);
+		plugin.messageManager.sendMessage(player, MessageId.SAFETY_COOLDOWN_START, duration);
 
 		// create task to remove player from map after duration
 		new BukkitRunnable() {
 			@Override
 			public void run() {
 				removePlayer(player);
-				plugin.messageManager.sendPlayerMessage(player, MessageId.SAFETY_COOLDOWN_END);
+				plugin.messageManager.sendMessage(player, MessageId.SAFETY_COOLDOWN_END);
 			}
 		}.runTaskLater(plugin, duration * 20);
 	}
@@ -83,7 +83,7 @@ public class SafetyManager {
 	 * @param player the player for whom to retrieve duration from the safety cooldown map
 	 * @return the duration of the player's safety cooldown, or zero if they player is not in the safety cooldown map
 	 */
-	public int getDuration(final Player player) {
+	public Integer getDuration(final Player player) {
 		
 		int duration = 0;
 		if (isPlayerProtected(player)) {
