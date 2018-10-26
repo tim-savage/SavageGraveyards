@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTargetEvent.TargetReason;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import java.util.Collections;
@@ -181,9 +182,9 @@ public class PlayerEventListener implements Listener {
 	}
 
 
-//	@EventHandler
-//	void onPlayerLogout(final PlayerQuitEvent event) {
-//		plugin.messageManager.removePlayerCooldown(event.getPlayer());
-//	}
+	@EventHandler
+	void onPlayerLogout(final PlayerQuitEvent event) {
+		plugin.messageManager.removePlayerCooldown(event.getPlayer());
+	}
 
 }
