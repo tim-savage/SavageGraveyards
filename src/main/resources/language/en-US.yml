@@ -3,10 +3,10 @@
 # Variable substitutions:
 # %PLAYER_NAME%         Player's name
 # %WORLD_NAME%          Player world name
-# %GRAVEYARD_NAME%    display name of graveyard
+# %GRAVEYARD_NAME%      display name of graveyard
 
 
-messages:
+MESSAGES:
   COMMAND_FAIL_ARGS_COUNT_UNDER:
     enabled: true
     string: '&3[Graveyards]&c Too few arguments!'
