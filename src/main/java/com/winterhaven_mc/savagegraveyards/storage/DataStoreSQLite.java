@@ -28,7 +28,7 @@ class DataStoreSQLite extends DataStore {
 	 * Class constructor
 	 * @param plugin reference to main class
 	 */
-	DataStoreSQLite (PluginMain plugin) {
+	DataStoreSQLite (final PluginMain plugin) {
 
 		// reference to main class
 		this.plugin = plugin;
@@ -261,7 +261,7 @@ class DataStoreSQLite extends DataStore {
 	}
 	
 	
-	public Graveyard selectNearestGraveyard(Player player) {
+	public Graveyard selectNearestGraveyard(final Player player) {
 		
 		// if player is null, return null record
 		if (player == null) {

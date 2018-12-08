@@ -447,8 +447,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	}
 
 	
-	private boolean setEnabled(final CommandSender sender, final Graveyard graveyard, String value) {
-		
+	private boolean setEnabled(final CommandSender sender, final Graveyard graveyard, final String passedValue) {
+
+		String value = passedValue;
+
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.enabled")) {
 			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SET_ENABLED);
@@ -493,8 +495,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	}
 	
 	
-	private boolean setHidden(final CommandSender sender, final Graveyard graveyard, String value) {
+	private boolean setHidden(final CommandSender sender, final Graveyard graveyard, final String passedValue) {
 		
+		String value = passedValue;
+
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.hidden")) {
 			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SET_HIDDEN);
@@ -539,8 +543,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	}
 	
 	
-	private boolean setDiscoveryRange(final CommandSender sender, final Graveyard graveyard, String value) {
-		
+	private boolean setDiscoveryRange(final CommandSender sender, final Graveyard graveyard, final String value) {
+
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.discoveryrange")) {
 			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SET_DISCOVERYRANGE);
@@ -588,8 +592,12 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	}
 	
 	
-	private boolean setDiscoveryMessage(final CommandSender sender, final Graveyard graveyard, String discoveryMessage) {
+	private boolean setDiscoveryMessage(final CommandSender sender,
+										final Graveyard graveyard,
+										final String passedDiscoveryMessage) {
 		
+		String discoveryMessage = passedDiscoveryMessage;
+
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.discoverymessage")) {
 			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SET_DISCOVERYMESSAGE);
@@ -613,8 +621,12 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	}
 	
 	
-	private boolean setRespawnMessage(final CommandSender sender, final Graveyard graveyard, String respawnMessage) {
+	private boolean setRespawnMessage(final CommandSender sender,
+									  final Graveyard graveyard,
+									  final String passedRespawnMessage) {
 		
+		String respawnMessage = passedRespawnMessage;
+
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.respawnmessage")) {
 			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SET_RESPAWNMESSAGE);
@@ -638,7 +650,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	}
 	
 	
-	private boolean setGroup(final CommandSender sender, final Graveyard graveyard, String group) {
+	private boolean setGroup(final CommandSender sender,
+							 final Graveyard graveyard,
+							 final String group) {
 		
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.group")) {
@@ -658,7 +672,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	}
 	
 	
-	private boolean setSafetyTime(final CommandSender sender, final Graveyard graveyard, String value) {
+	private boolean setSafetyTime(final CommandSender sender,
+								  final Graveyard graveyard,
+								  final String value) {
 
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.safetytime")) {
@@ -1015,7 +1031,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			// if graveyard is not enabled and sender does not have override permission, do not add to display list
 			if (!graveyard.isEnabled() && !sender.hasPermission("graveyard.list.disabled")) {
 				if (plugin.debug) {
-					plugin.getLogger().info(graveyard.getDisplayName() + " is disabled and player does not have graveyard.list.disabled permission.");
+					plugin.getLogger().info(graveyard.getDisplayName()
+							+ " is disabled and player does not have graveyard.list.disabled permission.");
 				}
 				continue;
 			}
@@ -1025,7 +1042,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 					&& undiscoveredIds.contains(graveyard.getKey())
 					&& !sender.hasPermission("graveyard.list.hidden")) {
 				if (plugin.debug) {
-					plugin.getLogger().info(graveyard.getDisplayName() + " is undiscovered and player does not have graveyard.list.hidden permission.");
+					plugin.getLogger().info(graveyard.getDisplayName()
+							+ " is undiscovered and player does not have graveyard.list.hidden permission.");
 				}
 				continue;
 			}
@@ -1034,7 +1052,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			String group = graveyard.getGroup();
 			if (group != null && !group.isEmpty() && !sender.hasPermission("group." + graveyard.getGroup())) {
 				if (plugin.debug) {
-					plugin.getLogger().info(graveyard.getDisplayName() + " is in group that player does not have permission.");
+					plugin.getLogger().info(graveyard.getDisplayName()
+							+ " is in group that player does not have permission.");
 				}
 				continue;
 			}
@@ -1249,9 +1268,11 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	/**
 	 * Display command usage
 	 * @param sender the command sender
-	 * @param command the command for which to display usage
+	 * @param passedCommand the command for which to display usage
 	 */
-	private void displayUsage(final CommandSender sender, String command) {
+	private void displayUsage(final CommandSender sender, final String passedCommand) {
+
+		String command = passedCommand;
 	
 		if (command.isEmpty() || command.equalsIgnoreCase("help")) {
 			command = "all";
