@@ -241,7 +241,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param args the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
-	private boolean reloadCommand(final CommandSender sender, final String args[]) {
+	private boolean reloadCommand(final CommandSender sender, final String[] args) {
 		
 		// if sender does not have permission to reload config, send error message and return true
 		if (!sender.hasPermission("graveyard.reload")) {
@@ -286,7 +286,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	}
 	
 	
-	private boolean setCommand(final CommandSender sender, final String args[]) {
+	private boolean setCommand(final CommandSender sender, final String[] args) {
 		
 		// Example usage:
 		// graveyard set <graveyard> displayname <new_name>
@@ -696,7 +696,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	}
 	
 	
-	private boolean createCommand(final CommandSender sender, final String args[]) {
+	private boolean createCommand(final CommandSender sender, final String[] args) {
 		
 		// sender must be in game player
 		if (!(sender instanceof Player)) {
@@ -772,7 +772,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param args the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
-	private boolean deleteCommand(final CommandSender sender, final String args[]) {
+	private boolean deleteCommand(final CommandSender sender, final String[] args) {
 
 		// check for permission
 		if (!sender.hasPermission("graveyard.delete")) {
@@ -834,7 +834,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param args the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
-	private boolean showCommand(final CommandSender sender, final String args[]) {
+	private boolean showCommand(final CommandSender sender, final String[] args) {
 		
 		// if command sender does not have permission to show death spawns, output error message and return true
 		if (!sender.hasPermission("graveyard.show")) {
@@ -960,7 +960,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param args the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
-	private boolean listCommand(final CommandSender sender, final String args[]) {
+	private boolean listCommand(final CommandSender sender, final String[] args) {
 		
 		// if command sender does not have permission to list death spawns, output error message and return true
 		if (!sender.hasPermission("graveyard.list")) {
@@ -1128,7 +1128,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param args the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
-	private boolean teleportCommand(final CommandSender sender, final String args[]) {
+	private boolean teleportCommand(final CommandSender sender, final String[] args) {
 		
 		// sender must be in game player
 		if (!(sender instanceof Player)) {
@@ -1196,7 +1196,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param args the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
-	private boolean helpCommand(final CommandSender sender, final String args[]) {
+	private boolean helpCommand(final CommandSender sender, final String[] args) {
 
 		// if command sender does not have permission to display help, output error message and return true
 		if (!sender.hasPermission("graveyard.help")) {
