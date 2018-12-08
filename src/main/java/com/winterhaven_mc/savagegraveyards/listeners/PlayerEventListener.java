@@ -120,7 +120,7 @@ public class PlayerEventListener implements Listener {
 			return;
 		}
 
-		// check that player has deathspawn.respawn permission
+		// check that player has graveyard.respawn permission
 		if (!player.hasPermission("graveyard.respawn")) {
 			return;
 		}

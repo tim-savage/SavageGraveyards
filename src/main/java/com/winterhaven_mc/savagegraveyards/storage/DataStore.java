@@ -38,7 +38,7 @@ public abstract class DataStore {
 	
 	/**
 	 * Get undiscovered death spawns for player
-	 * @param player the player for whom to retrieve undiscovered DeathSpawns
+	 * @param player the player for whom to retrieve undiscovered Graveyards
 	 * @return HashSet of Graveyard objects that are undiscovered for player
 	 */
 	public abstract Set<Graveyard> getUndiscovered(final Player player);

@@ -33,7 +33,7 @@ discovery-range: 50
 # interval to check for discovery (in ticks)
 discovery-interval: 40
 
-# number of DeathSpawns shown per page in list command
+# number of Graveyards shown per page in list command
 list-page-size: 5
 
 # respawn listener priority ( LOWEST | LOW | NORMAL | HIGH | HIGHEST )

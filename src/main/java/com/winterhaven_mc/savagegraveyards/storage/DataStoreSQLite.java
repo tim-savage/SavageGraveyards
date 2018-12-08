@@ -37,7 +37,7 @@ class DataStoreSQLite extends DataStore {
 		this.type = DataStoreType.SQLITE;
 
 		// set datastore filename
-		this.filename = "deathspawns.db";
+		this.filename = "graveyards.db";
 	}
 
 
@@ -50,33 +50,7 @@ class DataStoreSQLite extends DataStore {
 			return;
 		}
 
-//		// sql statement to create table if it doesn't already exist
-//		final String createDeathSpawnsTable = "CREATE TABLE IF NOT EXISTS deathspawns ("
-//				+ "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-//				+ "searchkey VARCHAR UNIQUE NOT NULL, "
-//				+ "displayname VARCHAR NOT NULL, "
-//				+ "enabled BOOLEAN DEFAULT TRUE, "
-//				+ "hidden BOOLEAN DEFAULT TRUE, "
-//				+ "discoveryrange INTEGER, "
-//				+ "discoverymessage VARCHAR, "
-//				+ "respawnmessage VARCHAR, "
-//				+ "safetyrange INTEGER, "
-//				+ "safetytime INTEGER, "
-//				+ "groupname VARCHAR, "
-//				+ "worldname VARCHAR NOT NULL, "
-//				+ "x DOUBLE, "
-//				+ "y DOUBLE, "
-//				+ "z DOUBLE, "
-//				+ "yaw FLOAT, "
-//				+ "pitch FLOAT) ";
-
-//		// sql statement to create table if it doesn't already exist
-//		final String createDiscoveredTable = "CREATE TABLE IF NOT EXISTS discovered ("
-//				+ "spawnid INTEGER REFERENCES deathspawns(id) ON DELETE CASCADE, "
-//				+ "playeruuid VARCHAR, "
-//				+ "PRIMARY KEY (spawnid,playeruuid)) ";
-
-		// register the driver 
+		// register the driver
 		final String jdbcDriverName = "org.sqlite.JDBC";
 
 		Class.forName(jdbcDriverName);
@@ -91,7 +65,7 @@ class DataStoreSQLite extends DataStore {
 		Statement statement = connection.createStatement();
 
 		// execute table creation statements
-		statement.executeUpdate(Queries.getQuery("CreateDeathSpawnsTable"));
+		statement.executeUpdate(Queries.getQuery("CreateGraveyardsTable"));
 		statement.executeUpdate(Queries.getQuery("CreateDiscoveredTable"));
 
 		// set initialized true
@@ -110,7 +84,7 @@ class DataStoreSQLite extends DataStore {
 	
 		try {
 			PreparedStatement preparedStatement = 
-					connection.prepareStatement(Queries.getQuery("SelectAllDeathSpawns"));
+					connection.prepareStatement(Queries.getQuery("SelectAllGraveyards"));
 	
 			// execute sql query
 			ResultSet rs = preparedStatement.executeQuery();
@@ -198,7 +172,7 @@ class DataStoreSQLite extends DataStore {
 		World world;
 
 		try {
-			PreparedStatement preparedStatement = connection.prepareStatement(Queries.getQuery("SelectDeathSpawn"));
+			PreparedStatement preparedStatement = connection.prepareStatement(Queries.getQuery("SelectGraveyard"));
 
 			preparedStatement.setString(1, derivedKey.toLowerCase());
 
@@ -302,7 +276,7 @@ class DataStoreSQLite extends DataStore {
 		
 		try {
 			PreparedStatement preparedStatement = 
-					connection.prepareStatement(Queries.getQuery("SelectNearestDeathSpawns"));
+					connection.prepareStatement(Queries.getQuery("SelectNearestGraveyards"));
 	
 			preparedStatement.setString(1, playerWorldName);
 			preparedStatement.setString(2, uuidString);
@@ -369,7 +343,7 @@ class DataStoreSQLite extends DataStore {
 	
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
-					+ "fetch the closest DeathSpawnfrom the SQLite datastore.");
+					+ "fetch the closest Graveyard from the SQLite datastore.");
 			plugin.getLogger().warning(e.getLocalizedMessage());
 	
 			// if debugging is enabled, output stack trace
@@ -391,7 +365,7 @@ class DataStoreSQLite extends DataStore {
 
 		try {
 			PreparedStatement preparedStatement = 
-					connection.prepareStatement(Queries.getQuery("SelectMatchingDeathSpawnNames"));
+					connection.prepareStatement(Queries.getQuery("SelectMatchingGraveyardNames"));
 
 			preparedStatement.setString(1, match.toLowerCase() + "%");
 			
@@ -428,7 +402,7 @@ class DataStoreSQLite extends DataStore {
 		
 		try {
 			PreparedStatement preparedStatement = 
-					connection.prepareStatement(Queries.getQuery("SelectUndiscoveredDeathSpawns"));
+					connection.prepareStatement(Queries.getQuery("SelectUndiscoveredGraveyards"));
 			
 			preparedStatement.setString(1, player.getWorld().getName());
 			preparedStatement.setString(2, player.getUniqueId().toString());
@@ -516,7 +490,7 @@ class DataStoreSQLite extends DataStore {
 		
 		try {
 			PreparedStatement preparedStatement = 
-					connection.prepareStatement(Queries.getQuery("SelectUndiscoveredDeathSpawnKeys"));
+					connection.prepareStatement(Queries.getQuery("SelectUndiscoveredGraveyardKeys"));
 			
 			preparedStatement.setString(1, player.getWorld().getName());
 			preparedStatement.setString(2, player.getUniqueId().toString());
@@ -559,9 +533,6 @@ class DataStoreSQLite extends DataStore {
 			return;
 		}
 
-		//		final String sqlInsertDiscovered = "INSERT INTO discovered (spawnid, playeruuid) "
-		//				+ "VALUES (?,?)";
-		
 		new BukkitRunnable() {
 			@Override
 			public void run() {
@@ -664,7 +635,7 @@ class DataStoreSQLite extends DataStore {
 						
 						// create prepared statement
 						PreparedStatement preparedStatement = 
-								connection.prepareStatement(Queries.getQuery("InsertDeathSpawn"));
+								connection.prepareStatement(Queries.getQuery("InsertGraveyard"));
 
 						preparedStatement.setString(1, searchKey);
 						preparedStatement.setString(2, displayName);
@@ -761,26 +732,6 @@ class DataStoreSQLite extends DataStore {
 		}
 		final String worldName = testWorldName;
 	
-//		// sql statement to insert or replace record
-//		final String sqlUpdateDeathSpawn = "UPDATE deathspawns SET "
-//				+ "searchkey=?, "
-//				+ "displayname=?, "
-//				+ "enabled=?, "
-//				+ "hidden=?, "
-//				+ "discoveryrange=?, "
-//				+ "discoverymessage=?, "
-//				+ "respawnmessage=?, "
-//				+ "groupname=?, "
-//				+ "safetyrange=?, "
-//				+ "safetytime=?, "
-//				+ "worldname=?, "
-//				+ "x=?, "
-//				+ "y=?, "
-//				+ "z=?, "
-//				+ "yaw=?, "
-//				+ "pitch=? "
-//				+ "WHERE id = ?";
-	
 		new BukkitRunnable() {
 			@Override
 			public void run() {
@@ -791,7 +742,7 @@ class DataStoreSQLite extends DataStore {
 
 						// create prepared statement
 						PreparedStatement preparedStatement = 
-								connection.prepareStatement(Queries.getQuery("UpdateDeathSpawn"));
+								connection.prepareStatement(Queries.getQuery("UpdateGraveyard"));
 
 						preparedStatement.setString(1, searchKey);
 						preparedStatement.setString(2, displayName);
@@ -849,9 +800,6 @@ class DataStoreSQLite extends DataStore {
 		// get primary key of record to be deleted
 		final Integer primaryKey = graveyard.getKey();
 		
-		//		final String sqlDeleteDestination = "DELETE FROM deathspawns WHERE id = ?";
-		//		final String sqlDeleteDiscoveries = "DELETE FROM discovered WHERE spawnid = ?";
-
 		new BukkitRunnable() {
 			@Override
 			public void run() {
@@ -865,7 +813,7 @@ class DataStoreSQLite extends DataStore {
 						
 						// create prepared statement
 						PreparedStatement preparedStatement = 
-								connection.prepareStatement(Queries.getQuery("DeleteDeathSpawn"));
+								connection.prepareStatement(Queries.getQuery("DeleteGraveyard"));
 
 						preparedStatement.setInt(1, primaryKey);
 

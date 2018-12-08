@@ -317,13 +317,13 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			return true;
 		}
 		
-		// get deathspawn name
+		// get graveyard name
 		String graveyardName = arguments.get(0);
 		
 		// remove name from arguments ArrayList
 		arguments.remove(0);
 		
-		// get deathspawn key
+		// get graveyard key
 		String key = Graveyard.deriveKey(graveyardName);
 		
 		if (plugin.debug) {
@@ -829,7 +829,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 	
 	/**
-	 * Display a single deathspawn's settings
+	 * Display a single graveyard's settings
 	 * @param sender the command sender
 	 * @param args the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
@@ -866,13 +866,13 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// get display name from remaining arguments joined with spaces
 		String displayName = join(arguments);
 		
-		// get deathspawn key from display name
+		// get graveyard key from display name
 		String key = Graveyard.deriveKey(displayName);
 		
-		// retrieve deathspawn from data store
+		// retrieve graveyard from data store
 		Graveyard graveyard = plugin.dataStore.selectGraveyard(key);
 		
-		// if retrieved deathspawn is null, display error and usage messages and return
+		// if retrieved graveyard is null, display error and usage messages and return
 		if (graveyard == null) {
 
 			// create dummy graveyard to send to message manager
@@ -886,22 +886,22 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			return true;
 		}
 
-		// display deathspawn display name
+		// display graveyard display name
 		sender.sendMessage(ChatColor.DARK_AQUA + "Name: "
 				+ ChatColor.RESET + graveyard.getDisplayName());
 		
-		// display deathspawn 'enabled' setting
+		// display graveyard 'enabled' setting
 		sender.sendMessage(ChatColor.DARK_AQUA + "Enabled: " 
 				+ ChatColor.RESET + graveyard.isEnabled());
 		
-		// display deathspawn 'hidden' setting
+		// display graveyard 'hidden' setting
 		sender.sendMessage(ChatColor.DARK_AQUA + "Hidden: " 
 				+ ChatColor.RESET + graveyard.isHidden());
 		
 		// get configured default discovery range
 		int discoveryRange = plugin.getConfig().getInt("discovery-range");
 
-		// if deathspawn discovery range is set, display it instead of default
+		// if graveyard discovery range is set, display it instead of default
 		if (graveyard.getDiscoveryRange() >= 0) {
 			discoveryRange = graveyard.getDiscoveryRange();
 		}
@@ -923,7 +923,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// get configured default safety time
 		int safetyTime = plugin.getConfig().getInt("safety-time");
 
-		// if deathspawn safety time is set, display it instead of default
+		// if graveyard safety time is set, display it instead of default
 		if (graveyard.getSafetyTime() >= 0) {
 			safetyTime = graveyard.getSafetyTime();
 		}
@@ -938,7 +938,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		sender.sendMessage(ChatColor.DARK_AQUA + "Group: " 
 				+ ChatColor.RESET + group);
 		
-		// display deathspawn location
+		// display graveyard location
 		Location location = graveyard.getLocation();
 		String locationString = ChatColor.DARK_AQUA + "Location: "
 				+ ChatColor.RESET+ "[" 

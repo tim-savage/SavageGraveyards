@@ -38,7 +38,7 @@ public class DiscoveryTask extends BukkitRunnable {
 				// get death spawn location
 				Location dsLocation = graveyard.getLocation();
 
-				// check that player has deathspawn.discover permission
+				// check that player has graveyard.discover permission
 				if (player.hasPermission("graveyard.discover")) {
 
 					// check if player is in death spawn group
