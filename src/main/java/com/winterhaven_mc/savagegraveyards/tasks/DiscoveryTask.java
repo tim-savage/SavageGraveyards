@@ -32,30 +32,30 @@ public class DiscoveryTask extends BukkitRunnable {
 			// get player location
 			Location playerLocation = player.getLocation();
 			
-			// iterate through player's undiscovered death spawns
+			// iterate through player's undiscovered graveyards
 			for (Graveyard graveyard : plugin.dataStore.getUndiscovered(player)) {
 				
-				// get death spawn location
+				// get graveyard location
 				Location dsLocation = graveyard.getLocation();
 
 				// check that player has graveyard.discover permission
 				if (player.hasPermission("graveyard.discover")) {
 
-					// check if player is in death spawn group
+					// check if player is in graveyard group
 					if (graveyard.getGroup() == null
 							|| graveyard.getGroup().isEmpty()
 							|| player.hasPermission("group." + graveyard.getGroup())) {
 
-						// get death spawn discovery range, or config default if null or negative
+						// get graveyard discovery range, or config default if null or negative
 						Integer discoveryRange = graveyard.getDiscoveryRange();
 						if (discoveryRange == null || discoveryRange < 0) {
 							discoveryRange = plugin.getConfig().getInt("discovery-range");
 						}
 
-						// check if player is within discovery range of death spawn
+						// check if player is within discovery range of graveyard
 						if (dsLocation.distanceSquared(playerLocation) < Math.pow(discoveryRange,2)) {
 
-							// set death spawn as discovered for player
+							// set graveyard as discovered for player
 							plugin.dataStore.insertDiscovery(player, graveyard.getSearchKey());
 
 							// send discovery message to player

@@ -87,7 +87,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			}
 		}
 
-		// return list of valid matching death spawn names
+		// return list of valid matching graveyard names
 		else if (args.length == 2) {
 			if (args[0].equalsIgnoreCase("teleport")
 					|| args[0].equalsIgnoreCase("tp") 
@@ -736,10 +736,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// set displayName to passed arguments
 		String displayName = join(arguments);
 		
-		// check if death spawn exists and if so if player has overwrite permission
+		// check if graveyard exists and if so if player has overwrite permission
 		Graveyard graveyard = plugin.dataStore.selectGraveyard(displayName);
 
-		// check if death spawn already exists
+		// check if graveyard already exists
 		if (graveyard != null) {
 				plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_CREATE_EXISTS, graveyard);
 				plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
@@ -754,7 +754,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		graveyard.setEnabled(plugin.getConfig().getBoolean("default-enabled"));
 		graveyard.setHidden(plugin.getConfig().getBoolean("default-hidden"));
 
-		// store death spawn object
+		// store graveyard object
 		plugin.dataStore.insertGraveyard(graveyard);
 
 		// send success message to player
@@ -799,10 +799,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			return true;
 		}
 
-		// get death spawn name to delete from arguments
+		// get graveyard name to delete from arguments
 		String displayName = arguments.get(0);
 		
-		// remove death spawn record from storage
+		// remove graveyard record from storage
 		Graveyard result = plugin.dataStore.deleteGraveyard(displayName);
 		
 		// if result is null, send not found error message
@@ -836,7 +836,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 */
 	private boolean showCommand(final CommandSender sender, final String[] args) {
 		
-		// if command sender does not have permission to show death spawns, output error message and return true
+		// if command sender does not have permission to show graveyards, output error message and return true
 		if (!sender.hasPermission("graveyard.show")) {
 			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SHOW);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
@@ -930,7 +930,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		sender.sendMessage(ChatColor.DARK_AQUA + "Safety time: "
 				+ ChatColor.RESET + safetyTime);
 
-		// get death spawn group; if null or empty, set to ALL
+		// get graveyard group; if null or empty, set to ALL
 		String group = graveyard.getGroup();
 		if (group == null || group.isEmpty()) {
 			group = "ALL";
@@ -962,7 +962,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 */
 	private boolean listCommand(final CommandSender sender, final String[] args) {
 		
-		// if command sender does not have permission to list death spawns, output error message and return true
+		// if command sender does not have permission to list graveyards, output error message and return true
 		if (!sender.hasPermission("graveyard.list")) {
 			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_LIST);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
@@ -1123,7 +1123,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	
 	
 	/**
-	 * Teleport player to death spawn location
+	 * Teleport player to graveyard location
 	 * @param sender the command sender
 	 * @param args the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
@@ -1182,7 +1182,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			return true;
 		}
 
-		// teleport player to death spawn location
+		// teleport player to graveyard location
 		Location destination = graveyard.getLocation();
 		player.teleport(destination, TeleportCause.COMMAND);
 		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_TELEPORT, graveyard);

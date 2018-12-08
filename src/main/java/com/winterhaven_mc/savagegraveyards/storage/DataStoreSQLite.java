@@ -823,7 +823,7 @@ class DataStoreSQLite extends DataStore {
 					
 					// output debugging information
 					if (plugin.debug) {
-						plugin.getLogger().info(rowsAffected + " death spawns deleted.");
+						plugin.getLogger().info(rowsAffected + " graveyards deleted.");
 					}
 				}
 				catch (Exception e) {
