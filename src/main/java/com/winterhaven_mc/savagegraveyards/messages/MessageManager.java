@@ -38,7 +38,7 @@ public class MessageManager extends AbstractMessageManager {
 //# %DESTINATION_NAME%		display name of graveyard, with no color codes
 
 	@Override
-	protected Map<String,String> getDefaultReplacements(CommandSender recipient) {
+	protected Map<String,String> getDefaultReplacements(final CommandSender recipient) {
 
 		Map<String,String> replacements = new HashMap<>();
 

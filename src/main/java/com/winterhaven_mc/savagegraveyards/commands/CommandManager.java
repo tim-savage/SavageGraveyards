@@ -87,7 +87,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			}
 		}
 
-		// return list of valid matching death spawn names
+		// return list of valid matching graveyard names
 		else if (args.length == 2) {
 			if (args[0].equalsIgnoreCase("teleport")
 					|| args[0].equalsIgnoreCase("tp") 
@@ -241,7 +241,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param args the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
-	private boolean reloadCommand(final CommandSender sender, final String args[]) {
+	private boolean reloadCommand(final CommandSender sender, final String[] args) {
 		
 		// if sender does not have permission to reload config, send error message and return true
 		if (!sender.hasPermission("graveyard.reload")) {
@@ -286,7 +286,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	}
 	
 	
-	private boolean setCommand(final CommandSender sender, final String args[]) {
+	private boolean setCommand(final CommandSender sender, final String[] args) {
 		
 		// Example usage:
 		// graveyard set <graveyard> displayname <new_name>
@@ -317,13 +317,13 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			return true;
 		}
 		
-		// get deathspawn name
+		// get graveyard name
 		String graveyardName = arguments.get(0);
 		
 		// remove name from arguments ArrayList
 		arguments.remove(0);
 		
-		// get deathspawn key
+		// get graveyard key
 		String key = Graveyard.deriveKey(graveyardName);
 		
 		if (plugin.debug) {
@@ -447,8 +447,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	}
 
 	
-	private boolean setEnabled(final CommandSender sender, final Graveyard graveyard, String value) {
-		
+	private boolean setEnabled(final CommandSender sender, final Graveyard graveyard, final String passedValue) {
+
+		String value = passedValue;
+
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.enabled")) {
 			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SET_ENABLED);
@@ -493,8 +495,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	}
 	
 	
-	private boolean setHidden(final CommandSender sender, final Graveyard graveyard, String value) {
+	private boolean setHidden(final CommandSender sender, final Graveyard graveyard, final String passedValue) {
 		
+		String value = passedValue;
+
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.hidden")) {
 			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SET_HIDDEN);
@@ -539,8 +543,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	}
 	
 	
-	private boolean setDiscoveryRange(final CommandSender sender, final Graveyard graveyard, String value) {
-		
+	private boolean setDiscoveryRange(final CommandSender sender, final Graveyard graveyard, final String value) {
+
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.discoveryrange")) {
 			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SET_DISCOVERYRANGE);
@@ -588,8 +592,12 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	}
 	
 	
-	private boolean setDiscoveryMessage(final CommandSender sender, final Graveyard graveyard, String discoveryMessage) {
+	private boolean setDiscoveryMessage(final CommandSender sender,
+										final Graveyard graveyard,
+										final String passedDiscoveryMessage) {
 		
+		String discoveryMessage = passedDiscoveryMessage;
+
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.discoverymessage")) {
 			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SET_DISCOVERYMESSAGE);
@@ -613,8 +621,12 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	}
 	
 	
-	private boolean setRespawnMessage(final CommandSender sender, final Graveyard graveyard, String respawnMessage) {
+	private boolean setRespawnMessage(final CommandSender sender,
+									  final Graveyard graveyard,
+									  final String passedRespawnMessage) {
 		
+		String respawnMessage = passedRespawnMessage;
+
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.respawnmessage")) {
 			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SET_RESPAWNMESSAGE);
@@ -638,7 +650,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	}
 	
 	
-	private boolean setGroup(final CommandSender sender, final Graveyard graveyard, String group) {
+	private boolean setGroup(final CommandSender sender,
+							 final Graveyard graveyard,
+							 final String group) {
 		
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.group")) {
@@ -658,7 +672,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	}
 	
 	
-	private boolean setSafetyTime(final CommandSender sender, final Graveyard graveyard, String value) {
+	private boolean setSafetyTime(final CommandSender sender,
+								  final Graveyard graveyard,
+								  final String value) {
 
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.safetytime")) {
@@ -696,7 +712,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	}
 	
 	
-	private boolean createCommand(final CommandSender sender, final String args[]) {
+	private boolean createCommand(final CommandSender sender, final String[] args) {
 		
 		// sender must be in game player
 		if (!(sender instanceof Player)) {
@@ -736,10 +752,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// set displayName to passed arguments
 		String displayName = join(arguments);
 		
-		// check if death spawn exists and if so if player has overwrite permission
+		// check if graveyard exists and if so if player has overwrite permission
 		Graveyard graveyard = plugin.dataStore.selectGraveyard(displayName);
 
-		// check if death spawn already exists
+		// check if graveyard already exists
 		if (graveyard != null) {
 				plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_CREATE_EXISTS, graveyard);
 				plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
@@ -754,7 +770,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		graveyard.setEnabled(plugin.getConfig().getBoolean("default-enabled"));
 		graveyard.setHidden(plugin.getConfig().getBoolean("default-hidden"));
 
-		// store death spawn object
+		// store graveyard object
 		plugin.dataStore.insertGraveyard(graveyard);
 
 		// send success message to player
@@ -772,7 +788,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param args the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
-	private boolean deleteCommand(final CommandSender sender, final String args[]) {
+	private boolean deleteCommand(final CommandSender sender, final String[] args) {
 
 		// check for permission
 		if (!sender.hasPermission("graveyard.delete")) {
@@ -799,10 +815,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			return true;
 		}
 
-		// get death spawn name to delete from arguments
+		// get graveyard name to delete from arguments
 		String displayName = arguments.get(0);
 		
-		// remove death spawn record from storage
+		// remove graveyard record from storage
 		Graveyard result = plugin.dataStore.deleteGraveyard(displayName);
 		
 		// if result is null, send not found error message
@@ -829,14 +845,14 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 	
 	/**
-	 * Display a single deathspawn's settings
+	 * Display a single graveyard's settings
 	 * @param sender the command sender
 	 * @param args the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
-	private boolean showCommand(final CommandSender sender, final String args[]) {
+	private boolean showCommand(final CommandSender sender, final String[] args) {
 		
-		// if command sender does not have permission to show death spawns, output error message and return true
+		// if command sender does not have permission to show graveyards, output error message and return true
 		if (!sender.hasPermission("graveyard.show")) {
 			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_SHOW);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
@@ -866,13 +882,13 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// get display name from remaining arguments joined with spaces
 		String displayName = join(arguments);
 		
-		// get deathspawn key from display name
+		// get graveyard key from display name
 		String key = Graveyard.deriveKey(displayName);
 		
-		// retrieve deathspawn from data store
+		// retrieve graveyard from data store
 		Graveyard graveyard = plugin.dataStore.selectGraveyard(key);
 		
-		// if retrieved deathspawn is null, display error and usage messages and return
+		// if retrieved graveyard is null, display error and usage messages and return
 		if (graveyard == null) {
 
 			// create dummy graveyard to send to message manager
@@ -886,22 +902,22 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			return true;
 		}
 
-		// display deathspawn display name
+		// display graveyard display name
 		sender.sendMessage(ChatColor.DARK_AQUA + "Name: "
 				+ ChatColor.RESET + graveyard.getDisplayName());
 		
-		// display deathspawn 'enabled' setting
+		// display graveyard 'enabled' setting
 		sender.sendMessage(ChatColor.DARK_AQUA + "Enabled: " 
 				+ ChatColor.RESET + graveyard.isEnabled());
 		
-		// display deathspawn 'hidden' setting
+		// display graveyard 'hidden' setting
 		sender.sendMessage(ChatColor.DARK_AQUA + "Hidden: " 
 				+ ChatColor.RESET + graveyard.isHidden());
 		
 		// get configured default discovery range
 		int discoveryRange = plugin.getConfig().getInt("discovery-range");
 
-		// if deathspawn discovery range is set, display it instead of default
+		// if graveyard discovery range is set, display it instead of default
 		if (graveyard.getDiscoveryRange() >= 0) {
 			discoveryRange = graveyard.getDiscoveryRange();
 		}
@@ -923,14 +939,14 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// get configured default safety time
 		int safetyTime = plugin.getConfig().getInt("safety-time");
 
-		// if deathspawn safety time is set, display it instead of default
+		// if graveyard safety time is set, display it instead of default
 		if (graveyard.getSafetyTime() >= 0) {
 			safetyTime = graveyard.getSafetyTime();
 		}
 		sender.sendMessage(ChatColor.DARK_AQUA + "Safety time: "
 				+ ChatColor.RESET + safetyTime);
 
-		// get death spawn group; if null or empty, set to ALL
+		// get graveyard group; if null or empty, set to ALL
 		String group = graveyard.getGroup();
 		if (group == null || group.isEmpty()) {
 			group = "ALL";
@@ -938,7 +954,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		sender.sendMessage(ChatColor.DARK_AQUA + "Group: " 
 				+ ChatColor.RESET + group);
 		
-		// display deathspawn location
+		// display graveyard location
 		Location location = graveyard.getLocation();
 		String locationString = ChatColor.DARK_AQUA + "Location: "
 				+ ChatColor.RESET+ "[" 
@@ -960,9 +976,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param args the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
-	private boolean listCommand(final CommandSender sender, final String args[]) {
+	private boolean listCommand(final CommandSender sender, final String[] args) {
 		
-		// if command sender does not have permission to list death spawns, output error message and return true
+		// if command sender does not have permission to list graveyards, output error message and return true
 		if (!sender.hasPermission("graveyard.list")) {
 			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_LIST);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
@@ -1015,7 +1031,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			// if graveyard is not enabled and sender does not have override permission, do not add to display list
 			if (!graveyard.isEnabled() && !sender.hasPermission("graveyard.list.disabled")) {
 				if (plugin.debug) {
-					plugin.getLogger().info(graveyard.getDisplayName() + " is disabled and player does not have graveyard.list.disabled permission.");
+					plugin.getLogger().info(graveyard.getDisplayName()
+							+ " is disabled and player does not have graveyard.list.disabled permission.");
 				}
 				continue;
 			}
@@ -1025,7 +1042,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 					&& undiscoveredIds.contains(graveyard.getKey())
 					&& !sender.hasPermission("graveyard.list.hidden")) {
 				if (plugin.debug) {
-					plugin.getLogger().info(graveyard.getDisplayName() + " is undiscovered and player does not have graveyard.list.hidden permission.");
+					plugin.getLogger().info(graveyard.getDisplayName()
+							+ " is undiscovered and player does not have graveyard.list.hidden permission.");
 				}
 				continue;
 			}
@@ -1034,7 +1052,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			String group = graveyard.getGroup();
 			if (group != null && !group.isEmpty() && !sender.hasPermission("group." + graveyard.getGroup())) {
 				if (plugin.debug) {
-					plugin.getLogger().info(graveyard.getDisplayName() + " is in group that player does not have permission.");
+					plugin.getLogger().info(graveyard.getDisplayName()
+							+ " is in group that player does not have permission.");
 				}
 				continue;
 			}
@@ -1123,12 +1142,12 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	
 	
 	/**
-	 * Teleport player to death spawn location
+	 * Teleport player to graveyard location
 	 * @param sender the command sender
 	 * @param args the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
-	private boolean teleportCommand(final CommandSender sender, final String args[]) {
+	private boolean teleportCommand(final CommandSender sender, final String[] args) {
 		
 		// sender must be in game player
 		if (!(sender instanceof Player)) {
@@ -1182,7 +1201,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			return true;
 		}
 
-		// teleport player to death spawn location
+		// teleport player to graveyard location
 		Location destination = graveyard.getLocation();
 		player.teleport(destination, TeleportCause.COMMAND);
 		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_TELEPORT, graveyard);
@@ -1196,7 +1215,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param args the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
-	private boolean helpCommand(final CommandSender sender, final String args[]) {
+	private boolean helpCommand(final CommandSender sender, final String[] args) {
 
 		// if command sender does not have permission to display help, output error message and return true
 		if (!sender.hasPermission("graveyard.help")) {
@@ -1249,9 +1268,11 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	/**
 	 * Display command usage
 	 * @param sender the command sender
-	 * @param command the command for which to display usage
+	 * @param passedCommand the command for which to display usage
 	 */
-	private void displayUsage(final CommandSender sender, String command) {
+	private void displayUsage(final CommandSender sender, final String passedCommand) {
+
+		String command = passedCommand;
 	
 		if (command.isEmpty() || command.equalsIgnoreCase("help")) {
 			command = "all";

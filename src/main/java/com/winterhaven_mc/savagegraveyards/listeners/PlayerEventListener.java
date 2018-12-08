@@ -120,19 +120,19 @@ public class PlayerEventListener implements Listener {
 			return;
 		}
 
-		// check that player has deathspawn.respawn permission
+		// check that player has graveyard.respawn permission
 		if (!player.hasPermission("graveyard.respawn")) {
 			return;
 		}
 		
-		// get closest valid death spawn for player
+		// get closest valid graveyard for player
 		Graveyard closest = plugin.dataStore.selectNearestGraveyard(player);
 		
-		// if closest death spawn is not null, set respawn location
+		// if closest graveyard is not null, set respawn location
 		if (closest != null) {
 			event.setRespawnLocation(closest.getLocation());
 			
-			// if death spawn has custom respawn message, send custom message to player
+			// if graveyard has custom respawn message, send custom message to player
 			if (closest.getRespawnMessage() != null && !closest.getRespawnMessage().isEmpty()) {
 				player.sendMessage(ChatColor.translateAlternateColorCodes('&', closest.getRespawnMessage()));
 			}
@@ -141,7 +141,7 @@ public class PlayerEventListener implements Listener {
 				plugin.messageManager.sendMessage(player, MessageId.DEFAULT_RESPAWN, closest);
 			}
 			
-			// if death spawn safety time is not null, use to set duration
+			// if graveyard safety time is not null, use to set duration
 			if (closest.getSafetyTime() != null) {
 				duration = closest.getSafetyTime();
 			}

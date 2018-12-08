@@ -3,14 +3,16 @@
 # localized language support
 language: en-US
 
-# Note: If no worlds are listed in enabled-worlds, then all worlds are enabled
-# enabled worlds list (use this list for a default-deny world policy)
+# enabled worlds list
+# if this list is empty, all worlds will be added to the enabled worlds list
+# otherwise, only listed worlds will be added to the enabled worlds list
 
 enabled-worlds:
 #  - enabled_world1
 #  - enabled_world2
 
-# disabled worlds list (use this list for a default-allow world policy)
+# disabled worlds list
+# these worlds will be removed from the enabled worlds list created by the previous setting
 
 disabled-worlds:
 #  - disabled_world1
@@ -31,7 +33,7 @@ discovery-range: 50
 # interval to check for discovery (in ticks)
 discovery-interval: 40
 
-# number of DeathSpawns shown per page in list command
+# number of Graveyards shown per page in list command
 list-page-size: 5
 
 # respawn listener priority ( LOWEST | LOW | NORMAL | HIGH | HIGHEST )

@@ -24,8 +24,8 @@ public abstract class DataStore {
 	abstract void initialize() throws Exception;
 	
 	/**
-	 * get all death spawn records
-	 * @return List of all death spawn objects in alphabetical order
+	 * get all graveyard records
+	 * @return List of all graveyard objects in alphabetical order
 	 */
 	public abstract List<Graveyard> selectAllGraveyards();
 
@@ -37,28 +37,28 @@ public abstract class DataStore {
 	public abstract Graveyard selectGraveyard(final String name);
 	
 	/**
-	 * Get undiscovered death spawns for player
-	 * @param player the player for whom to retrieve undiscovered DeathSpawns
+	 * Get undiscovered graveyards for player
+	 * @param player the player for whom to retrieve undiscovered Graveyards
 	 * @return HashSet of Graveyard objects that are undiscovered for player
 	 */
 	public abstract Set<Graveyard> getUndiscovered(final Player player);
 	
 	/**
-	 * Get undiscovered death spawn keys for player
+	 * Get undiscovered graveyard keys for player
 	 * @param player the player for whom to retrieve undiscovered Graveyard keys
 	 * @return HashSet of Graveyard keys that are undiscovered for player
 	 */
 	public abstract Set<Integer> getUndiscoveredKeys(final Player player);
 	
 	/**
-	 * Gets closest death spawn to player's current location
+	 * Gets closest graveyard to player's current location
 	 * @param player the player for whom to retrieve the nearest Graveyard
 	 * @return Graveyard object
 	 */
 	public abstract Graveyard selectNearestGraveyard(final Player player);
 
 	/**
-	 * Set death spawn to discovered for player
+	 * Set graveyard to discovered for player
 	 * @param player the player for whom to set a Graveyard as discovered
 	 * @param key the Graveyard key to set as discovered
 	 */
@@ -79,7 +79,7 @@ public abstract class DataStore {
 	/**
 	 * Delete record
 	 * @param key key of record to be deleted
-	 * @return Deleted death spawn record
+	 * @return Deleted graveyard record
 	 */	
 	public abstract Graveyard deleteGraveyard(final String key);
 	
