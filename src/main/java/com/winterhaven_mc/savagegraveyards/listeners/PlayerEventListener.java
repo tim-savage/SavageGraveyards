@@ -11,12 +11,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTargetEvent.TargetReason;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Arrays;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -30,7 +28,10 @@ public class PlayerEventListener implements Listener {
 
 	// reference to main class
 	private final PluginMain plugin;
-	
+
+	// player death respawn hash set, prevents setting respawn location to graveyards on non-death respawn events
+	private Set<UUID> deathTriggeredRespawn = new HashSet<>();
+
 	// set entity target cancel reasons
 	private final static Set<TargetReason> cancelReasons =
 			Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
@@ -49,6 +50,18 @@ public class PlayerEventListener implements Listener {
 		
 		// register events in this class
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
+	}
+
+
+	/**
+	 * Player death event handler
+	 * @param event the event handled by this method
+	 */
+	@EventHandler
+	public void onPlayerDeath(final PlayerDeathEvent event) {
+
+		// put player uuid in deathTriggeredRespawn set
+		deathTriggeredRespawn.add(event.getEntity().getUniqueId());
 	}
 
 
@@ -105,13 +118,21 @@ public class PlayerEventListener implements Listener {
 			onPlayerRespawnHandler(event);
 		}
 	}
-	
-	
+
+
 	private void onPlayerRespawnHandler(final PlayerRespawnEvent event) {
-		
+
 		// get event player
 		Player player = event.getPlayer();
-		
+
+		// if deathTriggeredRespawn set does not contain user uuid, do nothing and return
+		if (!deathTriggeredRespawn.contains(player.getUniqueId())) {
+			return;
+		}
+
+		// remove player uuid from deathTriggeredRespawn hashset
+		deathTriggeredRespawn.remove(player.getUniqueId());
+
 		// get config default safety time duration
 		Integer duration = plugin.getConfig().getInt("safety-time");
 		

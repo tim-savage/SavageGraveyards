@@ -9,7 +9,7 @@ import org.bukkit.Location;
 @SuppressWarnings("WeakerAccess")
 public class Graveyard {
 
-	private Integer key; 
+	private Integer key;
 	private String searchKey;
 	private String displayName;
 	private Boolean enabled;
