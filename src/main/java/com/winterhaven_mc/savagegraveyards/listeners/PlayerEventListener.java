@@ -67,6 +67,10 @@ public class PlayerEventListener implements Listener {
 	}
 
 
+	/**
+	 * Player respawn event handler for LOWEST priority
+	 * @param event the event handled by this method
+	 */
 	@EventHandler(priority=EventPriority.LOWEST)
 	void onPlayerRespawnLOWEST(final PlayerRespawnEvent event) {
 		if (plugin.getConfig().getString("respawn-priority").equalsIgnoreCase("LOWEST")) {
@@ -76,8 +80,12 @@ public class PlayerEventListener implements Listener {
 			onPlayerRespawnHandler(event);
 		}
 	}
-	
-	
+
+
+	/**
+	 * Player respawn event handler for LOW priority
+	 * @param event the event handled by this method
+	 */
 	@EventHandler(priority=EventPriority.LOW)
 	void onPlayerRespawnLOW(final PlayerRespawnEvent event) {
 		if (plugin.getConfig().getString("respawn-priority").equalsIgnoreCase("LOW")) {
@@ -87,8 +95,12 @@ public class PlayerEventListener implements Listener {
 			onPlayerRespawnHandler(event);
 		}
 	}
-	
-	
+
+
+	/**
+	 * Player respawn event handler for NORMAL priority
+	 * @param event the event handled by this method
+	 */
 	@EventHandler(priority=EventPriority.NORMAL)
 	void onPlayerRespawnNORMAL(final PlayerRespawnEvent event) {
 		if (plugin.getConfig().getString("respawn-priority").equalsIgnoreCase("NORMAL")) {
@@ -98,8 +110,12 @@ public class PlayerEventListener implements Listener {
 			onPlayerRespawnHandler(event);
 		}
 	}
-	
-	
+
+
+	/**
+	 * Player respawn event handler for HIGH priority
+	 * @param event the event handled by this method
+	 */
 	@EventHandler(priority=EventPriority.HIGH)
 	void onPlayerRespawnHIGH(final PlayerRespawnEvent event) {
 		if (plugin.getConfig().getString("respawn-priority").equalsIgnoreCase("HIGH")) {
@@ -109,8 +125,12 @@ public class PlayerEventListener implements Listener {
 			onPlayerRespawnHandler(event);
 		}
 	}
-	
-	
+
+
+	/**
+	 * Player respawn event handler for HIGHEST priority
+	 * @param event the event handled by this method
+	 */
 	@EventHandler(priority=EventPriority.HIGHEST)
 	void onPlayerRespawnHIGHEST(final PlayerRespawnEvent event) {
 		if (plugin.getConfig().getString("respawn-priority").equalsIgnoreCase("HIGHEST")) {
@@ -122,6 +142,10 @@ public class PlayerEventListener implements Listener {
 	}
 
 
+	/**
+	 * Player respawn handler, called by the registered event listener with configured priority
+	 * @param event the player respawn event handled by this method
+	 */
 	private void onPlayerRespawnHandler(final PlayerRespawnEvent event) {
 
 		// get event player
@@ -179,7 +203,11 @@ public class PlayerEventListener implements Listener {
 		}
 	}
 
-	
+
+	/**
+	 * Cancel mob targeting of a player for configured time period following death respawn
+	 * @param event the event handled by this method
+	 */
 	@EventHandler
 	void onEntityTargetLivingEntity(final EntityTargetLivingEntityEvent event) {
 
