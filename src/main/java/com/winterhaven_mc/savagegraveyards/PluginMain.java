@@ -23,35 +23,35 @@ import org.bukkit.scheduler.BukkitTask;
  * @version		1.0
  */
 public final class PluginMain extends JavaPlugin {
-	
+
 	// static reference to main class
 	public static PluginMain instance;
 
 	public Boolean debug = getConfig().getBoolean("debug");
-	
+
 	public DataStore dataStore;
 	public WorldManager worldManager;
 	public MessageManager messageManager;
 	public SoundConfiguration soundConfig;
 	public SafetyManager safetyManager;
 	private BukkitTask discoveryTask;
-	
+
 
 	@Override
 	public void onEnable() {
 
 		// set static reference to main class
 		instance = this;
-		
-		// install default config.yml if not present  
+
+		// install default config.yml if not present
 		saveDefaultConfig();
-		
+
 		// get initialized destination storage object
 		dataStore = DataStoreFactory.create();
-		
+
 		// instantiate world manager
 		worldManager = new WorldManager(this);
-		
+
 		// instantiate message manager
 		messageManager = new MessageManager(this);
 
@@ -71,7 +71,8 @@ public final class PluginMain extends JavaPlugin {
 		discoveryTask = new DiscoveryTask(this)
 			.runTaskTimerAsynchronously(this, 0, getConfig().getInt("discovery-interval"));
 	}
-	
+
+
 	@Override
 	public void onDisable() {
 		discoveryTask.cancel();
