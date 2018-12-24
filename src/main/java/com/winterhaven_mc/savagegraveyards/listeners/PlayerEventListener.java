@@ -3,6 +3,7 @@ package com.winterhaven_mc.savagegraveyards.listeners;
 import com.winterhaven_mc.savagegraveyards.PluginMain;
 import com.winterhaven_mc.savagegraveyards.storage.Graveyard;
 import com.winterhaven_mc.savagegraveyards.messages.MessageId;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,6 +16,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -30,7 +32,7 @@ public class PlayerEventListener implements Listener {
 	private final PluginMain plugin;
 
 	// player death respawn hash set, prevents setting respawn location to graveyards on non-death respawn events
-	private Set<UUID> deathTriggeredRespawn = new HashSet<>();
+	private final Set<UUID> deathTriggeredRespawn = ConcurrentHashMap.newKeySet();
 
 	// set entity target cancel reasons
 	private final static Set<TargetReason> cancelReasons =
@@ -130,8 +132,8 @@ public class PlayerEventListener implements Listener {
 			return;
 		}
 
-		// remove player uuid from deathTriggeredRespawn hashset
-		deathTriggeredRespawn.remove(player.getUniqueId());
+		// remove player uuid from deathTriggeredRespawn set
+			deathTriggeredRespawn.remove(player.getUniqueId());
 
 		// get config default safety time duration
 		Integer duration = plugin.getConfig().getInt("safety-time");
