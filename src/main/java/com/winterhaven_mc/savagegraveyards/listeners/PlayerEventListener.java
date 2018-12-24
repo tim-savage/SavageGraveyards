@@ -46,10 +46,10 @@ public class PlayerEventListener implements Listener {
 	 * @param	plugin		A reference to this plugin's main class
 	 */
 	public PlayerEventListener(final PluginMain plugin) {
-		
+
 		// reference to main
 		this.plugin = plugin;
-		
+
 		// register events in this class
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
@@ -161,7 +161,7 @@ public class PlayerEventListener implements Listener {
 
 		// get config default safety time duration
 		Integer duration = plugin.getConfig().getInt("safety-time");
-		
+
 		// check that player world is enabled
 		if (!plugin.worldManager.isEnabled(player.getWorld())) {
 			return;
@@ -171,14 +171,14 @@ public class PlayerEventListener implements Listener {
 		if (!player.hasPermission("graveyard.respawn")) {
 			return;
 		}
-		
+
 		// get closest valid graveyard for player
 		Graveyard closest = plugin.dataStore.selectNearestGraveyard(player);
-		
+
 		// if closest graveyard is not null, set respawn location
 		if (closest != null) {
 			event.setRespawnLocation(closest.getLocation());
-			
+
 			// if graveyard has custom respawn message, send custom message to player
 			if (closest.getRespawnMessage() != null && !closest.getRespawnMessage().isEmpty()) {
 				player.sendMessage(ChatColor.translateAlternateColorCodes('&', closest.getRespawnMessage()));
@@ -187,17 +187,17 @@ public class PlayerEventListener implements Listener {
 			else {
 				plugin.messageManager.sendMessage(player, MessageId.DEFAULT_RESPAWN, closest);
 			}
-			
+
 			// if graveyard safety time is not null, use to set duration
 			if (closest.getSafetyTime() != null) {
 				duration = closest.getSafetyTime();
 			}
-			
+
 			// if safety time is negative, get configured default
 			if (duration < 0) {
 				duration = plugin.getConfig().getInt("safety-time");
 			}
-			
+
 			// put player in safety cooldown map
 			plugin.safetyManager.putPlayer(player, duration);
 		}
@@ -213,16 +213,16 @@ public class PlayerEventListener implements Listener {
 
 		// check that target is a player
 		if (event.getTarget() != null && event.getTarget() instanceof Player) {
-			
+
 			// get targeted player
 			Player player = (Player) event.getTarget();
-			
+
 			// if player is in safety cooldown, cancel event
 			if (plugin.safetyManager.isPlayerProtected(player)) {
-				
+
 				// get target reason
 				EntityTargetEvent.TargetReason reason = event.getReason();
-				
+
 				// if reason is in cancelReasons list, cancel event
 				if (cancelReasons.contains(reason)) {
 					event.setCancelled(true);
