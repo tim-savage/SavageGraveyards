@@ -35,7 +35,7 @@ public final class Graveyard {
 
 
 	/**
-	 * Private class constructor used with static builder
+	 * Private class constructor for use with static builder
 	 * @param builder builder object
 	 */
 	private Graveyard(final Builder builder) {
@@ -54,6 +54,9 @@ public final class Graveyard {
 	}
 
 
+	/**
+	 * Builder class
+	 */
 	public final static class Builder {
 
 		private int primaryKey;
@@ -70,9 +73,16 @@ public final class Graveyard {
 		private Location location;
 
 
+		/**
+		 * Builder class constructor
+		 */
 		public Builder() { }
 
 
+		/**
+		 * Builder class constructor
+		 * @param graveyard existing graveyard object from which all values are copied
+		 */
 		public Builder(Graveyard graveyard) {
 			this.primaryKey = graveyard.getPrimaryKey();
 			this.displayName = graveyard.getDisplayName();
@@ -88,74 +98,138 @@ public final class Graveyard {
 		}
 
 
-		final Builder primaryKey(final int val) {
-			primaryKey = val;
+		/**
+		 * set primary key
+		 * @param value int value to assign to builder primary key field
+		 * @return this Builder object
+		 */
+		final Builder primaryKey(final int value) {
+			primaryKey = value;
 			return this;
 		}
 
-		public final Builder displayName(final String val) {
-			displayName = val;
-			searchKey = createSearchKey(val);
+		/**
+		 * set display name field
+		 * @param value string value to assign to builder display name field
+		 * @return this Builder object
+		 */
+		public final Builder displayName(final String value) {
+			displayName = value;
+			searchKey = createSearchKey(value);
 			return this;
 		}
 
-		final Builder searchKey(final String val) {
-			searchKey = val;
+		/**
+		 * set search key field
+		 * @param value string value to assign to builder search key field
+		 * @return this Builder object
+		 */
+		final Builder searchKey(final String value) {
+			searchKey = value;
 			return this;
 		}
 
-		public final Builder enabled(final boolean val) {
-			enabled = val;
+		/**
+		 * set enabled field
+		 * @param value boolean value to assign to builder enabled field
+		 * @return this Builder object
+		 */
+		public final Builder enabled(final boolean value) {
+			enabled = value;
 			return this;
 		}
 
-		public final Builder hidden(final boolean val) {
-			hidden = val;
+		/**
+		 * set hidden field
+		 * @param value boolean value to assign to builder hidden field
+		 * @return this Builder object
+		 */
+		public final Builder hidden(final boolean value) {
+			hidden = value;
 			return this;
 		}
 
-		public final Builder discoveryRange(final int val) {
-			discoveryRange = val;
+		/**
+		 * set discovery range field
+		 * @param value int value to assign to builder discovery range field
+		 * @return this Builder object
+		 */
+		public final Builder discoveryRange(final int value) {
+			discoveryRange = value;
 			return this;
 		}
 
-		public final Builder discoveryMessage(final String val) {
-			discoveryMessage = val;
+		/**
+		 * set discovery message field
+		 * @param value string value to assign to builder discover message field
+		 * @return this Builder object
+		 */
+		public final Builder discoveryMessage(final String value) {
+			discoveryMessage = value;
 			return this;
 		}
 
-		public final Builder respawnMessage(final String val) {
-			respawnMessage = val;
+		/**
+		 * set respawn message field
+		 * @param value string value to assign to builder respawn message field
+		 * @return this Builder object
+		 */
+		public final Builder respawnMessage(final String value) {
+			respawnMessage = value;
 			return this;
 		}
 
-		public final Builder group(final String val) {
-			group = val;
+		/**
+		 * set group field
+		 * @param value string value to assign to builder group field
+		 * @return this Builder object
+		 */
+		public final Builder group(final String value) {
+			group = value;
 			return this;
 		}
 
-		final Builder safetyRange(final int val) {
-			safetyRange = val;
+		/**
+		 * set safety range field (currently unused)
+		 * @param value int value to assign to builder safety range field
+		 * @return this Builder object
+		 */
+		final Builder safetyRange(final int value) {
+			safetyRange = value;
 			return this;
 		}
 
-		public final Builder safetyTime(final int val) {
-			safetyTime = val;
+		/**
+		 * set safety time field
+		 * @param value int value to assign to builder safety time field
+		 * @return this Builder object
+		 */
+		public final Builder safetyTime(final int value) {
+			safetyTime = value;
 			return this;
 		}
 
-		public final Builder location(final Location val) {
+		/**
+		 * set location field
+		 * @param value location value to assign to builder location field
+		 * @return this Builder object
+		 */
+		public final Builder location(final Location value) {
 
 			// create defensive copy of passed location
-			location = new Location(val.getWorld(),
-					val.getX(),
-					val.getY(),
-					val.getZ(),
-					val.getYaw(),
-					val.getPitch());
+			location = new Location(value.getWorld(),
+					value.getX(),
+					value.getY(),
+					value.getZ(),
+					value.getYaw(),
+					value.getPitch());
 			return this;
 		}
 
+		/**
+		 * build Graveyard object from builder fields
+		 * @return new Graveyard object
+		 */
 		public final Graveyard build() {
 			return new Graveyard(this);
 		}
@@ -170,7 +244,6 @@ public final class Graveyard {
 		return this.primaryKey;
 	}
 
-
 	/**
 	 * Getter for display name
 	 * @return String - display name
@@ -178,7 +251,6 @@ public final class Graveyard {
 	public final String getDisplayName() {
 		return this.displayName;
 	}
-
 
 	/**
 	 * Getter for search key
@@ -188,7 +260,6 @@ public final class Graveyard {
 		return this.searchKey;
 	}
 
-
 	/**
 	 * Getter for enabled
 	 * @return boolean - enabled
@@ -196,7 +267,6 @@ public final class Graveyard {
 	public final boolean isEnabled() {
 		return this.enabled;
 	}
-
 
 	/**
 	 * Getter for hidden
@@ -206,7 +276,6 @@ public final class Graveyard {
 		return this.hidden;
 	}
 
-
 	/**
 	 * Getter for discovery range
 	 * @return int - discovery range
@@ -214,7 +283,6 @@ public final class Graveyard {
 	public final int getDiscoveryRange() {
 		return this.discoveryRange;
 	}
-
 
 	/**
 	 * Getter for group
@@ -224,7 +292,6 @@ public final class Graveyard {
 		return this.group;
 	}
 
-
 	/**
 	 * Getter for discovery message
 	 * @return String - discovery message
@@ -233,7 +300,6 @@ public final class Graveyard {
 		return this.discoveryMessage;
 	}
 
-
 	/**
 	 * Getter for respawn message
 	 * @return String - respawn message
@@ -241,7 +307,6 @@ public final class Graveyard {
 	public final String getRespawnMessage() {
 		return this.respawnMessage;
 	}
-
 
 	/**
 	 * Getter for location
@@ -258,7 +323,6 @@ public final class Graveyard {
 				this.location.getPitch());
 	}
 
-
 	/**
 	 * Getter for safety range (currently unused)
 	 * @return int - safety range
@@ -266,7 +330,6 @@ public final class Graveyard {
 	final int getSafetyRange() {
 		return this.safetyRange;
 	}
-
 
 	/**
 	 * Getter for safety time
