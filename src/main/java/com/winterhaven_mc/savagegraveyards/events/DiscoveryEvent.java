@@ -27,18 +27,21 @@ public final class DiscoveryEvent extends Event {
 	}
 
 
+	/**
+	 * Get player that triggered graveyard discovery
+	 * @return player
+	 */
 	public Player getPlayer() {
 		return this.player;
 	}
 
 
-	public String getGraveyardName() {
-		return this.graveyard.getDisplayName();
-	}
-
-
-	public Location getGraveyardLocation() {
-		return this.graveyard.getLocation();
+	/**
+	 * Get graveyard discovered by player
+	 * @return graveyard
+	 */
+	public Graveyard getGraveyard() {
+		return this.graveyard;
 	}
 
 }
