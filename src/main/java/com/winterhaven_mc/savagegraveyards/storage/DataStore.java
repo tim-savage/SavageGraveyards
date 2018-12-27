@@ -31,10 +31,10 @@ public abstract class DataStore {
 
 	/**
 	 * Get record
-	 * @param name the name of the Graveyard to be retrieved
+	 * @param displayName the name of the Graveyard to be retrieved
 	 * @return Graveyard object or null if no matching record
 	 */
-	public abstract Graveyard selectGraveyard(final String name);
+	public abstract Graveyard selectGraveyard(final String displayName);
 	
 	/**
 	 * Get undiscovered graveyards for player
@@ -46,7 +46,7 @@ public abstract class DataStore {
 	/**
 	 * Get undiscovered graveyard keys for player
 	 * @param player the player for whom to retrieve undiscovered Graveyard keys
-	 * @return HashSet of Graveyard keys that are undiscovered for player
+	 * @return HashSet of Graveyard search keys that are undiscovered for player
 	 */
 	public abstract Set<String> getUndiscoveredKeys(final Player player);
 	
@@ -60,9 +60,9 @@ public abstract class DataStore {
 	/**
 	 * Set graveyard to discovered for player
 	 * @param player the player for whom to set a Graveyard as discovered
-	 * @param key the Graveyard key to set as discovered
+	 * @param displayName display name or search key of the Graveyard to set as discovered
 	 */
-	public abstract void insertDiscovery(final Player player, final String key);
+	public abstract void insertDiscovery(final Player player, final String displayName);
 	
 	/**
 	 * Insert new record
@@ -78,10 +78,10 @@ public abstract class DataStore {
 
 	/**
 	 * Delete record
-	 * @param key key of record to be deleted
+	 * @param displayName display name or search key of record to be deleted
 	 * @return Deleted graveyard record
 	 */	
-	public abstract Graveyard deleteGraveyard(final String key);
+	public abstract Graveyard deleteGraveyard(final String displayName);
 	
 	/**
 	 * Close datastore connection
