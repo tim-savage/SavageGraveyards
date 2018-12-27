@@ -15,7 +15,7 @@ class Queries {
 	private static Properties properties;
 	
 
-	/*
+	/**
 	 * Private class constructor to prevent instantiation
 	 */
 	private Queries() {

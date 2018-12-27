@@ -159,9 +159,6 @@ public class PlayerEventListener implements Listener {
 		// remove player uuid from deathTriggeredRespawn set
 			deathTriggeredRespawn.remove(player.getUniqueId());
 
-		// get config default safety time duration
-		Integer duration = plugin.getConfig().getInt("safety-time");
-
 		// check that player world is enabled
 		if (!plugin.worldManager.isEnabled(player.getWorld())) {
 			return;
@@ -172,26 +169,25 @@ public class PlayerEventListener implements Listener {
 			return;
 		}
 
-		// get closest valid graveyard for player
-		Graveyard closest = plugin.dataStore.selectNearestGraveyard(player);
+		// get nearest valid graveyard for player
+		Graveyard graveyard = plugin.dataStore.selectNearestGraveyard(player);
 
-		// if closest graveyard is not null, set respawn location
-		if (closest != null) {
-			event.setRespawnLocation(closest.getLocation());
+		// if graveyard graveyard is not null, set respawn location
+		if (graveyard != null) {
+			event.setRespawnLocation(graveyard.getLocation());
 
 			// if graveyard has custom respawn message, send custom message to player
-			if (closest.getRespawnMessage() != null && !closest.getRespawnMessage().isEmpty()) {
-				player.sendMessage(ChatColor.translateAlternateColorCodes('&', closest.getRespawnMessage()));
+			if (graveyard.getRespawnMessage() != null && !graveyard.getRespawnMessage().isEmpty()) {
+				player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+						graveyard.getRespawnMessage()));
 			}
 			// else send default respawn message
 			else {
-				plugin.messageManager.sendMessage(player, MessageId.DEFAULT_RESPAWN, closest);
+				plugin.messageManager.sendMessage(player, MessageId.DEFAULT_RESPAWN, graveyard);
 			}
 
-			// if graveyard safety time is not null, use to set duration
-			if (closest.getSafetyTime() != null) {
-				duration = closest.getSafetyTime();
-			}
+			// get safety time duration
+			int duration = graveyard.getSafetyTime();
 
 			// if safety time is negative, get configured default
 			if (duration < 0) {

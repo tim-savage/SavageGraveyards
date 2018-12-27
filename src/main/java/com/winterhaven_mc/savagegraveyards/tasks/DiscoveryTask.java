@@ -1,6 +1,7 @@
 package com.winterhaven_mc.savagegraveyards.tasks;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
+import com.winterhaven_mc.savagegraveyards.events.DiscoveryEvent;
 import com.winterhaven_mc.savagegraveyards.storage.Graveyard;
 import com.winterhaven_mc.savagegraveyards.messages.MessageId;
 import com.winterhaven_mc.savagegraveyards.sounds.SoundId;
@@ -47,8 +48,8 @@ public class DiscoveryTask extends BukkitRunnable {
 							|| player.hasPermission("group." + graveyard.getGroup())) {
 
 						// get graveyard discovery range, or config default if null or negative
-						Integer discoveryRange = graveyard.getDiscoveryRange();
-						if (discoveryRange == null || discoveryRange < 0) {
+						int discoveryRange = graveyard.getDiscoveryRange();
+						if (discoveryRange < 0) {
 							discoveryRange = plugin.getConfig().getInt("discovery-range");
 						}
 
@@ -67,7 +68,11 @@ public class DiscoveryTask extends BukkitRunnable {
 							else {
 								plugin.messageManager.sendMessage(player, MessageId.DEFAULT_DISCOVERY, graveyard);
 							}
-							
+
+							// call discovery event
+							DiscoveryEvent event = new DiscoveryEvent(player, graveyard);
+							plugin.getServer().getPluginManager().callEvent(event);
+
 							// play discovery sound
 							plugin.soundConfig.playSound(player, SoundId.ACTION_DISCOVERY);
 						}

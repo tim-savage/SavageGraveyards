@@ -48,7 +48,7 @@ public abstract class DataStore {
 	 * @param player the player for whom to retrieve undiscovered Graveyard keys
 	 * @return HashSet of Graveyard keys that are undiscovered for player
 	 */
-	public abstract Set<Integer> getUndiscoveredKeys(final Player player);
+	public abstract Set<String> getUndiscoveredKeys(final Player player);
 	
 	/**
 	 * Gets closest graveyard to player's current location
