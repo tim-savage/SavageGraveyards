@@ -1094,8 +1094,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			return true;
 		}
 
+		// set default page
 		int page = 1;
 
+		// if argument exists, try to parse as integer page number
 		if (args.length == 2) {
 			try {
 				page = Integer.parseInt(args[1]);
@@ -1210,7 +1212,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	private boolean closestCommand(final CommandSender sender) {
 
 		// if command sender does not have permission to display help, output error message and return true
-		if (!sender.hasPermission("graveyard.closest")) {
+		if (!sender.hasPermission("graveyard.graveyard")) {
 			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_CLOSEST);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
@@ -1222,17 +1224,21 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			return true;
 		}
 
+		// cast sender to player
 		Player player = (Player) sender;
 
-		Graveyard closest = plugin.dataStore.selectNearestGraveyard(player);
+		// get nearest graveyard
+		Graveyard graveyard = plugin.dataStore.selectNearestGraveyard(player);
 
-		if (closest == null) {
+		// if no graveyard returned from datastore, send failure message and return
+		if (graveyard == null) {
 			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_CLOSEST_NO_MATCH);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
-		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_CLOSEST, closest);
+		// send success message
+		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_CLOSEST, graveyard);
 		return true;
 	}
 
@@ -1320,12 +1326,15 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			return true;
 		}
 
+		// set default command
 		String command = "help";
 
+		// get passed command
 		if (args.length > 1) {
 			command = args[1]; 
 		}
 
+		// set failure message
 		String helpMessage = "That is not a valid command.";
 
 		if (command.equalsIgnoreCase("create")) {
