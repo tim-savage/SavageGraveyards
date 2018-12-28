@@ -194,7 +194,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			return teleportCommand(sender,args);
 		}
 
-		// help command
+		// forget command
 		if (subcommand.equalsIgnoreCase("forget")) {
 			return forgetCommand(sender,args);
 		}
@@ -1351,6 +1351,12 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	}
 
 
+	/**
+	 * Remove graveyard discovery record for player
+	 * @param sender the command sender
+	 * @param args the command arguments
+	 * @return always returns {@code true}, to prevent display of bukkit usage message
+	 */
 	private boolean forgetCommand(final CommandSender sender, final String[] args) {
 
 		// check for permission
