@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 
 /**
@@ -88,9 +89,24 @@ public abstract class DataStore {
 	 * Delete record
 	 * @param displayName display name or search key of record to be deleted
 	 * @return Deleted graveyard record
-	 */	
+	 */
 	public abstract Graveyard deleteGraveyard(final String displayName);
-	
+
+
+	/**
+	 * Delete discovery record
+	 * @param displayName display name or search key of record to be deleted
+	 */
+	public abstract boolean deleteDiscovery(final String displayName, final UUID playerUUID);
+
+
+	/**
+	 * Select player UUIDs that have discovered a graveyard
+	 * @param displayName the display name or search key of the graveyard
+	 * @return List of UUID - player UUIDs that have discovered the graveyard
+	 */
+	public abstract List<UUID> selectPlayersDiscovered(final String displayName);
+
 
 	/**
 	 * Close datastore connection

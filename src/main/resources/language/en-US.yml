@@ -27,6 +27,18 @@ MESSAGES:
     enabled: true
     string: '&3[Graveyards]&c A valid graveyard could not be found in your current world!'
 
+  COMMAND_FAIL_FORGET:
+    enabled: true
+    string: '&3[Graveyards]&c %TARGET_PLAYER% has not discovered %GRAVEYARD_NAME%!'
+
+  COMMAND_FAIL_FORGET_INVALID_GRAVEYARD:
+    enabled: true
+    string: '&3[Graveyards]&c A graveyard with the name ''%GRAVEYARD_NAME%'' could not be found!'
+
+  COMMAND_FAIL_FORGET_INVALID_PLAYER:
+    enabled: true
+    string: '&3[Graveyards]&c That player could not be found!'
+
   COMMAND_FAIL_INVALID_ATTRIBUTE:
     enabled: true
     string: '&3[Graveyards]&c That is not a valid graveyard attribute!'
@@ -63,6 +75,10 @@ MESSAGES:
   COMMAND_SUCCESS_DELETE:
     enabled: true
     string: '&3[Graveyards]&b %GRAVEYARD_NAME% removed!'
+
+  COMMAND_SUCCESS_FORGET:
+    enabled: true
+    string: '&3[Graveyards]&b %GRAVEYARD_NAME% has been wiped from %TARGET_PLAYER%''s memory!'
 
   COMMAND_SUCCESS_RELOAD:
     enabled: true

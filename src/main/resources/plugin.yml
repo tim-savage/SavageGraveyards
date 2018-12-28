@@ -31,7 +31,11 @@ permissions:
   graveyard.discover:
     description: Allow player to discover hidden graveyards.
     default: true
-        
+
+  graveyard.forget:
+    description: Remove a graveyard from a player's memory.
+    default: op
+
   graveyard.help:
     description: Display help for graveyard commands.
     default: true
@@ -144,6 +148,7 @@ permissions:
       graveyard.closest: true
       graveyard.create: true
       graveyard.delete: true
+      graveyard.forget: true
       graveyard.list.disabled: true
       graveyard.list.hidden: true
       graveyard.reload: true

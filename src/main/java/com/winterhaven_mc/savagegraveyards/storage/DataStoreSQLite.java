@@ -89,7 +89,7 @@ class DataStoreSQLite extends DataStore {
 		List<Graveyard> returnList = new ArrayList<>();
 
 		try {
-			PreparedStatement preparedStatement = 
+			PreparedStatement preparedStatement =
 					connection.prepareStatement(getQuery("SelectAllGraveyards"));
 
 			// execute sql query
@@ -237,30 +237,30 @@ class DataStoreSQLite extends DataStore {
 
 	@Override
 	public Graveyard selectNearestGraveyard(final Player player) {
-		
+
 		// if player is null, return null record
 		if (player == null) {
 			return null;
 		}
-		
+
 		Location playerLocation = player.getLocation();
 		String uuidString = player.getUniqueId().toString();
 		String playerWorldName = player.getWorld().getName();
-		
+
 		Graveyard closest = null;
-		
+
 		try {
-			PreparedStatement preparedStatement = 
+			PreparedStatement preparedStatement =
 					connection.prepareStatement(getQuery("SelectNearestGraveyards"));
-	
+
 			preparedStatement.setString(1, playerWorldName);
 			preparedStatement.setString(2, uuidString);
-	
+
 			// execute sql query
 			ResultSet rs = preparedStatement.executeQuery();
-	
+
 			while (rs.next()) {
-			
+
 				int primaryKey = rs.getInt("id");
 				String searchKey = rs.getString("searchkey");
 				String displayName = rs.getString("displayname");
@@ -278,17 +278,17 @@ class DataStoreSQLite extends DataStore {
 				double z = rs.getDouble("z");
 				float yaw = rs.getFloat("yaw");
 				float pitch = rs.getFloat("pitch");
-	
+
 				World world;
-	
+
 				try {
 					world = plugin.getServer().getWorld(worldName);
 				} catch (Exception e) {
-					plugin.getLogger().warning("Stored record has unloaded world: " 
+					plugin.getLogger().warning("Stored record has unloaded world: "
 							+ worldName + ". Skipping record.");
 					continue;
 				}
-	
+
 				Location location = new Location(world,x,y,z,yaw,pitch);
 
 				Graveyard graveyard = new Graveyard.Builder()
@@ -307,7 +307,7 @@ class DataStoreSQLite extends DataStore {
 						.build();
 
 				if (groupName == null || groupName.isEmpty() || player.hasPermission("group." + groupName)) {
-					if (closest == null 
+					if (closest == null
 							|| graveyard.getLocation().distanceSquared(playerLocation)
 							< closest.getLocation().distanceSquared(playerLocation)) {
 						closest = graveyard;
@@ -316,18 +316,18 @@ class DataStoreSQLite extends DataStore {
 			}
 		}
 		catch (Exception e) {
-	
+
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
 					+ "fetch the closest Graveyard from the SQLite datastore.");
 			plugin.getLogger().warning(e.getLocalizedMessage());
-	
+
 			// if debugging is enabled, output stack trace
 			if (plugin.debug) {
 				e.getStackTrace();
 			}
 		}
-	
+
 		// return closest result
 		return closest;
 	}
@@ -340,11 +340,11 @@ class DataStoreSQLite extends DataStore {
 		List<String> returnList = new ArrayList<>();
 
 		try {
-			PreparedStatement preparedStatement = 
+			PreparedStatement preparedStatement =
 					connection.prepareStatement(getQuery("SelectMatchingGraveyardNames"));
 
 			preparedStatement.setString(1, match.toLowerCase() + "%");
-			
+
 			// execute sql query
 			ResultSet rs = preparedStatement.executeQuery();
 
@@ -375,19 +375,19 @@ class DataStoreSQLite extends DataStore {
 
 		// create empty set of Graveyard for return
 		Set<Graveyard> returnSet = new HashSet<>();
-		
+
 		try {
-			PreparedStatement preparedStatement = 
+			PreparedStatement preparedStatement =
 					connection.prepareStatement(getQuery("SelectUndiscoveredGraveyards"));
-			
+
 			preparedStatement.setString(1, player.getWorld().getName());
 			preparedStatement.setString(2, player.getUniqueId().toString());
-	
+
 			// execute sql query
 			ResultSet rs = preparedStatement.executeQuery();
-	
+
 			while (rs.next()) {
-				
+
 				int primaryKey = rs.getInt("id");
 				String searchKey = rs.getString("searchkey");
 				String displayName = rs.getString("displayname");
@@ -405,17 +405,17 @@ class DataStoreSQLite extends DataStore {
 				double z = rs.getDouble("z");
 				float yaw = rs.getFloat("yaw");
 				float pitch = rs.getFloat("pitch");
-	
+
 				World world;
-	
+
 				try {
 					world = plugin.getServer().getWorld(worldName);
 				} catch (Exception e) {
-					plugin.getLogger().warning("Stored record has unloaded world: " 
+					plugin.getLogger().warning("Stored record has unloaded world: "
 							+ worldName + ". Skipping record.");
 					continue;
 				}
-	
+
 				Location location = new Location(world,x,y,z,yaw,pitch);
 
 				Graveyard graveyard = new Graveyard.Builder()
@@ -437,18 +437,18 @@ class DataStoreSQLite extends DataStore {
 			}
 		}
 		catch (Exception e) {
-	
+
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
 					+ "fetch undiscovered Graveyard records from the SQLite datastore.");
 			plugin.getLogger().warning(e.getLocalizedMessage());
-	
+
 			// if debugging is enabled, output stack trace
 			if (plugin.debug) {
 				e.getStackTrace();
 			}
 		}
-	
+
 		// return results
 		return Collections.unmodifiableSet(returnSet);
 	}
@@ -466,7 +466,7 @@ class DataStoreSQLite extends DataStore {
 		Set<String> returnSet = new HashSet<>();
 
 		try {
-			PreparedStatement preparedStatement = 
+			PreparedStatement preparedStatement =
 					connection.prepareStatement(getQuery("SelectUndiscoveredGraveyardKeys"));
 
 			preparedStatement.setString(1, player.getWorld().getName());
@@ -560,7 +560,7 @@ class DataStoreSQLite extends DataStore {
 					synchronized(connection) {
 
 						// create prepared statement
-						PreparedStatement preparedStatement = 
+						PreparedStatement preparedStatement =
 								connection.prepareStatement(getQuery("InsertGraveyard"));
 
 						preparedStatement.setString(1, graveyard.getSearchKey());
@@ -621,7 +621,7 @@ class DataStoreSQLite extends DataStore {
 					synchronized(connection) {
 
 						// create prepared statement
-						PreparedStatement preparedStatement = 
+						PreparedStatement preparedStatement =
 								connection.prepareStatement(getQuery("UpdateGraveyard"));
 
 						preparedStatement.setString(1, graveyard.getSearchKey());
@@ -681,7 +681,7 @@ class DataStoreSQLite extends DataStore {
 					synchronized(connection) {
 
 						// create prepared statement
-						PreparedStatement preparedStatement = 
+						PreparedStatement preparedStatement =
 								connection.prepareStatement(getQuery("DeleteGraveyard"));
 
 						preparedStatement.setString(1, Graveyard.createSearchKey(displayName));
@@ -706,11 +706,105 @@ class DataStoreSQLite extends DataStore {
 					if (plugin.debug) {
 						e.getStackTrace();
 					}
-				}		
+				}
 			}
 		}.runTaskAsynchronously(plugin);
 
 		return graveyard;
+	}
+
+
+	@Override
+	public List<UUID> selectPlayersDiscovered(final String displayName) {
+
+		// get search key from passed display name
+		String searchKey = Graveyard.createSearchKey(displayName);
+
+		// if search key is null or empty, return empty set
+		if (searchKey == null || displayName.isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		// create empty list for return
+		List<UUID> resultList = new ArrayList<>();
+
+		try {
+			PreparedStatement preparedStatement =
+					connection.prepareStatement(getQuery("SelectPlayersDiscovered"));
+
+			preparedStatement.setString(1, searchKey);
+
+			// execute sql query
+			ResultSet rs = preparedStatement.executeQuery();
+
+			while (rs.next()) {
+				resultList.add(UUID.fromString(rs.getString("PlayerUuid")));
+			}
+
+		}
+		catch (Exception e) {
+
+			// output simple error message
+			plugin.getLogger().warning("An error occurred while trying to "
+					+ "fetch player discovery records from the SQLite datastore.");
+			plugin.getLogger().warning(e.getLocalizedMessage());
+
+			// if debugging is enabled, output stack trace
+			if (plugin.debug) {
+				e.getStackTrace();
+			}
+		}
+
+		// return results
+		return resultList;
+	}
+
+
+
+	@Override
+	public boolean deleteDiscovery(final String displayName, final UUID playerUUID) {
+
+		int rowsAffected;
+		boolean result = true;
+
+		try {
+
+			// synchronize on connection
+			synchronized(connection) {
+
+				// create prepared statement
+				PreparedStatement preparedStatement =
+						connection.prepareStatement(getQuery("DeleteDiscovery"));
+
+				preparedStatement.setString(1, playerUUID.toString());
+				preparedStatement.setString(2, Graveyard.createSearchKey(displayName));
+
+				// execute prepared statement
+				rowsAffected = preparedStatement.executeUpdate();
+			}
+
+			if (rowsAffected < 1) {
+				result = false;
+			}
+
+			// output debugging information
+			if (plugin.debug) {
+				plugin.getLogger().info(rowsAffected + " discoveries deleted.");
+			}
+		}
+		catch (Exception e) {
+
+			// output simple error message
+			plugin.getLogger().warning("An error occurred while attempting to "
+					+ "delete a Discovery record from the SQLite datastore.");
+			plugin.getLogger().warning(e.getLocalizedMessage());
+
+			// if debugging is enabled, output stack trace
+			if (plugin.debug) {
+				e.getStackTrace();
+			}
+		}
+		return result;
 	}
 
 
