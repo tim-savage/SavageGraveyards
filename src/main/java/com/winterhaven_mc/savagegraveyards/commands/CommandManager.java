@@ -1311,8 +1311,12 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 		// teleport player to graveyard location
 		Location destination = graveyard.getLocation();
+
+		// play teleport departure sound
+		plugin.soundConfig.playSound(player,SoundId.TELEPORT_SUCCESS_DEPARTURE);
 		if (player.teleport(destination, TeleportCause.PLUGIN)) {
 			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_TELEPORT, graveyard);
+			plugin.soundConfig.playSound(player,SoundId.TELEPORT_SUCCESS_ARRIVAL);
 		}
 		else {
 			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_TELEPORT, graveyard);
