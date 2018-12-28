@@ -319,10 +319,19 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// get graveyard name from arguments ArrayList
 		String displayName = arguments.remove(0);
 
+		// fetch graveyard from datastore
 		Graveyard graveyard = plugin.dataStore.selectGraveyard(displayName);
 
+		// if graveyard not found in datastore, send failure message and return
 		if (graveyard == null) {
-			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_NO_RECORD);
+
+			// create dummy graveyard to send to message manager
+			Graveyard dummyGraveyard = new Graveyard.Builder().displayName(displayName).build();
+
+			// send failure message
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_NO_RECORD, dummyGraveyard);
+
+			// play failure sound
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -1302,8 +1311,12 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 		// teleport player to graveyard location
 		Location destination = graveyard.getLocation();
-		player.teleport(destination, TeleportCause.PLUGIN);
-		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_TELEPORT, graveyard);
+		if (player.teleport(destination, TeleportCause.PLUGIN)) {
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_TELEPORT, graveyard);
+		}
+		else {
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_TELEPORT, graveyard);
+		}
 		return true;
 	}
 
