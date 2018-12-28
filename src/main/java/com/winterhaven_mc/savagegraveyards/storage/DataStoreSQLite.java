@@ -738,9 +738,13 @@ class DataStoreSQLite extends DataStore {
 			ResultSet rs = preparedStatement.executeQuery();
 
 			while (rs.next()) {
-				resultList.add(UUID.fromString(rs.getString("PlayerUuid")));
+				try {
+					resultList.add(UUID.fromString(rs.getString("PlayerUuid")));
+				}
+				catch (IllegalArgumentException e) {
+					plugin.getLogger().warning("Invalid Player UUID in datastore!");
+				}
 			}
-
 		}
 		catch (Exception e) {
 
