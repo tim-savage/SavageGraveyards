@@ -720,7 +720,7 @@ class DataStoreSQLite extends DataStore {
 		// get search key from passed display name
 		String searchKey = Graveyard.createSearchKey(displayName);
 
-		// if search key is null or empty, return empty set
+		// if search key is null or empty, return empty list
 		if (searchKey == null || displayName.isEmpty()) {
 			return Collections.emptyList();
 		}
