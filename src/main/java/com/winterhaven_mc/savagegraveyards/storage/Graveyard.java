@@ -38,7 +38,7 @@ public final class Graveyard {
 	 * Private class constructor for use with static builder
 	 * @param builder builder object
 	 */
-	public Graveyard(final Builder builder) {
+	private Graveyard(final Builder builder) {
 		primaryKey = builder.primaryKey;
 		displayName = builder.displayName;
 		searchKey = builder.searchKey;
