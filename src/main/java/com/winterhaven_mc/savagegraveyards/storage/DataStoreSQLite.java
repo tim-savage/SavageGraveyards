@@ -222,7 +222,7 @@ class DataStoreSQLite extends DataStore {
 		catch (SQLException e) {
 
 			// output simple error message
-			plugin.getLogger().warning("An error occured while fetching a Graveyard record from the SQLite database.");
+			plugin.getLogger().warning("An error occurred while fetching a Graveyard record from the SQLite database.");
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
@@ -587,7 +587,7 @@ class DataStoreSQLite extends DataStore {
 				catch (Exception e) {
 
 					// output simple error message
-					plugin.getLogger().warning("An error occured while inserting a Graveyard record "
+					plugin.getLogger().warning("An error occurred while inserting a Graveyard record "
 							+ "into the SQLite datastore.");
 					plugin.getLogger().warning(e.getLocalizedMessage());
 
@@ -649,7 +649,7 @@ class DataStoreSQLite extends DataStore {
 				catch (Exception e) {
 
 					// output simple error message
-					plugin.getLogger().warning("An error occured while updating a Graveyard record "
+					plugin.getLogger().warning("An error occurred while updating a Graveyard record "
 							+ "into the SQLite datastore.");
 					plugin.getLogger().warning(e.getLocalizedMessage());
 
@@ -724,7 +724,7 @@ class DataStoreSQLite extends DataStore {
 		catch (Exception e) {
 
 			// output simple error message
-			plugin.getLogger().warning("An error occured while closing the SQLite datastore.");
+			plugin.getLogger().warning("An error occurred while closing the SQLite datastore.");
 			plugin.getLogger().warning(e.getMessage());
 
 			// if debugging is enabled, output stack trace
