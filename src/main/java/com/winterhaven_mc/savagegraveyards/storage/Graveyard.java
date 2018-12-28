@@ -333,7 +333,7 @@ public final class Graveyard {
 
 	/**
 	 * Getter for safety time
-	 * @return int safety time
+	 * @return int - safety time
 	 */
 	public final int getSafetyTime() {
 		return this.safetyTime;

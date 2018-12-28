@@ -15,10 +15,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -322,10 +319,19 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// get graveyard name from arguments ArrayList
 		String displayName = arguments.remove(0);
 
+		// fetch graveyard from datastore
 		Graveyard graveyard = plugin.dataStore.selectGraveyard(displayName);
 
+		// if graveyard not found in datastore, send failure message and return
 		if (graveyard == null) {
-			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_NO_RECORD);
+
+			// create dummy graveyard to send to message manager
+			Graveyard dummyGraveyard = new Graveyard.Builder().displayName(displayName).build();
+
+			// send failure message
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_NO_RECORD, dummyGraveyard);
+
+			// play failure sound
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -1305,8 +1311,16 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 		// teleport player to graveyard location
 		Location destination = graveyard.getLocation();
-		player.teleport(destination, TeleportCause.COMMAND);
-		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_TELEPORT, graveyard);
+
+		// play teleport departure sound
+		plugin.soundConfig.playSound(player,SoundId.TELEPORT_SUCCESS_DEPARTURE);
+		if (player.teleport(destination, TeleportCause.PLUGIN)) {
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_TELEPORT, graveyard);
+			plugin.soundConfig.playSound(player,SoundId.TELEPORT_SUCCESS_ARRIVAL);
+		}
+		else {
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_TELEPORT, graveyard);
+		}
 		return true;
 	}
 

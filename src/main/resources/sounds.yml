@@ -19,7 +19,7 @@ COMMAND_SUCCESS_SET:
   player-only: true
   sound: ENTITY_PLAYER_LEVELUP
   volume: 1
-  pitch: 1.5
+  pitch: 1.25
 
 ACTION_DISCOVERY:
   enabled: true
@@ -27,3 +27,17 @@ ACTION_DISCOVERY:
   sound: ENTITY_PLAYER_LEVELUP
   volume: 1
   pitch: 1.5
+
+TELEPORT_SUCCESS_DEPARTURE:
+  enabled: true
+  player-only: false
+  sound: ENTITY_ENDERMAN_TELEPORT
+  volume: 1
+  pitch: 1
+
+TELEPORT_SUCCESS_ARRIVAL:
+  enabled: true
+  player-only: false
+  sound: ENTITY_ENDERMAN_TELEPORT
+  volume: 1
+  pitch: 1
