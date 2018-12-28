@@ -81,9 +81,10 @@ class DataStoreSQLite extends DataStore {
 
 	}
 
-	
+
+	@Override
 	public List<Graveyard> selectAllGraveyards() {
-	
+
 		// create empty list for return
 		List<Graveyard> returnList = new ArrayList<>();
 
@@ -140,23 +141,23 @@ class DataStoreSQLite extends DataStore {
 						.safetyTime(safetyTime)
 						.location(location)
 						.build();
-	
+
 				returnList.add(graveyard);
 			}
 		}
 		catch (Exception e) {
-	
+
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
 					+ "fetch all Graveyard records from the SQLite datastore.");
 			plugin.getLogger().warning(e.getLocalizedMessage());
-	
+
 			// if debugging is enabled, output stack trace
 			if (plugin.debug) {
 				e.getStackTrace();
 			}
 		}
-	
+
 		// return results as unmodifiable list
 		return Collections.unmodifiableList(returnList);
 	}
@@ -232,8 +233,9 @@ class DataStoreSQLite extends DataStore {
 		}
 		return graveyard;
 	}
-	
-	
+
+
+	@Override
 	public Graveyard selectNearestGraveyard(final Player player) {
 		
 		// if player is null, return null record
@@ -367,7 +369,7 @@ class DataStoreSQLite extends DataStore {
 		return Collections.unmodifiableList(returnList);
 	}
 
-	
+
 	@Override
 	public Set<Graveyard> getUndiscovered(final Player player) {
 
@@ -451,10 +453,10 @@ class DataStoreSQLite extends DataStore {
 		return Collections.unmodifiableSet(returnSet);
 	}
 
-	
+
 	@Override
 	public Set<String> getUndiscoveredKeys(final Player player) {
-		
+
 		// if player is null, return empty set
 		if (player == null) {
 			return Collections.emptySet();
@@ -462,34 +464,34 @@ class DataStoreSQLite extends DataStore {
 
 		// create empty set for return
 		Set<String> returnSet = new HashSet<>();
-		
+
 		try {
 			PreparedStatement preparedStatement = 
 					connection.prepareStatement(getQuery("SelectUndiscoveredGraveyardKeys"));
-			
+
 			preparedStatement.setString(1, player.getWorld().getName());
 			preparedStatement.setString(2, player.getUniqueId().toString());
-	
+
 			// execute sql query
 			ResultSet rs = preparedStatement.executeQuery();
-	
+
 			while (rs.next()) {
 				returnSet.add(rs.getString("searchkey"));
 			}
 		}
 		catch (Exception e) {
-	
+
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
 					+ "fetch undiscovered Graveyard ids from the SQLite datastore.");
 			plugin.getLogger().warning(e.getLocalizedMessage());
-	
+
 			// if debugging is enabled, output stack trace
 			if (plugin.debug) {
 				e.getStackTrace();
 			}
 		}
-	
+
 		// return results
 		return returnSet;
 	}
@@ -535,7 +537,7 @@ class DataStoreSQLite extends DataStore {
 		}.runTaskAsynchronously(plugin);
 
 	}
-	
+
 
 	@Override
 	public void insertGraveyard(final Graveyard graveyard) {
@@ -553,10 +555,10 @@ class DataStoreSQLite extends DataStore {
 			public void run() {
 
 				try {
-					
+
 					// synchronize on connection
 					synchronized(connection) {
-						
+
 						// create prepared statement
 						PreparedStatement preparedStatement = 
 								connection.prepareStatement(getQuery("InsertGraveyard"));
@@ -599,9 +601,9 @@ class DataStoreSQLite extends DataStore {
 	}
 
 
-	//	@Override
+	@Override
 	public void updateGraveyard(final Graveyard graveyard) {
-	
+
 		// if destination is null do nothing and return
 		if (graveyard == null) {
 			return;
@@ -645,12 +647,12 @@ class DataStoreSQLite extends DataStore {
 					}
 				}
 				catch (Exception e) {
-	
+
 					// output simple error message
 					plugin.getLogger().warning("An error occured while updating a Graveyard record "
 							+ "into the SQLite datastore.");
 					plugin.getLogger().warning(e.getLocalizedMessage());
-	
+
 					// if debugging is enabled, output stack trace
 					if (plugin.debug) {
 						e.getStackTrace();
@@ -733,12 +735,14 @@ class DataStoreSQLite extends DataStore {
 		setInitialized(false);
 	}
 
+
 	@Override
 	void sync() {
 
 		// no action necessary for this storage type
 
 	}
+
 
 	@Override
 	boolean delete() {
@@ -751,6 +755,7 @@ class DataStoreSQLite extends DataStore {
 		}
 		return result;
 	}
+
 
 	@Override
 	boolean exists() {
