@@ -1029,13 +1029,13 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 		// get custom discovery message and display if not null or empty
 		if (graveyard.getDiscoveryMessage() != null && !graveyard.getDiscoveryMessage().isEmpty()) {
-			sender.sendMessage(ChatColor.DARK_AQUA + "Custom Discovery MessageId: "
+			sender.sendMessage(ChatColor.DARK_AQUA + "Custom Discovery Message: "
 					+ ChatColor.RESET + graveyard.getDiscoveryMessage());
 		}
 
 		// get custom respawn message and display if not null or empty
 		if (graveyard.getRespawnMessage() != null && !graveyard.getRespawnMessage().isEmpty()) {
-			sender.sendMessage(ChatColor.DARK_AQUA + "Custom Respawn MessageId: "
+			sender.sendMessage(ChatColor.DARK_AQUA + "Custom Respawn Message: "
 					+ ChatColor.RESET + graveyard.getRespawnMessage());
 		}
 
