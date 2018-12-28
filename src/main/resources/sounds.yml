@@ -14,6 +14,13 @@ COMMAND_SUCCESS_DELETE:
   volume: 1
   pitch: 1
 
+COMMAND_SUCCESS_FORGET:
+  enabled: true
+  player-only: true
+  sound: BLOCK_BEACON_DEACTIVATE
+  volume: 1
+  pitch: 1
+
 COMMAND_SUCCESS_SET:
   enabled: true
   player-only: true

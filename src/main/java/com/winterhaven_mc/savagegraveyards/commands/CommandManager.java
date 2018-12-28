@@ -8,6 +8,7 @@ import com.winterhaven_mc.savagegraveyards.sounds.SoundId;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -34,7 +35,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	// list of possible subcommands
 	private final static List<String> SUBCOMMANDS =
 			Collections.unmodifiableList(new ArrayList<>(Arrays.asList(
-					"closest","create","delete","list","reload",
+					"closest","create","delete","forget","list","reload",
 					"set","show","status","teleport","help")));
 
 	// list of possible attributes
@@ -88,21 +89,41 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 					|| args[0].equalsIgnoreCase("tp") 
 					|| args[0].equalsIgnoreCase("set")
 					|| args[0].equalsIgnoreCase("show")
-					|| args[0].equalsIgnoreCase("delete")) {
+					|| args[0].equalsIgnoreCase("delete")
+					|| args[0].equalsIgnoreCase("forget")) {
 				returnList = plugin.dataStore.selectMatchingGraveyardNames(args[1]);
 			}
 		}
 
 		// return list of valid matching attributes
-		else if (args.length == 3 && args[0].equalsIgnoreCase("set")) {
+		else if (args.length == 3) {
 
-			for (String attribute : ATTRIBUTES) {
-				if (sender.hasPermission("graveyard.set." + attribute)
-						&& attribute.startsWith(args[2])) {
-					returnList.add(attribute);
+			if (args[0].equalsIgnoreCase("set")) {
+				for (String attribute : ATTRIBUTES) {
+					if (sender.hasPermission("graveyard.set." + attribute)
+							&& attribute.startsWith(args[2])) {
+						returnList.add(attribute);
+					}
+				}
+			}
+			else if (args[0].equalsIgnoreCase("forget")) {
+				// select playerUUIDs for graveyard from Discovered table
+				List<UUID> playerUUIDs = plugin.dataStore.selectPlayersDiscovered(args[1]);
+
+				// iterate over list of playerUUIDs and add player names to return list that match prefix
+				for (UUID playerUUID : playerUUIDs) {
+
+					// get player name from UUID
+					String playerName = plugin.getServer().getOfflinePlayer(playerUUID).getName();
+
+					// if player name begins with arg[2] (ignoring case), add player name to return list
+					if (playerName.toLowerCase().startsWith(args[2].toLowerCase())) {
+						returnList.add(playerName);
+					}
 				}
 			}
 		}
+
 		return returnList;
 	}
 
@@ -171,6 +192,11 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// teleport command
 		if (subcommand.equalsIgnoreCase("teleport") || subcommand.equalsIgnoreCase("tp")) {
 			return teleportCommand(sender,args);
+		}
+
+		// forget command
+		if (subcommand.equalsIgnoreCase("forget")) {
+			return forgetCommand(sender,args);
 		}
 
 		// help command
@@ -1029,13 +1055,13 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 		// get custom discovery message and display if not null or empty
 		if (graveyard.getDiscoveryMessage() != null && !graveyard.getDiscoveryMessage().isEmpty()) {
-			sender.sendMessage(ChatColor.DARK_AQUA + "Custom Discovery MessageId: "
+			sender.sendMessage(ChatColor.DARK_AQUA + "Custom Discovery Message: "
 					+ ChatColor.RESET + graveyard.getDiscoveryMessage());
 		}
 
 		// get custom respawn message and display if not null or empty
 		if (graveyard.getRespawnMessage() != null && !graveyard.getRespawnMessage().isEmpty()) {
-			sender.sendMessage(ChatColor.DARK_AQUA + "Custom Respawn MessageId: "
+			sender.sendMessage(ChatColor.DARK_AQUA + "Custom Respawn Message: "
 					+ ChatColor.RESET + graveyard.getRespawnMessage());
 		}
 
@@ -1326,6 +1352,91 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 
 	/**
+	 * Remove graveyard discovery record for player
+	 * @param sender the command sender
+	 * @param args the command arguments
+	 * @return always returns {@code true}, to prevent display of bukkit usage message
+	 */
+	private boolean forgetCommand(final CommandSender sender, final String[] args) {
+
+		// check for permission
+		if (!sender.hasPermission("graveyard.forget")) {
+			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_FORGET);
+			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
+			return true;
+		}
+
+		// convert args list to ArrayList so we can remove elements as we parse them
+		List<String> arguments = new ArrayList<>(Arrays.asList(args));
+
+		// get subcommand from arguments ArrayList
+		String subcommand = arguments.remove(0);
+
+		// argument limits
+		int minArgs = 3;
+
+		// check for minimum arguments
+		if (args.length < minArgs) {
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER);
+			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
+			displayUsage(sender, subcommand);
+			return true;
+		}
+
+		// get graveyard search key
+		String searchKey = arguments.remove(0);
+
+		// get graveyard (for messages)
+		Graveyard graveyard = plugin.dataStore.selectGraveyard(searchKey);
+
+		// if no matching graveyard found, send message and return
+		if (graveyard == null) {
+
+			// create dummy graveyard for message
+			Graveyard dummyGraveyard = new Graveyard.Builder().displayName(searchKey).build();
+
+			// send graveyard not found message
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_FORGET_INVALID_GRAVEYARD, dummyGraveyard);
+
+			// play command fail sound
+			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
+			return true;
+		}
+
+		// get player name
+		String playerName = arguments.remove(0);
+
+		// get offline player from passed player name
+		@SuppressWarnings("deprecation")
+		OfflinePlayer player = plugin.getServer().getOfflinePlayer(playerName);
+
+		// if player not found, send message and return
+		if (player == null) {
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_FORGET_INVALID_PLAYER);
+			return true;
+		}
+
+		// delete discovery record
+		if (plugin.dataStore.deleteDiscovery(searchKey, player.getUniqueId())) {
+
+			// send success message
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_FORGET, graveyard, player);
+
+			// play success sound
+			plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_FORGET);
+		}
+		else {
+			// send failure message
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_FORGET, graveyard, player);
+
+			// send command fail sound
+			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
+		}
+		return true;
+	}
+
+
+	/**
 	 * Display help message for commands
 	 * @param sender the command sender
 	 * @param args the command arguments
@@ -1356,6 +1467,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		}
 		if (command.equalsIgnoreCase("delete")) {
 			helpMessage = "Removes a graveyard location.";
+		}
+		if (command.equalsIgnoreCase("forget")) {
+			helpMessage = "Remove graveyard from player's memory.";
 		}
 		if (command.equalsIgnoreCase("help")) {
 			helpMessage = "Displays help for graveyard commands.";
@@ -1409,14 +1523,19 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		if ((command.equalsIgnoreCase("create") 
 				|| command.equalsIgnoreCase("all"))
 				&& sender.hasPermission("graveyard.create")) {
-			sender.sendMessage(USAGE_COLOR + "/graveyard create <name>");
+			sender.sendMessage(USAGE_COLOR + "/graveyard create <graveyard>");
 		}
-		if ((command.equalsIgnoreCase("delete") 
+		if ((command.equalsIgnoreCase("delete")
 				|| command.equalsIgnoreCase("all"))
 				&& sender.hasPermission("graveyard.delete")) {
-			sender.sendMessage(USAGE_COLOR + "/graveyard delete <name>");
+			sender.sendMessage(USAGE_COLOR + "/graveyard delete <graveyard>");
 		}
-		if ((command.equalsIgnoreCase("help") 
+		if ((command.equalsIgnoreCase("forget")
+				|| command.equalsIgnoreCase("all"))
+				&& sender.hasPermission("graveyard.forget")) {
+			sender.sendMessage(USAGE_COLOR + "/graveyard forget <graveyard> <player>");
+		}
+		if ((command.equalsIgnoreCase("help")
 				|| command.equalsIgnoreCase("all"))
 				&& sender.hasPermission("graveyard.help")) {
 			sender.sendMessage(USAGE_COLOR + "/graveyard help [command]");
@@ -1429,12 +1548,12 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		if ((command.equalsIgnoreCase("set") 
 				|| command.equalsIgnoreCase("all"))
 				&& sender.hasPermission("graveyard.set")) {
-			sender.sendMessage(USAGE_COLOR + "/graveyard set <name> <attribute> <value>");
+			sender.sendMessage(USAGE_COLOR + "/graveyard set <graveyard> <attribute> <value>");
 		}
 		if ((command.equalsIgnoreCase("show") 
 				|| command.equalsIgnoreCase("all"))
 				&& sender.hasPermission("graveyard.show")) {
-			sender.sendMessage(USAGE_COLOR + "/graveyard show <name>");
+			sender.sendMessage(USAGE_COLOR + "/graveyard show <graveyard>");
 		}
 		if ((command.equalsIgnoreCase("teleport") 
 				|| command.equalsIgnoreCase("tp")

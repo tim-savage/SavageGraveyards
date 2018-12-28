@@ -5,6 +5,7 @@ import com.winterhaven_mc.savagegraveyards.storage.Graveyard;
 import com.winterhaven_mc.util.AbstractMessageManager;
 
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
 import java.util.HashMap;
@@ -124,6 +125,29 @@ public class MessageManager extends AbstractMessageManager {
 
 		replacements.put("%GRAVEYARD_NAME%", graveyard.getDisplayName());
 		replacements.put("%VALUE%", value);
+
+		//noinspection unchecked
+		sendMessage(recipient, messageId, replacements);
+	}
+
+
+	/** Send message to player
+	 *
+	 * @param recipient		Player receiving message
+	 * @param messageId		message identifier
+	 * @param graveyard		graveyard object
+	 * @param targetPlayer	targeted player
+	 */
+	public void sendMessage(final CommandSender recipient,
+							final MessageId messageId,
+							final Graveyard graveyard,
+							final OfflinePlayer targetPlayer) {
+
+		// get default replacement map
+		Map<String,String> replacements = getDefaultReplacements(recipient);
+
+		replacements.put("%GRAVEYARD_NAME%", graveyard.getDisplayName());
+		replacements.put("%TARGET_PLAYER%", targetPlayer.getName());
 
 		//noinspection unchecked
 		sendMessage(recipient, messageId, replacements);
