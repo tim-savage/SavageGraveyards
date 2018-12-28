@@ -1302,7 +1302,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 		// teleport player to graveyard location
 		Location destination = graveyard.getLocation();
-		player.teleport(destination, TeleportCause.COMMAND);
+		player.teleport(destination, TeleportCause.PLUGIN);
 		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_TELEPORT, graveyard);
 		return true;
 	}
