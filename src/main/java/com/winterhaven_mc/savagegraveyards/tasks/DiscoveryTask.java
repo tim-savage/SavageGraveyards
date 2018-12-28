@@ -19,11 +19,13 @@ import com.google.common.collect.ImmutableList;
 public class DiscoveryTask extends BukkitRunnable {
 
 	private final PluginMain plugin;
-	
+
+
 	public DiscoveryTask(final PluginMain plugin) {
 		this.plugin = plugin;
 	}
-	
+
+
 	@Override
 	public void run() {
 
@@ -32,10 +34,10 @@ public class DiscoveryTask extends BukkitRunnable {
 
 			// get player location
 			Location playerLocation = player.getLocation();
-			
+
 			// iterate through player's undiscovered graveyards
 			for (Graveyard graveyard : plugin.dataStore.getUndiscovered(player)) {
-				
+
 				// get graveyard location
 				Location dsLocation = graveyard.getLocation();
 
