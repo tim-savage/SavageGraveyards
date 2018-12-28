@@ -12,10 +12,9 @@ import java.util.Set;
 public abstract class DataStore {
 
 	private boolean initialized;
-	
 	DataStoreType type;
-
 	String filename;
+
 
 	/**
 	 * Initialize storage
@@ -23,11 +22,13 @@ public abstract class DataStore {
 	 */
 	abstract void initialize() throws Exception;
 	
+
 	/**
 	 * get all graveyard records
 	 * @return List of all graveyard objects in alphabetical order
 	 */
 	public abstract List<Graveyard> selectAllGraveyards();
+
 
 	/**
 	 * Get record
@@ -36,6 +37,7 @@ public abstract class DataStore {
 	 */
 	public abstract Graveyard selectGraveyard(final String displayName);
 	
+
 	/**
 	 * Get undiscovered graveyards for player
 	 * @param player the player for whom to retrieve undiscovered Graveyards
@@ -43,6 +45,7 @@ public abstract class DataStore {
 	 */
 	public abstract Set<Graveyard> getUndiscovered(final Player player);
 	
+
 	/**
 	 * Get undiscovered graveyard keys for player
 	 * @param player the player for whom to retrieve undiscovered Graveyard keys
@@ -50,12 +53,14 @@ public abstract class DataStore {
 	 */
 	public abstract Set<String> getUndiscoveredKeys(final Player player);
 	
+
 	/**
 	 * Gets closest graveyard to player's current location
 	 * @param player the player for whom to retrieve the nearest Graveyard
 	 * @return Graveyard object
 	 */
 	public abstract Graveyard selectNearestGraveyard(final Player player);
+
 
 	/**
 	 * Set graveyard to discovered for player
@@ -64,17 +69,20 @@ public abstract class DataStore {
 	 */
 	public abstract void insertDiscovery(final Player player, final String displayName);
 	
+
 	/**
 	 * Insert new record
 	 * @param graveyard the Graveyard object to insert into the datastore
 	 */
 	public abstract void insertGraveyard(final Graveyard graveyard);
 
+
 	/**
 	 * Update record
 	 * @param graveyard the Graveyard to update in the datastore
 	 */
 	public abstract void updateGraveyard(final Graveyard graveyard);
+
 
 	/**
 	 * Delete record
@@ -83,28 +91,33 @@ public abstract class DataStore {
 	 */	
 	public abstract Graveyard deleteGraveyard(final String displayName);
 	
+
 	/**
 	 * Close datastore connection
 	 */
 	public abstract void close();
+
 
 	/**
 	 * Sync datastore to disk if supported
 	 */
 	abstract void sync();
 	
+
 	/**
 	 * Delete datastore
 	 */
 	@SuppressWarnings("UnusedReturnValue")
 	abstract boolean delete();
 	
+
 	/**
 	 * Check that datastore exists
 	 * @return true if datastore exists, false if it does not
 	 */
 	abstract boolean exists();
 	
+
 	/**
 	 * Get datastore filename or equivalent
 	 * @return datastore filename
@@ -112,6 +125,7 @@ public abstract class DataStore {
 	String getFilename() {
 		return this.filename;
 	}
+
 
 	/**
 	 * Get datastore type
@@ -121,6 +135,7 @@ public abstract class DataStore {
 		return this.type;
 	}
 	
+
 	/**
 	 * Get datastore name
 	 * @return String containing datastore name
@@ -130,6 +145,7 @@ public abstract class DataStore {
 		return this.getType().toString();
 	}
 	
+
 	/**
 	 * Get datastore initialized field
 	 * @return true if datastore is initialized, false if it is not
@@ -138,6 +154,7 @@ public abstract class DataStore {
 		return this.initialized;
 	}
 	
+
 	/**
 	 * Set initialized field
 	 * @param initialized the initialized value of the datastore
@@ -145,6 +162,7 @@ public abstract class DataStore {
 	void setInitialized(final boolean initialized) {
 		this.initialized = initialized;
 	}
+
 
 	/**
 	 * Get records that prefix match string
