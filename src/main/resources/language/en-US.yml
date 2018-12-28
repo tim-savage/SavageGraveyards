@@ -47,6 +47,10 @@ MESSAGES:
     enabled: true
     string: '&3[Graveyards]&c That is not an existing graveyard!'
 
+  COMMAND_FAIL_TELEPORT:
+    enabled: true
+    string: '&3[Graveyards]&c Could not teleport to %GRAVEYARD_NAME%!'
+
 
   COMMAND_SUCCESS_CLOSEST:
     enabled: true
@@ -99,6 +103,10 @@ MESSAGES:
   COMMAND_SUCCESS_SET_SAFETYTIME:
     enabled: true
     string: '&3[Graveyards]&b Set safety time: &2%VALUE%&b for &2%GRAVEYARD_NAME%&b.'
+
+  COMMAND_SUCCESS_TELEPORT:
+    enabled: true
+    string: '&3[Graveyards]&b Successfully teleported to %GRAVEYARD_NAME%.'
 
 
   DEFAULT_DISCOVERY:
