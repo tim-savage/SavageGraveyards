@@ -197,7 +197,7 @@ public class MessageManager extends AbstractMessageManager {
 
 
 	/**
-	 * Send message to player
+	 * Display list header/footer
 	 *
 	 * @param recipient Player receiving message
 	 * @param messageId message identifier
