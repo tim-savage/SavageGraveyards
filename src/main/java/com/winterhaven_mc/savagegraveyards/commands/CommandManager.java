@@ -1231,7 +1231,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		int itemNumber = startIndex;
 
 		// display list header
-		plugin.messageManager.sendMessage(sender, MessageId.LIST_HEADER, page, pageCount);
+		plugin.messageManager.listAnnotation(sender, MessageId.LIST_HEADER, page, pageCount);
 
 		for (Graveyard graveyard : displayRange) {
 
@@ -1255,7 +1255,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		}
 
 		// display list footer
-		plugin.messageManager.sendMessage(sender, MessageId.LIST_FOOTER, page, pageCount);
+		plugin.messageManager.listAnnotation(sender, MessageId.LIST_FOOTER, page, pageCount);
 		return true;
 	}
 
