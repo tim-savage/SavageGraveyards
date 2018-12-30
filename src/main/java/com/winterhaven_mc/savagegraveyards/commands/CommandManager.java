@@ -251,6 +251,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		sender.sendMessage(ChatColor.GREEN + "Discovery check interval: "
 				+ ChatColor.RESET + plugin.getConfig().getInt("discovery-interval") + " ticks");
 
+		sender.sendMessage(ChatColor.GREEN + "List items page size: "
+				+ ChatColor.RESET + plugin.getConfig().getInt("list-page-size") + " items");
+
 		sender.sendMessage(ChatColor.GREEN + "Enabled Words: "
 				+ ChatColor.RESET + plugin.worldManager.getEnabledWorldNames().toString());
 

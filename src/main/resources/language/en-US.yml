@@ -1,13 +1,14 @@
 # Message configuration file for ${project.name} v${project.version}
-#
+
 # Variable substitutions:
-# %PLAYER_NAME%         Player's name
-# %WORLD_NAME%          Player world name
+# %PLAYER_NAME%         Message recipient's name
+# %TARGET_PLAYER%       Other player's name (available in forget command messages only)
 # %GRAVEYARD_NAME%      display name of graveyard
-# %WORLD_NAME%          world name of graveyard
-# %LOC_X%               graveyard coordinates
-# %LOC_Y%               graveyard coordinates
-# %LOC_Z%               graveyard coordinates
+# %WORLD_NAME%          world name of graveyard (or message recipient if no graveyard)
+# %LOC_X%               graveyard coordinates (or message recipient if no graveyard)
+# %LOC_Y%               graveyard coordinates (or message recipient if no graveyard)
+# %LOC_Z%               graveyard coordinates (or message recipient if no graveyard)
+
 
 MESSAGES:
   COMMAND_FAIL_ARGS_COUNT_UNDER:
