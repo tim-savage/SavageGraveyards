@@ -21,6 +21,9 @@ import java.util.Map;
  */
 public class MessageManager extends AbstractMessageManager {
 
+	// reference to plugin main class
+	private final PluginMain plugin;
+
 	/**
 	 * Constructor method for class
 	 * 
@@ -31,6 +34,9 @@ public class MessageManager extends AbstractMessageManager {
 		// call super class constructor
 		//noinspection unchecked
 		super(plugin, MessageId.class);
+
+		// set reference to plugin main class
+		this.plugin = plugin;
 	}
 
 //# %PLAYER_NAME%          Player's name, with no color codes
@@ -80,7 +86,13 @@ public class MessageManager extends AbstractMessageManager {
 		Map<String,String> replacements = getDefaultReplacements(recipient);
 
 		// set replacement strings
-		replacements.put("%GRAVEYARD_NAME%", graveyard.getDisplayName());
+		if (graveyard != null) {
+			replacements.put("%GRAVEYARD_NAME%", graveyard.getDisplayName());
+			replacements.put("%WORLD_NAME%", plugin.worldManager.getWorldName(graveyard.getLocation().getWorld()));
+			replacements.put("%LOC_X%", String.valueOf(graveyard.getLocation().getBlockX()));
+			replacements.put("%LOC_Y%", String.valueOf(graveyard.getLocation().getBlockY()));
+			replacements.put("%LOC_Z%", String.valueOf(graveyard.getLocation().getBlockZ()));
+		}
 
 		//noinspection unchecked
 		sendMessage(recipient, messageId, replacements);
@@ -123,7 +135,14 @@ public class MessageManager extends AbstractMessageManager {
 		// get default replacement map
 		Map<String,String> replacements = getDefaultReplacements(recipient);
 
-		replacements.put("%GRAVEYARD_NAME%", graveyard.getDisplayName());
+		if (graveyard != null) {
+			replacements.put("%GRAVEYARD_NAME%", graveyard.getDisplayName());
+			replacements.put("%WORLD_NAME%", plugin.worldManager.getWorldName(graveyard.getLocation().getWorld()));
+			replacements.put("%LOC_X%", String.valueOf(graveyard.getLocation().getBlockX()));
+			replacements.put("%LOC_Y%", String.valueOf(graveyard.getLocation().getBlockY()));
+			replacements.put("%LOC_Z%", String.valueOf(graveyard.getLocation().getBlockZ()));
+		}
+
 		replacements.put("%VALUE%", value);
 
 		//noinspection unchecked
@@ -146,7 +165,14 @@ public class MessageManager extends AbstractMessageManager {
 		// get default replacement map
 		Map<String,String> replacements = getDefaultReplacements(recipient);
 
-		replacements.put("%GRAVEYARD_NAME%", graveyard.getDisplayName());
+		if (graveyard != null) {
+			replacements.put("%GRAVEYARD_NAME%", graveyard.getDisplayName());
+			replacements.put("%WORLD_NAME%", plugin.worldManager.getWorldName(graveyard.getLocation().getWorld()));
+			replacements.put("%LOC_X%", String.valueOf(graveyard.getLocation().getBlockX()));
+			replacements.put("%LOC_Y%", String.valueOf(graveyard.getLocation().getBlockY()));
+			replacements.put("%LOC_Z%", String.valueOf(graveyard.getLocation().getBlockZ()));
+		}
+
 		replacements.put("%TARGET_PLAYER%", targetPlayer.getName());
 
 		//noinspection unchecked
@@ -171,6 +197,36 @@ public class MessageManager extends AbstractMessageManager {
 
 		replacements.put("%PAGE%", page.toString());
 		replacements.put("%PAGE_COUNT%", pageCount.toString());
+
+		//noinspection unchecked
+		sendMessage(recipient, messageId, replacements);
+	}
+
+
+	/**
+	 *  display one list item
+	 * @param recipient		Player receiving message
+	 * @param messageId		message identifier
+	 * @param itemNumber	item number in list
+	 */
+	public void listItem(final CommandSender recipient,
+							final MessageId messageId,
+							final Graveyard graveyard,
+							final int itemNumber) {
+
+		// get default replacement map
+		Map<String,String> replacements = getDefaultReplacements(recipient);
+
+		// set replacement strings
+		replacements.put("%ITEM_NUMBER%", String.valueOf(itemNumber));
+
+		if (graveyard != null) {
+			replacements.put("%GRAVEYARD_NAME%", graveyard.getDisplayName());
+			replacements.put("%WORLD_NAME%", plugin.worldManager.getWorldName(graveyard.getLocation().getWorld()));
+			replacements.put("%LOC_X%", String.valueOf(graveyard.getLocation().getBlockX()));
+			replacements.put("%LOC_Y%", String.valueOf(graveyard.getLocation().getBlockY()));
+			replacements.put("%LOC_Z%", String.valueOf(graveyard.getLocation().getBlockZ()));
+		}
 
 		//noinspection unchecked
 		sendMessage(recipient, messageId, replacements);
