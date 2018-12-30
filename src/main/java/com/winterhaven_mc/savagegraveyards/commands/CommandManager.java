@@ -21,8 +21,9 @@ import java.util.*;
 
 /**
  * Implements command executor for {@code SavageGraveyards} commands.
- * @author      Tim Savage
- * @version		1.0
+ *
+ * @author Tim Savage
+ * @version 1.0
  */
 public class CommandManager implements CommandExecutor, TabCompleter {
 
@@ -35,19 +36,19 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	// list of possible subcommands
 	private final static List<String> SUBCOMMANDS =
 			Collections.unmodifiableList(new ArrayList<>(Arrays.asList(
-					"closest","create","delete","forget","list","reload",
-					"set","show","status","teleport","help")));
+					"closest", "create", "delete", "forget", "list", "reload",
+					"set", "show", "status", "teleport", "help")));
 
 	// list of possible attributes
 	private final static List<String> ATTRIBUTES =
 			Collections.unmodifiableList(new ArrayList<>(Arrays.asList(
-					"enabled","hidden","location","name","safetytime",
-					"discoveryrange","discoverymessage","respawnmessage")));
+					"enabled", "hidden", "location", "name", "safetytime",
+					"discoveryrange", "discoverymessage", "respawnmessage")));
 
 
 	/**
 	 * constructor method for {@code CommandManager} class
-	 * 
+	 *
 	 * @param plugin reference to main class
 	 */
 	public CommandManager(final PluginMain plugin) {
@@ -67,8 +68,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * Tab completer for SavageGraveyards commands
 	 */
 	@Override
-	public List<String> onTabComplete(final CommandSender sender, final Command command, 
-			final String alias, final String[] args) {
+	public List<String> onTabComplete(final CommandSender sender, final Command command,
+									  final String alias, final String[] args) {
 
 		List<String> returnList = new ArrayList<>();
 
@@ -86,7 +87,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// return list of valid matching graveyard names
 		else if (args.length == 2) {
 			if (args[0].equalsIgnoreCase("teleport")
-					|| args[0].equalsIgnoreCase("tp") 
+					|| args[0].equalsIgnoreCase("tp")
 					|| args[0].equalsIgnoreCase("set")
 					|| args[0].equalsIgnoreCase("show")
 					|| args[0].equalsIgnoreCase("delete")
@@ -130,11 +131,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 	/**
 	 * Command Executor for SavageGraveyards
-	 * 
 	 */
 	@Override
-	public boolean onCommand(final CommandSender sender, final Command command, 
-			final String label, final String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command command,
+							 final String label, final String[] args) {
 
 		String subcommand;
 
@@ -145,7 +145,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 		// if no arguments, display usage for all commands
 		else {
-			displayUsage(sender,"all");
+			displayUsage(sender, "all");
 			return true;
 		}
 
@@ -161,62 +161,63 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 		// reload command
 		if (subcommand.equalsIgnoreCase("reload")) {
-			return reloadCommand(sender,args);
+			return reloadCommand(sender, args);
 		}
 
 		//create command
 		if (subcommand.equalsIgnoreCase("create")) {
-			return createCommand(sender,args);
+			return createCommand(sender, args);
 		}
 
 		// delete command
 		if (subcommand.equalsIgnoreCase("delete")) {
-			return deleteCommand(sender,args);
+			return deleteCommand(sender, args);
 		}
 
 		// list command
 		if (subcommand.equalsIgnoreCase("list")) {
-			return listCommand(sender,args);
+			return listCommand(sender, args);
 		}
 
 		// set command
 		if (subcommand.equalsIgnoreCase("set")) {
-			return setCommand(sender,args);
+			return setCommand(sender, args);
 		}
 
 		// show command
 		if (subcommand.equalsIgnoreCase("show")) {
-			return showCommand(sender,args);
+			return showCommand(sender, args);
 		}
 
 		// teleport command
 		if (subcommand.equalsIgnoreCase("teleport") || subcommand.equalsIgnoreCase("tp")) {
-			return teleportCommand(sender,args);
+			return teleportCommand(sender, args);
 		}
 
 		// forget command
 		if (subcommand.equalsIgnoreCase("forget")) {
-			return forgetCommand(sender,args);
+			return forgetCommand(sender, args);
 		}
 
 		// help command
 		if (subcommand.equalsIgnoreCase("help")) {
-			return helpCommand(sender,args);
+			return helpCommand(sender, args);
 		}
 
 		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_INVALID_COMMAND);
 		plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
-		displayUsage(sender,"help");
+		displayUsage(sender, "help");
 		return true;
 	}
 
 
 	/**
 	 * Display plugin settings
+	 *
 	 * @param sender the command sender
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
-	private boolean statusCommand (final CommandSender sender) {
+	private boolean statusCommand(final CommandSender sender) {
 
 		// if command sender does not have permission to view status, output error message and return true
 		if (!sender.hasPermission("graveyard.status")) {
@@ -259,8 +260,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 	/**
 	 * Reload plugin settings
+	 *
 	 * @param sender the command sender
-	 * @param args the command arguments
+	 * @param args   the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
 	private boolean reloadCommand(final CommandSender sender, final String[] args) {
@@ -310,8 +312,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 	/**
 	 * Set new value for graveyard attribute
+	 *
 	 * @param sender the player issuing the command
-	 * @param args the command arguments
+	 * @param args   the command arguments
 	 * @return always return {@code true} to suppress bukkit usage message
 	 */
 	private boolean setCommand(final CommandSender sender, final String[] args) {
@@ -369,39 +372,39 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		String value = join(arguments);
 
 		if (attribute.equalsIgnoreCase("location")) {
-			return setLocation(sender,graveyard);
+			return setLocation(sender, graveyard);
 		}
 
 		if (attribute.equalsIgnoreCase("name")) {
-			return setName(sender,graveyard,value);
+			return setName(sender, graveyard, value);
 		}
 
 		if (attribute.equalsIgnoreCase("enabled")) {
-			return setEnabled(sender,graveyard,value);
+			return setEnabled(sender, graveyard, value);
 		}
 
 		if (attribute.equalsIgnoreCase("hidden")) {
-			return setHidden(sender,graveyard,value);
+			return setHidden(sender, graveyard, value);
 		}
 
 		if (attribute.equalsIgnoreCase("discoveryrange")) {
-			return setDiscoveryRange(sender,graveyard,value);
+			return setDiscoveryRange(sender, graveyard, value);
 		}
 
 		if (attribute.equalsIgnoreCase("discoverymessage")) {
-			return setDiscoveryMessage(sender,graveyard,value);
+			return setDiscoveryMessage(sender, graveyard, value);
 		}
 
 		if (attribute.equalsIgnoreCase("respawnmessage")) {
-			return setRespawnMessage(sender,graveyard,value);
+			return setRespawnMessage(sender, graveyard, value);
 		}
 
 		if (attribute.equalsIgnoreCase("group")) {
-			return setGroup(sender,graveyard,value);
+			return setGroup(sender, graveyard, value);
 		}
 
 		if (attribute.equalsIgnoreCase("safetytime")) {
-			return setSafetyTime(sender,graveyard,value);
+			return setSafetyTime(sender, graveyard, value);
 		}
 
 		// no matching attribute, send error message
@@ -413,7 +416,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 	/**
 	 * Set new location for existing graveyard
-	 * @param sender the player that issued the command
+	 *
+	 * @param sender    the player that issued the command
 	 * @param graveyard the existing graveyard to be updated
 	 * @return always returns {@code true} to suppress display of bukkit command usage
 	 */
@@ -447,16 +451,17 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		plugin.messageManager.sendMessage(player, MessageId.COMMAND_SUCCESS_SET_LOCATION, newGraveyard);
 
 		// play success sound
-		plugin.soundConfig.playSound(player,SoundId.COMMAND_SUCCESS_SET);
-		return true;	
+		plugin.soundConfig.playSound(player, SoundId.COMMAND_SUCCESS_SET);
+		return true;
 	}
 
 
 	/**
 	 * Set new display name for existing graveyard
-	 * @param sender the player that issued the command
+	 *
+	 * @param sender    the player that issued the command
 	 * @param graveyard the existing graveyard to be updated
-	 * @param newName the new display name for the graveyard
+	 * @param newName   the new display name for the graveyard
 	 * @return always returns {@code true} to suppress display of bukkit command usage
 	 */
 	private boolean setName(final CommandSender sender, final Graveyard graveyard, final String newName) {
@@ -483,15 +488,16 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_SET_NAME, newGraveyard, originalName);
 
 		// play success sound
-		plugin.soundConfig.playSound(sender,SoundId.COMMAND_SUCCESS_SET);
+		plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
 		return true;
 	}
 
 
 	/**
 	 * Set new enabled setting for existing graveyard
-	 * @param sender the player that issued the command
-	 * @param graveyard the existing graveyard to be updated
+	 *
+	 * @param sender      the player that issued the command
+	 * @param graveyard   the existing graveyard to be updated
 	 * @param passedValue the new enabled setting for the graveyard
 	 * @return always returns {@code true} to suppress display of bukkit command usage
 	 */
@@ -516,12 +522,12 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			value = plugin.getConfig().getString("default-enabled");
 			enabled = plugin.getConfig().getBoolean("default-enabled");
 		}
-		else if (value.equalsIgnoreCase("true") 
+		else if (value.equalsIgnoreCase("true")
 				|| value.equalsIgnoreCase("yes")
 				|| value.equalsIgnoreCase("y")) {
 			enabled = true;
 		}
-		else if (value.equalsIgnoreCase("false") 
+		else if (value.equalsIgnoreCase("false")
 				|| value.equalsIgnoreCase("no")
 				|| value.equalsIgnoreCase("n")) {
 			enabled = false;
@@ -544,15 +550,16 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_SET_ENABLED, newGraveyard, value);
 
 		// play success sound
-		plugin.soundConfig.playSound(sender,SoundId.COMMAND_SUCCESS_SET);
+		plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
 		return true;
 	}
 
 
 	/**
 	 * Set new hidden setting for existing graveyard
-	 * @param sender the player that issued the command
-	 * @param graveyard the existing graveyard to be updated
+	 *
+	 * @param sender      the player that issued the command
+	 * @param graveyard   the existing graveyard to be updated
 	 * @param passedValue the new hidden setting for the graveyard
 	 * @return always returns {@code true} to suppress display of bukkit command usage
 	 */
@@ -577,12 +584,12 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			value = plugin.getConfig().getString("default-hidden");
 			hidden = plugin.getConfig().getBoolean("default-hidden");
 		}
-		else if (value.equalsIgnoreCase("true") 
+		else if (value.equalsIgnoreCase("true")
 				|| value.equalsIgnoreCase("yes")
 				|| value.equalsIgnoreCase("y")) {
 			hidden = true;
 		}
-		else if (value.equalsIgnoreCase("false") 
+		else if (value.equalsIgnoreCase("false")
 				|| value.equalsIgnoreCase("no")
 				|| value.equalsIgnoreCase("n")) {
 			hidden = false;
@@ -605,16 +612,17 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_SET_HIDDEN, newGraveyard, value);
 
 		// play success sound
-		plugin.soundConfig.playSound(sender,SoundId.COMMAND_SUCCESS_SET);
+		plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
 		return true;
 	}
 
 
 	/**
 	 * Set new discovery range for existing graveyard
-	 * @param sender the player that issued the command
+	 *
+	 * @param sender    the player that issued the command
 	 * @param graveyard the existing graveyard to be updated
-	 * @param value the new hidden setting for the graveyard
+	 * @param value     the new hidden setting for the graveyard
 	 * @return always returns {@code true} to suppress display of bukkit command usage
 	 */
 	private boolean setDiscoveryRange(final CommandSender sender, final Graveyard graveyard, final String value) {
@@ -638,14 +646,15 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			else {
 				plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_CONSOLE);
 				plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
-				return true;					
+				return true;
 			}
 		}
 		else {
 			// try to parse entered range as integer
 			try {
 				discoveryRange = Integer.parseInt(value);
-			} catch (NumberFormatException e) {
+			}
+			catch (NumberFormatException e) {
 				plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_SET_INVALID_INTEGER);
 				plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 				return true;
@@ -670,7 +679,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 					String.valueOf(discoveryRange));
 
 			// play success sound
-			plugin.soundConfig.playSound(sender,SoundId.COMMAND_SUCCESS_SET);
+			plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
 		}
 		return true;
 	}
@@ -678,8 +687,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 	/**
 	 * Set new discovery message for existing graveyard
-	 * @param sender the player that issued the command
-	 * @param graveyard the existing graveyard to be updated
+	 *
+	 * @param sender                 the player that issued the command
+	 * @param graveyard              the existing graveyard to be updated
 	 * @param passedDiscoveryMessage the new discovery message for the graveyard
 	 * @return always returns {@code true} to suppress display of bukkit command usage
 	 */
@@ -713,15 +723,16 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_SET_DISCOVERYMESSAGE, newGraveyard);
 
 		// play success sound
-		plugin.soundConfig.playSound(sender,SoundId.COMMAND_SUCCESS_SET);
+		plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
 		return true;
 	}
 
 
 	/**
 	 * Set new respawn message for existing graveyard
-	 * @param sender the player that issued the command
-	 * @param graveyard the existing graveyard to be updated
+	 *
+	 * @param sender               the player that issued the command
+	 * @param graveyard            the existing graveyard to be updated
 	 * @param passedRespawnMessage the new respawn message for the graveyard
 	 * @return always returns {@code true} to suppress display of bukkit command usage
 	 */
@@ -758,9 +769,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 	/**
 	 * Set new group for existing graveyard
-	 * @param sender the player that issued the command
+	 *
+	 * @param sender    the player that issued the command
 	 * @param graveyard the existing graveyard to be updated
-	 * @param group the new group for the graveyard
+	 * @param group     the new group for the graveyard
 	 * @return always returns {@code true} to suppress display of bukkit command usage
 	 */
 	private boolean setGroup(final CommandSender sender,
@@ -786,16 +798,17 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_SET_GROUP, newGraveyard);
 
 		// play success sound
-		plugin.soundConfig.playSound(sender,SoundId.COMMAND_SUCCESS_SET);
+		plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
 		return true;
 	}
 
 
 	/**
 	 * Set new safety time for existing graveyard
-	 * @param sender the player that issued the command
+	 *
+	 * @param sender    the player that issued the command
 	 * @param graveyard the existing graveyard to be updated
-	 * @param value the new safety time for the graveyard
+	 * @param value     the new safety time for the graveyard
 	 * @return always returns {@code true} to suppress display of bukkit command usage
 	 */
 	private boolean setSafetyTime(final CommandSender sender,
@@ -818,7 +831,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			// try to parse entered safety time as integer
 			try {
 				safetyTime = Integer.parseInt(value);
-			} catch (NumberFormatException e) {
+			}
+			catch (NumberFormatException e) {
 				plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_SET_INVALID_INTEGER);
 				plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 				return true;
@@ -840,15 +854,16 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 				value);
 
 		// play success sound
-		plugin.soundConfig.playSound(sender,SoundId.COMMAND_SUCCESS_SET);
+		plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
 		return true;
 	}
 
 
 	/**
 	 * Create new graveyard
+	 *
 	 * @param sender the player that issued the command
-	 * @param args passed command arguments
+	 * @param args   passed command arguments
 	 * @return always returns {@code true} to suppress display of bukkit command usage
 	 */
 	private boolean createCommand(final CommandSender sender, final String[] args) {
@@ -914,15 +929,16 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_CREATE, newGraveyard);
 
 		// play sound effect
-		plugin.soundConfig.playSound(sender,SoundId.COMMAND_SUCCESS_SET);
+		plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
 		return true;
 	}
 
 
 	/**
 	 * Remove graveyard
+	 *
 	 * @param sender the command sender
-	 * @param args the command arguments
+	 * @param args   the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
 	private boolean deleteCommand(final CommandSender sender, final String[] args) {
@@ -974,15 +990,16 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_DELETE, graveyard);
 
 		// play sound effect
-		plugin.soundConfig.playSound(sender,SoundId.COMMAND_SUCCESS_DELETE);
+		plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_DELETE);
 		return true;
 	}
 
 
 	/**
 	 * Display a single graveyard's settings
+	 *
 	 * @param sender the command sender
-	 * @param args the command arguments
+	 * @param args   the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
 	private boolean showCommand(final CommandSender sender, final String[] args) {
@@ -1036,11 +1053,11 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 				+ ChatColor.RESET + graveyard.getDisplayName());
 
 		// display graveyard 'enabled' setting
-		sender.sendMessage(ChatColor.DARK_AQUA + "Enabled: " 
+		sender.sendMessage(ChatColor.DARK_AQUA + "Enabled: "
 				+ ChatColor.RESET + graveyard.isEnabled());
 
 		// display graveyard 'hidden' setting
-		sender.sendMessage(ChatColor.DARK_AQUA + "Hidden: " 
+		sender.sendMessage(ChatColor.DARK_AQUA + "Hidden: "
 				+ ChatColor.RESET + graveyard.isHidden());
 
 		// if graveyard discovery range is set to non-negative value, display it; else display configured default
@@ -1080,20 +1097,20 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		if (group == null || group.isEmpty()) {
 			group = "ALL";
 		}
-		sender.sendMessage(ChatColor.DARK_AQUA + "Group: " 
+		sender.sendMessage(ChatColor.DARK_AQUA + "Group: "
 				+ ChatColor.RESET + group);
 
 		// display graveyard location
 		Location location = graveyard.getLocation();
 		String locationString = ChatColor.DARK_AQUA + "Location: "
-				+ ChatColor.RESET+ "[" 
-				+ ChatColor.AQUA + location.getWorld().getName() 
+				+ ChatColor.RESET + "["
+				+ ChatColor.AQUA + location.getWorld().getName()
 				+ ChatColor.RESET + "] "
 				+ ChatColor.RESET + "X: " + ChatColor.AQUA + location.getBlockX() + " "
 				+ ChatColor.RESET + "Y: " + ChatColor.AQUA + location.getBlockY() + " "
 				+ ChatColor.RESET + "Z: " + ChatColor.AQUA + location.getBlockZ() + " "
 				+ ChatColor.RESET + "P: " + ChatColor.GOLD + String.format("%.2f", location.getPitch()) + " "
-				+ ChatColor.RESET + "Y: " + ChatColor.GOLD + String.format("%.2f", location.getYaw());		
+				+ ChatColor.RESET + "Y: " + ChatColor.GOLD + String.format("%.2f", location.getYaw());
 		sender.sendMessage(locationString);
 		return true;
 	}
@@ -1101,8 +1118,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 	/**
 	 * List Graveyard names
+	 *
 	 * @param sender the command sender
-	 * @param args the command arguments
+	 * @param args   the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
 	private boolean listCommand(final CommandSender sender, final String[] args) {
@@ -1133,7 +1151,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		if (args.length == 2) {
 			try {
 				page = Integer.parseInt(args[1]);
-			} catch (NumberFormatException e) {
+			}
+			catch (NumberFormatException e) {
 				// second argument not a page number, let default of 1 stand
 			}
 		}
@@ -1205,46 +1224,52 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			page = pageCount;
 		}
 		int startIndex = ((page - 1) * itemsPerPage);
-		int endIndex = Math.min((page*itemsPerPage),displayRecords.size());
+		int endIndex = Math.min((page * itemsPerPage), displayRecords.size());
 
 		List<Graveyard> displayRange = displayRecords.subList(startIndex, endIndex);
 
+		int itemNumber = startIndex;
+
 		// display list header
-		plugin.messageManager.sendMessage(sender, MessageId.LIST_HEADER,page,pageCount);
+		plugin.messageManager.sendMessage(sender, MessageId.LIST_HEADER, page, pageCount);
 
 		for (Graveyard graveyard : displayRange) {
 
+			// increment item number
+			itemNumber++;
+
 			// display disabled list item
 			if (!graveyard.isEnabled()) {
-				plugin.messageManager.sendMessage(sender, MessageId.LIST_ITEM_DISABLED, graveyard);
+				plugin.messageManager.listItem(sender, MessageId.LIST_ITEM_DISABLED, graveyard, itemNumber);
 				continue;
 			}
 
 			// display undiscovered list item
 			if (graveyard.isHidden() && undiscoveredIds.contains(graveyard.getSearchKey())) {
-				plugin.messageManager.sendMessage(sender, MessageId.LIST_ITEM_UNDISCOVERED, graveyard);
+				plugin.messageManager.listItem(sender, MessageId.LIST_ITEM_UNDISCOVERED, graveyard, itemNumber);
 				continue;
 			}
 
 			// display normal list item
-			plugin.messageManager.sendMessage(sender, MessageId.LIST_ITEM, graveyard);
+			plugin.messageManager.listItem(sender, MessageId.LIST_ITEM, graveyard, itemNumber);
 		}
 
 		// display list footer
-		plugin.messageManager.sendMessage(sender, MessageId.LIST_FOOTER,page,pageCount);
+		plugin.messageManager.sendMessage(sender, MessageId.LIST_FOOTER, page, pageCount);
 		return true;
 	}
 
 
 	/**
 	 * Display closest graveyard that is known to player and otherwise allowed
+	 *
 	 * @param sender the command sender
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
 	private boolean closestCommand(final CommandSender sender) {
 
 		// if command sender does not have permission to display help, output error message and return true
-		if (!sender.hasPermission("graveyard.graveyard")) {
+		if (!sender.hasPermission("graveyard.closest")) {
 			plugin.messageManager.sendMessage(sender, MessageId.PERMISSION_DENIED_CLOSEST);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
@@ -1277,8 +1302,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 	/**
 	 * Teleport player to graveyard location
+	 *
 	 * @param sender the command sender
-	 * @param args the command arguments
+	 * @param args   the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
 	private boolean teleportCommand(final CommandSender sender, final String[] args) {
@@ -1339,10 +1365,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		Location destination = graveyard.getLocation();
 
 		// play teleport departure sound
-		plugin.soundConfig.playSound(player,SoundId.TELEPORT_SUCCESS_DEPARTURE);
+		plugin.soundConfig.playSound(player, SoundId.TELEPORT_SUCCESS_DEPARTURE);
 		if (player.teleport(destination, TeleportCause.PLUGIN)) {
 			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_TELEPORT, graveyard);
-			plugin.soundConfig.playSound(player,SoundId.TELEPORT_SUCCESS_ARRIVAL);
+			plugin.soundConfig.playSound(player, SoundId.TELEPORT_SUCCESS_ARRIVAL);
 		}
 		else {
 			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_TELEPORT, graveyard);
@@ -1353,8 +1379,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 	/**
 	 * Remove graveyard discovery record for player
+	 *
 	 * @param sender the command sender
-	 * @param args the command arguments
+	 * @param args   the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
 	private boolean forgetCommand(final CommandSender sender, final String[] args) {
@@ -1438,8 +1465,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 	/**
 	 * Display help message for commands
+	 *
 	 * @param sender the command sender
-	 * @param args the command arguments
+	 * @param args   the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
 	private boolean helpCommand(final CommandSender sender, final String[] args) {
@@ -1456,7 +1484,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 		// get passed command
 		if (args.length > 1) {
-			command = args[1]; 
+			command = args[1];
 		}
 
 		// set failure message
@@ -1493,14 +1521,15 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			helpMessage = "Teleport player to graveyard location.";
 		}
 		sender.sendMessage(HELP_COLOR + helpMessage);
-		displayUsage(sender,command);
+		displayUsage(sender, command);
 		return true;
 	}
 
 
 	/**
 	 * Display command usage
-	 * @param sender the command sender
+	 *
+	 * @param sender        the command sender
 	 * @param passedCommand the command for which to display usage
 	 */
 	private void displayUsage(final CommandSender sender, final String passedCommand) {
@@ -1510,17 +1539,17 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		if (command.isEmpty() || command.equalsIgnoreCase("help")) {
 			command = "all";
 		}
-		if ((command.equalsIgnoreCase("status")	
+		if ((command.equalsIgnoreCase("status")
 				|| command.equalsIgnoreCase("all"))
 				&& sender.hasPermission("graveyard.status")) {
 			sender.sendMessage(USAGE_COLOR + "/graveyard status");
 		}
-		if ((command.equalsIgnoreCase("reload") 
+		if ((command.equalsIgnoreCase("reload")
 				|| command.equalsIgnoreCase("all"))
 				&& sender.hasPermission("graveyard.reload")) {
 			sender.sendMessage(USAGE_COLOR + "/graveyard reload");
 		}
-		if ((command.equalsIgnoreCase("create") 
+		if ((command.equalsIgnoreCase("create")
 				|| command.equalsIgnoreCase("all"))
 				&& sender.hasPermission("graveyard.create")) {
 			sender.sendMessage(USAGE_COLOR + "/graveyard create <graveyard>");
@@ -1540,22 +1569,22 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 				&& sender.hasPermission("graveyard.help")) {
 			sender.sendMessage(USAGE_COLOR + "/graveyard help [command]");
 		}
-		if ((command.equalsIgnoreCase("list") 
+		if ((command.equalsIgnoreCase("list")
 				|| command.equalsIgnoreCase("all"))
 				&& sender.hasPermission("graveyard.list")) {
 			sender.sendMessage(USAGE_COLOR + "/graveyard list [page]");
 		}
-		if ((command.equalsIgnoreCase("set") 
+		if ((command.equalsIgnoreCase("set")
 				|| command.equalsIgnoreCase("all"))
 				&& sender.hasPermission("graveyard.set")) {
 			sender.sendMessage(USAGE_COLOR + "/graveyard set <graveyard> <attribute> <value>");
 		}
-		if ((command.equalsIgnoreCase("show") 
+		if ((command.equalsIgnoreCase("show")
 				|| command.equalsIgnoreCase("all"))
 				&& sender.hasPermission("graveyard.show")) {
 			sender.sendMessage(USAGE_COLOR + "/graveyard show <graveyard>");
 		}
-		if ((command.equalsIgnoreCase("teleport") 
+		if ((command.equalsIgnoreCase("teleport")
 				|| command.equalsIgnoreCase("tp")
 				|| command.equalsIgnoreCase("all"))
 				&& sender.hasPermission("graveyard.teleport")) {
@@ -1566,6 +1595,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 	/**
 	 * Join list of strings into one string with spaces
+	 *
 	 * @param stringList List of String to join with spaces
 	 * @return the joined String
 	 */

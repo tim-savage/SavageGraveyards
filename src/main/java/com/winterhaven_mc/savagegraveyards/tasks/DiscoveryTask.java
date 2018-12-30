@@ -21,6 +21,11 @@ public class DiscoveryTask extends BukkitRunnable {
 	private final PluginMain plugin;
 
 
+	/**
+	 * Class constructor
+	 *
+	 * @param plugin reference to main class
+	 */
 	public DiscoveryTask(final PluginMain plugin) {
 		this.plugin = plugin;
 	}
@@ -56,7 +61,7 @@ public class DiscoveryTask extends BukkitRunnable {
 						}
 
 						// check if player is within discovery range of graveyard
-						if (dsLocation.distanceSquared(playerLocation) < Math.pow(discoveryRange,2)) {
+						if (dsLocation.distanceSquared(playerLocation) < Math.pow(discoveryRange, 2)) {
 
 							// set graveyard as discovered for player
 							plugin.dataStore.insertDiscovery(player, graveyard.getSearchKey());

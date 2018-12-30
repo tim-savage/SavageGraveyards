@@ -4,6 +4,7 @@ import com.winterhaven_mc.savagegraveyards.PluginMain;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 
+
 /**
  * Graveyard object
  */
@@ -36,6 +37,7 @@ public final class Graveyard {
 
 	/**
 	 * Private class constructor for use with static builder
+	 *
 	 * @param builder builder object
 	 */
 	private Graveyard(final Builder builder) {
@@ -76,11 +78,13 @@ public final class Graveyard {
 		/**
 		 * Builder class constructor
 		 */
-		public Builder() { }
+		public Builder() {
+		}
 
 
 		/**
 		 * Builder class constructor
+		 *
 		 * @param graveyard existing graveyard object from which all values are copied
 		 */
 		public Builder(Graveyard graveyard) {
@@ -100,6 +104,7 @@ public final class Graveyard {
 
 		/**
 		 * set primary key
+		 *
 		 * @param value int value to assign to builder primary key field
 		 * @return this Builder object
 		 */
@@ -108,8 +113,10 @@ public final class Graveyard {
 			return this;
 		}
 
+
 		/**
 		 * set display name field
+		 *
 		 * @param value string value to assign to builder display name field
 		 * @return this Builder object
 		 */
@@ -119,8 +126,10 @@ public final class Graveyard {
 			return this;
 		}
 
+
 		/**
 		 * set search key field
+		 *
 		 * @param value string value to assign to builder search key field
 		 * @return this Builder object
 		 */
@@ -129,8 +138,10 @@ public final class Graveyard {
 			return this;
 		}
 
+
 		/**
 		 * set enabled field
+		 *
 		 * @param value boolean value to assign to builder enabled field
 		 * @return this Builder object
 		 */
@@ -139,8 +150,10 @@ public final class Graveyard {
 			return this;
 		}
 
+
 		/**
 		 * set hidden field
+		 *
 		 * @param value boolean value to assign to builder hidden field
 		 * @return this Builder object
 		 */
@@ -149,8 +162,10 @@ public final class Graveyard {
 			return this;
 		}
 
+
 		/**
 		 * set discovery range field
+		 *
 		 * @param value int value to assign to builder discovery range field
 		 * @return this Builder object
 		 */
@@ -159,8 +174,10 @@ public final class Graveyard {
 			return this;
 		}
 
+
 		/**
 		 * set discovery message field
+		 *
 		 * @param value string value to assign to builder discover message field
 		 * @return this Builder object
 		 */
@@ -169,8 +186,10 @@ public final class Graveyard {
 			return this;
 		}
 
+
 		/**
 		 * set respawn message field
+		 *
 		 * @param value string value to assign to builder respawn message field
 		 * @return this Builder object
 		 */
@@ -179,8 +198,10 @@ public final class Graveyard {
 			return this;
 		}
 
+
 		/**
 		 * set group field
+		 *
 		 * @param value string value to assign to builder group field
 		 * @return this Builder object
 		 */
@@ -189,8 +210,10 @@ public final class Graveyard {
 			return this;
 		}
 
+
 		/**
 		 * set safety range field (currently unused)
+		 *
 		 * @param value int value to assign to builder safety range field
 		 * @return this Builder object
 		 */
@@ -199,8 +222,10 @@ public final class Graveyard {
 			return this;
 		}
 
+
 		/**
 		 * set safety time field
+		 *
 		 * @param value int value to assign to builder safety time field
 		 * @return this Builder object
 		 */
@@ -209,8 +234,10 @@ public final class Graveyard {
 			return this;
 		}
 
+
 		/**
 		 * set location field
+		 *
 		 * @param value location value to assign to builder location field
 		 * @return this Builder object
 		 */
@@ -228,6 +255,7 @@ public final class Graveyard {
 
 		/**
 		 * build Graveyard object from builder fields
+		 *
 		 * @return new Graveyard object
 		 */
 		public final Graveyard build() {
@@ -238,78 +266,97 @@ public final class Graveyard {
 
 	/**
 	 * Getter for primary key
+	 *
 	 * @return int - primary key
 	 */
 	final int getPrimaryKey() {
 		return this.primaryKey;
 	}
 
+
 	/**
 	 * Getter for display name
+	 *
 	 * @return String - display name
 	 */
 	public final String getDisplayName() {
 		return this.displayName;
 	}
 
+
 	/**
 	 * Getter for search key
+	 *
 	 * @return String - search key
 	 */
 	public final String getSearchKey() {
 		return this.searchKey;
 	}
 
+
 	/**
 	 * Getter for enabled
+	 *
 	 * @return boolean - enabled
 	 */
 	public final boolean isEnabled() {
 		return this.enabled;
 	}
 
+
 	/**
 	 * Getter for hidden
+	 *
 	 * @return boolean - hidden
 	 */
 	public final boolean isHidden() {
 		return this.hidden;
 	}
 
+
 	/**
 	 * Getter for discovery range
+	 *
 	 * @return int - discovery range
 	 */
 	public final int getDiscoveryRange() {
 		return this.discoveryRange;
 	}
 
+
 	/**
 	 * Getter for group
+	 *
 	 * @return String - group
 	 */
 	public final String getGroup() {
 		return this.group;
 	}
 
+
 	/**
 	 * Getter for discovery message
+	 *
 	 * @return String - discovery message
 	 */
 	public final String getDiscoveryMessage() {
 		return this.discoveryMessage;
 	}
 
+
 	/**
 	 * Getter for respawn message
+	 *
 	 * @return String - respawn message
 	 */
 	public final String getRespawnMessage() {
 		return this.respawnMessage;
 	}
 
+
 	/**
 	 * Getter for location
+	 *
 	 * @return Location - location
 	 */
 	public final Location getLocation() {
@@ -323,16 +370,20 @@ public final class Graveyard {
 				this.location.getPitch());
 	}
 
+
 	/**
 	 * Getter for safety range (currently unused)
+	 *
 	 * @return int - safety range
 	 */
 	final int getSafetyRange() {
 		return this.safetyRange;
 	}
 
+
 	/**
 	 * Getter for safety time
+	 *
 	 * @return int - safety time
 	 */
 	public final int getSafetyTime() {
@@ -344,6 +395,7 @@ public final class Graveyard {
 	 * Static method to create search key from graveyard display name;
 	 * strips color codes and replaces spaces with underscores;
 	 * preserves case
+	 *
 	 * @param displayName the graveyard display name
 	 * @return String - a search key derived from graveyard display name
 	 */

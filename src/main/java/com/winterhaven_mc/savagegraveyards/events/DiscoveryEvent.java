@@ -1,7 +1,6 @@
 package com.winterhaven_mc.savagegraveyards.events;
 
 import com.winterhaven_mc.savagegraveyards.storage.Graveyard;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -29,6 +28,7 @@ public final class DiscoveryEvent extends Event {
 
 	/**
 	 * Get player that triggered graveyard discovery
+	 *
 	 * @return player
 	 */
 	public Player getPlayer() {
@@ -38,6 +38,7 @@ public final class DiscoveryEvent extends Event {
 
 	/**
 	 * Get graveyard discovered by player
+	 *
 	 * @return graveyard
 	 */
 	public Graveyard getGraveyard() {

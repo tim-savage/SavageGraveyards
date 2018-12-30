@@ -28,9 +28,10 @@ class DataStoreSQLite extends DataStore {
 
 	/**
 	 * Class constructor
+	 *
 	 * @param plugin reference to main class
 	 */
-	DataStoreSQLite (final PluginMain plugin) {
+	DataStoreSQLite(final PluginMain plugin) {
 
 		// reference to main class
 		this.plugin = plugin;
@@ -63,7 +64,7 @@ class DataStoreSQLite extends DataStore {
 		String dbUrl = jdbc + ":" + dataFilePath;
 
 		// create a database connection
-        connection = DriverManager.getConnection(dbUrl);
+		connection = DriverManager.getConnection(dbUrl);
 		Statement statement = connection.createStatement();
 
 		// enable foreign keys
@@ -119,13 +120,14 @@ class DataStoreSQLite extends DataStore {
 
 				try {
 					world = plugin.getServer().getWorld(worldName);
-				} catch (Exception e) {
+				}
+				catch (Exception e) {
 					plugin.getLogger().warning("Stored record has invalid world: "
 							+ worldName + ". Skipping record.");
 					continue;
 				}
 
-				Location location = new Location(world,x,y,z,yaw,pitch);
+				Location location = new Location(world, x, y, z, yaw, pitch);
 
 				Graveyard graveyard = new Graveyard.Builder()
 						.primaryKey(primaryKey)
@@ -201,7 +203,7 @@ class DataStoreSQLite extends DataStore {
 					return null;
 				}
 				world = plugin.getServer().getWorld(worldName);
-				Location location = new Location(world,x,y,z,yaw,pitch);
+				Location location = new Location(world, x, y, z, yaw, pitch);
 
 				graveyard = new Graveyard.Builder()
 						.primaryKey(rs.getInt("id"))
@@ -283,13 +285,14 @@ class DataStoreSQLite extends DataStore {
 
 				try {
 					world = plugin.getServer().getWorld(worldName);
-				} catch (Exception e) {
+				}
+				catch (Exception e) {
 					plugin.getLogger().warning("Stored record has unloaded world: "
 							+ worldName + ". Skipping record.");
 					continue;
 				}
 
-				Location location = new Location(world,x,y,z,yaw,pitch);
+				Location location = new Location(world, x, y, z, yaw, pitch);
 
 				Graveyard graveyard = new Graveyard.Builder()
 						.primaryKey(primaryKey)
@@ -410,13 +413,14 @@ class DataStoreSQLite extends DataStore {
 
 				try {
 					world = plugin.getServer().getWorld(worldName);
-				} catch (Exception e) {
+				}
+				catch (Exception e) {
 					plugin.getLogger().warning("Stored record has unloaded world: "
 							+ worldName + ". Skipping record.");
 					continue;
 				}
 
-				Location location = new Location(world,x,y,z,yaw,pitch);
+				Location location = new Location(world, x, y, z, yaw, pitch);
 
 				Graveyard graveyard = new Graveyard.Builder()
 						.primaryKey(primaryKey)
@@ -509,7 +513,7 @@ class DataStoreSQLite extends DataStore {
 				try {
 
 					// synchronize on connection
-					synchronized(connection) {
+					synchronized (connection) {
 
 						PreparedStatement preparedStatement =
 								connection.prepareStatement(getQuery("InsertDiscovered"));
@@ -557,7 +561,7 @@ class DataStoreSQLite extends DataStore {
 				try {
 
 					// synchronize on connection
-					synchronized(connection) {
+					synchronized (connection) {
 
 						// create prepared statement
 						PreparedStatement preparedStatement =
@@ -618,7 +622,7 @@ class DataStoreSQLite extends DataStore {
 
 				try {
 					// synchronize on connection
-					synchronized(connection) {
+					synchronized (connection) {
 
 						// create prepared statement
 						PreparedStatement preparedStatement =
@@ -678,7 +682,7 @@ class DataStoreSQLite extends DataStore {
 				try {
 
 					// synchronize on connection
-					synchronized(connection) {
+					synchronized (connection) {
 
 						// create prepared statement
 						PreparedStatement preparedStatement =
@@ -764,7 +768,6 @@ class DataStoreSQLite extends DataStore {
 	}
 
 
-
 	@Override
 	public boolean deleteDiscovery(final String displayName, final UUID playerUUID) {
 
@@ -774,7 +777,7 @@ class DataStoreSQLite extends DataStore {
 		try {
 
 			// synchronize on connection
-			synchronized(connection) {
+			synchronized (connection) {
 
 				// create prepared statement
 				PreparedStatement preparedStatement =

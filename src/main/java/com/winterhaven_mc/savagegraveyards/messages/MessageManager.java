@@ -14,10 +14,9 @@ import java.util.Map;
 
 /**
  * Implements message manager for {@code SavageGraveyards}.
- * 
- * @author      Tim Savage
- * @version		1.0
- *  
+ *
+ * @author Tim Savage
+ * @version 1.0
  */
 public class MessageManager extends AbstractMessageManager {
 
@@ -26,7 +25,7 @@ public class MessageManager extends AbstractMessageManager {
 
 	/**
 	 * Constructor method for class
-	 * 
+	 *
 	 * @param plugin reference to main class
 	 */
 	public MessageManager(final PluginMain plugin) {
@@ -45,9 +44,9 @@ public class MessageManager extends AbstractMessageManager {
 //# %DESTINATION_NAME%		display name of graveyard, with no color codes
 
 	@Override
-	protected Map<String,String> getDefaultReplacements(final CommandSender recipient) {
+	protected Map<String, String> getDefaultReplacements(final CommandSender recipient) {
 
-		Map<String,String> replacements = new HashMap<>();
+		Map<String, String> replacements = new HashMap<>();
 
 		replacements.put("%PLAYER_NAME%", recipient.getName());
 		replacements.put("%WORLD_NAME%", ChatColor.stripColor(getWorldName(recipient)));
@@ -57,33 +56,34 @@ public class MessageManager extends AbstractMessageManager {
 
 
 	/**
-	 *  Send message to player
-	 * 
-	 * @param recipient			player receiving message
-	 * @param messageId			message identifier
+	 * Send message to player
+	 *
+	 * @param recipient player receiving message
+	 * @param messageId message identifier
 	 */
 	public void sendMessage(final CommandSender recipient, final MessageId messageId) {
 
 		// get default replacement map
-		Map<String,String> replacements = getDefaultReplacements(recipient);
+		Map<String, String> replacements = getDefaultReplacements(recipient);
 
 		//noinspection unchecked
 		sendMessage(recipient, messageId, replacements);
 	}
 
 
-	/** Send message to player
+	/**
+	 * Send message to player
 	 *
-	 * @param recipient		Player receiving message
-	 * @param messageId		message identifier
-	 * @param graveyard		graveyard object
+	 * @param recipient Player receiving message
+	 * @param messageId message identifier
+	 * @param graveyard graveyard object
 	 */
 	public void sendMessage(final CommandSender recipient,
 							final MessageId messageId,
 							final Graveyard graveyard) {
 
 		// get default replacement map
-		Map<String,String> replacements = getDefaultReplacements(recipient);
+		Map<String, String> replacements = getDefaultReplacements(recipient);
 
 		// set replacement strings
 		if (graveyard != null) {
@@ -99,18 +99,19 @@ public class MessageManager extends AbstractMessageManager {
 	}
 
 
-	/** Send message to player
+	/**
+	 * Send message to player
 	 *
-	 * @param recipient		Player receiving message
-	 * @param messageId		message identifier
-	 * @param duration		duration of safety
+	 * @param recipient Player receiving message
+	 * @param messageId message identifier
+	 * @param duration  duration of safety
 	 */
 	public void sendMessage(final CommandSender recipient,
 							final MessageId messageId,
 							final Integer duration) {
 
 		// get default replacement map
-		Map<String,String> replacements = getDefaultReplacements(recipient);
+		Map<String, String> replacements = getDefaultReplacements(recipient);
 
 		// set replacement strings
 		replacements.put("%DURATION%", duration.toString());
@@ -120,12 +121,13 @@ public class MessageManager extends AbstractMessageManager {
 	}
 
 
-	/** Send message to player
+	/**
+	 * Send message to player
 	 *
-	 * @param recipient		Player receiving message
-	 * @param messageId		message identifier
-	 * @param graveyard		graveyard object
-	 * @param value			new value
+	 * @param recipient Player receiving message
+	 * @param messageId message identifier
+	 * @param graveyard graveyard object
+	 * @param value     new value
 	 */
 	public void sendMessage(final CommandSender recipient,
 							final MessageId messageId,
@@ -133,7 +135,7 @@ public class MessageManager extends AbstractMessageManager {
 							final String value) {
 
 		// get default replacement map
-		Map<String,String> replacements = getDefaultReplacements(recipient);
+		Map<String, String> replacements = getDefaultReplacements(recipient);
 
 		if (graveyard != null) {
 			replacements.put("%GRAVEYARD_NAME%", graveyard.getDisplayName());
@@ -150,12 +152,13 @@ public class MessageManager extends AbstractMessageManager {
 	}
 
 
-	/** Send message to player
+	/**
+	 * Send message to player
 	 *
-	 * @param recipient		Player receiving message
-	 * @param messageId		message identifier
-	 * @param graveyard		graveyard object
-	 * @param targetPlayer	targeted player
+	 * @param recipient    Player receiving message
+	 * @param messageId    message identifier
+	 * @param graveyard    graveyard object
+	 * @param targetPlayer targeted player
 	 */
 	public void sendMessage(final CommandSender recipient,
 							final MessageId messageId,
@@ -163,7 +166,7 @@ public class MessageManager extends AbstractMessageManager {
 							final OfflinePlayer targetPlayer) {
 
 		// get default replacement map
-		Map<String,String> replacements = getDefaultReplacements(recipient);
+		Map<String, String> replacements = getDefaultReplacements(recipient);
 
 		if (graveyard != null) {
 			replacements.put("%GRAVEYARD_NAME%", graveyard.getDisplayName());
@@ -180,12 +183,13 @@ public class MessageManager extends AbstractMessageManager {
 	}
 
 
-	/** Send message to player
-	 * 
-	 * @param recipient		Player receiving message
-	 * @param messageId		message identifier
-	 * @param page 			page number to display for multi-page messages
-	 * @param pageCount 	total number of pages for multi-page messages
+	/**
+	 * Send message to player
+	 *
+	 * @param recipient Player receiving message
+	 * @param messageId message identifier
+	 * @param page      page number to display for multi-page messages
+	 * @param pageCount total number of pages for multi-page messages
 	 */
 	public void sendMessage(final CommandSender recipient,
 							final MessageId messageId,
@@ -193,7 +197,7 @@ public class MessageManager extends AbstractMessageManager {
 							final Integer pageCount) {
 
 		// get default replacement map
-		Map<String,String> replacements = getDefaultReplacements(recipient);
+		Map<String, String> replacements = getDefaultReplacements(recipient);
 
 		replacements.put("%PAGE%", page.toString());
 		replacements.put("%PAGE_COUNT%", pageCount.toString());
@@ -204,18 +208,19 @@ public class MessageManager extends AbstractMessageManager {
 
 
 	/**
-	 *  display one list item
-	 * @param recipient		Player receiving message
-	 * @param messageId		message identifier
-	 * @param itemNumber	item number in list
+	 * display one list item
+	 *
+	 * @param recipient  Player receiving message
+	 * @param messageId  message identifier
+	 * @param itemNumber item number in list
 	 */
 	public void listItem(final CommandSender recipient,
-							final MessageId messageId,
-							final Graveyard graveyard,
-							final int itemNumber) {
+						 final MessageId messageId,
+						 final Graveyard graveyard,
+						 final int itemNumber) {
 
 		// get default replacement map
-		Map<String,String> replacements = getDefaultReplacements(recipient);
+		Map<String, String> replacements = getDefaultReplacements(recipient);
 
 		// set replacement strings
 		replacements.put("%ITEM_NUMBER%", String.valueOf(itemNumber));

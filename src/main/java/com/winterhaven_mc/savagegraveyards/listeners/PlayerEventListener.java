@@ -21,10 +21,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Implements player event listener for {@code SavageGraveyards}
- * 
- * @author      Tim Savage
- * @version		1.0
- *  
+ *
+ * @author Tim Savage
+ * @version 1.0
  */
 public class PlayerEventListener implements Listener {
 
@@ -43,7 +42,8 @@ public class PlayerEventListener implements Listener {
 
 	/**
 	 * constructor method for {@code PlayerEventListener} class
-	 * @param	plugin		A reference to this plugin's main class
+	 *
+	 * @param    plugin        A reference to this plugin's main class
 	 */
 	public PlayerEventListener(final PluginMain plugin) {
 
@@ -57,6 +57,7 @@ public class PlayerEventListener implements Listener {
 
 	/**
 	 * Player death event handler
+	 *
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
@@ -69,9 +70,10 @@ public class PlayerEventListener implements Listener {
 
 	/**
 	 * Player respawn event handler for LOWEST priority
+	 *
 	 * @param event the event handled by this method
 	 */
-	@EventHandler(priority=EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.LOWEST)
 	void onPlayerRespawnLOWEST(final PlayerRespawnEvent event) {
 		if (plugin.getConfig().getString("respawn-priority").equalsIgnoreCase("LOWEST")) {
 			if (plugin.debug) {
@@ -84,9 +86,10 @@ public class PlayerEventListener implements Listener {
 
 	/**
 	 * Player respawn event handler for LOW priority
+	 *
 	 * @param event the event handled by this method
 	 */
-	@EventHandler(priority=EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	void onPlayerRespawnLOW(final PlayerRespawnEvent event) {
 		if (plugin.getConfig().getString("respawn-priority").equalsIgnoreCase("LOW")) {
 			if (plugin.debug) {
@@ -99,9 +102,10 @@ public class PlayerEventListener implements Listener {
 
 	/**
 	 * Player respawn event handler for NORMAL priority
+	 *
 	 * @param event the event handled by this method
 	 */
-	@EventHandler(priority=EventPriority.NORMAL)
+	@EventHandler(priority = EventPriority.NORMAL)
 	void onPlayerRespawnNORMAL(final PlayerRespawnEvent event) {
 		if (plugin.getConfig().getString("respawn-priority").equalsIgnoreCase("NORMAL")) {
 			if (plugin.debug) {
@@ -114,9 +118,10 @@ public class PlayerEventListener implements Listener {
 
 	/**
 	 * Player respawn event handler for HIGH priority
+	 *
 	 * @param event the event handled by this method
 	 */
-	@EventHandler(priority=EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH)
 	void onPlayerRespawnHIGH(final PlayerRespawnEvent event) {
 		if (plugin.getConfig().getString("respawn-priority").equalsIgnoreCase("HIGH")) {
 			if (plugin.debug) {
@@ -129,9 +134,10 @@ public class PlayerEventListener implements Listener {
 
 	/**
 	 * Player respawn event handler for HIGHEST priority
+	 *
 	 * @param event the event handled by this method
 	 */
-	@EventHandler(priority=EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	void onPlayerRespawnHIGHEST(final PlayerRespawnEvent event) {
 		if (plugin.getConfig().getString("respawn-priority").equalsIgnoreCase("HIGHEST")) {
 			if (plugin.debug) {
@@ -144,6 +150,7 @@ public class PlayerEventListener implements Listener {
 
 	/**
 	 * Player respawn handler, called by the registered event listener with configured priority
+	 *
 	 * @param event the player respawn event handled by this method
 	 */
 	private void onPlayerRespawnHandler(final PlayerRespawnEvent event) {
@@ -157,7 +164,7 @@ public class PlayerEventListener implements Listener {
 		}
 
 		// remove player uuid from deathTriggeredRespawn set
-			deathTriggeredRespawn.remove(player.getUniqueId());
+		deathTriggeredRespawn.remove(player.getUniqueId());
 
 		// check that player world is enabled
 		if (!plugin.worldManager.isEnabled(player.getWorld())) {
@@ -202,6 +209,7 @@ public class PlayerEventListener implements Listener {
 
 	/**
 	 * Cancel mob targeting of a player for configured time period following death respawn
+	 *
 	 * @param event the event handled by this method
 	 */
 	@EventHandler
