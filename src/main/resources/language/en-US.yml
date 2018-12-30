@@ -4,7 +4,10 @@
 # %PLAYER_NAME%         Player's name
 # %WORLD_NAME%          Player world name
 # %GRAVEYARD_NAME%      display name of graveyard
-
+# %WORLD_NAME%          world name of graveyard
+# %LOC_X%               graveyard coordinates
+# %LOC_Y%               graveyard coordinates
+# %LOC_Z%               graveyard coordinates
 
 MESSAGES:
   COMMAND_FAIL_ARGS_COUNT_UNDER:
@@ -226,15 +229,18 @@ MESSAGES:
 
   LIST_ITEM:
     enabled: true
-    string: '&a%GRAVEYARD_NAME%'
+    string: "%ITEM_NUMBER%) &a%GRAVEYARD_NAME% \n
+      &aLocation:&b %WORLD_NAME% [%LOC_X%, %LOC_Y%, %LOC_Z%]"
 
   LIST_ITEM_DISABLED:
     enabled: true
-    string: '&8%GRAVEYARD_NAME% &r[ DISABLED ]'
+    string: "%ITEM_NUMBER%) &8%GRAVEYARD_NAME% &r[ DISABLED ] \n
+      &aLocation:&b %WORLD_NAME% [%LOC_X%, %LOC_Y%, %LOC_Z%]"
 
   LIST_ITEM_UNDISCOVERED:
     enabled: true
-    string: '&c%GRAVEYARD_NAME% &r[ UNDISCOVERED ]'
+    string: "%ITEM_NUMBER%) &c%GRAVEYARD_NAME% &r[ UNDISCOVERED ] \n
+    &aLocation:&b %WORLD_NAME% [%LOC_X%, %LOC_Y%, %LOC_Z%]"
 
   LIST_EMPTY:
     enabled: true
