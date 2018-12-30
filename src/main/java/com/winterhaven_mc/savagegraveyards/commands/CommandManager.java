@@ -245,11 +245,11 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		sender.sendMessage(ChatColor.GREEN + "Default discovery range: "
 				+ ChatColor.RESET + plugin.getConfig().getInt("discovery-range") + " blocks");
 
-		sender.sendMessage(ChatColor.GREEN + "Discovery check interval: "
-				+ ChatColor.RESET + plugin.getConfig().getInt("discovery-interval") + " ticks");
-
 		sender.sendMessage(ChatColor.GREEN + "Default safety time: "
 				+ ChatColor.RESET + plugin.getConfig().getInt("safety-time") + " seconds");
+
+		sender.sendMessage(ChatColor.GREEN + "Discovery check interval: "
+				+ ChatColor.RESET + plugin.getConfig().getInt("discovery-interval") + " ticks");
 
 		sender.sendMessage(ChatColor.GREEN + "Enabled Words: "
 				+ ChatColor.RESET + plugin.worldManager.getEnabledWorldNames().toString());
