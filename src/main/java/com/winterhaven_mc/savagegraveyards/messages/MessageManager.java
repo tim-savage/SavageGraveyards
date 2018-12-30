@@ -7,6 +7,7 @@ import com.winterhaven_mc.util.AbstractMessageManager;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,6 +51,18 @@ public class MessageManager extends AbstractMessageManager {
 
 		replacements.put("%PLAYER_NAME%", recipient.getName());
 		replacements.put("%WORLD_NAME%", ChatColor.stripColor(getWorldName(recipient)));
+
+		if (recipient instanceof Player) {
+			Player player = (Player) recipient;
+			replacements.put("%LOC_X%", String.valueOf(player.getLocation().getBlockX()));
+			replacements.put("%LOC_Y%", String.valueOf(player.getLocation().getBlockY()));
+			replacements.put("%LOC_Z%", String.valueOf(player.getLocation().getBlockZ()));
+		}
+		else {
+			replacements.put("%LOC_X%", "X");
+			replacements.put("%LOC_Y%", "Y");
+			replacements.put("%LOC_Z%", "Z");
+		}
 
 		return replacements;
 	}
@@ -184,17 +197,17 @@ public class MessageManager extends AbstractMessageManager {
 
 
 	/**
-	 * Send message to player
+	 * Display list header/footer
 	 *
 	 * @param recipient Player receiving message
 	 * @param messageId message identifier
 	 * @param page      page number to display for multi-page messages
 	 * @param pageCount total number of pages for multi-page messages
 	 */
-	public void sendMessage(final CommandSender recipient,
-							final MessageId messageId,
-							final Integer page,
-							final Integer pageCount) {
+	public void listAnnotation(final CommandSender recipient,
+							   final MessageId messageId,
+							   final Integer page,
+							   final Integer pageCount) {
 
 		// get default replacement map
 		Map<String, String> replacements = getDefaultReplacements(recipient);

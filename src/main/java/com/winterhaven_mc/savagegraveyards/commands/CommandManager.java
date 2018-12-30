@@ -245,11 +245,14 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		sender.sendMessage(ChatColor.GREEN + "Default discovery range: "
 				+ ChatColor.RESET + plugin.getConfig().getInt("discovery-range") + " blocks");
 
+		sender.sendMessage(ChatColor.GREEN + "Default safety time: "
+				+ ChatColor.RESET + plugin.getConfig().getInt("safety-time") + " seconds");
+
 		sender.sendMessage(ChatColor.GREEN + "Discovery check interval: "
 				+ ChatColor.RESET + plugin.getConfig().getInt("discovery-interval") + " ticks");
 
-		sender.sendMessage(ChatColor.GREEN + "Default safety time: "
-				+ ChatColor.RESET + plugin.getConfig().getInt("safety-time") + " seconds");
+		sender.sendMessage(ChatColor.GREEN + "List items page size: "
+				+ ChatColor.RESET + plugin.getConfig().getInt("list-page-size") + " items");
 
 		sender.sendMessage(ChatColor.GREEN + "Enabled Words: "
 				+ ChatColor.RESET + plugin.worldManager.getEnabledWorldNames().toString());
@@ -1231,7 +1234,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		int itemNumber = startIndex;
 
 		// display list header
-		plugin.messageManager.sendMessage(sender, MessageId.LIST_HEADER, page, pageCount);
+		plugin.messageManager.listAnnotation(sender, MessageId.LIST_HEADER, page, pageCount);
 
 		for (Graveyard graveyard : displayRange) {
 
@@ -1255,7 +1258,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		}
 
 		// display list footer
-		plugin.messageManager.sendMessage(sender, MessageId.LIST_FOOTER, page, pageCount);
+		plugin.messageManager.listAnnotation(sender, MessageId.LIST_FOOTER, page, pageCount);
 		return true;
 	}
 
