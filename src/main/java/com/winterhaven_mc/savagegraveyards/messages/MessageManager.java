@@ -7,7 +7,7 @@ import com.winterhaven_mc.util.AbstractMessageManager;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.Entity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,8 +21,6 @@ import java.util.Map;
  */
 public class MessageManager extends AbstractMessageManager {
 
-	// reference to plugin main class
-	private final PluginMain plugin;
 
 	/**
 	 * Constructor method for class
@@ -34,15 +32,12 @@ public class MessageManager extends AbstractMessageManager {
 		// call super class constructor
 		//noinspection unchecked
 		super(plugin, MessageId.class);
-
-		// set reference to plugin main class
-		this.plugin = plugin;
 	}
 
 //# %PLAYER_NAME%          Player's name, with no color codes
 //# %PLAYER_NICKNAME%      Player's nickname, with no color codes
 //# %WORLD_NAME%           World name that player is in, with no color codes
-//# %DESTINATION_NAME%		display name of graveyard, with no color codes
+//# %DESTINATION_NAME%     display name of graveyard, with no color codes
 
 	@Override
 	protected Map<String, String> getDefaultReplacements(final CommandSender recipient) {
@@ -52,11 +47,11 @@ public class MessageManager extends AbstractMessageManager {
 		replacements.put("%PLAYER_NAME%", recipient.getName());
 		replacements.put("%WORLD_NAME%", ChatColor.stripColor(getWorldName(recipient)));
 
-		if (recipient instanceof Player) {
-			Player player = (Player) recipient;
-			replacements.put("%LOC_X%", String.valueOf(player.getLocation().getBlockX()));
-			replacements.put("%LOC_Y%", String.valueOf(player.getLocation().getBlockY()));
-			replacements.put("%LOC_Z%", String.valueOf(player.getLocation().getBlockZ()));
+		if (recipient instanceof Entity) {
+			Entity entity = (Entity) recipient;
+			replacements.put("%LOC_X%", String.valueOf(entity.getLocation().getBlockX()));
+			replacements.put("%LOC_Y%", String.valueOf(entity.getLocation().getBlockY()));
+			replacements.put("%LOC_Z%", String.valueOf(entity.getLocation().getBlockZ()));
 		}
 		else {
 			replacements.put("%LOC_X%", "X");
@@ -101,33 +96,11 @@ public class MessageManager extends AbstractMessageManager {
 		// set replacement strings
 		if (graveyard != null) {
 			replacements.put("%GRAVEYARD_NAME%", graveyard.getDisplayName());
-			replacements.put("%WORLD_NAME%", plugin.worldManager.getWorldName(graveyard.getLocation().getWorld()));
+			replacements.put("%WORLD_NAME%", getWorldName(graveyard.getLocation()));
 			replacements.put("%LOC_X%", String.valueOf(graveyard.getLocation().getBlockX()));
 			replacements.put("%LOC_Y%", String.valueOf(graveyard.getLocation().getBlockY()));
 			replacements.put("%LOC_Z%", String.valueOf(graveyard.getLocation().getBlockZ()));
 		}
-
-		//noinspection unchecked
-		sendMessage(recipient, messageId, replacements);
-	}
-
-
-	/**
-	 * Send message to player
-	 *
-	 * @param recipient Player receiving message
-	 * @param messageId message identifier
-	 * @param duration  duration of safety
-	 */
-	public void sendMessage(final CommandSender recipient,
-							final MessageId messageId,
-							final Integer duration) {
-
-		// get default replacement map
-		Map<String, String> replacements = getDefaultReplacements(recipient);
-
-		// set replacement strings
-		replacements.put("%DURATION%", duration.toString());
 
 		//noinspection unchecked
 		sendMessage(recipient, messageId, replacements);
@@ -152,7 +125,7 @@ public class MessageManager extends AbstractMessageManager {
 
 		if (graveyard != null) {
 			replacements.put("%GRAVEYARD_NAME%", graveyard.getDisplayName());
-			replacements.put("%WORLD_NAME%", plugin.worldManager.getWorldName(graveyard.getLocation().getWorld()));
+			replacements.put("%WORLD_NAME%", getWorldName(graveyard.getLocation()));
 			replacements.put("%LOC_X%", String.valueOf(graveyard.getLocation().getBlockX()));
 			replacements.put("%LOC_Y%", String.valueOf(graveyard.getLocation().getBlockY()));
 			replacements.put("%LOC_Z%", String.valueOf(graveyard.getLocation().getBlockZ()));
@@ -183,13 +156,35 @@ public class MessageManager extends AbstractMessageManager {
 
 		if (graveyard != null) {
 			replacements.put("%GRAVEYARD_NAME%", graveyard.getDisplayName());
-			replacements.put("%WORLD_NAME%", plugin.worldManager.getWorldName(graveyard.getLocation().getWorld()));
+			replacements.put("%WORLD_NAME%", getWorldName(graveyard.getLocation()));
 			replacements.put("%LOC_X%", String.valueOf(graveyard.getLocation().getBlockX()));
 			replacements.put("%LOC_Y%", String.valueOf(graveyard.getLocation().getBlockY()));
 			replacements.put("%LOC_Z%", String.valueOf(graveyard.getLocation().getBlockZ()));
 		}
 
 		replacements.put("%TARGET_PLAYER%", targetPlayer.getName());
+
+		//noinspection unchecked
+		sendMessage(recipient, messageId, replacements);
+	}
+
+
+	/**
+	 * Send message to player
+	 *
+	 * @param recipient Player receiving message
+	 * @param messageId message identifier
+	 * @param duration  duration of safety
+	 */
+	public void sendMessage(final CommandSender recipient,
+							final MessageId messageId,
+							final Integer duration) {
+
+		// get default replacement map
+		Map<String, String> replacements = getDefaultReplacements(recipient);
+
+		// set replacement strings
+		replacements.put("%DURATION%", duration.toString());
 
 		//noinspection unchecked
 		sendMessage(recipient, messageId, replacements);
@@ -240,7 +235,7 @@ public class MessageManager extends AbstractMessageManager {
 
 		if (graveyard != null) {
 			replacements.put("%GRAVEYARD_NAME%", graveyard.getDisplayName());
-			replacements.put("%WORLD_NAME%", plugin.worldManager.getWorldName(graveyard.getLocation().getWorld()));
+			replacements.put("%WORLD_NAME%", getWorldName(graveyard.getLocation()));
 			replacements.put("%LOC_X%", String.valueOf(graveyard.getLocation().getBlockX()));
 			replacements.put("%LOC_Y%", String.valueOf(graveyard.getLocation().getBlockY()));
 			replacements.put("%LOC_Z%", String.valueOf(graveyard.getLocation().getBlockZ()));
