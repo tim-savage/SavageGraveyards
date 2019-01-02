@@ -1,13 +1,5 @@
 # Message configuration file for ${project.name} v${project.version}
 
-##########
-# Defaults
-##########
-DEFAULTS:
-  PLAYER_NAME: 'player'
-  WORLD_NAME: 'world'
-
-
 # Variable substitutions:
 # %PLAYER_NAME%         Message recipient's name
 # %TARGET_PLAYER%       Other player's name (available in forget command messages only)
