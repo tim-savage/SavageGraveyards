@@ -1107,7 +1107,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		Location location = graveyard.getLocation();
 		String locationString = ChatColor.DARK_AQUA + "Location: "
 				+ ChatColor.RESET + "["
-				+ ChatColor.AQUA + location.getWorld().getName()
+				+ ChatColor.AQUA + plugin.messageManager.getWorldName(location)
 				+ ChatColor.RESET + "] "
 				+ ChatColor.RESET + "X: " + ChatColor.AQUA + location.getBlockX() + " "
 				+ ChatColor.RESET + "Y: " + ChatColor.AQUA + location.getBlockY() + " "
