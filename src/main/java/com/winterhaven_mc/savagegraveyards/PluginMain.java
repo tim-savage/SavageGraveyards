@@ -3,7 +3,6 @@ package com.winterhaven_mc.savagegraveyards;
 import com.winterhaven_mc.savagegraveyards.commands.CommandManager;
 import com.winterhaven_mc.savagegraveyards.listeners.PlayerEventListener;
 import com.winterhaven_mc.savagegraveyards.storage.DataStore;
-import com.winterhaven_mc.savagegraveyards.storage.DataStoreFactory;
 import com.winterhaven_mc.savagegraveyards.tasks.DiscoveryTask;
 import com.winterhaven_mc.savagegraveyards.messages.MessageManager;
 import com.winterhaven_mc.savagegraveyards.util.SafetyManager;
@@ -48,7 +47,7 @@ public final class PluginMain extends JavaPlugin {
 		saveDefaultConfig();
 
 		// get initialized destination storage object
-		dataStore = DataStoreFactory.create();
+		dataStore = DataStore.create();
 
 		// instantiate world manager
 		worldManager = new WorldManager(this);

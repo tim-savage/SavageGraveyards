@@ -1,7 +1,7 @@
 package com.winterhaven_mc.savagegraveyards.commands;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
-import com.winterhaven_mc.savagegraveyards.storage.DataStoreFactory;
+import com.winterhaven_mc.savagegraveyards.storage.DataStore;
 import com.winterhaven_mc.savagegraveyards.storage.Graveyard;
 import com.winterhaven_mc.savagegraveyards.messages.MessageId;
 import com.winterhaven_mc.savagegraveyards.sounds.SoundId;
@@ -302,7 +302,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		plugin.soundConfig.reload();
 
 		// reload datastore
-		DataStoreFactory.reload();
+		DataStore.reload();
 
 		// set debug field
 		plugin.debug = plugin.getConfig().getBoolean("debug");
