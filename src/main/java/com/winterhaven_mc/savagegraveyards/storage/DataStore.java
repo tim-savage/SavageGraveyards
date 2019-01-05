@@ -262,6 +262,9 @@ public abstract class DataStore {
 	}
 
 
+	/**
+	 * Reload data store if configured type has changed
+	 */
 	public static void reload() {
 
 		// get current datastore type
@@ -276,7 +279,6 @@ public abstract class DataStore {
 			// create new datastore
 			plugin.dataStore = create(newType, plugin.dataStore);
 		}
-
 	}
 
 
