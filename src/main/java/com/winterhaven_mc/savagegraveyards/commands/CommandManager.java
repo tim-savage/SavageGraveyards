@@ -1,7 +1,7 @@
 package com.winterhaven_mc.savagegraveyards.commands;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
-import com.winterhaven_mc.savagegraveyards.storage.DataStoreFactory;
+import com.winterhaven_mc.savagegraveyards.storage.DataStore;
 import com.winterhaven_mc.savagegraveyards.storage.Graveyard;
 import com.winterhaven_mc.savagegraveyards.messages.MessageId;
 import com.winterhaven_mc.savagegraveyards.sounds.SoundId;
@@ -302,7 +302,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		plugin.soundConfig.reload();
 
 		// reload datastore
-		DataStoreFactory.reload();
+		DataStore.reload();
 
 		// set debug field
 		plugin.debug = plugin.getConfig().getBoolean("debug");
@@ -1107,7 +1107,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		Location location = graveyard.getLocation();
 		String locationString = ChatColor.DARK_AQUA + "Location: "
 				+ ChatColor.RESET + "["
-				+ ChatColor.AQUA + location.getWorld().getName()
+				+ ChatColor.AQUA + plugin.messageManager.getWorldName(location)
 				+ ChatColor.RESET + "] "
 				+ ChatColor.RESET + "X: " + ChatColor.AQUA + location.getBlockX() + " "
 				+ ChatColor.RESET + "Y: " + ChatColor.AQUA + location.getBlockY() + " "

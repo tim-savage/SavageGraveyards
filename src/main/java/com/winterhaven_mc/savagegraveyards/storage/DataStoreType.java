@@ -2,6 +2,7 @@ package com.winterhaven_mc.savagegraveyards.storage;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
 
+
 /**
  * Enumeration of supported datastore types with constructor and other convenience methods
  */
@@ -25,7 +26,13 @@ enum DataStoreType {
 	// default DataStoreType
 	private final static DataStoreType defaultType = DataStoreType.SQLITE;
 
+
+	/**
+	 * Get new instance of DataStore of configured type
+	 * @return new instance of DataStore
+	 */
 	abstract DataStore create();
+
 
 	/**
 	 * Class constructor
@@ -36,11 +43,25 @@ enum DataStoreType {
 		this.displayName = displayName;
 	}
 
+
+	/**
+	 * Get display name of DataStoreType
+	 *
+	 * @return String - display name of DataStoreType
+	 */
 	@Override
 	public String toString() {
 		return displayName;
 	}
 
+
+	/**
+	 * Attempt to match a DataStoreType by name
+	 *
+	 * @param name the name to attempt to match to a DataStoreType
+	 * @return A DataStoreType whose name matched the passed string,
+	 * or the default DataStoreType if no match
+	 */
 	public static DataStoreType match(final String name) {
 		for (DataStoreType type : DataStoreType.values()) {
 			if (type.toString().equalsIgnoreCase(name)) {
@@ -51,6 +72,12 @@ enum DataStoreType {
 		return defaultType;
 	}
 
+
+	/**
+	 * Get the default DataStoreType
+	 *
+	 * @return DataStoreType - the default DataStoreType
+	 */
 	public static DataStoreType getDefaultType() {
 		return defaultType;
 	}
