@@ -5,8 +5,9 @@ import com.winterhaven_mc.savagegraveyards.messages.MessageId;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.HashMap;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -14,8 +15,11 @@ import java.util.UUID;
  */
 public class SafetyManager {
 
+	// reference to main class
 	private final PluginMain plugin;
-	private HashMap<UUID, Integer> safetyCooldownMap = new HashMap<>();
+
+	// safety cooldown set
+	private Set<UUID> safetyCooldownSet;
 
 
 	/**
@@ -24,7 +28,12 @@ public class SafetyManager {
 	 * @param plugin reference to main class
 	 */
 	public SafetyManager(final PluginMain plugin) {
+
+		// set reference to main class
 		this.plugin = plugin;
+
+		// instantiate safety cooldown set
+		safetyCooldownSet = ConcurrentHashMap.newKeySet();
 	}
 
 
@@ -46,8 +55,10 @@ public class SafetyManager {
 			return;
 		}
 
-		safetyCooldownMap.put(player.getUniqueId(), duration);
+		// add player to safety cooldown set
+		safetyCooldownSet.add(player.getUniqueId());
 
+		// send safety message to player
 		plugin.messageManager.sendMessage(player, MessageId.SAFETY_COOLDOWN_START, duration);
 
 		// create task to remove player from map after duration
@@ -64,10 +75,10 @@ public class SafetyManager {
 	/**
 	 * Remove player from safety cooldown map
 	 *
-	 * @param player the player to be removed from the safety cooldown map
+	 * @param player the player to be removed from the safety cooldown set
 	 */
 	private void removePlayer(final Player player) {
-		safetyCooldownMap.remove(player.getUniqueId());
+		safetyCooldownSet.remove(player.getUniqueId());
 	}
 
 
@@ -79,24 +90,7 @@ public class SafetyManager {
 	 */
 	public boolean isPlayerProtected(final Player player) {
 
-		return safetyCooldownMap.containsKey(player.getUniqueId());
-	}
-
-
-	/**
-	 * Get player safety cooldown duration
-	 *
-	 * @param player the player for whom to retrieve duration from the safety cooldown map
-	 * @return the duration of the player's safety cooldown, or zero if they player is not in the safety cooldown map
-	 */
-	@SuppressWarnings("unused")
-	public Integer getDuration(final Player player) {
-
-		int duration = 0;
-		if (isPlayerProtected(player)) {
-			duration = safetyCooldownMap.get(player.getUniqueId());
-		}
-		return duration;
+		return safetyCooldownSet.contains(player.getUniqueId());
 	}
 
 }
