@@ -1,6 +1,7 @@
 package com.winterhaven_mc.savagegraveyards.events;
 
 import com.winterhaven_mc.savagegraveyards.storage.Graveyard;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
