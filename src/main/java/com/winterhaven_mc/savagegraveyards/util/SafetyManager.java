@@ -2,6 +2,7 @@ package com.winterhaven_mc.savagegraveyards.util;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
 import com.winterhaven_mc.savagegraveyards.messages.MessageId;
+
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -38,7 +39,7 @@ public class SafetyManager {
 
 
 	/**
-	 * Insert player uuid into safety cooldown map
+	 * Insert player uuid into safety cooldown set
 	 *
 	 * @param player   the player whose uuid will be used as key in the safety cooldown map
 	 * @param duration in seconds
@@ -73,7 +74,7 @@ public class SafetyManager {
 
 
 	/**
-	 * Remove player from safety cooldown map
+	 * Remove player from safety cooldown set
 	 *
 	 * @param player the player to be removed from the safety cooldown set
 	 */
@@ -83,10 +84,10 @@ public class SafetyManager {
 
 
 	/**
-	 * Check if player is in safety cooldown map
+	 * Check if player is in safety cooldown set
 	 *
-	 * @param player the player to test if in the safety cooldown map
-	 * @return {@code true} if the player is in the safety cooldown map, {@code false} if they are not
+	 * @param player the player to test if in the safety cooldown set
+	 * @return {@code true} if the player is in the safety cooldown set, {@code false} if they are not
 	 */
 	public boolean isPlayerProtected(final Player player) {
 
