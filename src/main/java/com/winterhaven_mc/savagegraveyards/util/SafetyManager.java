@@ -40,7 +40,7 @@ public class SafetyManager {
 
 
 	/**
-	 * Insert player uuid into safety cooldown set
+	 * Insert player uuid into safety cooldown map
 	 *
 	 * @param player   the player whose uuid will be used as key in the safety cooldown map
 	 * @param duration in seconds
