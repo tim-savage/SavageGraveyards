@@ -921,7 +921,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 					.location(location)
 					.build();
 
-			// update graveyard in data store
+			// insert graveyard in data store
 			plugin.dataStore.insertGraveyard(newGraveyard);
 
 			// send success message
