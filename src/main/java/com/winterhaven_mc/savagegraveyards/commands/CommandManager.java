@@ -933,7 +933,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		}
 
 		// if player has overwrite permission, update record with new graveyard and return
-		if (player.hasPermission("graveyard.create.overwrite")) {
+		if (player.hasPermission("graveyard.overwrite")) {
 
 			// create new graveyard object with passed display name and player location and existing primary key
 			Graveyard newGraveyard = new Graveyard.Builder()

@@ -24,7 +24,7 @@ permissions:
     description: Create a new graveyard at current location.
     default: op
 
-  graveyard.create.overwrite:
+  graveyard.overwrite:
     description: Overwrite an existing graveyard with a new graveyard at current location.
     default: op
 
