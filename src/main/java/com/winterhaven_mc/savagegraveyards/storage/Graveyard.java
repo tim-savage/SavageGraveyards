@@ -108,7 +108,7 @@ public final class Graveyard {
 		 * @param value int value to assign to builder primary key field
 		 * @return this Builder object
 		 */
-		final Builder primaryKey(final int value) {
+		public final Builder primaryKey(final int value) {
 			primaryKey = value;
 			return this;
 		}
@@ -269,7 +269,7 @@ public final class Graveyard {
 	 *
 	 * @return int - primary key
 	 */
-	final int getPrimaryKey() {
+	public final int getPrimaryKey() {
 		return this.primaryKey;
 	}
 

@@ -2,11 +2,14 @@ package com.winterhaven_mc.savagegraveyards.util;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
 import com.winterhaven_mc.savagegraveyards.messages.MessageId;
+
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -14,8 +17,11 @@ import java.util.UUID;
  */
 public class SafetyManager {
 
+	// reference to main class
 	private final PluginMain plugin;
-	private HashMap<UUID, Integer> safetyCooldownMap = new HashMap<>();
+
+	// safety cooldown map
+	private Map<UUID, BukkitTask> safetyCooldownMap;
 
 
 	/**
@@ -24,7 +30,12 @@ public class SafetyManager {
 	 * @param plugin reference to main class
 	 */
 	public SafetyManager(final PluginMain plugin) {
+
+		// set reference to main class
 		this.plugin = plugin;
+
+		// instantiate safety cooldown map
+		safetyCooldownMap = new ConcurrentHashMap<>();
 	}
 
 
@@ -36,28 +47,35 @@ public class SafetyManager {
 	 */
 	public void putPlayer(final Player player, int duration) {
 
+		// if duration is zero, do nothing and return
+		if (duration == 0) {
+			return;
+		}
+
 		// if duration is negative, use configured default
 		if (duration < 0) {
 			duration = plugin.getConfig().getInt("safety-time");
 		}
 
-		// if duration is less than one, do nothing and return
-		if (duration < 1) {
-			return;
-		}
-
-		safetyCooldownMap.put(player.getUniqueId(), duration);
-
+		// send safety message to player
 		plugin.messageManager.sendMessage(player, MessageId.SAFETY_COOLDOWN_START, duration);
 
 		// create task to remove player from map after duration
-		new BukkitRunnable() {
+		BukkitTask task = new BukkitRunnable() {
 			@Override
 			public void run() {
 				removePlayer(player);
 				plugin.messageManager.sendMessage(player, MessageId.SAFETY_COOLDOWN_END);
 			}
 		}.runTaskLater(plugin, duration * 20);
+
+		// if player is already in cooldown map, cancel existing task
+		if (isPlayerProtected(player)) {
+			safetyCooldownMap.get(player.getUniqueId()).cancel();
+		}
+
+		// add player to safety cooldown map
+		safetyCooldownMap.put(player.getUniqueId(), task);
 	}
 
 
@@ -80,23 +98,6 @@ public class SafetyManager {
 	public boolean isPlayerProtected(final Player player) {
 
 		return safetyCooldownMap.containsKey(player.getUniqueId());
-	}
-
-
-	/**
-	 * Get player safety cooldown duration
-	 *
-	 * @param player the player for whom to retrieve duration from the safety cooldown map
-	 * @return the duration of the player's safety cooldown, or zero if they player is not in the safety cooldown map
-	 */
-	@SuppressWarnings("unused")
-	public Integer getDuration(final Player player) {
-
-		int duration = 0;
-		if (isPlayerProtected(player)) {
-			duration = safetyCooldownMap.get(player.getUniqueId());
-		}
-		return duration;
 	}
 
 }

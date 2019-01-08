@@ -910,29 +910,54 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		String displayName = join(arguments);
 
 		// attempt to retrieve existing graveyard from datastore
-		Graveyard graveyard = plugin.dataStore.selectGraveyard(displayName);
+		Graveyard existingGraveyard = plugin.dataStore.selectGraveyard(displayName);
 
-		// if graveyard exists and player does not have overwrite permission, send fail message
-		if (graveyard != null && !player.hasPermission("graveyard.overwrite")) {
-			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_CREATE_EXISTS, graveyard);
-			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
+		// if graveyard does not exist, insert new graveyard in data store and return
+		if (existingGraveyard == null) {
+
+			// create new graveyard object with passed display name and player location
+			Graveyard newGraveyard = new Graveyard.Builder()
+					.displayName(displayName)
+					.location(location)
+					.build();
+
+			// insert graveyard in data store
+			plugin.dataStore.insertGraveyard(newGraveyard);
+
+			// send success message
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_CREATE, newGraveyard);
+
+			// play sound effect
+			plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
 			return true;
 		}
 
-		// create new graveyard object with passed display name and player location
-		Graveyard newGraveyard = new Graveyard.Builder()
-				.displayName(displayName)
-				.location(location)
-				.build();
+		// if player has overwrite permission, update record with new graveyard and return
+		if (player.hasPermission("graveyard.overwrite")) {
 
-		// store graveyard object
-		plugin.dataStore.insertGraveyard(newGraveyard);
+			// create new graveyard object with passed display name and player location and existing primary key
+			Graveyard newGraveyard = new Graveyard.Builder()
+					.primaryKey(existingGraveyard.getPrimaryKey())
+					.displayName(displayName)
+					.location(location)
+					.build();
 
-		// send success message to player
-		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_CREATE, newGraveyard);
+			// update graveyard in data store
+			plugin.dataStore.updateGraveyard(newGraveyard);
+
+			// send success message
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_CREATE, newGraveyard);
+
+			// play sound effect
+			plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
+			return true;
+		}
+
+		// send graveyard exists error message
+		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_CREATE_EXISTS, existingGraveyard);
 
 		// play sound effect
-		plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
+		plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 		return true;
 	}
 
