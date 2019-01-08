@@ -909,30 +909,48 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// set displayName to passed arguments
 		String displayName = join(arguments);
 
-		// attempt to retrieve existing graveyard from datastore
-		Graveyard graveyard = plugin.dataStore.selectGraveyard(displayName);
-
-		// if graveyard exists and player does not have overwrite permission, send fail message
-		if (graveyard != null && !player.hasPermission("graveyard.overwrite")) {
-			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_CREATE_EXISTS, graveyard);
-			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
-			return true;
-		}
-
 		// create new graveyard object with passed display name and player location
 		Graveyard newGraveyard = new Graveyard.Builder()
 				.displayName(displayName)
 				.location(location)
 				.build();
 
-		// store graveyard object
-		plugin.dataStore.insertGraveyard(newGraveyard);
+		// attempt to retrieve existing graveyard from datastore
+		Graveyard existingGraveyard = plugin.dataStore.selectGraveyard(displayName);
 
-		// send success message to player
-		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_CREATE, newGraveyard);
+		// if graveyard does not exist, insert new graveyard in data store and return
+		if (existingGraveyard == null) {
+
+			// update graveyard in data store
+			plugin.dataStore.insertGraveyard(newGraveyard);
+
+			// send success message
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_CREATE, newGraveyard);
+
+			// play sound effect
+			plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
+			return true;
+		}
+
+		// if player has overwrite permission, update record with new graveyard and return
+		if (player.hasPermission("graveyard.create.overwrite")) {
+
+			// update graveyard in data store
+			plugin.dataStore.updateGraveyard(newGraveyard);
+
+			// send success message
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_CREATE, newGraveyard);
+
+			// play sound effect
+			plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
+			return true;
+		}
+
+		// send graveyard exists error message
+		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_CREATE_EXISTS, existingGraveyard);
 
 		// play sound effect
-		plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
+		plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 		return true;
 	}
 
