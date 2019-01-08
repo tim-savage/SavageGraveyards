@@ -909,17 +909,17 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// set displayName to passed arguments
 		String displayName = join(arguments);
 
-		// create new graveyard object with passed display name and player location
-		Graveyard newGraveyard = new Graveyard.Builder()
-				.displayName(displayName)
-				.location(location)
-				.build();
-
 		// attempt to retrieve existing graveyard from datastore
 		Graveyard existingGraveyard = plugin.dataStore.selectGraveyard(displayName);
 
 		// if graveyard does not exist, insert new graveyard in data store and return
 		if (existingGraveyard == null) {
+
+			// create new graveyard object with passed display name and player location
+			Graveyard newGraveyard = new Graveyard.Builder()
+					.displayName(displayName)
+					.location(location)
+					.build();
 
 			// update graveyard in data store
 			plugin.dataStore.insertGraveyard(newGraveyard);
@@ -934,6 +934,13 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 		// if player has overwrite permission, update record with new graveyard and return
 		if (player.hasPermission("graveyard.create.overwrite")) {
+
+			// create new graveyard object with passed display name and player location and existing primary key
+			Graveyard newGraveyard = new Graveyard.Builder()
+					.primaryKey(existingGraveyard.getPrimaryKey())
+					.displayName(displayName)
+					.location(location)
+					.build();
 
 			// update graveyard in data store
 			plugin.dataStore.updateGraveyard(newGraveyard);
