@@ -1130,16 +1130,18 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 		// display graveyard location
 		Location location = graveyard.getLocation();
-		String locationString = ChatColor.DARK_AQUA + "Location: "
-				+ ChatColor.RESET + "["
-				+ ChatColor.AQUA + plugin.messageManager.getWorldName(location)
-				+ ChatColor.RESET + "] "
-				+ ChatColor.RESET + "X: " + ChatColor.AQUA + location.getBlockX() + " "
-				+ ChatColor.RESET + "Y: " + ChatColor.AQUA + location.getBlockY() + " "
-				+ ChatColor.RESET + "Z: " + ChatColor.AQUA + location.getBlockZ() + " "
-				+ ChatColor.RESET + "P: " + ChatColor.GOLD + String.format("%.2f", location.getPitch()) + " "
-				+ ChatColor.RESET + "Y: " + ChatColor.GOLD + String.format("%.2f", location.getYaw());
-		sender.sendMessage(locationString);
+		if (location != null) {
+			String locationString = ChatColor.DARK_AQUA + "Location: "
+					+ ChatColor.RESET + "["
+					+ ChatColor.AQUA + plugin.messageManager.getWorldName(location)
+					+ ChatColor.RESET + "] "
+					+ ChatColor.RESET + "X: " + ChatColor.AQUA + location.getBlockX() + " "
+					+ ChatColor.RESET + "Y: " + ChatColor.AQUA + location.getBlockY() + " "
+					+ ChatColor.RESET + "Z: " + ChatColor.AQUA + location.getBlockZ() + " "
+					+ ChatColor.RESET + "P: " + ChatColor.GOLD + String.format("%.2f", location.getPitch()) + " "
+					+ ChatColor.RESET + "Y: " + ChatColor.GOLD + String.format("%.2f", location.getYaw());
+			sender.sendMessage(locationString);
+		}
 		return true;
 	}
 
