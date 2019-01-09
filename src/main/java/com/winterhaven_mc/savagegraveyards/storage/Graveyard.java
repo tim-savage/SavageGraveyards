@@ -78,8 +78,7 @@ public final class Graveyard {
 		/**
 		 * Builder class constructor
 		 */
-		public Builder() {
-		}
+		public Builder() { }
 
 
 		/**
@@ -360,6 +359,11 @@ public final class Graveyard {
 	 * @return Location - location
 	 */
 	public final Location getLocation() {
+
+		// if location is null, return null
+		if (this.location == null) {
+			return null;
+		}
 
 		// return defensive copy of location
 		return new Location(this.location.getWorld(),
