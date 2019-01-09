@@ -36,9 +36,18 @@ public class MessageManager extends AbstractMessageManager {
 
 //# %PLAYER_NAME%          Player's name, with no color codes
 //# %PLAYER_NICKNAME%      Player's nickname, with no color codes
-//# %WORLD_NAME%           World name that player is in, with no color codes
 //# %GRAVEYARD_NAME%       display name of graveyard, with no color codes
+//# %WORLD_NAME%           World name that player is in, with no color codes
+//# %LOC_X%                location coordinate X
+//# %LOC_Y%                location coordinate Y
+//# %LOC_Z%                location coordinate Z
 
+
+	/**
+	 * Set default replacement values
+	 * @param recipient the message recipient
+	 * @return Map of seplacement strings
+	 */
 	@Override
 	protected Map<String, String> getDefaultReplacements(final CommandSender recipient) {
 
