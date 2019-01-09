@@ -29,7 +29,7 @@ permissions:
     default: op
 
   graveyard.delete:
-    description: Allows deleting a graveyard location.
+    description: Allow deleting a graveyard.
     default: op
 
   graveyard.discover:
@@ -57,63 +57,63 @@ permissions:
     default: op
 
   graveyard.reload:
-    description: Allows reloading the config file.
+    description: Allow reloading the config file.
     default: op
 
   graveyard.set:
-    description: Allows use of the set command.
+    description: Allow use of the set command.
     default: op
 
   graveyard.set.enabled:
-    description: Allows setting a graveyard enabled status.
+    description: Allow setting a graveyard enabled status.
     default: op
     children:
       graveyard.set: true
 
   graveyard.set.group:
-    description: Allows setting graveyard group.
+    description: Allow setting graveyard group.
     default: op
     children:
       graveyard.set: true
 
   graveyard.set.hidden:
-    description: Allows setting a graveyard hidden status.
+    description: Allow setting a graveyard hidden status.
     default: op
     children:
       graveyard.set: true
 
   graveyard.set.location:
-    description: Allows setting a graveyard location.
+    description: Allow setting a graveyard location.
     default: op
     children:
       graveyard.set: true
 
   graveyard.set.displayname:
-    description: Allows setting a graveyard name.
+    description: Allow setting a graveyard name.
     default: op
     children:
       graveyard.set: true
 
   graveyard.set.discoveryrange:
-    description: Allows setting a graveyard range.
+    description: Allow setting a graveyard range.
     default: op
     children:
       graveyard.set: true
 
   graveyard.set.discoverymessage:
-    description: Allows setting graveyard discovery message.
+    description: Allow setting graveyard discovery message.
     default: op
     children:
       graveyard.set: true
 
   graveyard.set.respawnmessage:
-    description: Allows setting graveyard respawn message.
+    description: Allow setting graveyard respawn message.
     default: op
     children:
       graveyard.set: true
 
   graveyard.set.safetytime:
-    description: Allows setting graveyard safety time.
+    description: Allow setting graveyard safety time.
     default: op
     children:
       graveyard.set: true
@@ -123,15 +123,15 @@ permissions:
     default: op
 
   graveyard.status:
-    description: Allows display of config settings.
+    description: Allow display of config settings.
     default: op
 
   graveyard.teleport:
-    description: Allows player to teleport to a graveyard location.
+    description: Allow player to teleport to a graveyard location.
     default: op
 
   graveyard.set.*:
-    description: Allows setting all attributes.
+    description: Allow setting all attributes.
     default: op
     children:
       graveyard.set: true
@@ -146,7 +146,7 @@ permissions:
       graveyard.set.safetytime: true
 
   graveyard.admin:
-    description: Allows all admin commands
+    description: Allow all admin commands.
     default: op
     children:
       graveyard.closest: true
@@ -169,4 +169,3 @@ permissions:
       graveyard.show: true
       graveyard.status: true
       graveyard.teleport: true
-      
