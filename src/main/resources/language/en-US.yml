@@ -11,17 +11,25 @@
 
 
 MESSAGES:
-  COMMAND_FAIL_ARGS_COUNT_UNDER:
-    enabled: true
-    string: '&3[Graveyards]&c Too few arguments!'
-
   COMMAND_FAIL_ARGS_COUNT_OVER:
     enabled: true
     string: '&3[Graveyards]&c Too many arguments!'
 
+  COMMAND_FAIL_ARGS_COUNT_UNDER:
+    enabled: true
+    string: '&3[Graveyards]&c Too few arguments!'
+
   COMMAND_FAIL_CONSOLE:
     enabled: true
     string: '&3[Graveyards]&c You must be in game to use this command!'
+
+  COMMAND_FAIL_INVALID_ATTRIBUTE:
+    enabled: true
+    string: '&3[Graveyards]&c That is not a valid graveyard attribute!'
+
+  COMMAND_FAIL_INVALID_COMMAND:
+    enabled: true
+    string: '&3[Graveyards]&c That is not a valid command!'
 
   COMMAND_FAIL_CREATE_EXISTS:
     enabled: true
@@ -43,21 +51,17 @@ MESSAGES:
     enabled: true
     string: '&3[Graveyards]&c That player could not be found!'
 
-  COMMAND_FAIL_INVALID_ATTRIBUTE:
-    enabled: true
-    string: '&3[Graveyards]&c That is not a valid graveyard attribute!'
-
   COMMAND_FAIL_SET_INVALID_BOOLEAN:
     enabled: true
     string: '&3[Graveyards]&c Value must be true or false!'
 
-  COMMAND_FAIL_INVALID_COMMAND:
-    enabled: true
-    string: '&3[Graveyards]&c That is not a valid command!'
-
   COMMAND_FAIL_SET_INVALID_INTEGER:
     enabled: true
     string: '&3[Graveyards]&c Value must be an integer!'
+
+  COMMAND_FAIL_SET_INVALID_NAME:
+    enabled: true
+    string: '&3[Graveyards]&c That is not a valid graveyard name!'
 
   COMMAND_FAIL_NO_RECORD:
     enabled: true
@@ -92,9 +96,17 @@ MESSAGES:
     enabled: true
     string: '&3[Graveyards]&b Set custom discovery message for &2%GRAVEYARD_NAME%&b.'
 
+  COMMAND_SUCCESS_SET_DISCOVERYMESSAGE_DEFAULT:
+    enabled: true
+    string: '&3[Graveyards]&b Set default discovery message for &2%GRAVEYARD_NAME%&b.'
+
   COMMAND_SUCCESS_SET_DISCOVERYRANGE:
     enabled: true
     string: '&3[Graveyards]&b Set discovery range: &2%VALUE%&b for &2%GRAVEYARD_NAME%&b.'
+
+  COMMAND_SUCCESS_SET_DISCOVERYRANGE_DEFAULT:
+    enabled: true
+    string: '&3[Graveyards]&b Set discovery range to configured default for &2%GRAVEYARD_NAME%&b.'
 
   COMMAND_SUCCESS_SET_NAME:
     enabled: true
@@ -119,6 +131,10 @@ MESSAGES:
   COMMAND_SUCCESS_SET_RESPAWNMESSAGE:
     enabled: true
     string: '&3[Graveyards]&b Set custom respawn message for &2%GRAVEYARD_NAME%&b.'
+
+  COMMAND_SUCCESS_SET_RESPAWNMESSAGE_DEFAULT:
+    enabled: true
+    string: '&3[Graveyards]&b Set default respawn message for &2%GRAVEYARD_NAME%&b.'
 
   COMMAND_SUCCESS_SET_SAFETYTIME:
     enabled: true
