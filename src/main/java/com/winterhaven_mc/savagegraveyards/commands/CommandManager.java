@@ -216,8 +216,12 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 *
 	 * @param sender the command sender
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
+	 * @throws NullPointerException if any parameter is null
 	 */
 	private boolean statusCommand(final CommandSender sender) {
+
+		// check for null parameter
+		Objects.requireNonNull(sender);
 
 		// if command sender does not have permission to view status, output error message and return true
 		if (!sender.hasPermission("graveyard.status")) {
@@ -267,8 +271,13 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param sender the command sender
 	 * @param args   the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
+	 * @throws NullPointerException if any parameter is null
 	 */
 	private boolean reloadCommand(final CommandSender sender, final String[] args) {
+
+		// check for null parameters
+		Objects.requireNonNull(sender);
+		Objects.requireNonNull(args);
 
 		// if sender does not have permission to reload config, send error message and return true
 		if (!sender.hasPermission("graveyard.reload")) {
@@ -319,6 +328,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param sender the player issuing the command
 	 * @param args   the command arguments
 	 * @return always return {@code true} to suppress bukkit usage message
+	 * @throws NullPointerException if any parameter is null
 	 */
 	private boolean setCommand(final CommandSender sender, final String[] args) {
 
@@ -331,6 +341,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// graveyard set <graveyard> respawnmessage <message>
 		// graveyard set <graveyard> safetytime <seconds>
 		// graveyard set <graveyard> group <group>
+
+		// check for null parameters
+		Objects.requireNonNull(sender);
+		Objects.requireNonNull(args);
 
 		// convert args list to ArrayList so we can remove elements as we parse them
 		List<String> arguments = new ArrayList<>(Arrays.asList(args));
@@ -423,8 +437,13 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param sender    the player that issued the command
 	 * @param graveyard the existing graveyard to be updated
 	 * @return always returns {@code true} to suppress display of bukkit command usage
+	 * @throws NullPointerException if any parameter is null
 	 */
 	private boolean setLocation(final CommandSender sender, final Graveyard graveyard) {
+
+		// check for null parameters
+		Objects.requireNonNull(sender);
+		Objects.requireNonNull(graveyard);
 
 		// sender must be in game player
 		if (!(sender instanceof Player)) {
@@ -462,12 +481,20 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	/**
 	 * Set new display name for existing graveyard
 	 *
-	 * @param sender    the player that issued the command
-	 * @param graveyard the existing graveyard to be updated
-	 * @param newName   the new display name for the graveyard
+	 * @param sender       the player that issued the command
+	 * @param graveyard    the existing graveyard to be updated
+	 * @param passedString the new display name for the graveyard
 	 * @return always returns {@code true} to suppress display of bukkit command usage
+	 * @throws NullPointerException if any parameter is null
 	 */
-	private boolean setName(final CommandSender sender, final Graveyard graveyard, final String newName) {
+	private boolean setName(final CommandSender sender,
+							final Graveyard graveyard,
+							final String passedString) {
+
+		// check for null parameters
+		Objects.requireNonNull(sender);
+		Objects.requireNonNull(graveyard);
+		Objects.requireNonNull(passedString);
 
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.name")) {
@@ -476,10 +503,20 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			return true;
 		}
 
-		// get original name
-		final String originalName = graveyard.getDisplayName();
+		// get new name from passed string trimmed
+		String newName = passedString.trim();
 
-		// create new graveyard object with from existing graveyard with new displayName
+		// if new name is blank, send invalid name message
+		if (ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', newName)).isEmpty()) {
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_SET_INVALID_NAME);
+			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
+			return true;
+		}
+
+		// get original name
+		final String oldName = graveyard.getDisplayName();
+
+		// create new graveyard object from existing graveyard with new name
 		Graveyard newGraveyard = new Graveyard.Builder(graveyard)
 				.displayName(newName)
 				.build();
@@ -488,7 +525,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		plugin.dataStore.updateGraveyard(newGraveyard);
 
 		// send success message
-		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_SET_NAME, newGraveyard, originalName);
+		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_SET_NAME, newGraveyard, oldName);
 
 		// play success sound
 		plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
@@ -499,15 +536,20 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	/**
 	 * Set new enabled setting for existing graveyard
 	 *
-	 * @param sender      the player that issued the command
-	 * @param graveyard   the existing graveyard to be updated
-	 * @param passedValue the new enabled setting for the graveyard
+	 * @param sender       the player that issued the command
+	 * @param graveyard    the existing graveyard to be updated
+	 * @param passedString the new enabled setting for the graveyard
 	 * @return always returns {@code true} to suppress display of bukkit command usage
+	 * @throws NullPointerException if any parameter is null
 	 */
-	private boolean setEnabled(final CommandSender sender, final Graveyard graveyard, final String passedValue) {
+	private boolean setEnabled(final CommandSender sender,
+							   final Graveyard graveyard,
+							   final String passedString) {
 
-		String value = passedValue;
-		boolean enabled;
+		// check for null parameters
+		Objects.requireNonNull(sender);
+		Objects.requireNonNull(graveyard);
+		Objects.requireNonNull(passedString);
 
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.enabled")) {
@@ -516,13 +558,16 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			return true;
 		}
 
-		// if value is null or empty, set to true
-		if (value == null || value.isEmpty()) {
+		// get value from passed string trimmed
+		String value = passedString.trim();
+		boolean enabled;
+
+		// if value is empty, set to true
+		if (value.isEmpty()) {
 			value = "true";
 		}
 
 		if (value.equalsIgnoreCase("default")) {
-			value = plugin.getConfig().getString("default-enabled");
 			enabled = plugin.getConfig().getBoolean("default-enabled");
 		}
 		else if (value.equalsIgnoreCase("true")
@@ -540,6 +585,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
+
+		// set value to string representation of boolean
+		value = String.valueOf(enabled);
 
 		// create new graveyard object from existing graveyard with new enabled setting
 		Graveyard newGraveyard = new Graveyard.Builder(graveyard)
@@ -561,15 +609,20 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	/**
 	 * Set new hidden setting for existing graveyard
 	 *
-	 * @param sender      the player that issued the command
-	 * @param graveyard   the existing graveyard to be updated
-	 * @param passedValue the new hidden setting for the graveyard
+	 * @param sender       the player that issued the command
+	 * @param graveyard    the existing graveyard to be updated
+	 * @param passedString the new hidden setting for the graveyard
 	 * @return always returns {@code true} to suppress display of bukkit command usage
+	 * @throws NullPointerException if any parameter is null
 	 */
-	private boolean setHidden(final CommandSender sender, final Graveyard graveyard, final String passedValue) {
+	private boolean setHidden(final CommandSender sender,
+							  final Graveyard graveyard,
+							  final String passedString) {
 
-		String value = passedValue;
-		boolean hidden;
+		// check for null parameters
+		Objects.requireNonNull(sender);
+		Objects.requireNonNull(graveyard);
+		Objects.requireNonNull(passedString);
 
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.hidden")) {
@@ -578,13 +631,16 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			return true;
 		}
 
-		// if value is null or empty, set to true
-		if (value == null || value.isEmpty()) {
+		// get value from passed string trimmed
+		String value = passedString.trim();
+		boolean hidden;
+
+		// if value is empty, set to true
+		if (value.isEmpty()) {
 			value = "true";
 		}
 
 		if (value.equalsIgnoreCase("default")) {
-			value = plugin.getConfig().getString("default-hidden");
 			hidden = plugin.getConfig().getBoolean("default-hidden");
 		}
 		else if (value.equalsIgnoreCase("true")
@@ -602,6 +658,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
+
+		// set value to string representation of boolean
+		value = String.valueOf(hidden);
 
 		// create new graveyard object from existing graveyard with new hidden setting
 		Graveyard newGraveyard = new Graveyard.Builder(graveyard)
@@ -623,12 +682,20 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	/**
 	 * Set new discovery range for existing graveyard
 	 *
-	 * @param sender    the player that issued the command
-	 * @param graveyard the existing graveyard to be updated
-	 * @param value     the new hidden setting for the graveyard
+	 * @param sender       the player that issued the command
+	 * @param graveyard    the existing graveyard to be updated
+	 * @param passedString the new hidden setting for the graveyard
 	 * @return always returns {@code true} to suppress display of bukkit command usage
+	 * @throws NullPointerException if any parameter is null
 	 */
-	private boolean setDiscoveryRange(final CommandSender sender, final Graveyard graveyard, final String value) {
+	private boolean setDiscoveryRange(final CommandSender sender,
+									  final Graveyard graveyard,
+									  final String passedString) {
+
+		// check for null parameters
+		Objects.requireNonNull(sender);
+		Objects.requireNonNull(graveyard);
+		Objects.requireNonNull(passedString);
 
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.discoveryrange")) {
@@ -637,8 +704,11 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			return true;
 		}
 
+		// get value from passed string trimmed
+		String value = passedString.trim();
+
 		//noinspection UnusedAssignment
-		int discoveryRange = 0;
+		int discoveryRange = -1;
 
 		// if no distance given and sender is player, use player's current distance
 		if (value.isEmpty()) {
@@ -647,7 +717,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 				discoveryRange = (int) player.getLocation().distance(graveyard.getLocation());
 			}
 			else {
-				plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_CONSOLE);
+				plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER);
 				plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 				return true;
 			}
@@ -664,26 +734,28 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			}
 		}
 
-		// set new range
-		if (discoveryRange > 0) {
+		// create new graveyard object from existing graveyard with new discovery range
+		Graveyard newGraveyard = new Graveyard.Builder(graveyard)
+				.discoveryRange(discoveryRange)
+				.build();
 
-			// create new graveyard object from existing graveyard with new discovery range
-			Graveyard newGraveyard = new Graveyard.Builder(graveyard)
-					.discoveryRange(discoveryRange)
-					.build();
+		// update graveyard in datastore
+		plugin.dataStore.updateGraveyard(newGraveyard);
 
-			// update graveyard in datastore
-			plugin.dataStore.updateGraveyard(newGraveyard);
-
-			// send success message
+		// send success message
+		if (discoveryRange < 0) {
+			plugin.messageManager.sendMessage(sender,
+					MessageId.COMMAND_SUCCESS_SET_DISCOVERYRANGE_DEFAULT, newGraveyard);
+		}
+		else {
 			plugin.messageManager.sendMessage(sender,
 					MessageId.COMMAND_SUCCESS_SET_DISCOVERYRANGE,
 					newGraveyard,
 					String.valueOf(discoveryRange));
-
-			// play success sound
-			plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
 		}
+
+		// play success sound
+		plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
 		return true;
 	}
 
@@ -691,16 +763,20 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	/**
 	 * Set new discovery message for existing graveyard
 	 *
-	 * @param sender                 the player that issued the command
-	 * @param graveyard              the existing graveyard to be updated
-	 * @param passedDiscoveryMessage the new discovery message for the graveyard
+	 * @param sender       the player that issued the command
+	 * @param graveyard    the existing graveyard to be updated
+	 * @param passedString the new discovery message for the graveyard
 	 * @return always returns {@code true} to suppress display of bukkit command usage
+	 * @throws NullPointerException if any parameter is null
 	 */
 	private boolean setDiscoveryMessage(final CommandSender sender,
 										final Graveyard graveyard,
-										final String passedDiscoveryMessage) {
+										final String passedString) {
 
-		String discoveryMessage = passedDiscoveryMessage;
+		// check for null parameters
+		Objects.requireNonNull(sender);
+		Objects.requireNonNull(graveyard);
+		Objects.requireNonNull(passedString);
 
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.discoverymessage")) {
@@ -708,6 +784,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
+
+		// get discovery message from passed string trimmed
+		String discoveryMessage = passedString.trim();
 
 		// if message is 'default', set message to empty string
 		if (discoveryMessage.equalsIgnoreCase("default")) {
@@ -723,7 +802,15 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		plugin.dataStore.updateGraveyard(newGraveyard);
 
 		// send success message
-		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_SET_DISCOVERYMESSAGE, newGraveyard);
+		if (discoveryMessage.isEmpty()) {
+			plugin.messageManager.sendMessage(sender,
+					MessageId.COMMAND_SUCCESS_SET_DISCOVERYMESSAGE_DEFAULT, newGraveyard);
+		}
+		else {
+			plugin.messageManager.sendMessage(sender,
+					MessageId.COMMAND_SUCCESS_SET_DISCOVERYMESSAGE, newGraveyard);
+
+		}
 
 		// play success sound
 		plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
@@ -734,16 +821,20 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	/**
 	 * Set new respawn message for existing graveyard
 	 *
-	 * @param sender               the player that issued the command
-	 * @param graveyard            the existing graveyard to be updated
-	 * @param passedRespawnMessage the new respawn message for the graveyard
+	 * @param sender       the player that issued the command
+	 * @param graveyard    the existing graveyard to be updated
+	 * @param passedString the new respawn message for the graveyard
 	 * @return always returns {@code true} to suppress display of bukkit command usage
+	 * @throws NullPointerException if any parameter is null
 	 */
 	private boolean setRespawnMessage(final CommandSender sender,
 									  final Graveyard graveyard,
-									  final String passedRespawnMessage) {
+									  final String passedString) {
 
-		String respawnMessage = passedRespawnMessage;
+		// check for null parameters
+		Objects.requireNonNull(sender);
+		Objects.requireNonNull(graveyard);
+		Objects.requireNonNull(passedString);
 
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.respawnmessage")) {
@@ -751,6 +842,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
+
+		// get respawn message from passed string trimmed
+		String respawnMessage = passedString.trim();
 
 		// if message is 'default', set message to empty string
 		if (respawnMessage.equalsIgnoreCase("default")) {
@@ -764,7 +858,18 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 		// update record in data store
 		plugin.dataStore.updateGraveyard(newGraveyard);
-		plugin.messageManager.sendMessage(sender, MessageId.COMMAND_SUCCESS_SET_RESPAWNMESSAGE, newGraveyard);
+
+		// send success message
+		if (respawnMessage.isEmpty()) {
+			plugin.messageManager.sendMessage(sender,
+					MessageId.COMMAND_SUCCESS_SET_RESPAWNMESSAGE_DEFAULT, newGraveyard);
+		}
+		else {
+			plugin.messageManager.sendMessage(sender,
+					MessageId.COMMAND_SUCCESS_SET_RESPAWNMESSAGE, newGraveyard);
+		}
+
+		// play success sound
 		plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
 		return true;
 	}
@@ -773,14 +878,20 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	/**
 	 * Set new group for existing graveyard
 	 *
-	 * @param sender    the player that issued the command
-	 * @param graveyard the existing graveyard to be updated
-	 * @param group     the new group for the graveyard
+	 * @param sender       the player that issued the command
+	 * @param graveyard    the existing graveyard to be updated
+	 * @param passedString the new group for the graveyard
 	 * @return always returns {@code true} to suppress display of bukkit command usage
+	 * @throws NullPointerException if any parameter is null
 	 */
 	private boolean setGroup(final CommandSender sender,
 							 final Graveyard graveyard,
-							 final String group) {
+							 final String passedString) {
+
+		// check for null parameters
+		Objects.requireNonNull(sender);
+		Objects.requireNonNull(graveyard);
+		Objects.requireNonNull(passedString);
 
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.group")) {
@@ -788,6 +899,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
+
+		// get group name from passed string trimmed
+		String group = passedString.trim();
 
 		// create new graveyard object from existing graveyard with new group
 		Graveyard newGraveyard = new Graveyard.Builder(graveyard)
@@ -809,14 +923,20 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	/**
 	 * Set new safety time for existing graveyard
 	 *
-	 * @param sender    the player that issued the command
-	 * @param graveyard the existing graveyard to be updated
-	 * @param value     the new safety time for the graveyard
+	 * @param sender       the player that issued the command
+	 * @param graveyard    the existing graveyard to be updated
+	 * @param passedString the new safety time for the graveyard
 	 * @return always returns {@code true} to suppress display of bukkit command usage
+	 * @throws NullPointerException if any parameter is null
 	 */
 	private boolean setSafetyTime(final CommandSender sender,
 								  final Graveyard graveyard,
-								  final String value) {
+								  final String passedString) {
+
+		// check for null parameters
+		Objects.requireNonNull(sender);
+		Objects.requireNonNull(graveyard);
+		Objects.requireNonNull(passedString);
 
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.safetytime")) {
@@ -824,6 +944,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
+
+		// get value from passed string trimmed
+		String value = passedString.trim();
 
 		int safetyTime;
 
@@ -868,8 +991,13 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param sender the player that issued the command
 	 * @param args   passed command arguments
 	 * @return always returns {@code true} to suppress display of bukkit command usage
+	 * @throws NullPointerException if any parameter is null
 	 */
 	private boolean createCommand(final CommandSender sender, final String[] args) {
+
+		// check for null parameters
+		Objects.requireNonNull(sender);
+		Objects.requireNonNull(args);
 
 		// sender must be in game player
 		if (!(sender instanceof Player)) {
@@ -968,8 +1096,13 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param sender the command sender
 	 * @param args   the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
+	 * @throws NullPointerException if any parameter is null
 	 */
 	private boolean deleteCommand(final CommandSender sender, final String[] args) {
+
+		// check for null parameters
+		Objects.requireNonNull(sender);
+		Objects.requireNonNull(args);
 
 		// check for permission
 		if (!sender.hasPermission("graveyard.delete")) {
@@ -1029,8 +1162,13 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param sender the command sender
 	 * @param args   the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
+	 * @throws NullPointerException if any parameter is null
 	 */
 	private boolean showCommand(final CommandSender sender, final String[] args) {
+
+		// check for null parameters
+		Objects.requireNonNull(sender);
+		Objects.requireNonNull(args);
 
 		// if command sender does not have permission to show graveyards, output error message and return true
 		if (!sender.hasPermission("graveyard.show")) {
@@ -1066,10 +1204,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		if (graveyard == null) {
 
 			// create dummy graveyard to send to message manager
-			Graveyard notGraveyard = new Graveyard.Builder().displayName(displayName).build();
+			Graveyard dummyGraveyard = new Graveyard.Builder().displayName(displayName).build();
 
 			// send message
-			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_NO_RECORD, notGraveyard);
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_NO_RECORD, dummyGraveyard);
 
 			// play sound
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
@@ -1152,8 +1290,13 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param sender the command sender
 	 * @param args   the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
+	 * @throws NullPointerException if any parameter is null
 	 */
 	private boolean listCommand(final CommandSender sender, final String[] args) {
+
+		// check for null parameters
+		Objects.requireNonNull(sender);
+		Objects.requireNonNull(args);
 
 		// if command sender does not have permission to list graveyards, output error message and return true
 		if (!sender.hasPermission("graveyard.list")) {
@@ -1295,8 +1438,12 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 *
 	 * @param sender the command sender
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
+	 * @throws NullPointerException if any parameter is null
 	 */
 	private boolean closestCommand(final CommandSender sender) {
+
+		// check for null parameters
+		Objects.requireNonNull(sender);
 
 		// if command sender does not have permission to display help, output error message and return true
 		if (!sender.hasPermission("graveyard.closest")) {
@@ -1336,8 +1483,13 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param sender the command sender
 	 * @param args   the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
+	 * @throws NullPointerException if any parameter is null
 	 */
 	private boolean teleportCommand(final CommandSender sender, final String[] args) {
+
+		// check for null parameters
+		Objects.requireNonNull(sender);
+		Objects.requireNonNull(args);
 
 		// sender must be in game player
 		if (!(sender instanceof Player)) {
@@ -1381,10 +1533,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		if (graveyard == null) {
 
 			// create dummy graveyard to send to message manager
-			Graveyard notGraveyard = new Graveyard.Builder().displayName(displayName).build();
+			Graveyard dummyGraveyard = new Graveyard.Builder().displayName(displayName).build();
 
 			// send message
-			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_NO_RECORD, notGraveyard);
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_NO_RECORD, dummyGraveyard);
 
 			// play sound
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
@@ -1413,8 +1565,13 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param sender the command sender
 	 * @param args   the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
+	 * @throws NullPointerException if any parameter is null
 	 */
 	private boolean forgetCommand(final CommandSender sender, final String[] args) {
+
+		// check for null parameters
+		Objects.requireNonNull(sender);
+		Objects.requireNonNull(args);
 
 		// check for permission
 		if (!sender.hasPermission("graveyard.forget")) {
@@ -1499,8 +1656,13 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param sender the command sender
 	 * @param args   the command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
+	 * @throws NullPointerException if any parameter is null
 	 */
 	private boolean helpCommand(final CommandSender sender, final String[] args) {
+
+		// check for null parameters
+		Objects.requireNonNull(sender);
+		Objects.requireNonNull(args);
 
 		// if command sender does not have permission to display help, output error message and return true
 		if (!sender.hasPermission("graveyard.help")) {
@@ -1561,8 +1723,13 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 *
 	 * @param sender        the command sender
 	 * @param passedCommand the command for which to display usage
+	 * @throws NullPointerException if any parameter is null
 	 */
 	private void displayUsage(final CommandSender sender, final String passedCommand) {
+
+		// check for null parameters
+		Objects.requireNonNull(sender);
+		Objects.requireNonNull(passedCommand);
 
 		String command = passedCommand;
 
@@ -1628,8 +1795,12 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 *
 	 * @param stringList List of String to join with spaces
 	 * @return the joined String
+	 * @throws NullPointerException if any parameter is null
 	 */
 	private String join(final List<String> stringList) {
+
+		// check for null parameter
+		Objects.requireNonNull(stringList);
 
 		StringBuilder returnString = new StringBuilder();
 
