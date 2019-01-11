@@ -187,7 +187,7 @@ class DataStoreSQLite extends DataStore {
 			// execute sql query
 			ResultSet rs = preparedStatement.executeQuery();
 
-			// only zero or one record can match the unique key
+			// only zero or one record can match the unique search key
 			if (rs.next()) {
 
 				// get stored world and coordinates
@@ -308,6 +308,10 @@ class DataStoreSQLite extends DataStore {
 						.safetyTime(safetyTime)
 						.location(location)
 						.build();
+
+				if (graveyard.getLocation() == null) {
+					continue;
+				}
 
 				if (groupName == null || groupName.isEmpty() || player.hasPermission("group." + groupName)) {
 					if (closest == null
@@ -546,8 +550,8 @@ class DataStoreSQLite extends DataStore {
 	@Override
 	public void insertGraveyard(final Graveyard graveyard) {
 
-		// if destination is null do nothing and return
-		if (graveyard == null) {
+		// if graveyard or graveyard location is null, do nothing and return
+		if (graveyard == null || graveyard.getLocation() == null) {
 			return;
 		}
 
@@ -608,8 +612,8 @@ class DataStoreSQLite extends DataStore {
 	@Override
 	public void updateGraveyard(final Graveyard graveyard) {
 
-		// if destination is null do nothing and return
-		if (graveyard == null) {
+		// if graveyard or graveyard location is null do nothing and return
+		if (graveyard == null || graveyard.getLocation() == null) {
 			return;
 		}
 

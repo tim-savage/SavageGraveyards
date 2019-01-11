@@ -150,7 +150,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		}
 
 		// closest command
-		if (subcommand.equalsIgnoreCase("closest")) {
+		if (subcommand.equalsIgnoreCase("closest")
+				|| subcommand.equalsIgnoreCase("nearest")) {
 			return closestCommand(sender);
 		}
 
@@ -190,7 +191,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		}
 
 		// teleport command
-		if (subcommand.equalsIgnoreCase("teleport") || subcommand.equalsIgnoreCase("tp")) {
+		if (subcommand.equalsIgnoreCase("teleport")
+				|| subcommand.equalsIgnoreCase("tp")) {
 			return teleportCommand(sender, args);
 		}
 
@@ -335,8 +337,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// Example usage:
 		// graveyard set <graveyard> displayname <new_name>
 		// graveyard set <graveyard> location
-		// graveyard set <graveyard> enabled <true|false>
-		// graveyard set <graveyard> hidden <true|false>
+		// graveyard set <graveyard> enabled <true|false|default>
+		// graveyard set <graveyard> hidden <true|false|default>
 		// graveyard set <graveyard> discoverymessage <message>
 		// graveyard set <graveyard> respawnmessage <message>
 		// graveyard set <graveyard> safetytime <seconds>
@@ -346,7 +348,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		Objects.requireNonNull(sender);
 		Objects.requireNonNull(args);
 
-		// convert args list to ArrayList so we can remove elements as we parse them
+		// convert args to ArrayList so we can remove elements as we parse them
 		List<String> arguments = new ArrayList<>(Arrays.asList(args));
 
 		// get subcommand from arguments ArrayList
@@ -707,19 +709,23 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// get value from passed string trimmed
 		String value = passedString.trim();
 
-		//noinspection UnusedAssignment
-		int discoveryRange = -1;
+		int discoveryRange;
 
-		// if no distance given and sender is player, use player's current distance
-		if (value.isEmpty()) {
+		if (value.equalsIgnoreCase("default")) {
+			discoveryRange = -1;
+		}
+		// if no distance given...
+		else if (value.isEmpty()) {
+
+			// if sender is player, use player's current distance
 			if (sender instanceof Player) {
 				Player player = (Player) sender;
 				discoveryRange = (int) player.getLocation().distance(graveyard.getLocation());
 			}
+
+			// if command sender is not in game player, set negative discovery range to use configured default
 			else {
-				plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER);
-				plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
-				return true;
+				discoveryRange = -1;
 			}
 		}
 		else {
@@ -1117,10 +1123,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// get subcommand from arguments ArrayList
 		String subcommand = arguments.remove(0);
 
-		int minArgs = 2;
+		int minArgs = 1;
 
 		// check min arguments
-		if (args.length < minArgs) {
+		if (arguments.size() < minArgs) {
 			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER);
 			displayUsage(sender, subcommand);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
@@ -1184,10 +1190,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		String subcommand = arguments.remove(0);
 
 		// argument limits
-		int minArgs = 2;
+		int minArgs = 1;
 
 		// if too few arguments, display error and usage messages and return
-		if (args.length < minArgs) {
+		if (arguments.size() < minArgs) {
 			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender, subcommand);
@@ -1305,12 +1311,16 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			return true;
 		}
 
-		String subcommand = args[0];
+		// convert args list to ArrayList so we can remove elements as we parse them
+		List<String> arguments = new ArrayList<>(Arrays.asList(args));
+
+		// get subcommand from arguments ArrayList
+		String subcommand = arguments.remove(0);
 
 		// argument limits
-		int maxArgs = 2;
+		int maxArgs = 1;
 
-		if (args.length > maxArgs) {
+		if (arguments.size() > maxArgs) {
 			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender, subcommand);
@@ -1511,9 +1521,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		String subcommand = arguments.remove(0);
 
 		// argument limits
-		int minArgs = 2;
+		int minArgs = 1;
 
-		if (args.length < minArgs) {
+		if (arguments.size() < minArgs) {
 			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender, subcommand);
@@ -1587,10 +1597,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		String subcommand = arguments.remove(0);
 
 		// argument limits
-		int minArgs = 3;
+		int minArgs = 2;
 
 		// check for minimum arguments
-		if (args.length < minArgs) {
+		if (arguments.size() < minArgs) {
 			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender, subcommand);
@@ -1685,6 +1695,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		if (command.equalsIgnoreCase("create")) {
 			helpMessage = "Creates a graveyard at current player location.";
 		}
+		if (command.equalsIgnoreCase("closest")
+				|| command.equalsIgnoreCase("nearest")) {
+			helpMessage = "Display the nearest graveyard to player's current location.";
+		}
 		if (command.equalsIgnoreCase("delete")) {
 			helpMessage = "Removes a graveyard location.";
 		}
@@ -1709,7 +1723,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		if (command.equalsIgnoreCase("status")) {
 			helpMessage = "Displays current configuration settings.";
 		}
-		if (command.equalsIgnoreCase("teleport")) {
+		if (command.equalsIgnoreCase("teleport")
+				|| command.equalsIgnoreCase("tp")) {
 			helpMessage = "Teleport player to graveyard location.";
 		}
 		sender.sendMessage(HELP_COLOR + helpMessage);
@@ -1731,7 +1746,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		Objects.requireNonNull(sender);
 		Objects.requireNonNull(passedCommand);
 
-		String command = passedCommand;
+		String command = passedCommand.trim();
 
 		if (command.isEmpty() || command.equalsIgnoreCase("help")) {
 			command = "all";
@@ -1750,6 +1765,12 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 				|| command.equalsIgnoreCase("all"))
 				&& sender.hasPermission("graveyard.create")) {
 			sender.sendMessage(USAGE_COLOR + "/graveyard create <graveyard>");
+		}
+		if ((command.equalsIgnoreCase("closest")
+				|| command.equalsIgnoreCase("nearest")
+				|| command.equalsIgnoreCase("all"))
+				&& sender.hasPermission("graveyard.closest")) {
+			sender.sendMessage(USAGE_COLOR + "/graveyard closest");
 		}
 		if ((command.equalsIgnoreCase("delete")
 				|| command.equalsIgnoreCase("all"))
