@@ -12,6 +12,8 @@ public final class Graveyard {
 
 	private static PluginMain plugin = PluginMain.instance;
 
+	private final static int CONFIG_DEFAULT = -1;
+
 	private final int primaryKey;
 	private final String searchKey;
 	private final String displayName;
@@ -66,12 +68,12 @@ public final class Graveyard {
 		private String searchKey;
 		private boolean enabled = plugin.getConfig().getBoolean("default-enabled");
 		private boolean hidden = plugin.getConfig().getBoolean("default-hidden");
-		private int discoveryRange = -1;
+		private int discoveryRange = CONFIG_DEFAULT;
 		private String discoveryMessage = "";
 		private String respawnMessage = "";
 		private String group = "";
-		private int safetyRange = -1;
-		private int safetyTime = -1;
+		private int safetyRange = CONFIG_DEFAULT;
+		private int safetyTime = CONFIG_DEFAULT;
 		private Location location;
 
 
