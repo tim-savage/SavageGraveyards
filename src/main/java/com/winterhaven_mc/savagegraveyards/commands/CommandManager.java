@@ -711,6 +711,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 		int discoveryRange;
 
+		// if passed string is "default", set discovery range to negative to use configured default
 		if (value.equalsIgnoreCase("default")) {
 			discoveryRange = -1;
 		}
@@ -956,8 +957,23 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 		int safetyTime;
 
+		// if passed string is "default", set safety time to negative to use configured default
 		if (value.equalsIgnoreCase("default")) {
 			safetyTime = -1;
+		}
+		// if no safety time parameter given...
+		else if (value.isEmpty()) {
+
+			// if sender is player, use player's current distance
+			if (sender instanceof Player) {
+				Player player = (Player) sender;
+				safetyTime = (int) player.getLocation().distance(graveyard.getLocation());
+			}
+
+			// if command sender is not in game player, set negative safety time to use configured default
+			else {
+				safetyTime = -1;
+			}
 		}
 		else {
 			// try to parse entered safety time as integer
