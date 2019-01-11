@@ -712,6 +712,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// get value from passed string trimmed
 		String value = passedString.trim();
 
+		// declare discovery range to be set
 		int discoveryRange;
 
 		// if passed string is "default", set discovery range to negative to use configured default
@@ -958,6 +959,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// get value from passed string trimmed
 		String value = passedString.trim();
 
+		// declare safety time to be set
 		int safetyTime;
 
 		// if passed string is "default", set safety time to negative to use configured default

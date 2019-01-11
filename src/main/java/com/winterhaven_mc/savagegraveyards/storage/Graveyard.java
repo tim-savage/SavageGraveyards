@@ -12,6 +12,7 @@ public final class Graveyard {
 
 	private static PluginMain plugin = PluginMain.instance;
 
+	// constant value for integer attributes to use configured default
 	private final static int CONFIG_DEFAULT = -1;
 
 	private final int primaryKey;
