@@ -33,6 +33,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	private final static ChatColor HELP_COLOR = ChatColor.YELLOW;
 	private final static ChatColor USAGE_COLOR = ChatColor.GOLD;
 
+	// constant value for integer attributes to use configured default
+	private final static int CONFIG_DEFAULT = -1;
+
 	// list of possible subcommands
 	private final static List<String> SUBCOMMANDS =
 			Collections.unmodifiableList(new ArrayList<>(Arrays.asList(
@@ -713,7 +716,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 		// if passed string is "default", set discovery range to negative to use configured default
 		if (value.equalsIgnoreCase("default")) {
-			discoveryRange = -1;
+			discoveryRange = CONFIG_DEFAULT;
 		}
 		// if no distance given...
 		else if (value.isEmpty()) {
@@ -726,7 +729,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 			// if command sender is not in game player, set negative discovery range to use configured default
 			else {
-				discoveryRange = -1;
+				discoveryRange = CONFIG_DEFAULT;
 			}
 		}
 		else {
@@ -959,7 +962,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 		// if passed string is "default", set safety time to negative to use configured default
 		if (value.equalsIgnoreCase("default")) {
-			safetyTime = -1;
+			safetyTime = CONFIG_DEFAULT;
 		}
 		// if no safety time parameter given...
 		else if (value.isEmpty()) {
@@ -972,7 +975,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 			// if command sender is not in game player, set negative safety time to use configured default
 			else {
-				safetyTime = -1;
+				safetyTime = CONFIG_DEFAULT;
 			}
 		}
 		else {
