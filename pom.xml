@@ -35,14 +35,6 @@
 	</repositories>
 
 	<dependencies>
-		<!-- Bukkit -->
-		<dependency>
-			<groupId>org.bukkit</groupId>
-			<artifactId>bukkit</artifactId>
-			<version>1.14.4-R0.1-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-
 		<!-- MessageManagerLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
@@ -62,6 +54,14 @@
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>world-manager-lib</artifactId>
 			<version>1.0.8</version>
+		</dependency>
+
+		<!-- Bukkit -->
+		<dependency>
+			<groupId>org.bukkit</groupId>
+			<artifactId>bukkit</artifactId>
+			<version>1.14.4-R0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
