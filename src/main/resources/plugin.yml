@@ -3,7 +3,7 @@ main: com.winterhaven_mc.savagegraveyards.PluginMain
 author: ${project.author}
 version: ${project.version}
 softdepend: [Multiverse-Core]
-api-version: 1.13
+api-version: 1.14
 
 commands:
   graveyard:
