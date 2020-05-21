@@ -43,7 +43,7 @@ public class PlayerEventListener implements Listener {
 	/**
 	 * constructor method for {@code PlayerEventListener} class
 	 *
-	 * @param    plugin        A reference to this plugin's main class
+	 * @param plugin A reference to this plugin's main class
 	 */
 	public PlayerEventListener(final PluginMain plugin) {
 
