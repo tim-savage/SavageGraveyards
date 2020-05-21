@@ -21,7 +21,7 @@ public class SafetyManager {
 	private final PluginMain plugin;
 
 	// safety cooldown map
-	private Map<UUID, BukkitTask> safetyCooldownMap;
+	private final Map<UUID, BukkitTask> safetyCooldownMap;
 
 
 	/**
