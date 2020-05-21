@@ -108,6 +108,8 @@ public abstract class DataStore {
 	 * Delete discovery record
 	 *
 	 * @param displayName display name or search key of record to be deleted
+	 * @param playerUUID the player unique id
+	 * @return boolean - {@code true} if deletion was successful, {@code false} if not
 	 */
 	public abstract boolean deleteDiscovery(final String displayName, final UUID playerUUID);
 

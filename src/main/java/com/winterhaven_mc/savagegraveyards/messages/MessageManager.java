@@ -291,6 +291,7 @@ public class MessageManager extends AbstractMessageManager<MessageId> {
 	 *
 	 * @param recipient  Player receiving message
 	 * @param messageId  message identifier
+	 * @param graveyard  the graveyard whose details are being listed
 	 * @param itemNumber item number in list
 	 * @throws NullPointerException if any parameter is null
 	 */
