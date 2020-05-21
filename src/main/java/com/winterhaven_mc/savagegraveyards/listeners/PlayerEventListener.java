@@ -76,9 +76,6 @@ public class PlayerEventListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	void onPlayerRespawnLOWEST(final PlayerRespawnEvent event) {
 		if ("LOWEST".equalsIgnoreCase(plugin.getConfig().getString("respawn-priority"))) {
-			if (plugin.debug) {
-				plugin.getLogger().info("PlayerRespawnEvent responding at LOWEST priority.");
-			}
 			onPlayerRespawnHandler(event);
 		}
 	}
@@ -92,9 +89,6 @@ public class PlayerEventListener implements Listener {
 	@EventHandler(priority = EventPriority.LOW)
 	void onPlayerRespawnLOW(final PlayerRespawnEvent event) {
 		if ("LOW".equalsIgnoreCase(plugin.getConfig().getString("respawn-priority"))) {
-			if (plugin.debug) {
-				plugin.getLogger().info("PlayerRespawnEvent responding at LOW priority.");
-			}
 			onPlayerRespawnHandler(event);
 		}
 	}
@@ -108,9 +102,6 @@ public class PlayerEventListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
 	void onPlayerRespawnNORMAL(final PlayerRespawnEvent event) {
 		if ("NORMAL".equalsIgnoreCase(plugin.getConfig().getString("respawn-priority"))) {
-			if (plugin.debug) {
-				plugin.getLogger().info("PlayerRespawnEvent responding at NORMAL priority.");
-			}
 			onPlayerRespawnHandler(event);
 		}
 	}
@@ -124,9 +115,6 @@ public class PlayerEventListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
 	void onPlayerRespawnHIGH(final PlayerRespawnEvent event) {
 		if ("HIGH".equalsIgnoreCase(plugin.getConfig().getString("respawn-priority"))) {
-			if (plugin.debug) {
-				plugin.getLogger().info("PlayerRespawnEvent responding at HIGH priority.");
-			}
 			onPlayerRespawnHandler(event);
 		}
 	}
@@ -141,9 +129,6 @@ public class PlayerEventListener implements Listener {
 	void onPlayerRespawnHIGHEST(final PlayerRespawnEvent event) {
 		if (Objects.requireNonNull(plugin.getConfig().getString("respawn-priority"))
 				.equalsIgnoreCase("HIGHEST")) {
-			if (plugin.debug) {
-				plugin.getLogger().info("PlayerRespawnEvent responding at HIGHEST priority.");
-			}
 			onPlayerRespawnHandler(event);
 		}
 	}
