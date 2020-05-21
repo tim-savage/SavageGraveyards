@@ -46,6 +46,11 @@ public class DiscoveryTask extends BukkitRunnable {
 				// get graveyard location
 				Location dsLocation = graveyard.getLocation();
 
+				// if graveyard location is null, skip to next graveyard
+				if (dsLocation == null) {
+					continue;
+				}
+
 				// check that player has graveyard.discover permission
 				if (player.hasPermission("graveyard.discover")) {
 
