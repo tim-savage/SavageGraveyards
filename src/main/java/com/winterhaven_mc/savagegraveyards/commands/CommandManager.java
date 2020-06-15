@@ -1731,7 +1731,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			Message.create(sender, COMMAND_SUCCESS_FORGET)
 					.setMacro(GRAVEYARD, graveyard)
 					.setMacro(LOCATION, graveyard.getLocation())
-					.setMacro(TARGET_PLAYER, player.getName())
+					.setMacro(TARGET_PLAYER, player)
 					.send();
 
 			// play success sound
@@ -1742,7 +1742,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			Message.create(sender, COMMAND_FAIL_FORGET)
 					.setMacro(GRAVEYARD, graveyard)
 					.setMacro(LOCATION, graveyard)
-					.setMacro(TARGET_PLAYER, player.getName())
+					.setMacro(TARGET_PLAYER, player)
 					.send();
 
 			// send command fail sound
