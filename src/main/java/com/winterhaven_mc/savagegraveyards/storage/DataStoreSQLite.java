@@ -551,7 +551,11 @@ class DataStoreSQLite extends DataStore {
 	public void insertGraveyard(final Graveyard graveyard) {
 
 		// if graveyard or graveyard location is null, do nothing and return
-		if (graveyard == null || graveyard.getLocation() == null) {
+		if (graveyard == null || graveyard.getLocation() == null || graveyard.getLocation().getWorld() == null) {
+			if (plugin.debug) {
+				plugin.getLogger().warning("Could not insert graveyard in data store "
+						+ "because location is not valid!");
+			}
 			return;
 		}
 
@@ -613,7 +617,7 @@ class DataStoreSQLite extends DataStore {
 	public void updateGraveyard(final Graveyard graveyard) {
 
 		// if graveyard or graveyard location is null do nothing and return
-		if (graveyard == null || graveyard.getLocation() == null) {
+		if (graveyard == null || graveyard.getLocation() == null || graveyard.getLocation().getWorld() == null) {
 			return;
 		}
 

@@ -1,6 +1,8 @@
 package com.winterhaven_mc.savagegraveyards.util;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
+import com.winterhaven_mc.savagegraveyards.messages.Macro;
+import com.winterhaven_mc.savagegraveyards.messages.Message;
 import com.winterhaven_mc.savagegraveyards.messages.MessageId;
 
 import org.bukkit.entity.Player;
@@ -58,14 +60,14 @@ public class SafetyManager {
 		}
 
 		// send safety message to player
-		plugin.messageManager.sendMessage(player, MessageId.SAFETY_COOLDOWN_START, duration);
+		Message.create(player, MessageId.SAFETY_COOLDOWN_START).setMacro(Macro.DURATION, duration).send();
 
 		// create task to remove player from map after duration
 		BukkitTask task = new BukkitRunnable() {
 			@Override
 			public void run() {
 				removePlayer(player);
-				plugin.messageManager.sendMessage(player, MessageId.SAFETY_COOLDOWN_END);
+				Message.create(player, MessageId.SAFETY_COOLDOWN_END).send();
 			}
 		}.runTaskLater(plugin, duration * 20);
 

@@ -1,8 +1,9 @@
 package com.winterhaven_mc.savagegraveyards.storage;
 
-import com.winterhaven_mc.savagegraveyards.PluginMain;
+//import com.winterhaven_mc.savagegraveyards.PluginMain;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.plugin.java.JavaPlugin;
 
 
 /**
@@ -11,7 +12,7 @@ import org.bukkit.Location;
 public final class Graveyard {
 
 	// static reference to plugin main class
-	private final static PluginMain plugin = PluginMain.instance;
+//	private final static PluginMain plugin = PluginMain.instance;
 
 	// constant value for integer attributes to use configured default
 	private final static int CONFIG_DEFAULT = -1;
@@ -64,6 +65,8 @@ public final class Graveyard {
 	 * Builder class
 	 */
 	public final static class Builder {
+
+		JavaPlugin plugin = JavaPlugin.getProvidingPlugin(Graveyard.class);
 
 		private int primaryKey;
 		private String displayName;
@@ -264,6 +267,12 @@ public final class Graveyard {
 		public final Graveyard build() {
 			return new Graveyard(this);
 		}
+	}
+
+
+	@Override
+	public String toString() {
+		return this.displayName;
 	}
 
 

@@ -1,6 +1,8 @@
 package com.winterhaven_mc.savagegraveyards.listeners;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
+import com.winterhaven_mc.savagegraveyards.messages.Macro;
+import com.winterhaven_mc.savagegraveyards.messages.Message;
 import com.winterhaven_mc.savagegraveyards.storage.Graveyard;
 import com.winterhaven_mc.savagegraveyards.messages.MessageId;
 
@@ -176,7 +178,7 @@ public class PlayerEventListener implements Listener {
 			}
 			// else send default respawn message
 			else {
-				plugin.messageManager.sendMessage(player, MessageId.DEFAULT_RESPAWN, graveyard);
+				Message.create(player, MessageId.DEFAULT_RESPAWN).setMacro(Macro.GRAVEYARD, graveyard).send();
 			}
 
 			// get safety time duration
