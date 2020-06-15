@@ -250,15 +250,15 @@ MESSAGES:
 
   LIST_ITEM:
     enabled: true
-    string: "%ITEM_NUMBER%) &a%GRAVEYARD% | &b%LOCATION%"
+    string: "%ITEM_NUMBER%) &a%GRAVEYARD% &c| &b%LOCATION%"
 
   LIST_ITEM_DISABLED:
     enabled: true
-    string: "%ITEM_NUMBER%) &8%GRAVEYARD% &r[ DISABLED ] | &b%LOCATION%"
+    string: "%ITEM_NUMBER%) &8%GRAVEYARD% &r[ DISABLED ] &c| &b%LOCATION%"
 
   LIST_ITEM_UNDISCOVERED:
     enabled: true
-    string: "%ITEM_NUMBER%) &c%GRAVEYARD% &r[ UNDISCOVERED ] | &b%LOCATION%"
+    string: "%ITEM_NUMBER%) &c%GRAVEYARD% &r[ UNDISCOVERED ] &c| &b%LOCATION%"
 
   LIST_EMPTY:
     enabled: true
