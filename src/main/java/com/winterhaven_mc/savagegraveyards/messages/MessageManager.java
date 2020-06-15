@@ -20,7 +20,7 @@ import java.util.Objects;
  * @author Tim Savage
  * @version 1.0
  */
-public class MessageManager extends AbstractMessageManager {
+public class MessageManager extends AbstractMessageManager<MessageId> {
 
 
 	/**
@@ -31,7 +31,6 @@ public class MessageManager extends AbstractMessageManager {
 	public MessageManager(final PluginMain plugin) {
 
 		// call super class constructor
-		//noinspection unchecked
 		super(plugin, MessageId.class);
 	}
 
@@ -96,7 +95,7 @@ public class MessageManager extends AbstractMessageManager {
 		// get default replacement map
 		Map<String, String> replacements = getDefaultReplacements(recipient);
 
-		//noinspection unchecked
+		// send message
 		sendMessage(recipient, messageId, replacements);
 	}
 
@@ -134,7 +133,7 @@ public class MessageManager extends AbstractMessageManager {
 			replacements.put("%LOC_Z%", String.valueOf(graveyard.getLocation().getBlockZ()));
 		}
 
-		//noinspection unchecked
+		// send message
 		sendMessage(recipient, messageId, replacements);
 	}
 
@@ -177,7 +176,7 @@ public class MessageManager extends AbstractMessageManager {
 
 		replacements.put("%VALUE%", value);
 
-		//noinspection unchecked
+		// send message
 		sendMessage(recipient, messageId, replacements);
 	}
 
@@ -223,7 +222,7 @@ public class MessageManager extends AbstractMessageManager {
 			replacements.put("%TARGET_PLAYER%", targetPlayer.getName());
 		}
 
-		//noinspection unchecked
+		// send message
 		sendMessage(recipient, messageId, replacements);
 	}
 
@@ -251,7 +250,7 @@ public class MessageManager extends AbstractMessageManager {
 		// set replacement strings
 		replacements.put("%DURATION%", duration.toString());
 
-		//noinspection unchecked
+		// send message
 		sendMessage(recipient, messageId, replacements);
 	}
 
@@ -282,7 +281,7 @@ public class MessageManager extends AbstractMessageManager {
 		replacements.put("%PAGE%", page.toString());
 		replacements.put("%PAGE_COUNT%", pageCount.toString());
 
-		//noinspection unchecked
+		// send message
 		sendMessage(recipient, messageId, replacements);
 	}
 
@@ -292,6 +291,7 @@ public class MessageManager extends AbstractMessageManager {
 	 *
 	 * @param recipient  Player receiving message
 	 * @param messageId  message identifier
+	 * @param graveyard  the graveyard whose details are being listed
 	 * @param itemNumber item number in list
 	 * @throws NullPointerException if any parameter is null
 	 */
@@ -324,7 +324,7 @@ public class MessageManager extends AbstractMessageManager {
 			replacements.put("%LOC_Z%", String.valueOf(graveyard.getLocation().getBlockZ()));
 		}
 
-		//noinspection unchecked
+		// send message
 		sendMessage(recipient, messageId, replacements);
 	}
 

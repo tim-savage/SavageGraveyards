@@ -54,6 +54,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 *
 	 * @param plugin reference to main class
 	 */
+	@SuppressWarnings("ConstantConditions")
 	public CommandManager(final PluginMain plugin) {
 
 		// set reference to main class
@@ -121,7 +122,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 					String playerName = plugin.getServer().getOfflinePlayer(playerUUID).getName();
 
 					// if player name begins with arg[2] (ignoring case), add player name to return list
-					if (playerName.toLowerCase().startsWith(args[2].toLowerCase())) {
+					if (playerName != null && playerName.toLowerCase().startsWith(args[2].toLowerCase())) {
 						returnList.add(playerName);
 					}
 				}
@@ -719,11 +720,12 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		if (value.equalsIgnoreCase("default")) {
 			discoveryRange = CONFIG_DEFAULT;
 		}
+
 		// if no distance given...
 		else if (value.isEmpty()) {
 
 			// if sender is player, use player's current distance
-			if (sender instanceof Player) {
+			if (sender instanceof Player && graveyard.getLocation() != null) {
 				Player player = (Player) sender;
 				discoveryRange = (int) player.getLocation().distance(graveyard.getLocation());
 			}
@@ -962,23 +964,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// declare safety time to be set
 		int safetyTime;
 
-		// if passed string is "default", set safety time to negative to use configured default
-		if (value.equalsIgnoreCase("default")) {
+		// if passed string is "default" or empty, set safety time to negative to use configured default
+		if (value.equalsIgnoreCase("default") || value.isEmpty()) {
 			safetyTime = CONFIG_DEFAULT;
-		}
-		// if no safety time parameter given...
-		else if (value.isEmpty()) {
-
-			// if sender is player, use player's current distance
-			if (sender instanceof Player) {
-				Player player = (Player) sender;
-				safetyTime = (int) player.getLocation().distance(graveyard.getLocation());
-			}
-
-			// if command sender is not in game player, set negative safety time to use configured default
-			else {
-				safetyTime = CONFIG_DEFAULT;
-			}
 		}
 		else {
 			// try to parse entered safety time as integer
@@ -1577,6 +1565,12 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// teleport player to graveyard location
 		Location destination = graveyard.getLocation();
 
+		// if destination is null, send fail message and return
+		if (destination == null) {
+			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_TELEPORT, graveyard);
+			return true;
+		}
+
 		// play teleport departure sound
 		plugin.soundConfig.playSound(player, SoundId.TELEPORT_SUCCESS_DEPARTURE);
 		if (player.teleport(destination, TeleportCause.PLUGIN)) {
@@ -1651,9 +1645,16 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// get player name
 		String playerName = arguments.remove(0);
 
-		// get offline player from passed player name
-		@SuppressWarnings("deprecation")
-		OfflinePlayer player = plugin.getServer().getOfflinePlayer(playerName);
+		// get list of offline players
+		OfflinePlayer[] offlinePlayers = plugin.getServer().getOfflinePlayers();
+
+		OfflinePlayer player = null;
+
+		for (OfflinePlayer offlinePlayer : offlinePlayers) {
+			if (playerName.equals(offlinePlayer.getName())) {
+				player = offlinePlayer;
+			}
+		}
 
 		// if player not found, send message and return
 		if (player == null) {
