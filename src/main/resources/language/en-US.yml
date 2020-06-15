@@ -1,14 +1,18 @@
 # Message configuration file for ${project.name} v${project.version}
 
 # Variable substitutions:
-# %PLAYER_NAME%         Message recipient's name
+# %PLAYER%              Message recipient's name
+# %WORLD%               world name of message recipient
 # %TARGET_PLAYER%       Other player's name (available in forget command messages only)
-# %GRAVEYARD_NAME%      display name of graveyard
-# %WORLD_NAME%          world name of graveyard (or message recipient if no graveyard)
-# %LOC_X%               graveyard coordinates (or message recipient if no graveyard)
-# %LOC_Y%               graveyard coordinates (or message recipient if no graveyard)
-# %LOC_Z%               graveyard coordinates (or message recipient if no graveyard)
-
+# %GRAVEYARD%           display name of graveyard
+# %LOCATION%            graveyard location formatted: world [ x, y, z ]
+# %LOC_WORLD%           graveyard location world name
+# %LOC_X%               graveyard location x coordinate
+# %LOC_Y%               graveyard location y coordinate
+# %LOC_Z%               graveyard location z coordinate
+# %PAGE_NUMBER%         list page number (available in LIST_HEADER/LIST_FOOTER only)
+# %PAGE_TOTAL%          list page total (available in LIST_HEADER/LIST_FOOTER only)
+# %ITEM_NUMBER%         list item number (available in LIST_ITEM messages only)
 
 MESSAGES:
   COMMAND_FAIL_ARGS_COUNT_OVER:
@@ -41,11 +45,11 @@ MESSAGES:
 
   COMMAND_FAIL_FORGET:
     enabled: true
-    string: '&3[Graveyards]&c %TARGET_PLAYER% has not discovered %GRAVEYARD_NAME%!'
+    string: '&3[Graveyards]&c %TARGET_PLAYER% has not discovered %GRAVEYARD%!'
 
   COMMAND_FAIL_FORGET_INVALID_GRAVEYARD:
     enabled: true
-    string: '&3[Graveyards]&c A graveyard with the name ''%GRAVEYARD_NAME%'' could not be found!'
+    string: '&3[Graveyards]&c A graveyard with the name ''%GRAVEYARD%'' could not be found!'
 
   COMMAND_FAIL_FORGET_INVALID_PLAYER:
     enabled: true
@@ -69,24 +73,24 @@ MESSAGES:
 
   COMMAND_FAIL_TELEPORT:
     enabled: true
-    string: '&3[Graveyards]&c Could not teleport to %GRAVEYARD_NAME%!'
+    string: '&3[Graveyards]&c Could not teleport to %GRAVEYARD%!'
 
 
   COMMAND_SUCCESS_CLOSEST:
     enabled: true
-    string: '&3[Graveyards]&b %GRAVEYARD_NAME% is the closest graveyard to your current location.'
+    string: '&3[Graveyards]&b %GRAVEYARD% is the closest graveyard to your current location.'
 
   COMMAND_SUCCESS_CREATE:
     enabled: true
-    string: '&3[Graveyards]&b %GRAVEYARD_NAME% created!'
+    string: '&3[Graveyards]&b %GRAVEYARD% created!'
 
   COMMAND_SUCCESS_DELETE:
     enabled: true
-    string: '&3[Graveyards]&b %GRAVEYARD_NAME% removed!'
+    string: '&3[Graveyards]&b %GRAVEYARD% removed!'
 
   COMMAND_SUCCESS_FORGET:
     enabled: true
-    string: '&3[Graveyards]&b %GRAVEYARD_NAME% has been wiped from %TARGET_PLAYER%''s memory!'
+    string: '&3[Graveyards]&b %GRAVEYARD% has been wiped from %TARGET_PLAYER%''s memory!'
 
   COMMAND_SUCCESS_RELOAD:
     enabled: true
@@ -94,64 +98,64 @@ MESSAGES:
 
   COMMAND_SUCCESS_SET_DISCOVERYMESSAGE:
     enabled: true
-    string: '&3[Graveyards]&b Set custom discovery message for &2%GRAVEYARD_NAME%&b.'
+    string: '&3[Graveyards]&b Set custom discovery message for &2%GRAVEYARD%&b.'
 
   COMMAND_SUCCESS_SET_DISCOVERYMESSAGE_DEFAULT:
     enabled: true
-    string: '&3[Graveyards]&b Set default discovery message for &2%GRAVEYARD_NAME%&b.'
+    string: '&3[Graveyards]&b Set default discovery message for &2%GRAVEYARD%&b.'
 
   COMMAND_SUCCESS_SET_DISCOVERYRANGE:
     enabled: true
-    string: '&3[Graveyards]&b Set discovery range: &2%VALUE%&b for &2%GRAVEYARD_NAME%&b.'
+    string: '&3[Graveyards]&b Set discovery range: &2%VALUE%&b for &2%GRAVEYARD%&b.'
 
   COMMAND_SUCCESS_SET_DISCOVERYRANGE_DEFAULT:
     enabled: true
-    string: '&3[Graveyards]&b Set discovery range to configured default for &2%GRAVEYARD_NAME%&b.'
+    string: '&3[Graveyards]&b Set discovery range to configured default for &2%GRAVEYARD%&b.'
 
   COMMAND_SUCCESS_SET_NAME:
     enabled: true
-    string: '&3[Graveyards]&b Renamed &2%VALUE%&b to &2%GRAVEYARD_NAME%&b.'
+    string: '&3[Graveyards]&b Renamed &2%VALUE%&b to &2%GRAVEYARD%&b.'
 
   COMMAND_SUCCESS_SET_ENABLED:
     enabled: true
-    string: '&3[Graveyards]&b Set enabled: &2%VALUE%&b for &2%GRAVEYARD_NAME%&b.'
+    string: '&3[Graveyards]&b Set enabled: &2%VALUE%&b for &2%GRAVEYARD%&b.'
 
   COMMAND_SUCCESS_SET_GROUP:
     enabled: true
-    string: '&3[Graveyards]&b Set group: &2%VALUE%&b for &2%GRAVEYARD_NAME%&b.'
+    string: '&3[Graveyards]&b Set group: &2%VALUE%&b for &2%GRAVEYARD%&b.'
 
   COMMAND_SUCCESS_SET_HIDDEN:
     enabled: true
-    string: '&3[Graveyards]&b Set hidden: &2%VALUE%&b for &2%GRAVEYARD_NAME%&b.'
+    string: '&3[Graveyards]&b Set hidden: &2%VALUE%&b for &2%GRAVEYARD%&b.'
 
   COMMAND_SUCCESS_SET_LOCATION:
     enabled: true
-    string: '&3[Graveyards]&b Location for &2%GRAVEYARD_NAME%&b set to your current position.'
+    string: '&3[Graveyards]&b Location for &2%GRAVEYARD%&b set to your current position.'
 
   COMMAND_SUCCESS_SET_RESPAWNMESSAGE:
     enabled: true
-    string: '&3[Graveyards]&b Set custom respawn message for &2%GRAVEYARD_NAME%&b.'
+    string: '&3[Graveyards]&b Set custom respawn message for &2%GRAVEYARD%&b.'
 
   COMMAND_SUCCESS_SET_RESPAWNMESSAGE_DEFAULT:
     enabled: true
-    string: '&3[Graveyards]&b Set default respawn message for &2%GRAVEYARD_NAME%&b.'
+    string: '&3[Graveyards]&b Set default respawn message for &2%GRAVEYARD%&b.'
 
   COMMAND_SUCCESS_SET_SAFETYTIME:
     enabled: true
-    string: '&3[Graveyards]&b Set safety time: &2%VALUE%&b for &2%GRAVEYARD_NAME%&b.'
+    string: '&3[Graveyards]&b Set safety time: &2%VALUE%&b for &2%GRAVEYARD%&b.'
 
   COMMAND_SUCCESS_TELEPORT:
     enabled: true
-    string: '&3[Graveyards]&b Successfully teleported to %GRAVEYARD_NAME%.'
+    string: '&3[Graveyards]&b Successfully teleported to %GRAVEYARD%.'
 
 
   DEFAULT_DISCOVERY:
     enabled: true
-    string: '&3You have discovered %GRAVEYARD_NAME%!'
+    string: '&3You have discovered %GRAVEYARD%!'
 
   DEFAULT_RESPAWN:
     enabled: true
-    string: '&3You''ve been resurrected at %GRAVEYARD_NAME%!'
+    string: '&3You''ve been resurrected at %GRAVEYARD%!'
 
 
   SAFETY_COOLDOWN_START:
@@ -238,26 +242,23 @@ MESSAGES:
 
   LIST_HEADER:
     enabled: true
-    string: '&3Page &b%PAGE%&3 of &b%PAGE_COUNT%'
+    string: '&3Page &b%PAGE_NUMBER%&3 of &b%PAGE_TOTAL%'
 
   LIST_FOOTER:
     enabled: false
-    string: '&3Page &b%PAGE%&3 of &b%PAGE_COUNT%'
+    string: '&3Page &b%PAGE_NUMBER%&3 of &b%PAGE_TOTAL%'
 
   LIST_ITEM:
     enabled: true
-    string: "%ITEM_NUMBER%) &a%GRAVEYARD_NAME% \n
-      &aLocation:&b %WORLD_NAME% [%LOC_X%, %LOC_Y%, %LOC_Z%]"
+    string: "%ITEM_NUMBER%) &a%GRAVEYARD% | &b%LOCATION%"
 
   LIST_ITEM_DISABLED:
     enabled: true
-    string: "%ITEM_NUMBER%) &8%GRAVEYARD_NAME% &r[ DISABLED ] \n
-      &aLocation:&b %WORLD_NAME% [%LOC_X%, %LOC_Y%, %LOC_Z%]"
+    string: "%ITEM_NUMBER%) &8%GRAVEYARD% &r[ DISABLED ] | &b%LOCATION%"
 
   LIST_ITEM_UNDISCOVERED:
     enabled: true
-    string: "%ITEM_NUMBER%) &c%GRAVEYARD_NAME% &r[ UNDISCOVERED ] \n
-    &aLocation:&b %WORLD_NAME% [%LOC_X%, %LOC_Y%, %LOC_Z%]"
+    string: "%ITEM_NUMBER%) &c%GRAVEYARD% &r[ UNDISCOVERED ] | &b%LOCATION%"
 
   LIST_EMPTY:
     enabled: true

@@ -4,8 +4,8 @@ import com.winterhaven_mc.savagegraveyards.commands.CommandManager;
 import com.winterhaven_mc.savagegraveyards.listeners.PlayerEventListener;
 import com.winterhaven_mc.savagegraveyards.storage.DataStore;
 import com.winterhaven_mc.savagegraveyards.tasks.DiscoveryTask;
-import com.winterhaven_mc.savagegraveyards.messages.MessageManager;
 import com.winterhaven_mc.savagegraveyards.util.SafetyManager;
+import com.winterhaven_mc.util.LanguageManager;
 import com.winterhaven_mc.util.SoundConfiguration;
 import com.winterhaven_mc.util.WorldManager;
 import com.winterhaven_mc.util.YamlSoundConfiguration;
@@ -31,7 +31,6 @@ public final class PluginMain extends JavaPlugin {
 
 	public DataStore dataStore;
 	public WorldManager worldManager;
-	public MessageManager messageManager;
 	public SoundConfiguration soundConfig;
 	public SafetyManager safetyManager;
 	private BukkitTask discoveryTask;
@@ -52,8 +51,8 @@ public final class PluginMain extends JavaPlugin {
 		// instantiate world manager
 		worldManager = new WorldManager(this);
 
-		// instantiate message manager
-		messageManager = new MessageManager(this);
+		// force loading of messages on startup
+		LanguageManager.getInstance();
 
 		// instantiate sound configuration
 		soundConfig = new YamlSoundConfiguration(this);
@@ -69,7 +68,7 @@ public final class PluginMain extends JavaPlugin {
 
 		// run discovery task
 		discoveryTask = new DiscoveryTask(this)
-			.runTaskTimerAsynchronously(this, 0, getConfig().getInt("discovery-interval"));
+			.runTaskTimer(this, 0, getConfig().getInt("discovery-interval"));
 	}
 
 
@@ -80,4 +79,3 @@ public final class PluginMain extends JavaPlugin {
 	}
 
 }
-
