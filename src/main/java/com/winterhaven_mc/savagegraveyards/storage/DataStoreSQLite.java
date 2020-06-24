@@ -16,7 +16,6 @@ import static com.winterhaven_mc.savagegraveyards.storage.Queries.getQuery;
 /**
  * Concrete SQLite datastore class
  */
-@SuppressWarnings("SynchronizeOnNonFinalField")
 class DataStoreSQLite extends DataStore {
 
 	// reference to main class
@@ -517,7 +516,7 @@ class DataStoreSQLite extends DataStore {
 				try {
 
 					// synchronize on connection
-					synchronized (connection) {
+					synchronized (this) {
 
 						PreparedStatement preparedStatement =
 								connection.prepareStatement(getQuery("InsertDiscovered"));
@@ -569,7 +568,7 @@ class DataStoreSQLite extends DataStore {
 				try {
 
 					// synchronize on connection
-					synchronized (connection) {
+					synchronized (this) {
 
 						// create prepared statement
 						PreparedStatement preparedStatement =
@@ -630,7 +629,7 @@ class DataStoreSQLite extends DataStore {
 
 				try {
 					// synchronize on connection
-					synchronized (connection) {
+					synchronized (this) {
 
 						// create prepared statement
 						PreparedStatement preparedStatement =
@@ -690,7 +689,7 @@ class DataStoreSQLite extends DataStore {
 				try {
 
 					// synchronize on connection
-					synchronized (connection) {
+					synchronized (this) {
 
 						// create prepared statement
 						PreparedStatement preparedStatement =
@@ -785,7 +784,7 @@ class DataStoreSQLite extends DataStore {
 		try {
 
 			// synchronize on connection
-			synchronized (connection) {
+			synchronized (this) {
 
 				// create prepared statement
 				PreparedStatement preparedStatement =
