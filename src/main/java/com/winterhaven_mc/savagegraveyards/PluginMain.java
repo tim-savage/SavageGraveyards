@@ -5,6 +5,7 @@ import com.winterhaven_mc.savagegraveyards.listeners.PlayerEventListener;
 import com.winterhaven_mc.savagegraveyards.storage.DataStore;
 import com.winterhaven_mc.savagegraveyards.tasks.DiscoveryTask;
 import com.winterhaven_mc.savagegraveyards.util.SafetyManager;
+import com.winterhaven_mc.util.LanguageManager;
 import com.winterhaven_mc.util.SoundConfiguration;
 import com.winterhaven_mc.util.WorldManager;
 import com.winterhaven_mc.util.YamlSoundConfiguration;
@@ -23,9 +24,6 @@ import org.bukkit.scheduler.BukkitTask;
  */
 public final class PluginMain extends JavaPlugin {
 
-	// static reference to main class
-	public static PluginMain instance;
-
 	public Boolean debug = getConfig().getBoolean("debug");
 
 	public DataStore dataStore;
@@ -38,20 +36,20 @@ public final class PluginMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 
-		// set static reference to main class
-		instance = this;
-
 		// install default config.yml if not present
 		saveDefaultConfig();
 
-		// get initialized destination storage object
-		dataStore = DataStore.create();
+		// initialize language manager
+		LanguageManager.init();
 
 		// instantiate world manager
 		worldManager = new WorldManager(this);
 
 		// instantiate sound configuration
 		soundConfig = new YamlSoundConfiguration(this);
+
+		// get initialized destination storage object
+		dataStore = DataStore.create();
 
 		// instantiate safety manager
 		safetyManager = new SafetyManager(this);
