@@ -4,6 +4,7 @@ import com.winterhaven_mc.savagegraveyards.PluginMain;
 import com.winterhaven_mc.savagegraveyards.events.DiscoveryEvent;
 import com.winterhaven_mc.savagegraveyards.messages.Macro;
 import com.winterhaven_mc.savagegraveyards.messages.Message;
+import com.winterhaven_mc.savagegraveyards.storage.Discovery;
 import com.winterhaven_mc.savagegraveyards.storage.Graveyard;
 import com.winterhaven_mc.savagegraveyards.messages.MessageId;
 import com.winterhaven_mc.savagegraveyards.sounds.SoundId;
@@ -13,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.google.common.collect.ImmutableList;
+
 
 /**
  * Repeating task that checks if any players are
@@ -43,7 +45,7 @@ public class DiscoveryTask extends BukkitRunnable {
 			Location playerLocation = player.getLocation();
 
 			// iterate through player's undiscovered graveyards
-			for (Graveyard graveyard : plugin.dataStore.getUndiscovered(player)) {
+			for (Graveyard graveyard : plugin.dataStore.selectUndiscoveredGraveyards(player)) {
 
 				// get graveyard location
 				Location dsLocation = graveyard.getLocation();
@@ -70,8 +72,11 @@ public class DiscoveryTask extends BukkitRunnable {
 						// check if player is within discovery range of graveyard
 						if (dsLocation.distanceSquared(playerLocation) < Math.pow(discoveryRange, 2)) {
 
+							// create discovery record
+							Discovery record = new Discovery(graveyard.getSearchKey(), player.getUniqueId());
+
 							// set graveyard as discovered for player
-							plugin.dataStore.insertDiscovery(player, graveyard.getSearchKey());
+							plugin.dataStore.insertDiscovery(record);
 
 							// send discovery message to player
 							if (graveyard.getDiscoveryMessage() != null
@@ -99,4 +104,3 @@ public class DiscoveryTask extends BukkitRunnable {
 	}
 
 }
-
