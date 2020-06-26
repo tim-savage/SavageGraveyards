@@ -117,7 +117,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			}
 			else if (args[0].equalsIgnoreCase("forget")) {
 				// select playerUUIDs for graveyard from Discovered table
-				List<UUID> playerUUIDs = plugin.dataStore.selectPlayersDiscovered(args[1]);
+				Collection<UUID> playerUUIDs = plugin.dataStore.selectPlayersDiscovered(args[1]);
 
 				// iterate over list of playerUUIDs and add player names to return list that match prefix
 				for (UUID playerUUID : playerUUIDs) {
@@ -315,7 +315,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		plugin.worldManager.reload();
 
 		// reload messages
-		LanguageManager.getInstance().reload();
+		LanguageManager.reload();
 
 		// reload sounds
 		plugin.soundConfig.reload();
@@ -1089,7 +1089,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 					.build();
 
 			// insert graveyard in data store
-			plugin.dataStore.insertGraveyard(newGraveyard);
+			Collection<Graveyard> insertSet = new HashSet<>(1);
+			insertSet.add(newGraveyard);
+			plugin.dataStore.insertGraveyards(insertSet);
 
 			// send success message
 			Message.create(sender, COMMAND_SUCCESS_CREATE)
@@ -1389,16 +1391,16 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		int itemsPerPage = plugin.getConfig().getInt("list-page-size");
 
 		// get all records from datastore
-		final List<Graveyard> allRecords = plugin.dataStore.selectAllGraveyards();
+		final Collection<Graveyard> allRecords = plugin.dataStore.selectAllGraveyards();
 
 		if (plugin.debug) {
-			plugin.getLogger().info("Total records fetched from db: " + allRecords.size());
+			plugin.getLogger().info("Records fetched from datastore: " + allRecords.size());
 		}
 
 		// get undiscovered searchKeys for player
-		List<String> undiscoveredIds = new ArrayList<>();
+		List<String> undiscoveredKeys = new ArrayList<>();
 		if (sender instanceof Player) {
-			undiscoveredIds.addAll(plugin.dataStore.getUndiscoveredKeys((Player) sender));
+			undiscoveredKeys.addAll(plugin.dataStore.selectUndiscoveredKeys((Player) sender));
 		}
 
 		// create empty list of records
@@ -1417,7 +1419,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 			// if graveyard is undiscovered and sender does not have override permission, do not add to display list
 			if (graveyard.isHidden()
-					&& undiscoveredIds.contains(graveyard.getSearchKey())
+					&& undiscoveredKeys.contains(graveyard.getSearchKey())
 					&& !sender.hasPermission("graveyard.list.hidden")) {
 				if (plugin.debug) {
 					plugin.getLogger().info(graveyard.getDisplayName()
@@ -1478,7 +1480,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			}
 
 			// display undiscovered list item
-			if (graveyard.isHidden() && undiscoveredIds.contains(graveyard.getSearchKey())) {
+			if (graveyard.isHidden() && undiscoveredKeys.contains(graveyard.getSearchKey())) {
 				Message.create(sender, LIST_ITEM_UNDISCOVERED)
 						.setMacro(GRAVEYARD, graveyard)
 						.setMacro(ITEM_NUMBER, itemNumber)
