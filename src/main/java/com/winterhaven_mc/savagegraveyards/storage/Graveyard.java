@@ -1,18 +1,18 @@
 package com.winterhaven_mc.savagegraveyards.storage;
 
-//import com.winterhaven_mc.savagegraveyards.PluginMain;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.Objects;
+import java.util.UUID;
 
 
 /**
  * Graveyard object
  */
 public final class Graveyard {
-
-	// static reference to plugin main class
-//	private final static PluginMain plugin = PluginMain.instance;
 
 	// constant value for integer attributes to use configured default
 	private final static int CONFIG_DEFAULT = -1;
@@ -28,7 +28,13 @@ public final class Graveyard {
 	private final String group;
 	private final int safetyRange;
 	private final int safetyTime;
-	private final Location location;
+	private final String worldName;
+	private final UUID worldUid;
+	private final double x;
+	private final double y;
+	private final double z;
+	private final float yaw;
+	private final float pitch;
 
 
 	/**
@@ -57,7 +63,13 @@ public final class Graveyard {
 		group = builder.group;
 		safetyRange = builder.safetyRange;
 		safetyTime = builder.safetyTime;
-		location = builder.location;
+		worldName = builder.worldName;
+		worldUid = builder.worldUid;
+		x = builder.x;
+		y = builder.y;
+		z = builder.z;
+		yaw = builder.yaw;
+		pitch = builder.pitch;
 	}
 
 
@@ -66,7 +78,7 @@ public final class Graveyard {
 	 */
 	public final static class Builder {
 
-		JavaPlugin plugin = JavaPlugin.getProvidingPlugin(Graveyard.class);
+		private final JavaPlugin plugin = JavaPlugin.getProvidingPlugin(this.getClass());
 
 		private int primaryKey;
 		private String displayName;
@@ -79,8 +91,13 @@ public final class Graveyard {
 		private String group = "";
 		private int safetyRange = CONFIG_DEFAULT;
 		private int safetyTime = CONFIG_DEFAULT;
-		private Location location;
-
+		private String worldName;
+		private UUID worldUid;
+		private double x;
+		private double y;
+		private double z;
+		private float yaw;
+		private float pitch;
 
 		/**
 		 * Builder class constructor
@@ -104,7 +121,13 @@ public final class Graveyard {
 			this.group = graveyard.getGroup();
 			this.safetyRange = graveyard.getSafetyRange();
 			this.safetyTime = graveyard.getSafetyTime();
-			this.location = graveyard.getLocation();
+			this.worldName = graveyard.getWorldName();
+			this.worldUid = graveyard.getWorldUid();
+			this.x = graveyard.getX();
+			this.y = graveyard.getY();
+			this.z = graveyard.getZ();
+			this.yaw = graveyard.getYaw();
+			this.pitch = graveyard.getPitch();
 		}
 
 
@@ -244,20 +267,99 @@ public final class Graveyard {
 		/**
 		 * set location field
 		 *
-		 * @param value location value to assign to builder location field
+		 * @param value location value to assign to builder location fields
 		 * @return this Builder object
 		 */
 		public final Builder location(final Location value) {
 
-			// create defensive copy of passed location
-			location = new Location(value.getWorld(),
-					value.getX(),
-					value.getY(),
-					value.getZ(),
-					value.getYaw(),
-					value.getPitch());
+			worldUid = Objects.requireNonNull(value.getWorld()).getUID();
+			x = value.getX();
+			y = value.getY();
+			z = value.getZ();
+			yaw = value.getYaw();
+			pitch = value.getPitch();
+
 			return this;
 		}
+
+
+		/**
+		 * Set worldName field
+		 * @param value String value to assign to builder worldName field
+		 * @return this builder object
+		 */
+		public final Builder worldName(final String value) {
+			worldName = value;
+			return this;
+		}
+
+
+		/**
+		 * Set worldUid field
+		 *
+		 * @param value UUID value to assign to builder worldUid field
+		 * @return this builder object
+		 */
+		public final Builder worldUid(final UUID value) {
+			worldUid = value;
+			return this;
+		}
+
+
+		/**
+		 * Set x field
+		 * @param value double value to assign to builder x field
+		 * @return this builder object
+		 */
+		public final Builder x(final double value) {
+			x = value;
+			return this;
+		}
+
+
+		/**
+		 * Set y field
+		 * @param value double value to assign to builder y field
+		 * @return this builder object
+		 */
+		public final Builder y(final double value) {
+			y = value;
+			return this;
+		}
+
+
+		/**
+		 * Set z field
+		 * @param value double value to assign to builder z field
+		 * @return this builder object
+		 */
+		public final Builder z(final double value) {
+			z = value;
+			return this;
+		}
+
+
+		/**
+		 * Set yaw field
+		 * @param value float value to assign to builder yaw field
+		 * @return this builder object
+		 */
+		public final Builder yaw(final float value) {
+			yaw = value;
+			return this;
+		}
+
+
+		/**
+		 * Set pitch field
+		 * @param value float value to assign to builder pitch field
+		 * @return this builder object
+		 */
+		public final Builder pitch(final float value) {
+			pitch = value;
+			return this;
+		}
+
 
 		/**
 		 * build Graveyard object from builder fields
@@ -373,18 +475,79 @@ public final class Graveyard {
 	 */
 	public final Location getLocation() {
 
-		// if location is null, return null
-		if (this.location == null) {
+		// get world by uid
+		World world = JavaPlugin.getProvidingPlugin(this.getClass()).getServer().getWorld(this.worldUid);
+
+		// if world is null, return null
+		if (world == null) {
 			return null;
 		}
 
-		// return defensive copy of location
-		return new Location(this.location.getWorld(),
-				this.location.getX(),
-				this.location.getY(),
-				this.location.getZ(),
-				this.location.getYaw(),
-				this.location.getPitch());
+		// return new location
+		return new Location(world, this.x, this.y, this.z, this.yaw, this.pitch);
+	}
+
+
+	/**
+	 * Getter for worldName
+	 * @return String - worldName
+	 */
+	public final String getWorldName() {
+		return this.worldName;
+	}
+
+
+	/**
+	 * Getter for worldUid
+	 * @return UUID - worldUid
+	 */
+	public final UUID getWorldUid() {
+		return this.worldUid;
+	}
+
+
+	/**
+	 * Getter for x
+	 * @return double - x
+	 */
+	public final double getX() {
+		return this.x;
+	}
+
+
+	/**
+	 * Getter for y
+	 * @return double - y
+	 */
+	public final double getY() {
+		return this.y;
+	}
+
+
+	/**
+	 * Getter for z
+	 * @return double - z
+	 */
+	public final double getZ() {
+		return this.z;
+	}
+
+
+	/**
+	 * Getter for yaw
+	 * @return float - yaw
+	 */
+	public final float getYaw() {
+		return this.yaw;
+	}
+
+
+	/**
+	 * Getter for pitch
+	 * @return float - pitch
+	 */
+	public float getPitch() {
+		return this.pitch;
 	}
 
 
