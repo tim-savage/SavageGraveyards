@@ -1302,13 +1302,13 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		}
 
 		// if graveyard safety time is set to non-negative value, display it; else display configured default
-		if (graveyard.getSafetyTime() >= 0) {
+		if (graveyard.getSafetyTime() >= 0L) {
 			sender.sendMessage(ChatColor.DARK_AQUA + "Safety time: "
 					+ ChatColor.RESET + graveyard.getSafetyTime() + " seconds");
 		}
 		else {
 			sender.sendMessage(ChatColor.DARK_AQUA + "Safety time: "
-					+ ChatColor.RESET + plugin.getConfig().getInt("safety-time") + " seconds (default)");
+					+ ChatColor.RESET + plugin.getConfig().getLong("safety-time") + " seconds (default)");
 		}
 
 		// get graveyard group; if null or empty, set to ALL
