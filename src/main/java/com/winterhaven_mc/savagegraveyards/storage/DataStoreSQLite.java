@@ -894,7 +894,7 @@ class DataStoreSQLite extends DataStore {
 					preparedStatement.setString(7, graveyard.getRespawnMessage());
 					preparedStatement.setString(8, graveyard.getGroup());
 					preparedStatement.setInt(9, graveyard.getSafetyRange());
-					preparedStatement.setInt(10, graveyard.getSafetyTime());
+					preparedStatement.setLong(10, graveyard.getSafetyTime());
 					preparedStatement.setString(11, world.getName());
 					preparedStatement.setLong(12, world.getUID().getMostSignificantBits());
 					preparedStatement.setLong(13, world.getUID().getLeastSignificantBits());
@@ -955,7 +955,7 @@ class DataStoreSQLite extends DataStore {
 						preparedStatement.setString(7, graveyard.getRespawnMessage());
 						preparedStatement.setString(8, graveyard.getGroup());
 						preparedStatement.setInt(9, graveyard.getSafetyRange());
-						preparedStatement.setInt(10, graveyard.getSafetyTime());
+						preparedStatement.setLong(10, graveyard.getSafetyTime());
 						preparedStatement.setString(11, graveyard.getWorldName());
 						preparedStatement.setLong(12, graveyard.getWorldUid().getMostSignificantBits());
 						preparedStatement.setLong(13, graveyard.getWorldUid().getLeastSignificantBits());
