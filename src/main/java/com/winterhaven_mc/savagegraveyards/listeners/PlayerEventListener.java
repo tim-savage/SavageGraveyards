@@ -181,16 +181,8 @@ public class PlayerEventListener implements Listener {
 				Message.create(player, MessageId.DEFAULT_RESPAWN).setMacro(Macro.GRAVEYARD, graveyard).send();
 			}
 
-			// get safety time duration
-			int duration = graveyard.getSafetyTime();
-
-			// if safety time is negative, get configured default
-			if (duration < 0) {
-				duration = plugin.getConfig().getInt("safety-time");
-			}
-
 			// put player in safety cooldown map
-			plugin.safetyManager.putPlayer(player, duration);
+			plugin.safetyManager.putPlayer(player, graveyard.getSafetyTime());
 		}
 	}
 
