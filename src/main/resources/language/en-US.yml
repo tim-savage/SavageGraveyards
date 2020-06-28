@@ -1,5 +1,19 @@
 # Message configuration file for ${project.name} v${project.version}
 
+# Time strings
+TIME_STRINGS:
+  DAY: 'day'
+  DAY_PLURAL: 'days'
+  HOUR: 'hour'
+  HOUR_PLURAL: 'hours'
+  MINUTE: 'minute'
+  MINUTE_PLURAL: 'minutes'
+  SECOND: 'second'
+  SECOND_PLURAL: 'seconds'
+  UNLIMITED: 'unlimited time'
+  LESS_THAN_ONE: 'less than one'
+
+
 # Variable substitutions:
 # %PLAYER%              Message recipient's name
 # %WORLD%               world name of message recipient
@@ -13,6 +27,7 @@
 # %PAGE_NUMBER%         list page number (available in LIST_HEADER/LIST_FOOTER only)
 # %PAGE_TOTAL%          list page total (available in LIST_HEADER/LIST_FOOTER only)
 # %ITEM_NUMBER%         list item number (available in LIST_ITEM messages only)
+# %DURATION%            a time string, using time denominations specified above
 
 MESSAGES:
   COMMAND_FAIL_ARGS_COUNT_OVER:
@@ -160,7 +175,7 @@ MESSAGES:
 
   SAFETY_COOLDOWN_START:
     enabled: true
-    string: '&3You are protected from monsters for %DURATION% seconds.'
+    string: '&3You are protected from monsters for %DURATION%.'
 
   SAFETY_COOLDOWN_END:
     enabled: true
