@@ -27,7 +27,7 @@ public final class Graveyard {
 	private final String respawnMessage;
 	private final String group;
 	private final int safetyRange;
-	private final int safetyTime;
+	private final long safetyTime;
 	private final String worldName;
 	private final UUID worldUid;
 	private final double x;
@@ -90,7 +90,7 @@ public final class Graveyard {
 		private String respawnMessage = "";
 		private String group = "";
 		private int safetyRange = CONFIG_DEFAULT;
-		private int safetyTime = CONFIG_DEFAULT;
+		private long safetyTime = CONFIG_DEFAULT;
 		private String worldName;
 		private UUID worldUid;
 		private double x;
@@ -566,7 +566,7 @@ public final class Graveyard {
 	 *
 	 * @return int - safety time
 	 */
-	public final int getSafetyTime() {
+	public final long getSafetyTime() {
 		return this.safetyTime;
 	}
 
