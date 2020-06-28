@@ -12,6 +12,7 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -47,29 +48,34 @@ public class SafetyManager {
 	 * @param player   the player whose uuid will be used as key in the safety cooldown map
 	 * @param duration in seconds
 	 */
-	public void putPlayer(final Player player, int duration) {
+	public void putPlayer(final Player player, final long duration) {
 
-		// if duration is zero, do nothing and return
-		if (duration == 0) {
+		// get safety time from passed duration
+		long safetyTime = duration;
+
+		// if safetyTime is negative, use configured default
+		if (safetyTime < 0L) {
+			safetyTime = plugin.getConfig().getLong("safety-time");
+		}
+
+		// if safetyTime is zero, do nothing and return
+		if (safetyTime == 0L) {
 			return;
 		}
 
-		// if duration is negative, use configured default
-		if (duration < 0) {
-			duration = plugin.getConfig().getInt("safety-time");
-		}
-
 		// send safety message to player
-		Message.create(player, MessageId.SAFETY_COOLDOWN_START).setMacro(Macro.DURATION, duration).send();
+		Message.create(player, MessageId.SAFETY_COOLDOWN_START)
+				.setMacro(Macro.DURATION, TimeUnit.SECONDS.toMillis(safetyTime))
+				.send();
 
-		// create task to remove player from map after duration
+		// create task to remove player from map after safetyTime duration
 		BukkitTask task = new BukkitRunnable() {
 			@Override
 			public void run() {
 				removePlayer(player);
 				Message.create(player, MessageId.SAFETY_COOLDOWN_END).send();
 			}
-		}.runTaskLater(plugin, duration * 20);
+		}.runTaskLater(plugin, safetyTime * 20L);
 
 		// if player is already in cooldown map, cancel existing task
 		if (isPlayerProtected(player)) {
