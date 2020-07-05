@@ -4,8 +4,8 @@ import com.winterhaven_mc.savagegraveyards.commands.CommandManager;
 import com.winterhaven_mc.savagegraveyards.listeners.PlayerEventListener;
 import com.winterhaven_mc.savagegraveyards.storage.DataStore;
 import com.winterhaven_mc.savagegraveyards.tasks.DiscoveryTask;
-import com.winterhaven_mc.savagegraveyards.messages.MessageManager;
 import com.winterhaven_mc.savagegraveyards.util.SafetyManager;
+import com.winterhaven_mc.util.LanguageManager;
 import com.winterhaven_mc.util.SoundConfiguration;
 import com.winterhaven_mc.util.WorldManager;
 import com.winterhaven_mc.util.YamlSoundConfiguration;
@@ -24,14 +24,10 @@ import org.bukkit.scheduler.BukkitTask;
  */
 public final class PluginMain extends JavaPlugin {
 
-	// static reference to main class
-	public static PluginMain instance;
-
 	public Boolean debug = getConfig().getBoolean("debug");
 
 	public DataStore dataStore;
 	public WorldManager worldManager;
-	public MessageManager messageManager;
 	public SoundConfiguration soundConfig;
 	public SafetyManager safetyManager;
 	private BukkitTask discoveryTask;
@@ -40,23 +36,20 @@ public final class PluginMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 
-		// set static reference to main class
-		instance = this;
-
 		// install default config.yml if not present
 		saveDefaultConfig();
 
-		// get initialized destination storage object
-		dataStore = DataStore.create();
+		// initialize language manager
+		LanguageManager.init();
 
 		// instantiate world manager
 		worldManager = new WorldManager(this);
 
-		// instantiate message manager
-		messageManager = new MessageManager(this);
-
 		// instantiate sound configuration
 		soundConfig = new YamlSoundConfiguration(this);
+
+		// get initialized destination storage object
+		dataStore = DataStore.create();
 
 		// instantiate safety manager
 		safetyManager = new SafetyManager(this);
@@ -69,7 +62,7 @@ public final class PluginMain extends JavaPlugin {
 
 		// run discovery task
 		discoveryTask = new DiscoveryTask(this)
-			.runTaskTimerAsynchronously(this, 0, getConfig().getInt("discovery-interval"));
+			.runTaskTimer(this, 0, getConfig().getInt("discovery-interval"));
 	}
 
 
@@ -80,4 +73,3 @@ public final class PluginMain extends JavaPlugin {
 	}
 
 }
-

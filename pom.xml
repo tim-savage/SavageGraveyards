@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.winterhaven-mc</groupId>
   <artifactId>SavageGraveyards</artifactId>
-  <version>1.13.4</version>
+  <version>1.16.0</version>
   <name>SavageGraveyards</name>
 
 	<properties>
@@ -13,18 +13,18 @@
 	<distributionManagement>
 		<repository>
 			<id>releases</id>
-			<url>http://maven.winterhaven-mc.com/repository/releases/</url>
+			<url>https://maven.winterhaven-mc.com/repository/releases/</url>
 		</repository>
 		<snapshotRepository>
 			<id>snapshots</id>
-			<url>http://maven.winterhaven-mc.com/repository/snapshots/</url>
+			<url>https://maven.winterhaven-mc.com/repository/snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
 
 	<repositories>
 		<repository>
 			<id>public</id>
-			<url>http://maven.winterhaven-mc.com/repository/public/</url>
+			<url>https://maven.winterhaven-mc.com/repository/public/</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
@@ -35,33 +35,33 @@
 	</repositories>
 
 	<dependencies>
-		<!-- Bukkit -->
-		<dependency>
-			<groupId>org.bukkit</groupId>
-			<artifactId>bukkit</artifactId>
-			<version>1.13.2-R0.1-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<!-- MessageManagerLib -->
+		<!-- MessengerLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
-			<artifactId>message-manager-lib</artifactId>
-			<version>1.0.6</version>
+			<artifactId>messenger-lib</artifactId>
+			<version>1.16.0</version>
 		</dependency>
 
 		<!-- SoundConfigLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>sound-config-lib</artifactId>
-			<version>1.0.2</version>
+			<version>1.0.5</version>
 		</dependency>
 
 		<!-- WorldManagerLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>world-manager-lib</artifactId>
-			<version>1.0.7</version>
+			<version>1.16.0</version>
+		</dependency>
+
+		<!-- Spigot API -->
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot-api</artifactId>
+			<version>1.16.1-R0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
@@ -99,7 +99,7 @@
 							<minimizeJar>true</minimizeJar>
 							<artifactSet>
 								<includes>
-									<include>com.winterhaven-mc:message-manager-lib</include>
+									<include>com.winterhaven-mc:messenger-lib</include>
 									<include>com.winterhaven-mc:sound-config-lib</include>
 									<include>com.winterhaven-mc:world-manager-lib</include>
 								</includes>
@@ -137,7 +137,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>3.0.1</version>
+				<version>3.2.1</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>

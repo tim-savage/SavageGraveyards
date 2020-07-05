@@ -16,7 +16,6 @@ import static com.winterhaven_mc.savagegraveyards.storage.Queries.getQuery;
 /**
  * Concrete SQLite datastore class
  */
-@SuppressWarnings("SynchronizeOnNonFinalField")
 class DataStoreSQLite extends DataStore {
 
 	// reference to main class
@@ -24,6 +23,9 @@ class DataStoreSQLite extends DataStore {
 
 	// database connection object
 	private Connection connection;
+
+	// schema version
+	private int schemaVersion;
 
 
 	/**
@@ -65,29 +67,192 @@ class DataStoreSQLite extends DataStore {
 
 		// create a database connection
 		connection = DriverManager.getConnection(dbUrl);
+
+		// enable foreign keys
+		enableForeignKeys();
+
+		// update schema if necessary
+		updateSchema();
+
+		// set initialized true
+		setInitialized(true);
+		plugin.getLogger().info(this.toString() + " datastore initialized.");
+	}
+
+
+	private void enableForeignKeys() throws SQLException {
+
+		// create statement
 		Statement statement = connection.createStatement();
 
 		// enable foreign keys
 		statement.executeUpdate(getQuery("EnableForeignKeys"));
 
-		// execute table creation statements
-		statement.executeUpdate(getQuery("CreateGraveyardsTable"));
-		statement.executeUpdate(getQuery("CreateDiscoveredTable"));
-
-		// set initialized true
-		setInitialized(true);
 		if (plugin.debug) {
-			plugin.getLogger().info(this.toString() + " datastore initialized.");
+			plugin.getLogger().info("Enabled foreign keys.");
 		}
 
+		// close statement
+		statement.close();
+	}
+
+
+	private int getSchemaVersion() {
+
+		int version = -1;
+
+		try {
+			// create statement
+			final Statement statement = connection.createStatement();
+
+			// execute query
+			ResultSet rs = statement.executeQuery(Queries.getQuery("GetUserVersion"));
+
+			// get user version
+			while (rs.next()) {
+				version = rs.getInt(1);
+
+				if (plugin.debug) {
+					plugin.getLogger().info("Read schema version: " + version);
+				}
+			}
+
+			// close statement
+			statement.close();
+		}
+
+		catch (SQLException e) {
+			plugin.getLogger().warning("Could not read schema version!");
+		}
+		return version;
+	}
+
+
+	@SuppressWarnings("SameParameterValue")
+	private void setSchemaVersion(int version) {
+
+		try {
+			Statement statement = connection.createStatement();
+
+			// update schema version in database
+			statement.executeUpdate("PRAGMA user_version = " + version);
+
+			// update schema version field
+			schemaVersion = 1;
+
+			// close statement
+			statement.close();
+		}
+		catch (SQLException e) {
+			plugin.getLogger().warning("Could not set schema user version!");
+			plugin.getLogger().warning(e.getLocalizedMessage());
+			if (plugin.debug) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+	/**
+	 * Test for existence of graveyards table
+	 *
+	 * @return boolean {@code true} if table exists, {@code false} if not
+	 * @throws SQLException on sql error
+	 */
+	private boolean tableExists() throws SQLException {
+
+		boolean returnValue = false;
+
+		final Statement statement = connection.createStatement();
+		ResultSet rs = statement.executeQuery(Queries.getQuery("SelectGraveyardsTable"));
+		if (rs.next()) {
+			returnValue = true;
+		}
+		statement.close();
+		return returnValue;
+	}
+
+
+	private void updateSchema() throws SQLException {
+
+		// read schema version from database (pragma user_version)
+		schemaVersion = getSchemaVersion();
+
+		// if schema version is 0, migrate tables to schema version 1
+		if (schemaVersion == 0) {
+
+			if (tableExists()) {
+
+				int count;
+
+				// select all graveyard records
+				Collection<Graveyard> existingGraveyardRecords = selectAllGraveyards();
+
+				// select all discovery records
+				Collection<Discovery> existingDiscoveryRecords = selectAllDiscoveries();
+
+				// create statement object
+				Statement statement = connection.createStatement();
+
+				// drop discovered table with old schema
+				statement.executeUpdate(Queries.getQuery("DropDiscoveredTable"));
+				if (plugin.debug) {
+					plugin.getLogger().info("Discovered table dropped.");
+				}
+
+				// drop graveyards table with old schema
+				statement.executeUpdate(Queries.getQuery("DropGraveyardsTable"));
+				if (plugin.debug) {
+					plugin.getLogger().info("Graveyards table dropped.");
+				}
+
+				// create graveyards table with new schema
+				statement.executeUpdate(getQuery("CreateGraveyardsTable"));
+				if (plugin.debug) {
+					plugin.getLogger().info("Graveyards table created.");
+				}
+
+				// create discovered table with new schema
+				statement.executeUpdate(getQuery("CreateDiscoveredTable"));
+				if (plugin.debug) {
+					plugin.getLogger().info("Discovered table created.");
+				}
+
+				// close statement
+				statement.close();
+
+				// insert all graveyard records into graveyards table
+				count = insertGraveyards(existingGraveyardRecords);
+				plugin.getLogger().info(count + " graveyard records migrated to schema v1.");
+
+				// insert all discovery records into discovered table
+				count = insertDiscoveries(existingDiscoveryRecords);
+				plugin.getLogger().info(count + " discovery records migrated to schema v1.");
+			}
+		}
+
+		// create statement object
+		Statement statement = connection.createStatement();
+
+		// set schema to version 1
+		setSchemaVersion(1);
+
+		// execute table creation statement
+		statement.executeUpdate(Queries.getQuery("CreateGraveyardsTable"));
+
+		// execute index creation statement
+		statement.executeUpdate(Queries.getQuery("CreateDiscoveredTable"));
+
+		// close statement
+		statement.close();
 	}
 
 
 	@Override
-	public List<Graveyard> selectAllGraveyards() {
+	public Collection<Graveyard> selectAllGraveyards() {
 
-		// create empty list for return
-		List<Graveyard> returnList = new ArrayList<>();
+		// create empty list for return collection
+		final Collection<Graveyard> returnSet = new ArrayList<>();
 
 		try {
 			PreparedStatement preparedStatement =
@@ -98,70 +263,88 @@ class DataStoreSQLite extends DataStore {
 
 			while (rs.next()) {
 
-				int primaryKey = rs.getInt("id");
-				String searchKey = rs.getString("searchkey");
-				String displayName = rs.getString("displayname");
-				boolean enabled = rs.getBoolean("enabled");
-				boolean hidden = rs.getBoolean("hidden");
-				int discoveryRange = rs.getInt("discoveryrange");
-				String discoveryMessage = rs.getString("discoverymessage");
-				String respawnMessage = rs.getString("respawnmessage");
-				String groupName = rs.getString("groupname");
-				int safetyRange = rs.getInt("safetyrange");
-				int safetyTime = rs.getInt("safetytime");
-				String worldName = rs.getString("worldname");
-				double x = rs.getDouble("x");
-				double y = rs.getDouble("y");
-				double z = rs.getDouble("z");
-				float yaw = rs.getFloat("yaw");
-				float pitch = rs.getFloat("pitch");
+				// get stored world name
+				String worldName = rs.getString("WorldName");
 
 				World world;
+				int primaryKey;
 
-				try {
+				// if schema version 0, get primaryKey from field 'Id'; world by name
+				if (schemaVersion == 0) {
+
+					// get primary key (id)
+					primaryKey = rs.getInt("Id");
+
+					// get world by name
 					world = plugin.getServer().getWorld(worldName);
 				}
-				catch (Exception e) {
+
+				// else get primaryKey from field 'Key'; world by uid
+				else {
+					// get primary key
+					primaryKey = rs.getInt("Key");
+
+					// get world uid components
+					long worldUidMsb = rs.getLong("WorldUidMsb");
+					long worldUidLsb = rs.getLong("WorldUidLsb");
+
+					// reconstitute world uid from components
+					UUID worldUid = new UUID(worldUidMsb, worldUidLsb);
+
+					// get world by uid
+					world = plugin.getServer().getWorld(worldUid);
+				}
+
+				// if world is null, log error and skip to next record
+				if (world == null) {
 					plugin.getLogger().warning("Stored record has invalid world: "
 							+ worldName + ". Skipping record.");
 					continue;
 				}
 
-				Location location = new Location(world, x, y, z, yaw, pitch);
-
+				// build graveyard object
 				Graveyard graveyard = new Graveyard.Builder()
-						.primaryKey(primaryKey)
-						.displayName(displayName)
-						.searchKey(searchKey)
-						.enabled(enabled)
-						.hidden(hidden)
-						.discoveryRange(discoveryRange)
-						.discoveryMessage(discoveryMessage)
-						.respawnMessage(respawnMessage)
-						.group(groupName)
-						.safetyRange(safetyRange)
-						.safetyTime(safetyTime)
-						.location(location)
-						.build();
+							.primaryKey(primaryKey)
+							.searchKey(rs.getString("SearchKey"))
+							.displayName(rs.getString("DisplayName"))
+							.enabled(rs.getBoolean("Enabled"))
+							.hidden(rs.getBoolean("Hidden"))
+							.discoveryRange(rs.getInt("DiscoveryRange"))
+							.discoveryMessage(rs.getString("DiscoveryMessage"))
+							.respawnMessage(rs.getString("RespawnMessage"))
+							.group(rs.getString("GroupName"))
+							.safetyRange(rs.getInt("SafetyRange"))
+							.safetyTime(rs.getInt("safetyTime"))
+							.worldName(world.getName())
+							.worldUid(world.getUID())
+							.x(rs.getDouble("X"))
+							.y(rs.getDouble("Y"))
+							.z(rs.getDouble("Z"))
+							.yaw(rs.getFloat("Yaw"))
+							.pitch(rs.getFloat("Pitch"))
+							.build();
 
-				returnList.add(graveyard);
+				// add graveyard to return collection
+				returnSet.add(graveyard);
 			}
+			// close prepared statement
+			preparedStatement.close();
 		}
-		catch (Exception e) {
+		catch (SQLException e) {
 
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
-					+ "fetch all Graveyard records from the SQLite datastore.");
+					+ "select all graveyard records from the SQLite datastore.");
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
 			if (plugin.debug) {
-				e.getStackTrace();
+				e.printStackTrace();
 			}
 		}
 
-		// return results as unmodifiable list
-		return Collections.unmodifiableList(returnList);
+		// return record collection
+		return returnSet;
 	}
 
 
@@ -177,7 +360,6 @@ class DataStoreSQLite extends DataStore {
 		}
 
 		Graveyard graveyard = null;
-		World world;
 
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(getQuery("SelectGraveyard"));
@@ -190,23 +372,27 @@ class DataStoreSQLite extends DataStore {
 			// only zero or one record can match the unique search key
 			if (rs.next()) {
 
-				// get stored world and coordinates
+				// get stored world name
 				String worldName = rs.getString("worldname");
-				double x = rs.getDouble("x");
-				double y = rs.getDouble("y");
-				double z = rs.getDouble("z");
-				float yaw = rs.getFloat("yaw");
-				float pitch = rs.getFloat("pitch");
 
-				if (plugin.getServer().getWorld(worldName) == null) {
-					plugin.getLogger().warning("Stored Graveyard world not found!");
+				// get stored world uid components
+				long worldUidMsb = rs.getLong("WorldUidMsb");
+				long worldUidLsb = rs.getLong("WorldUidLsb");
+
+				// reconstitute world uid from components
+				UUID worldUid = new UUID(worldUidMsb, worldUidLsb);
+
+				// get world by uid
+				World world = plugin.getServer().getWorld(worldUid);
+
+				// if world is null, log error and return null
+				if (world == null) {
+					plugin.getLogger().warning("Stored Graveyard world: " + worldName + " is invalid!");
 					return null;
 				}
-				world = plugin.getServer().getWorld(worldName);
-				Location location = new Location(world, x, y, z, yaw, pitch);
 
 				graveyard = new Graveyard.Builder()
-						.primaryKey(rs.getInt("id"))
+						.primaryKey(rs.getInt("Key"))
 						.displayName(rs.getString("displayName"))
 						.searchKey(rs.getString("searchKey"))
 						.enabled(rs.getBoolean("enabled"))
@@ -217,19 +403,26 @@ class DataStoreSQLite extends DataStore {
 						.group(rs.getString("groupName"))
 						.safetyRange(rs.getInt("safetyRange"))
 						.safetyTime(rs.getInt("safetyTime"))
-						.location(location)
+						.worldName(world.getName())
+						.worldUid(worldUid)
+						.x(rs.getDouble("x"))
+						.y(rs.getDouble("y"))
+						.z(rs.getDouble("z"))
+						.yaw(rs.getFloat("yaw"))
+						.pitch(rs.getFloat("pitch"))
 						.build();
 			}
 		}
 		catch (SQLException e) {
 
 			// output simple error message
-			plugin.getLogger().warning("An error occurred while fetching a Graveyard record from the SQLite database.");
+			plugin.getLogger().warning("An error occurred while trying to " +
+					"select a Graveyard record from the SQLite database.");
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
 			if (plugin.debug) {
-				e.getStackTrace();
+				e.printStackTrace();
 			}
 			return null;
 		}
@@ -246,8 +439,12 @@ class DataStoreSQLite extends DataStore {
 		}
 
 		Location playerLocation = player.getLocation();
-		String uuidString = player.getUniqueId().toString();
-		String playerWorldName = player.getWorld().getName();
+
+		long worldUidMsb = player.getWorld().getUID().getMostSignificantBits();
+		long worldUidLsb = player.getWorld().getUID().getLeastSignificantBits();
+
+		long playerUidMsb = player.getUniqueId().getMostSignificantBits();
+		long playerUidLsb = player.getUniqueId().getLeastSignificantBits();
 
 		Graveyard closest = null;
 
@@ -255,58 +452,47 @@ class DataStoreSQLite extends DataStore {
 			PreparedStatement preparedStatement =
 					connection.prepareStatement(getQuery("SelectNearestGraveyards"));
 
-			preparedStatement.setString(1, playerWorldName);
-			preparedStatement.setString(2, uuidString);
+			preparedStatement.setLong(1, worldUidMsb);
+			preparedStatement.setLong(2, worldUidLsb);
+			preparedStatement.setLong(3, playerUidMsb);
+			preparedStatement.setLong(4, playerUidLsb);
 
 			// execute sql query
 			ResultSet rs = preparedStatement.executeQuery();
 
 			while (rs.next()) {
 
-				int primaryKey = rs.getInt("id");
-				String searchKey = rs.getString("searchkey");
-				String displayName = rs.getString("displayname");
-				boolean enabled = rs.getBoolean("enabled");
-				boolean hidden = rs.getBoolean("hidden");
-				int discoveryRange = rs.getInt("discoveryrange");
-				String discoveryMessage = rs.getString("discoverymessage");
-				String respawnMessage = rs.getString("respawnmessage");
-				String groupName = rs.getString("groupname");
-				int safetyRange = rs.getInt("safetyrange");
-				int safetyTime = rs.getInt("safetytime");
-				String worldName = rs.getString("worldname");
-				double x = rs.getDouble("x");
-				double y = rs.getDouble("y");
-				double z = rs.getDouble("z");
-				float yaw = rs.getFloat("yaw");
-				float pitch = rs.getFloat("pitch");
+				String groupName = rs.getString("GroupName");
+				String worldName = rs.getString("WorldName");
 
-				World world;
+				UUID worldUid = new UUID(worldUidMsb, worldUidLsb);
+				World world = plugin.getServer().getWorld(worldUid);
 
-				try {
-					world = plugin.getServer().getWorld(worldName);
-				}
-				catch (Exception e) {
-					plugin.getLogger().warning("Stored record has unloaded world: "
+				if (world == null) {
+					plugin.getLogger().warning("Stored record has invalid world: "
 							+ worldName + ". Skipping record.");
 					continue;
 				}
 
-				Location location = new Location(world, x, y, z, yaw, pitch);
-
 				Graveyard graveyard = new Graveyard.Builder()
-						.primaryKey(primaryKey)
-						.displayName(displayName)
-						.searchKey(searchKey)
-						.enabled(enabled)
-						.hidden(hidden)
-						.discoveryRange(discoveryRange)
-						.discoveryMessage(discoveryMessage)
-						.respawnMessage(respawnMessage)
+						.primaryKey(rs.getInt("Key"))
+						.searchKey(rs.getString("SearchKey"))
+						.displayName(rs.getString("DisplayName"))
+						.enabled(rs.getBoolean("Enabled"))
+						.hidden(rs.getBoolean("Hidden"))
+						.discoveryRange(rs.getInt("DiscoveryRange"))
+						.discoveryMessage(rs.getString("DiscoveryMessage"))
+						.respawnMessage(rs.getString("RespawnMessage"))
 						.group(groupName)
-						.safetyRange(safetyRange)
-						.safetyTime(safetyTime)
-						.location(location)
+						.safetyRange(rs.getInt("SafetyRange"))
+						.safetyTime(rs.getInt("SafetyTime"))
+						.worldName(world.getName())
+						.worldUid(worldUid)
+						.x(rs.getDouble("X"))
+						.y(rs.getDouble("Y"))
+						.z(rs.getDouble("Z"))
+						.yaw(rs.getFloat("Yaw"))
+						.pitch(rs.getFloat("Pitch"))
 						.build();
 
 				if (graveyard.getLocation() == null) {
@@ -322,7 +508,7 @@ class DataStoreSQLite extends DataStore {
 				}
 			}
 		}
-		catch (Exception e) {
+		catch (SQLException e) {
 
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
@@ -331,7 +517,7 @@ class DataStoreSQLite extends DataStore {
 
 			// if debugging is enabled, output stack trace
 			if (plugin.debug) {
-				e.getStackTrace();
+				e.printStackTrace();
 			}
 		}
 
@@ -356,10 +542,10 @@ class DataStoreSQLite extends DataStore {
 			ResultSet rs = preparedStatement.executeQuery();
 
 			while (rs.next()) {
-				returnList.add(rs.getString("searchkey"));
+				returnList.add(rs.getString("SearchKey"));
 			}
 		}
-		catch (Exception e) {
+		catch (SQLException e) {
 
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
@@ -368,77 +554,74 @@ class DataStoreSQLite extends DataStore {
 
 			// if debugging is enabled, output stack trace
 			if (plugin.debug) {
-				e.getStackTrace();
+				e.printStackTrace();
 			}
 		}
 
-		// return unmodifiable list of search key strings
-		return Collections.unmodifiableList(returnList);
+		// return list of search key strings
+		return returnList;
 	}
 
 
 	@Override
-	public Set<Graveyard> getUndiscovered(final Player player) {
+	public Collection<Graveyard> selectUndiscoveredGraveyards(final Player player) {
 
 		// create empty set of Graveyard for return
-		Set<Graveyard> returnSet = new HashSet<>();
+		Collection<Graveyard> returnSet = new HashSet<>();
 
 		try {
 			PreparedStatement preparedStatement =
 					connection.prepareStatement(getQuery("SelectUndiscoveredGraveyards"));
 
-			preparedStatement.setString(1, player.getWorld().getName());
-			preparedStatement.setString(2, player.getUniqueId().toString());
+			preparedStatement.setLong(1, player.getWorld().getUID().getMostSignificantBits());
+			preparedStatement.setLong(2, player.getWorld().getUID().getLeastSignificantBits());
+			preparedStatement.setLong(3, player.getUniqueId().getMostSignificantBits());
+			preparedStatement.setLong(4, player.getUniqueId().getLeastSignificantBits());
 
 			// execute sql query
 			ResultSet rs = preparedStatement.executeQuery();
 
 			while (rs.next()) {
 
-				int primaryKey = rs.getInt("id");
-				String searchKey = rs.getString("searchkey");
-				String displayName = rs.getString("displayname");
-				boolean enabled = rs.getBoolean("enabled");
-				boolean hidden = rs.getBoolean("hidden");
-				int discoveryRange = rs.getInt("discoveryrange");
-				String discoveryMessage = rs.getString("discoverymessage");
-				String respawnMessage = rs.getString("respawnmessage");
-				String groupName = rs.getString("groupname");
-				int safetyRange = rs.getInt("safetyrange");
-				int safetyTime = rs.getInt("safetytime");
-				String worldName = rs.getString("worldname");
-				double x = rs.getDouble("x");
-				double y = rs.getDouble("y");
-				double z = rs.getDouble("z");
-				float yaw = rs.getFloat("yaw");
-				float pitch = rs.getFloat("pitch");
+				// get stored world name
+				String worldName = rs.getString("WorldName");
 
-				World world;
+				// get world uid components
+				long worldUidMsb = rs.getLong("WorldUidMsb");
+				long worldUidLsb = rs.getLong("WorldUidLsb");
 
-				try {
-					world = plugin.getServer().getWorld(worldName);
-				}
-				catch (Exception e) {
+				// reconstitute world uid from components
+				UUID worldUid = new UUID(worldUidMsb, worldUidLsb);
+
+				// get world by uid
+				World world = plugin.getServer().getWorld(worldUid);
+
+				// if world is null, log error and skip to next record
+				if (world == null) {
 					plugin.getLogger().warning("Stored record has unloaded world: "
 							+ worldName + ". Skipping record.");
 					continue;
 				}
 
-				Location location = new Location(world, x, y, z, yaw, pitch);
-
 				Graveyard graveyard = new Graveyard.Builder()
-						.primaryKey(primaryKey)
-						.displayName(displayName)
-						.searchKey(searchKey)
-						.enabled(enabled)
-						.hidden(hidden)
-						.discoveryRange(discoveryRange)
-						.discoveryMessage(discoveryMessage)
-						.respawnMessage(respawnMessage)
-						.group(groupName)
-						.safetyRange(safetyRange)
-						.safetyTime(safetyTime)
-						.location(location)
+						.primaryKey(rs.getInt("Key"))
+						.searchKey(rs.getString("SearchKey"))
+						.displayName(rs.getString("DisplayName"))
+						.enabled(rs.getBoolean("Enabled"))
+						.hidden(rs.getBoolean("Hidden"))
+						.discoveryRange(rs.getInt("DiscoveryRange"))
+						.discoveryMessage(rs.getString("DiscoveryMessage"))
+						.respawnMessage(rs.getString("RespawnMessage"))
+						.group(rs.getString("GroupName"))
+						.safetyRange(rs.getInt("SafetyRange"))
+						.safetyTime(rs.getInt("SafetyTime"))
+						.worldName(world.getName())
+						.worldUid(worldUid)
+						.x(rs.getDouble("X"))
+						.y(rs.getDouble("Y"))
+						.z(rs.getDouble("Z"))
+						.yaw(rs.getFloat("Yaw"))
+						.pitch(rs.getFloat("Pitch"))
 						.build();
 
 				returnSet.add(graveyard);
@@ -448,22 +631,22 @@ class DataStoreSQLite extends DataStore {
 
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
-					+ "fetch undiscovered Graveyard records from the SQLite datastore.");
+					+ "select undiscovered Graveyard records from the SQLite datastore.");
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
 			if (plugin.debug) {
-				e.getStackTrace();
+				e.printStackTrace();
 			}
 		}
 
 		// return results
-		return Collections.unmodifiableSet(returnSet);
+		return returnSet;
 	}
 
 
 	@Override
-	public Set<String> getUndiscoveredKeys(final Player player) {
+	public Collection<String> selectUndiscoveredKeys(final Player player) {
 
 		// if player is null, return empty set
 		if (player == null) {
@@ -471,27 +654,29 @@ class DataStoreSQLite extends DataStore {
 		}
 
 		// create empty set for return
-		Set<String> returnSet = new HashSet<>();
+		Collection<String> returnSet = new HashSet<>();
 
 		try {
 			PreparedStatement preparedStatement =
 					connection.prepareStatement(getQuery("SelectUndiscoveredGraveyardKeys"));
 
-			preparedStatement.setString(1, player.getWorld().getName());
-			preparedStatement.setString(2, player.getUniqueId().toString());
+			preparedStatement.setLong(1, player.getWorld().getUID().getMostSignificantBits());
+			preparedStatement.setLong(2, player.getWorld().getUID().getLeastSignificantBits());
+			preparedStatement.setLong(3, player.getUniqueId().getMostSignificantBits());
+			preparedStatement.setLong(4, player.getUniqueId().getLeastSignificantBits());
 
 			// execute sql query
 			ResultSet rs = preparedStatement.executeQuery();
 
 			while (rs.next()) {
-				returnSet.add(rs.getString("searchkey"));
+				returnSet.add(rs.getString("SearchKey"));
 			}
 		}
-		catch (Exception e) {
+		catch (SQLException e) {
 
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
-					+ "fetch undiscovered Graveyard ids from the SQLite datastore.");
+					+ "select undiscovered Graveyard keys from the SQLite datastore.");
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
@@ -506,9 +691,10 @@ class DataStoreSQLite extends DataStore {
 
 
 	@Override
-	public void insertDiscovery(final Player player, final String displayName) {
+	public void insertDiscovery(Discovery discovery) {
 
-		final String uuidString = player.getUniqueId().toString();
+		final UUID playerUid = discovery.getPlayerUid();
+		final String searchKey = discovery.getSearchKey();
 
 		new BukkitRunnable() {
 			@Override
@@ -516,20 +702,21 @@ class DataStoreSQLite extends DataStore {
 
 				try {
 
-					// synchronize on connection
-					synchronized (connection) {
+					// synchronize on instance
+					synchronized (this) {
 
 						PreparedStatement preparedStatement =
-								connection.prepareStatement(getQuery("InsertDiscovered"));
+								connection.prepareStatement(getQuery("InsertDiscovery"));
 
-						preparedStatement.setString(1, Graveyard.createSearchKey(displayName));
-						preparedStatement.setString(2, uuidString);
+						preparedStatement.setString(1, Graveyard.createSearchKey(searchKey));
+						preparedStatement.setLong(2, playerUid.getMostSignificantBits());
+						preparedStatement.setLong(3, playerUid.getLeastSignificantBits());
 
 						// execute prepared statement
 						preparedStatement.executeUpdate();
 					}
 				}
-				catch (Exception e) {
+				catch (SQLException e) {
 
 					// output simple error message
 					plugin.getLogger().warning("An error occurred while trying to "
@@ -538,87 +725,214 @@ class DataStoreSQLite extends DataStore {
 
 					// if debugging is enabled, output stack trace
 					if (plugin.debug) {
-						e.getStackTrace();
+						e.printStackTrace();
 					}
 				}
 			}
 		}.runTaskAsynchronously(plugin);
-
 	}
 
 
 	@Override
-	public void insertGraveyard(final Graveyard graveyard) {
+	public int insertDiscoveries(Collection<Discovery> discoveries) {
 
-		// if graveyard or graveyard location is null, do nothing and return
-		if (graveyard == null || graveyard.getLocation() == null) {
-			return;
-		}
+		int count = 0;
 
-		// get location
-		final Location location = graveyard.getLocation();
+		for (Discovery record : discoveries) {
 
-		new BukkitRunnable() {
-			@Override
-			public void run() {
+			try {
+				// synchronize on instance
+				synchronized (this) {
 
-				try {
+					PreparedStatement preparedStatement =
+							connection.prepareStatement(getQuery("InsertDiscovery"));
 
-					// synchronize on connection
-					synchronized (connection) {
+					preparedStatement.setString(1, record.getSearchKey());
+					preparedStatement.setLong(2, record.getPlayerUid().getMostSignificantBits());
+					preparedStatement.setLong(3, record.getPlayerUid().getLeastSignificantBits());
 
-						// create prepared statement
-						PreparedStatement preparedStatement =
-								connection.prepareStatement(getQuery("InsertGraveyard"));
+					// execute prepared statement
+					preparedStatement.executeUpdate();
 
-						preparedStatement.setString(1, graveyard.getSearchKey());
-						preparedStatement.setString(2, graveyard.getDisplayName());
-						preparedStatement.setBoolean(3, graveyard.isEnabled());
-						preparedStatement.setBoolean(4, graveyard.isHidden());
-						preparedStatement.setInt(5, graveyard.getDiscoveryRange());
-						preparedStatement.setString(6, graveyard.getDiscoveryMessage());
-						preparedStatement.setString(7, graveyard.getRespawnMessage());
-						preparedStatement.setString(8, graveyard.getGroup());
-						preparedStatement.setInt(9, graveyard.getSafetyRange());
-						preparedStatement.setInt(10, graveyard.getSafetyTime());
-						preparedStatement.setString(11, location.getWorld().getName());
-						preparedStatement.setDouble(12, location.getX());
-						preparedStatement.setDouble(13, location.getY());
-						preparedStatement.setDouble(14, location.getZ());
-						preparedStatement.setFloat(15, location.getYaw());
-						preparedStatement.setFloat(16, location.getPitch());
-
-						// execute prepared statement
-						preparedStatement.executeUpdate();
-					}
-				}
-				catch (Exception e) {
-
-					// output simple error message
-					plugin.getLogger().warning("An error occurred while inserting a Graveyard record "
-							+ "into the SQLite datastore.");
-					plugin.getLogger().warning(e.getLocalizedMessage());
-
-					// if debugging is enabled, output stack trace
-					if (plugin.debug) {
-						e.getStackTrace();
-					}
+					// increment count
+					count++;
 				}
 			}
-		}.runTaskAsynchronously(plugin);
+			catch (SQLException e) {
+
+				// output simple error message
+				plugin.getLogger().warning("An error occurred while trying to "
+						+ "insert a record into the discovered table in the SQLite datastore.");
+				plugin.getLogger().warning(e.getLocalizedMessage());
+
+				// if debugging is enabled, output stack trace
+				if (plugin.debug) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return count;
+	}
+
+
+//	@Override
+//	public void insertGraveyard(final Graveyard graveyard) {
+//
+//		// if graveyard or graveyard location is null, do nothing and return
+//		if (graveyard == null) {
+//			if (plugin.debug) {
+//				plugin.getLogger().warning("Could not insert graveyard record in data store "
+//						+ "because record is null!");
+//			}
+//			return;
+//		}
+//
+//		// get world
+//		final World world = plugin.getServer().getWorld(graveyard.getWorldUid());
+//
+//		// if world is null, log error and return
+//		if (world == null) {
+//			plugin.getLogger().warning("Could not insert graveyard record in datastore "
+//					+ "because world is invalid!");
+//			return;
+//		}
+//
+//		new BukkitRunnable() {
+//			@Override
+//			public void run() {
+//
+//				try {
+//
+//					// synchronize on connection
+//					synchronized (this) {
+//
+//						// create prepared statement
+//						PreparedStatement preparedStatement =
+//								connection.prepareStatement(getQuery("InsertGraveyard"));
+//
+//						preparedStatement.setString(1, graveyard.getSearchKey());
+//						preparedStatement.setString(2, graveyard.getDisplayName());
+//						preparedStatement.setBoolean(3, graveyard.isEnabled());
+//						preparedStatement.setBoolean(4, graveyard.isHidden());
+//						preparedStatement.setInt(5, graveyard.getDiscoveryRange());
+//						preparedStatement.setString(6, graveyard.getDiscoveryMessage());
+//						preparedStatement.setString(7, graveyard.getRespawnMessage());
+//						preparedStatement.setString(8, graveyard.getGroup());
+//						preparedStatement.setInt(9, graveyard.getSafetyRange());
+//						preparedStatement.setInt(10, graveyard.getSafetyTime());
+//						preparedStatement.setString(11, world.getName());
+//						preparedStatement.setLong(12, world.getUID().getMostSignificantBits());
+//						preparedStatement.setLong(13, world.getUID().getLeastSignificantBits());
+//						preparedStatement.setDouble(14, graveyard.getX());
+//						preparedStatement.setDouble(15, graveyard.getY());
+//						preparedStatement.setDouble(16, graveyard.getZ());
+//						preparedStatement.setFloat(17, graveyard.getYaw());
+//						preparedStatement.setFloat(18, graveyard.getPitch());
+//
+//						// execute prepared statement
+//						preparedStatement.executeUpdate();
+//					}
+//				}
+//				catch (Exception e) {
+//
+//					// output simple error message
+//					plugin.getLogger().warning("An error occurred while trying to "
+//							+ "insert a Graveyard record into the SQLite datastore.");
+//					plugin.getLogger().warning(e.getLocalizedMessage());
+//
+//					// if debugging is enabled, output stack trace
+//					if (plugin.debug) {
+//						e.printStackTrace();
+//					}
+//				}
+//			}
+//		}.runTaskAsynchronously(plugin);
+//	}
+
+
+	@Override
+	public int insertGraveyards(final Collection<Graveyard> graveyards) {
+
+		// if graveyard collection is null, do nothing and return
+		if (graveyards == null) {
+			if (plugin.debug) {
+				plugin.getLogger().warning("Could not insert graveyard records in data store "
+						+ "because collection is null!");
+			}
+			return 0;
+		}
+
+		int count = 0;
+
+		for (Graveyard graveyard : graveyards) {
+
+			// get world
+			final World world = plugin.getServer().getWorld(graveyard.getWorldUid());
+
+			// if world is null, skip to next record
+			if (world == null) {
+				plugin.getLogger().warning("Could not insert graveyard record in datastore "
+						+ "because world is invalid!");
+				continue;
+			}
+
+			try {
+
+				// synchronize on connection
+				synchronized (this) {
+
+					// create prepared statement
+					PreparedStatement preparedStatement =
+							connection.prepareStatement(getQuery("InsertGraveyard"));
+
+					preparedStatement.setString(1, graveyard.getSearchKey());
+					preparedStatement.setString(2, graveyard.getDisplayName());
+					preparedStatement.setBoolean(3, graveyard.isEnabled());
+					preparedStatement.setBoolean(4, graveyard.isHidden());
+					preparedStatement.setInt(5, graveyard.getDiscoveryRange());
+					preparedStatement.setString(6, graveyard.getDiscoveryMessage());
+					preparedStatement.setString(7, graveyard.getRespawnMessage());
+					preparedStatement.setString(8, graveyard.getGroup());
+					preparedStatement.setInt(9, graveyard.getSafetyRange());
+					preparedStatement.setLong(10, graveyard.getSafetyTime());
+					preparedStatement.setString(11, world.getName());
+					preparedStatement.setLong(12, world.getUID().getMostSignificantBits());
+					preparedStatement.setLong(13, world.getUID().getLeastSignificantBits());
+					preparedStatement.setDouble(14, graveyard.getX());
+					preparedStatement.setDouble(15, graveyard.getY());
+					preparedStatement.setDouble(16, graveyard.getZ());
+					preparedStatement.setFloat(17, graveyard.getYaw());
+					preparedStatement.setFloat(18, graveyard.getPitch());
+
+					// execute prepared statement
+					preparedStatement.executeUpdate();
+				}
+			}
+			catch (Exception e) {
+
+				// output simple error message
+				plugin.getLogger().warning("An error occurred while inserting a Graveyard record "
+						+ "into the SQLite datastore.");
+				plugin.getLogger().warning(e.getLocalizedMessage());
+
+				// if debugging is enabled, output stack trace
+				if (plugin.debug) {
+					e.printStackTrace();
+				}
+			}
+			count++;
+		}
+		return count;
 	}
 
 
 	@Override
 	public void updateGraveyard(final Graveyard graveyard) {
 
-		// if graveyard or graveyard location is null do nothing and return
-		if (graveyard == null || graveyard.getLocation() == null) {
+		// if graveyard is null do nothing and return
+		if (graveyard == null) {
 			return;
 		}
-
-		// get location
-		final Location location = graveyard.getLocation();
 
 		new BukkitRunnable() {
 			@Override
@@ -626,7 +940,7 @@ class DataStoreSQLite extends DataStore {
 
 				try {
 					// synchronize on connection
-					synchronized (connection) {
+					synchronized (this) {
 
 						// create prepared statement
 						PreparedStatement preparedStatement =
@@ -641,29 +955,31 @@ class DataStoreSQLite extends DataStore {
 						preparedStatement.setString(7, graveyard.getRespawnMessage());
 						preparedStatement.setString(8, graveyard.getGroup());
 						preparedStatement.setInt(9, graveyard.getSafetyRange());
-						preparedStatement.setInt(10, graveyard.getSafetyTime());
-						preparedStatement.setString(11, location.getWorld().getName());
-						preparedStatement.setDouble(12, location.getX());
-						preparedStatement.setDouble(13, location.getY());
-						preparedStatement.setDouble(14, location.getZ());
-						preparedStatement.setFloat(15, location.getYaw());
-						preparedStatement.setFloat(16, location.getPitch());
-						preparedStatement.setInt(17, graveyard.getPrimaryKey());
+						preparedStatement.setLong(10, graveyard.getSafetyTime());
+						preparedStatement.setString(11, graveyard.getWorldName());
+						preparedStatement.setLong(12, graveyard.getWorldUid().getMostSignificantBits());
+						preparedStatement.setLong(13, graveyard.getWorldUid().getLeastSignificantBits());
+						preparedStatement.setDouble(14, graveyard.getX());
+						preparedStatement.setDouble(15, graveyard.getY());
+						preparedStatement.setDouble(16, graveyard.getZ());
+						preparedStatement.setFloat(17, graveyard.getYaw());
+						preparedStatement.setFloat(18, graveyard.getPitch());
+						preparedStatement.setInt(19, graveyard.getPrimaryKey());
 
 						// execute prepared statement
 						preparedStatement.executeUpdate();
 					}
 				}
-				catch (Exception e) {
+				catch (SQLException e) {
 
 					// output simple error message
-					plugin.getLogger().warning("An error occurred while updating a Graveyard record "
-							+ "into the SQLite datastore.");
+					plugin.getLogger().warning("An error occurred while trying to " +
+							"updating a Graveyard record into the SQLite datastore.");
 					plugin.getLogger().warning(e.getLocalizedMessage());
 
 					// if debugging is enabled, output stack trace
 					if (plugin.debug) {
-						e.getStackTrace();
+						e.printStackTrace();
 					}
 				}
 			}
@@ -686,7 +1002,7 @@ class DataStoreSQLite extends DataStore {
 				try {
 
 					// synchronize on connection
-					synchronized (connection) {
+					synchronized (this) {
 
 						// create prepared statement
 						PreparedStatement preparedStatement =
@@ -703,7 +1019,7 @@ class DataStoreSQLite extends DataStore {
 						plugin.getLogger().info(rowsAffected + " graveyards deleted.");
 					}
 				}
-				catch (Exception e) {
+				catch (SQLException e) {
 
 					// output simple error message
 					plugin.getLogger().warning("An error occurred while attempting to "
@@ -723,7 +1039,7 @@ class DataStoreSQLite extends DataStore {
 
 
 	@Override
-	public List<UUID> selectPlayersDiscovered(final String displayName) {
+	public Collection<UUID> selectPlayersDiscovered(final String displayName) {
 
 		// get search key from passed display name
 		String searchKey = Graveyard.createSearchKey(displayName);
@@ -733,8 +1049,8 @@ class DataStoreSQLite extends DataStore {
 			return Collections.emptyList();
 		}
 
-		// create empty list for return
-		List<UUID> resultList = new ArrayList<>();
+		// create empty set for return
+		Collection<UUID> returnSet = new HashSet<>();
 
 		try {
 			PreparedStatement preparedStatement =
@@ -746,30 +1062,133 @@ class DataStoreSQLite extends DataStore {
 			ResultSet rs = preparedStatement.executeQuery();
 
 			while (rs.next()) {
-				try {
-					resultList.add(UUID.fromString(rs.getString("PlayerUuid")));
-				}
-				catch (IllegalArgumentException e) {
-					plugin.getLogger().warning("Invalid Player UUID in datastore!");
-				}
+
+				// get player uid components
+				long playerUidMsb = rs.getLong("PlayerUidMsb");
+				long playerUidLsb = rs.getLong("PlayerUidLsb");
+
+				// reconstitute player uid
+				UUID playerUid = new UUID(playerUidMsb,playerUidLsb);
+
+				// add player uid to return set
+				returnSet.add(playerUid);
 			}
 		}
-		catch (Exception e) {
+		catch (SQLException e) {
 
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
-					+ "fetch player discovery records from the SQLite datastore.");
+					+ "select player discovery records from the SQLite datastore.");
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
 			if (plugin.debug) {
-				e.getStackTrace();
+				e.printStackTrace();
 			}
 		}
 
 		// return results
-		return resultList;
+		return returnSet;
 	}
+
+
+	private Collection<Discovery> selectAllDiscoveries() {
+
+		Collection<Discovery> returnSet = new ArrayList<>();
+
+		if (schemaVersion == 0) {
+
+			try {
+				PreparedStatement preparedStatement =
+						connection.prepareStatement(getQuery("SelectAllDiscoveryRecordsV0"));
+
+				// execute sql query
+				ResultSet rs = preparedStatement.executeQuery();
+
+				while (rs.next()) {
+
+					// get graveyard search key
+					String searchKey = rs.getString("SearchKey");
+
+					// get player uid as string
+					String playerUidString = rs.getString("PlayerUid");
+
+					UUID playerUid;
+
+					try {
+						playerUid = UUID.fromString(playerUidString);
+					}
+					catch (IllegalArgumentException e) {
+						plugin.getLogger().warning("A record in the Discovered table " +
+								"has an invalid UUID! Skipping record.");
+						plugin.getLogger().warning(e.getLocalizedMessage());
+						if (plugin.debug) {
+							e.printStackTrace();
+						}
+						continue;
+					}
+
+					// create new discovery record
+					Discovery record = new Discovery(searchKey, playerUid);
+
+					// add record to return set
+					returnSet.add(record);
+				}
+			}
+			catch (SQLException e) {
+				plugin.getLogger().warning("An error occurred while trying to " +
+						"select all discovery records from the SQLite datastore.");
+				plugin.getLogger().warning(e.getLocalizedMessage());
+				if (plugin.debug) {
+					e.printStackTrace();
+				}
+			}
+		}
+		else {
+
+			try {
+				PreparedStatement preparedStatement =
+						connection.prepareStatement(getQuery("SelectAllDiscoveryRecords"));
+
+				// execute sql query
+				ResultSet rs = preparedStatement.executeQuery();
+
+				while (rs.next()) {
+
+					// get primary key
+					String key = rs.getString("GraveyardSearchKey");
+
+					// get player uid components
+					long playerUidMsb = rs.getLong("PlayerUidMsb");
+					long playerUidLsb = rs.getLong("PlayerUidLsb");
+
+					// reconstitute player uid from components
+					UUID playerUid = new UUID(playerUidMsb, playerUidLsb);
+
+					// create new discovery record
+					Discovery record = new Discovery(key, playerUid);
+
+					// add record to return set
+					returnSet.add(record);
+				}
+
+				// close statement
+				preparedStatement.close();
+			}
+			catch (SQLException e) {
+				plugin.getLogger().warning("An error occurred while trying to " +
+						"select all discovery records from the SQLite datastore.");
+				plugin.getLogger().warning(e.getLocalizedMessage());
+				if (plugin.debug) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return returnSet;
+	}
+
+
 
 
 	@Override
@@ -781,14 +1200,15 @@ class DataStoreSQLite extends DataStore {
 		try {
 
 			// synchronize on connection
-			synchronized (connection) {
+			synchronized (this) {
 
 				// create prepared statement
 				PreparedStatement preparedStatement =
 						connection.prepareStatement(getQuery("DeleteDiscovery"));
 
-				preparedStatement.setString(1, playerUUID.toString());
-				preparedStatement.setString(2, Graveyard.createSearchKey(displayName));
+				preparedStatement.setLong(1, playerUUID.getMostSignificantBits());
+				preparedStatement.setLong(2, playerUUID.getLeastSignificantBits());
+				preparedStatement.setString(3, Graveyard.createSearchKey(displayName));
 
 				// execute prepared statement
 				rowsAffected = preparedStatement.executeUpdate();
@@ -803,7 +1223,7 @@ class DataStoreSQLite extends DataStore {
 				plugin.getLogger().info(rowsAffected + " discoveries deleted.");
 			}
 		}
-		catch (Exception e) {
+		catch (SQLException e) {
 
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while attempting to "
@@ -812,7 +1232,7 @@ class DataStoreSQLite extends DataStore {
 
 			// if debugging is enabled, output stack trace
 			if (plugin.debug) {
-				e.getStackTrace();
+				e.printStackTrace();
 			}
 		}
 		return result;
@@ -826,7 +1246,7 @@ class DataStoreSQLite extends DataStore {
 			connection.close();
 			plugin.getLogger().info("SQLite datastore connection closed.");
 		}
-		catch (Exception e) {
+		catch (SQLException e) {
 
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while closing the SQLite datastore.");
@@ -834,7 +1254,7 @@ class DataStoreSQLite extends DataStore {
 
 			// if debugging is enabled, output stack trace
 			if (plugin.debug) {
-				e.getStackTrace();
+				e.printStackTrace();
 			}
 		}
 		setInitialized(false);

@@ -1,6 +1,7 @@
 package com.winterhaven_mc.savagegraveyards.storage;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
+import org.bukkit.plugin.java.JavaPlugin;
 
 
 /**
@@ -18,10 +19,10 @@ enum DataStoreType {
 	};
 
 	// static reference to main class
-	private final static PluginMain plugin = PluginMain.instance;
+	private final static PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
 
 	// DataStoreType display name
-	private String displayName;
+	private final String displayName;
 
 	// default DataStoreType
 	private final static DataStoreType defaultType = DataStoreType.SQLITE;

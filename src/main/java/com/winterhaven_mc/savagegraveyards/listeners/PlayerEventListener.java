@@ -1,6 +1,8 @@
 package com.winterhaven_mc.savagegraveyards.listeners;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
+import com.winterhaven_mc.savagegraveyards.messages.Macro;
+import com.winterhaven_mc.savagegraveyards.messages.Message;
 import com.winterhaven_mc.savagegraveyards.storage.Graveyard;
 import com.winterhaven_mc.savagegraveyards.messages.MessageId;
 
@@ -43,7 +45,7 @@ public class PlayerEventListener implements Listener {
 	/**
 	 * constructor method for {@code PlayerEventListener} class
 	 *
-	 * @param    plugin        A reference to this plugin's main class
+	 * @param plugin A reference to this plugin's main class
 	 */
 	public PlayerEventListener(final PluginMain plugin) {
 
@@ -75,10 +77,7 @@ public class PlayerEventListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.LOWEST)
 	void onPlayerRespawnLOWEST(final PlayerRespawnEvent event) {
-		if (plugin.getConfig().getString("respawn-priority").equalsIgnoreCase("LOWEST")) {
-			if (plugin.debug) {
-				plugin.getLogger().info("PlayerRespawnEvent responding at LOWEST priority.");
-			}
+		if ("LOWEST".equalsIgnoreCase(plugin.getConfig().getString("respawn-priority"))) {
 			onPlayerRespawnHandler(event);
 		}
 	}
@@ -91,10 +90,7 @@ public class PlayerEventListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.LOW)
 	void onPlayerRespawnLOW(final PlayerRespawnEvent event) {
-		if (plugin.getConfig().getString("respawn-priority").equalsIgnoreCase("LOW")) {
-			if (plugin.debug) {
-				plugin.getLogger().info("PlayerRespawnEvent responding at LOW priority.");
-			}
+		if ("LOW".equalsIgnoreCase(plugin.getConfig().getString("respawn-priority"))) {
 			onPlayerRespawnHandler(event);
 		}
 	}
@@ -107,10 +103,7 @@ public class PlayerEventListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
 	void onPlayerRespawnNORMAL(final PlayerRespawnEvent event) {
-		if (plugin.getConfig().getString("respawn-priority").equalsIgnoreCase("NORMAL")) {
-			if (plugin.debug) {
-				plugin.getLogger().info("PlayerRespawnEvent responding at NORMAL priority.");
-			}
+		if ("NORMAL".equalsIgnoreCase(plugin.getConfig().getString("respawn-priority"))) {
 			onPlayerRespawnHandler(event);
 		}
 	}
@@ -123,10 +116,7 @@ public class PlayerEventListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.HIGH)
 	void onPlayerRespawnHIGH(final PlayerRespawnEvent event) {
-		if (plugin.getConfig().getString("respawn-priority").equalsIgnoreCase("HIGH")) {
-			if (plugin.debug) {
-				plugin.getLogger().info("PlayerRespawnEvent responding at HIGH priority.");
-			}
+		if ("HIGH".equalsIgnoreCase(plugin.getConfig().getString("respawn-priority"))) {
 			onPlayerRespawnHandler(event);
 		}
 	}
@@ -139,10 +129,8 @@ public class PlayerEventListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
 	void onPlayerRespawnHIGHEST(final PlayerRespawnEvent event) {
-		if (plugin.getConfig().getString("respawn-priority").equalsIgnoreCase("HIGHEST")) {
-			if (plugin.debug) {
-				plugin.getLogger().info("PlayerRespawnEvent responding at HIGHEST priority.");
-			}
+		if (Objects.requireNonNull(plugin.getConfig().getString("respawn-priority"))
+				.equalsIgnoreCase("HIGHEST")) {
 			onPlayerRespawnHandler(event);
 		}
 	}
@@ -179,8 +167,8 @@ public class PlayerEventListener implements Listener {
 		// get nearest valid graveyard for player
 		Graveyard graveyard = plugin.dataStore.selectNearestGraveyard(player);
 
-		// if graveyard graveyard is not null, set respawn location
-		if (graveyard != null) {
+		// if graveyard and graveyard location are not null, set respawn location
+		if (graveyard != null && graveyard.getLocation() != null) {
 			event.setRespawnLocation(graveyard.getLocation());
 
 			// if graveyard has custom respawn message, send custom message to player
@@ -190,19 +178,11 @@ public class PlayerEventListener implements Listener {
 			}
 			// else send default respawn message
 			else {
-				plugin.messageManager.sendMessage(player, MessageId.DEFAULT_RESPAWN, graveyard);
-			}
-
-			// get safety time duration
-			int duration = graveyard.getSafetyTime();
-
-			// if safety time is negative, get configured default
-			if (duration < 0) {
-				duration = plugin.getConfig().getInt("safety-time");
+				Message.create(player, MessageId.DEFAULT_RESPAWN).setMacro(Macro.GRAVEYARD, graveyard).send();
 			}
 
 			// put player in safety cooldown map
-			plugin.safetyManager.putPlayer(player, duration);
+			plugin.safetyManager.putPlayer(player, graveyard.getSafetyTime());
 		}
 	}
 

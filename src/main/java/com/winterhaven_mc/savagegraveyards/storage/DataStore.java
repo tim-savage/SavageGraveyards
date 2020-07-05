@@ -2,6 +2,7 @@ package com.winterhaven_mc.savagegraveyards.storage;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
 
@@ -11,7 +12,7 @@ import java.util.*;
  */
 public abstract class DataStore {
 
-	private final static PluginMain plugin = PluginMain.instance;
+	private final static PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
 
 	private boolean initialized;
 	DataStoreType type;
@@ -31,7 +32,7 @@ public abstract class DataStore {
 	 *
 	 * @return List of all graveyard objects in alphabetical order
 	 */
-	public abstract List<Graveyard> selectAllGraveyards();
+	public abstract Collection<Graveyard> selectAllGraveyards();
 
 
 	/**
@@ -49,7 +50,7 @@ public abstract class DataStore {
 	 * @param player the player for whom to retrieve undiscovered Graveyards
 	 * @return HashSet of Graveyard objects that are undiscovered for player
 	 */
-	public abstract Set<Graveyard> getUndiscovered(final Player player);
+	public abstract Collection<Graveyard> selectUndiscoveredGraveyards(final Player player);
 
 
 	/**
@@ -58,7 +59,7 @@ public abstract class DataStore {
 	 * @param player the player for whom to retrieve undiscovered Graveyard keys
 	 * @return HashSet of Graveyard search keys that are undiscovered for player
 	 */
-	public abstract Set<String> getUndiscoveredKeys(final Player player);
+	public abstract Collection<String> selectUndiscoveredKeys(final Player player);
 
 
 	/**
@@ -71,20 +72,29 @@ public abstract class DataStore {
 
 
 	/**
-	 * Set graveyard to discovered for player
+	 * Insert discovery record
 	 *
-	 * @param player      the player for whom to set a Graveyard as discovered
-	 * @param displayName display name or search key of the Graveyard to set as discovered
+	 * @param record the discovery record to be inserted
 	 */
-	public abstract void insertDiscovery(final Player player, final String displayName);
+	public abstract void insertDiscovery(Discovery record);
 
 
 	/**
-	 * Insert new record
+	 * Insert discovery records
 	 *
-	 * @param graveyard the Graveyard object to insert into the datastore
+	 * @param insertSet set of records to be inserted
+	 * @return number of records successfully inserted
 	 */
-	public abstract void insertGraveyard(final Graveyard graveyard);
+	public abstract int insertDiscoveries(Collection<Discovery> insertSet);
+
+
+	/**
+	 * Insert a collection of records
+	 *
+	 * @param graveyards a collection of graveyard records
+	 * @return int - the number of records successfully inserted
+	 */
+	public abstract int insertGraveyards(final Collection<Graveyard> graveyards);
 
 
 	/**
@@ -108,6 +118,8 @@ public abstract class DataStore {
 	 * Delete discovery record
 	 *
 	 * @param displayName display name or search key of record to be deleted
+	 * @param playerUUID the player unique id
+	 * @return boolean - {@code true} if deletion was successful, {@code false} if not
 	 */
 	public abstract boolean deleteDiscovery(final String displayName, final UUID playerUUID);
 
@@ -118,7 +130,7 @@ public abstract class DataStore {
 	 * @param displayName the display name or search key of the graveyard
 	 * @return List of UUID - player UUIDs that have discovered the graveyard
 	 */
-	public abstract List<UUID> selectPlayersDiscovered(final String displayName);
+	public abstract Collection<UUID> selectPlayersDiscovered(final String displayName);
 
 
 	/**
@@ -203,7 +215,7 @@ public abstract class DataStore {
 	 * Get records that prefix match string
 	 *
 	 * @param match the prefix to match
-	 * @return String list of names with matching prefix
+	 * @return String collection of names with matching prefix
 	 */
 	public abstract List<String> selectMatchingGraveyardNames(final String match);
 
@@ -314,13 +326,8 @@ public abstract class DataStore {
 				}
 			}
 
-			final List<Graveyard> allRecords = oldDataStore.selectAllGraveyards();
+			int count = newDataStore.insertGraveyards(oldDataStore.selectAllGraveyards());
 
-			int count = 0;
-			for (Graveyard record : allRecords) {
-				newDataStore.insertGraveyard(record);
-				count++;
-			}
 			plugin.getLogger().info(count + " records converted to " + newDataStore.toString() + " datastore.");
 
 			newDataStore.sync();
