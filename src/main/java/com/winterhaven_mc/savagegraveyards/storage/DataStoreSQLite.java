@@ -301,7 +301,7 @@ class DataStoreSQLite extends DataStore {
 					world = plugin.getServer().getWorld(worldUid);
 				}
 
-				// if world is null, log error and skip to next record
+				// if world is null, log warning
 				if (world == null) {
 					plugin.getLogger().warning("Stored record has invalid world: " + worldName);
 				}
@@ -394,7 +394,7 @@ class DataStoreSQLite extends DataStore {
 
 				// if world is null, log warning
 				if (world == null) {
-					plugin.getLogger().warning("Stored Graveyard world: " + worldName + " is invalid!");
+					plugin.getLogger().warning("Stored record has invalid world: " + worldName);
 					worldUid = null;
 				}
 				// else if world is not null, get current world name
@@ -524,7 +524,7 @@ class DataStoreSQLite extends DataStore {
 
 			// output simple error message
 			plugin.getLogger().warning("An error occurred while trying to "
-					+ "fetch the closest Graveyard from the SQLite datastore.");
+					+ "fetch the select Graveyard from the SQLite datastore.");
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
@@ -787,81 +787,6 @@ class DataStoreSQLite extends DataStore {
 	}
 
 
-//	@Override
-//	public void insertGraveyard(final Graveyard graveyard) {
-//
-//		// if graveyard or graveyard location is null, do nothing and return
-//		if (graveyard == null) {
-//			if (plugin.debug) {
-//				plugin.getLogger().warning("Could not insert graveyard record in data store "
-//						+ "because record is null!");
-//			}
-//			return;
-//		}
-//
-//		// get world
-//		final World world = plugin.getServer().getWorld(graveyard.getWorldUid());
-//
-//		// if world is null, log error and return
-//		if (world == null) {
-//			plugin.getLogger().warning("Could not insert graveyard record in datastore "
-//					+ "because world is invalid!");
-//			return;
-//		}
-//
-//		new BukkitRunnable() {
-//			@Override
-//			public void run() {
-//
-//				try {
-//
-//					// synchronize on connection
-//					synchronized (this) {
-//
-//						// create prepared statement
-//						PreparedStatement preparedStatement =
-//								connection.prepareStatement(getQuery("InsertGraveyard"));
-//
-//						preparedStatement.setString(1, graveyard.getSearchKey());
-//						preparedStatement.setString(2, graveyard.getDisplayName());
-//						preparedStatement.setBoolean(3, graveyard.isEnabled());
-//						preparedStatement.setBoolean(4, graveyard.isHidden());
-//						preparedStatement.setInt(5, graveyard.getDiscoveryRange());
-//						preparedStatement.setString(6, graveyard.getDiscoveryMessage());
-//						preparedStatement.setString(7, graveyard.getRespawnMessage());
-//						preparedStatement.setString(8, graveyard.getGroup());
-//						preparedStatement.setInt(9, graveyard.getSafetyRange());
-//						preparedStatement.setInt(10, graveyard.getSafetyTime());
-//						preparedStatement.setString(11, world.getName());
-//						preparedStatement.setLong(12, world.getUID().getMostSignificantBits());
-//						preparedStatement.setLong(13, world.getUID().getLeastSignificantBits());
-//						preparedStatement.setDouble(14, graveyard.getX());
-//						preparedStatement.setDouble(15, graveyard.getY());
-//						preparedStatement.setDouble(16, graveyard.getZ());
-//						preparedStatement.setFloat(17, graveyard.getYaw());
-//						preparedStatement.setFloat(18, graveyard.getPitch());
-//
-//						// execute prepared statement
-//						preparedStatement.executeUpdate();
-//					}
-//				}
-//				catch (Exception e) {
-//
-//					// output simple error message
-//					plugin.getLogger().warning("An error occurred while trying to "
-//							+ "insert a Graveyard record into the SQLite datastore.");
-//					plugin.getLogger().warning(e.getLocalizedMessage());
-//
-//					// if debugging is enabled, output stack trace
-//					if (plugin.debug) {
-//						e.printStackTrace();
-//					}
-//				}
-//			}
-//		}.runTaskAsynchronously(plugin);
-//	}
-
-
 	@Override
 	public int insertGraveyards(final Collection<Graveyard> graveyards) {
 
@@ -986,7 +911,7 @@ class DataStoreSQLite extends DataStore {
 
 					// output simple error message
 					plugin.getLogger().warning("An error occurred while trying to " +
-							"updating a Graveyard record into the SQLite datastore.");
+							"update a Graveyard record into the SQLite datastore.");
 					plugin.getLogger().warning(e.getLocalizedMessage());
 
 					// if debugging is enabled, output stack trace
