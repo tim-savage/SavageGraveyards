@@ -475,8 +475,12 @@ public final class Graveyard {
 	 */
 	public final Location getLocation() {
 
+		if (worldUid == null) {
+			return null;
+		}
+
 		// get world by uid
-		World world = JavaPlugin.getProvidingPlugin(this.getClass()).getServer().getWorld(this.worldUid);
+		World world = JavaPlugin.getProvidingPlugin(this.getClass()).getServer().getWorld(worldUid);
 
 		// if world is null, return null
 		if (world == null) {

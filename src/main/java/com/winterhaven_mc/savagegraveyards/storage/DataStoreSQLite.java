@@ -266,6 +266,7 @@ class DataStoreSQLite extends DataStore {
 				// get stored world name
 				String worldName = rs.getString("WorldName");
 
+				UUID worldUid = null;
 				World world;
 				int primaryKey;
 
@@ -277,6 +278,11 @@ class DataStoreSQLite extends DataStore {
 
 					// get world by name
 					world = plugin.getServer().getWorld(worldName);
+
+					// get world uid
+					if (world != null) {
+						worldUid = world.getUID();
+					}
 				}
 
 				// else get primaryKey from field 'Key'; world by uid
@@ -289,7 +295,7 @@ class DataStoreSQLite extends DataStore {
 					long worldUidLsb = rs.getLong("WorldUidLsb");
 
 					// reconstitute world uid from components
-					UUID worldUid = new UUID(worldUidMsb, worldUidLsb);
+					worldUid = new UUID(worldUidMsb, worldUidLsb);
 
 					// get world by uid
 					world = plugin.getServer().getWorld(worldUid);
@@ -297,9 +303,10 @@ class DataStoreSQLite extends DataStore {
 
 				// if world is null, log error and skip to next record
 				if (world == null) {
-					plugin.getLogger().warning("Stored record has invalid world: "
-							+ worldName + ". Skipping record.");
-					continue;
+					plugin.getLogger().warning("Stored record has invalid world: " + worldName);
+				}
+				else {
+					worldName = world.getName();
 				}
 
 				// build graveyard object
@@ -315,8 +322,8 @@ class DataStoreSQLite extends DataStore {
 							.group(rs.getString("GroupName"))
 							.safetyRange(rs.getInt("SafetyRange"))
 							.safetyTime(rs.getInt("safetyTime"))
-							.worldName(world.getName())
-							.worldUid(world.getUID())
+							.worldName(worldName)
+							.worldUid(worldUid)
 							.x(rs.getDouble("X"))
 							.y(rs.getDouble("Y"))
 							.z(rs.getDouble("Z"))
@@ -385,12 +392,17 @@ class DataStoreSQLite extends DataStore {
 				// get world by uid
 				World world = plugin.getServer().getWorld(worldUid);
 
-				// if world is null, log error and return null
+				// if world is null, log warning
 				if (world == null) {
 					plugin.getLogger().warning("Stored Graveyard world: " + worldName + " is invalid!");
-					return null;
+					worldUid = null;
+				}
+				// else if world is not null, get current world name
+				else {
+					worldName = world.getName();
 				}
 
+				// create graveyard object
 				graveyard = new Graveyard.Builder()
 						.primaryKey(rs.getInt("Key"))
 						.displayName(rs.getString("displayName"))
@@ -403,7 +415,7 @@ class DataStoreSQLite extends DataStore {
 						.group(rs.getString("groupName"))
 						.safetyRange(rs.getInt("safetyRange"))
 						.safetyTime(rs.getInt("safetyTime"))
-						.worldName(world.getName())
+						.worldName(worldName)
 						.worldUid(worldUid)
 						.x(rs.getDouble("x"))
 						.y(rs.getDouble("y"))

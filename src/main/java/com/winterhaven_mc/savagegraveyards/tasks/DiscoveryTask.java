@@ -48,10 +48,10 @@ public class DiscoveryTask extends BukkitRunnable {
 			for (Graveyard graveyard : plugin.dataStore.selectUndiscoveredGraveyards(player)) {
 
 				// get graveyard location
-				Location dsLocation = graveyard.getLocation();
+				Location graveyardLocation = graveyard.getLocation();
 
 				// if graveyard location is null, skip to next graveyard
-				if (dsLocation == null) {
+				if (graveyardLocation == null) {
 					continue;
 				}
 
@@ -70,7 +70,7 @@ public class DiscoveryTask extends BukkitRunnable {
 						}
 
 						// check if player is within discovery range of graveyard
-						if (dsLocation.distanceSquared(playerLocation) < Math.pow(discoveryRange, 2)) {
+						if (graveyardLocation.distanceSquared(playerLocation) < Math.pow(discoveryRange, 2)) {
 
 							// create discovery record
 							Discovery record = new Discovery(graveyard.getSearchKey(), player.getUniqueId());

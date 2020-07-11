@@ -82,6 +82,10 @@ MESSAGES:
     enabled: true
     string: '&3[Graveyards]&c That is not a valid graveyard name!'
 
+  COMMAND_FAIL_INVALID_LOCATION:
+    enabled: true
+    string: '&3[Graveyards]&c Cannot set attributes on a graveyard with an invalid location!'
+
   COMMAND_FAIL_NO_RECORD:
     enabled: true
     string: '&3[Graveyards]&c That is not an existing graveyard!'
@@ -274,6 +278,10 @@ MESSAGES:
   LIST_ITEM_UNDISCOVERED:
     enabled: true
     string: "%ITEM_NUMBER%) &c%GRAVEYARD% &r[ UNDISCOVERED ] &c| &b%LOCATION%"
+
+  LIST_ITEM_INVALID_WORLD:
+    enabled: true
+    string: "%ITEM_NUMBER%) &7%GRAVEYARD% &c| &b[ &eInvalid World: %WORLD% &b]"
 
   LIST_EMPTY:
     enabled: true

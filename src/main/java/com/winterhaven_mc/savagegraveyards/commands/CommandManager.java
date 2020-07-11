@@ -384,10 +384,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			// create dummy graveyard to send to message manager
 			Graveyard dummyGraveyard = new Graveyard.Builder().displayName(displayName).build();
 
-			// send failure message
+			// send command fail message
 			Message.create(sender, COMMAND_FAIL_NO_RECORD).setMacro(GRAVEYARD, dummyGraveyard);
 
-			// play failure sound
+			// play command fail sound
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -397,6 +397,14 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 		// get value by joining remaining arguments
 		String value = String.join(" ", arguments);
+
+		// only allow setting new location on graveyards with invalid location
+		if (graveyard.getLocation() == null && !attribute.equalsIgnoreCase("location")) {
+			Message.create(sender, COMMAND_FAIL_INVALID_LOCATION)
+					.send();
+			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
+			return true;
+		}
 
 		if (attribute.equalsIgnoreCase("location")) {
 			return setLocation(sender, graveyard);
@@ -1131,7 +1139,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// send graveyard exists error message
 		Message.create(sender, COMMAND_FAIL_CREATE_EXISTS)
 				.setMacro(GRAVEYARD, existingGraveyard)
-				.setMacro(LOCATION, existingGraveyard.getLocation())
+//				.setMacro(LOCATION, existingGraveyard.getLocation())
 				.send();
 
 		// play sound effect
@@ -1141,7 +1149,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 
 	/**
-	 * Remove graveyard
+	 * Delete graveyard
 	 *
 	 * @param sender the command sender
 	 * @param args   the command arguments
@@ -1320,19 +1328,16 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 				+ ChatColor.RESET + group);
 
 		// display graveyard location
-		Location location = graveyard.getLocation();
-		if (location != null) {
-			String locationString = ChatColor.DARK_AQUA + "Location: "
-					+ ChatColor.RESET + "["
-					+ ChatColor.AQUA + plugin.worldManager.getWorldName(location)
-					+ ChatColor.RESET + "] "
-					+ ChatColor.RESET + "X: " + ChatColor.AQUA + location.getBlockX() + " "
-					+ ChatColor.RESET + "Y: " + ChatColor.AQUA + location.getBlockY() + " "
-					+ ChatColor.RESET + "Z: " + ChatColor.AQUA + location.getBlockZ() + " "
-					+ ChatColor.RESET + "P: " + ChatColor.GOLD + String.format("%.2f", location.getPitch()) + " "
-					+ ChatColor.RESET + "Y: " + ChatColor.GOLD + String.format("%.2f", location.getYaw());
-			sender.sendMessage(locationString);
-		}
+		String locationString = ChatColor.DARK_AQUA + "Location: "
+				+ ChatColor.RESET + "["
+				+ ChatColor.AQUA + graveyard.getWorldName()
+				+ ChatColor.RESET + "] "
+				+ ChatColor.RESET + "X: " + ChatColor.AQUA + Math.round(graveyard.getX()) + " "
+				+ ChatColor.RESET + "Y: " + ChatColor.AQUA + Math.round(graveyard.getY()) + " "
+				+ ChatColor.RESET + "Z: " + ChatColor.AQUA + Math.round(graveyard.getZ()) + " "
+				+ ChatColor.RESET + "P: " + ChatColor.GOLD + String.format("%.2f", graveyard.getPitch()) + " "
+				+ ChatColor.RESET + "Y: " + ChatColor.GOLD + String.format("%.2f", graveyard.getYaw());
+		sender.sendMessage(locationString);
 		return true;
 	}
 
@@ -1408,6 +1413,14 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 		for (Graveyard graveyard : allRecords) {
 
+			// if graveyard has invalid location and sender has list disabled permission, add to display list
+			if (graveyard.getLocation() == null) {
+				if (sender.hasPermission("graveyard.list.disabled")) {
+					displayRecords.add(graveyard);
+				}
+				continue;
+			}
+
 			// if graveyard is not enabled and sender does not have override permission, do not add to display list
 			if (!graveyard.isEnabled() && !sender.hasPermission("graveyard.list.disabled")) {
 				if (plugin.debug) {
@@ -1467,6 +1480,16 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 			// increment item number
 			itemNumber++;
+
+			// display invalid world list item
+			if (graveyard.getLocation() == null) {
+				Message.create(sender, LIST_ITEM_INVALID_WORLD)
+						.setMacro(GRAVEYARD, graveyard)
+						.setMacro(ITEM_NUMBER, itemNumber)
+						.setMacro(WORLD, graveyard.getWorldName())
+						.send();
+				continue;
+			}
 
 			// display disabled list item
 			if (!graveyard.isEnabled()) {
@@ -1732,7 +1755,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			// send success message
 			Message.create(sender, COMMAND_SUCCESS_FORGET)
 					.setMacro(GRAVEYARD, graveyard)
-					.setMacro(LOCATION, graveyard.getLocation())
+//					.setMacro(LOCATION, graveyard.getLocation())
 					.setMacro(TARGET_PLAYER, player)
 					.send();
 
