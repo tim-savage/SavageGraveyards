@@ -16,6 +16,7 @@ TIME_STRINGS:
 
 # Variable substitutions:
 # %PLAYER%              Message recipient's name
+# %WORLD%               Message recipient's current world name
 # %TARGET_PLAYER%       Other player's name (available in forget command messages only)
 # %GRAVEYARD%           display name of graveyard
 # %LOCATION%            graveyard location formatted: world [ x, y, z ]
@@ -23,7 +24,7 @@ TIME_STRINGS:
 # %LOC_X%               graveyard location x coordinate
 # %LOC_Y%               graveyard location y coordinate
 # %LOC_Z%               graveyard location z coordinate
-# %INVALID_WORLD%       invalid world name of graveyard (used when location is invalid)
+# %INVALID_WORLD%       invalid world name of graveyard (used in location invalid messages only)
 # %PAGE_NUMBER%         list page number (available in LIST_HEADER/LIST_FOOTER only)
 # %PAGE_TOTAL%          list page total (available in LIST_HEADER/LIST_FOOTER only)
 # %ITEM_NUMBER%         list item number (available in LIST_ITEM messages only)
@@ -81,10 +82,6 @@ MESSAGES:
   COMMAND_FAIL_SET_INVALID_NAME:
     enabled: true
     string: '&3[Graveyards]&c That is not a valid graveyard name!'
-
-  COMMAND_FAIL_INVALID_LOCATION:
-    enabled: true
-    string: '&3[Graveyards]&c Cannot set attributes on a graveyard with an invalid location!'
 
   COMMAND_FAIL_NO_RECORD:
     enabled: true
