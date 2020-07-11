@@ -400,8 +400,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 		// only allow setting new location on graveyards with invalid location
 		if (graveyard.getLocation() == null && !attribute.equalsIgnoreCase("location")) {
-			Message.create(sender, COMMAND_FAIL_INVALID_LOCATION)
-					.send();
+			Message.create(sender, COMMAND_FAIL_INVALID_LOCATION).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -545,7 +544,6 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// send success message
 		Message.create(sender, COMMAND_SUCCESS_SET_NAME)
 				.setMacro(GRAVEYARD, newGraveyard)
-				.setMacro(LOCATION, newGraveyard.getLocation())
 				.setMacro(VALUE, oldName)
 				.send();
 
@@ -1104,7 +1102,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			// send success message
 			Message.create(sender, COMMAND_SUCCESS_CREATE)
 					.setMacro(GRAVEYARD, newGraveyard)
-					.setMacro(LOCATION, newGraveyard.getLocation())
+					.setMacro(LOCATION, location)
 					.send();
 
 			// play sound effect
@@ -1139,7 +1137,6 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// send graveyard exists error message
 		Message.create(sender, COMMAND_FAIL_CREATE_EXISTS)
 				.setMacro(GRAVEYARD, existingGraveyard)
-//				.setMacro(LOCATION, existingGraveyard.getLocation())
 				.send();
 
 		// play sound effect
@@ -1208,7 +1205,6 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// send success message to player
 		Message.create(sender, COMMAND_SUCCESS_DELETE)
 				.setMacro(GRAVEYARD, graveyard)
-				.setMacro(LOCATION, graveyard.getLocation())
 				.send();
 
 		// play sound effect
@@ -1558,7 +1554,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		Graveyard graveyard = plugin.dataStore.selectNearestGraveyard(player);
 
 		// if no graveyard returned from datastore, send failure message and return
-		if (graveyard == null) {
+		if (graveyard == null || graveyard.getLocation() == null) {
 			Message.create(sender, COMMAND_FAIL_CLOSEST_NO_MATCH).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
@@ -1641,15 +1637,20 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			return true;
 		}
 
-		// teleport player to graveyard location
+		// get graveyard location
 		Location destination = graveyard.getLocation();
 
 		// if destination is null, send fail message and return
 		if (destination == null) {
-			Message.create(sender, COMMAND_FAIL_TELEPORT)
+
+			// send message
+			Message.create(sender, COMMAND_FAIL_TELEPORT_WORLD_INVALID)
 					.setMacro(GRAVEYARD, graveyard)
-					.setMacro(LOCATION, graveyard.getLocation())
+					.setMacro(WORLD, graveyard.getWorldName())
 					.send();
+
+			// play sound
+			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
@@ -1663,7 +1664,11 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			plugin.soundConfig.playSound(player, SoundId.TELEPORT_SUCCESS_ARRIVAL);
 		}
 		else {
+			// send message
 			Message.create(sender, COMMAND_FAIL_TELEPORT).setMacro(GRAVEYARD, graveyard).send();
+
+			// play sound
+			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 		}
 		return true;
 	}
@@ -1755,7 +1760,6 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			// send success message
 			Message.create(sender, COMMAND_SUCCESS_FORGET)
 					.setMacro(GRAVEYARD, graveyard)
-//					.setMacro(LOCATION, graveyard.getLocation())
 					.setMacro(TARGET_PLAYER, player)
 					.send();
 
@@ -1766,7 +1770,6 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			// send failure message
 			Message.create(sender, COMMAND_FAIL_FORGET)
 					.setMacro(GRAVEYARD, graveyard)
-					.setMacro(LOCATION, graveyard)
 					.setMacro(TARGET_PLAYER, player)
 					.send();
 

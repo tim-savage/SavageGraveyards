@@ -1,11 +1,11 @@
 package com.winterhaven_mc.savagegraveyards.storage;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Objects;
 import java.util.UUID;
 
 
@@ -91,13 +91,13 @@ public final class Graveyard {
 		private String group = "";
 		private int safetyRange = CONFIG_DEFAULT;
 		private long safetyTime = CONFIG_DEFAULT;
-		private String worldName;
-		private UUID worldUid;
-		private double x;
-		private double y;
-		private double z;
-		private float yaw;
-		private float pitch;
+		private String worldName = "";
+		private UUID worldUid = null;
+		private double x = 0;
+		private double y = 0;
+		private double z = 0;
+		private float yaw = 0;
+		private float pitch = 0;
 
 		/**
 		 * Builder class constructor
@@ -272,13 +272,18 @@ public final class Graveyard {
 		 */
 		public final Builder location(final Location value) {
 
-			worldUid = Objects.requireNonNull(value.getWorld()).getUID();
-			x = value.getX();
-			y = value.getY();
-			z = value.getZ();
-			yaw = value.getYaw();
-			pitch = value.getPitch();
-
+			// if passed location is null, set worldUid null and let other values default to zero
+			if (value == null || value.getWorld() == null) {
+				worldUid = null;
+			}
+			else {
+				worldUid = value.getWorld().getUID();
+				x = value.getX();
+				y = value.getY();
+				z = value.getZ();
+				yaw = value.getYaw();
+				pitch = value.getPitch();
+			}
 			return this;
 		}
 
@@ -372,9 +377,13 @@ public final class Graveyard {
 	}
 
 
+	/**
+	 * Override toString method to return graveyard display name
+	 * @return String - graveyard display name
+	 */
 	@Override
 	public String toString() {
-		return this.displayName;
+		return displayName;
 	}
 
 
@@ -384,7 +393,7 @@ public final class Graveyard {
 	 * @return int - primary key
 	 */
 	public final int getPrimaryKey() {
-		return this.primaryKey;
+		return primaryKey;
 	}
 
 
@@ -394,7 +403,7 @@ public final class Graveyard {
 	 * @return String - display name
 	 */
 	public final String getDisplayName() {
-		return this.displayName;
+		return displayName;
 	}
 
 
@@ -404,7 +413,7 @@ public final class Graveyard {
 	 * @return String - search key
 	 */
 	public final String getSearchKey() {
-		return this.searchKey;
+		return searchKey;
 	}
 
 
@@ -414,7 +423,7 @@ public final class Graveyard {
 	 * @return boolean - enabled
 	 */
 	public final boolean isEnabled() {
-		return this.enabled;
+		return enabled;
 	}
 
 
@@ -424,7 +433,7 @@ public final class Graveyard {
 	 * @return boolean - hidden
 	 */
 	public final boolean isHidden() {
-		return this.hidden;
+		return hidden;
 	}
 
 
@@ -434,7 +443,7 @@ public final class Graveyard {
 	 * @return int - discovery range
 	 */
 	public final int getDiscoveryRange() {
-		return this.discoveryRange;
+		return discoveryRange;
 	}
 
 
@@ -444,7 +453,7 @@ public final class Graveyard {
 	 * @return String - group
 	 */
 	public final String getGroup() {
-		return this.group;
+		return group;
 	}
 
 
@@ -454,7 +463,7 @@ public final class Graveyard {
 	 * @return String - discovery message
 	 */
 	public final String getDiscoveryMessage() {
-		return this.discoveryMessage;
+		return discoveryMessage;
 	}
 
 
@@ -464,23 +473,26 @@ public final class Graveyard {
 	 * @return String - respawn message
 	 */
 	public final String getRespawnMessage() {
-		return this.respawnMessage;
+		return respawnMessage;
 	}
 
 
 	/**
-	 * Getter for location
+	 * Getter for location; returns new location object constructed from components.
+	 * If worldUid is null, or if world referenced by worldUid is invalid,
+	 * perhaps because it has been unloaded, the returned location will be null.
 	 *
 	 * @return Location - location
 	 */
 	public final Location getLocation() {
 
+		// if worldUid is null, return null
 		if (worldUid == null) {
 			return null;
 		}
 
 		// get world by uid
-		World world = JavaPlugin.getProvidingPlugin(this.getClass()).getServer().getWorld(worldUid);
+		World world = Bukkit.getServer().getWorld(worldUid);
 
 		// if world is null, return null
 		if (world == null) {
@@ -488,7 +500,7 @@ public final class Graveyard {
 		}
 
 		// return new location
-		return new Location(world, this.x, this.y, this.z, this.yaw, this.pitch);
+		return new Location(world, x, y, z, yaw, pitch);
 	}
 
 
@@ -497,7 +509,7 @@ public final class Graveyard {
 	 * @return String - worldName
 	 */
 	public final String getWorldName() {
-		return this.worldName;
+		return worldName;
 	}
 
 
@@ -506,7 +518,7 @@ public final class Graveyard {
 	 * @return UUID - worldUid
 	 */
 	public final UUID getWorldUid() {
-		return this.worldUid;
+		return worldUid;
 	}
 
 
@@ -515,7 +527,7 @@ public final class Graveyard {
 	 * @return double - x
 	 */
 	public final double getX() {
-		return this.x;
+		return x;
 	}
 
 
@@ -524,7 +536,7 @@ public final class Graveyard {
 	 * @return double - y
 	 */
 	public final double getY() {
-		return this.y;
+		return y;
 	}
 
 
@@ -533,7 +545,7 @@ public final class Graveyard {
 	 * @return double - z
 	 */
 	public final double getZ() {
-		return this.z;
+		return z;
 	}
 
 
@@ -542,7 +554,7 @@ public final class Graveyard {
 	 * @return float - yaw
 	 */
 	public final float getYaw() {
-		return this.yaw;
+		return yaw;
 	}
 
 
@@ -551,7 +563,7 @@ public final class Graveyard {
 	 * @return float - pitch
 	 */
 	public float getPitch() {
-		return this.pitch;
+		return pitch;
 	}
 
 
@@ -561,7 +573,7 @@ public final class Graveyard {
 	 * @return int - safety range
 	 */
 	final int getSafetyRange() {
-		return this.safetyRange;
+		return safetyRange;
 	}
 
 
@@ -571,7 +583,7 @@ public final class Graveyard {
 	 * @return int - safety time
 	 */
 	public final long getSafetyTime() {
-		return this.safetyTime;
+		return safetyTime;
 	}
 
 

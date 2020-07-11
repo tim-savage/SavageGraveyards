@@ -16,7 +16,6 @@ TIME_STRINGS:
 
 # Variable substitutions:
 # %PLAYER%              Message recipient's name
-# %WORLD%               world name of message recipient
 # %TARGET_PLAYER%       Other player's name (available in forget command messages only)
 # %GRAVEYARD%           display name of graveyard
 # %LOCATION%            graveyard location formatted: world [ x, y, z ]
@@ -24,6 +23,7 @@ TIME_STRINGS:
 # %LOC_X%               graveyard location x coordinate
 # %LOC_Y%               graveyard location y coordinate
 # %LOC_Z%               graveyard location z coordinate
+# %WORLD%               world name of graveyard (used when location is invalid)
 # %PAGE_NUMBER%         list page number (available in LIST_HEADER/LIST_FOOTER only)
 # %PAGE_TOTAL%          list page total (available in LIST_HEADER/LIST_FOOTER only)
 # %ITEM_NUMBER%         list item number (available in LIST_ITEM messages only)
@@ -93,6 +93,10 @@ MESSAGES:
   COMMAND_FAIL_TELEPORT:
     enabled: true
     string: '&3[Graveyards]&c Could not teleport to %GRAVEYARD%!'
+
+  COMMAND_FAIL_TELEPORT_WORLD_INVALID:
+    enabled: true
+    string: '&3[Graveyards]&c Could not teleport to %GRAVEYARD% because world %WORLD% is invalid!'
 
 
   COMMAND_SUCCESS_CLOSEST:
