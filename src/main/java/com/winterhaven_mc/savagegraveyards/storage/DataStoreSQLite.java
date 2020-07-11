@@ -395,7 +395,6 @@ class DataStoreSQLite extends DataStore {
 				// if world is null, log warning
 				if (world == null) {
 					plugin.getLogger().warning("Stored record has invalid world: " + worldName);
-//					worldUid = null;
 				}
 				// else if world is not null, get current world name
 				else {
