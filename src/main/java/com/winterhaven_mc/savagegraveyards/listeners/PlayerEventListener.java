@@ -22,10 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
- * Implements player event listener for {@code SavageGraveyards}
- *
- * @author Tim Savage
- * @version 1.0
+ * Implements Listener for player events
  */
 public class PlayerEventListener implements Listener {
 
