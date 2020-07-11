@@ -10,6 +10,6 @@ public enum Macro {
 	ITEM_NUMBER,
 	PAGE_NUMBER,
 	PAGE_TOTAL,
-	WORLD
+	INVALID_WORLD
 
 }

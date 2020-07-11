@@ -395,7 +395,7 @@ class DataStoreSQLite extends DataStore {
 				// if world is null, log warning
 				if (world == null) {
 					plugin.getLogger().warning("Stored record has invalid world: " + worldName);
-					worldUid = null;
+//					worldUid = null;
 				}
 				// else if world is not null, get current world name
 				else {
@@ -803,14 +803,22 @@ class DataStoreSQLite extends DataStore {
 
 		for (Graveyard graveyard : graveyards) {
 
-			// get world
+			// get world name from record
+			String worldName = graveyard.getWorldName();
+
+			// get world uid from record
+			UUID worldUid = graveyard.getWorldUid();
+
+			// get world by uid
 			final World world = plugin.getServer().getWorld(graveyard.getWorldUid());
 
-			// if world is null, skip to next record
+			// if world is null, log warning
 			if (world == null) {
-				plugin.getLogger().warning("Could not insert graveyard record in datastore "
-						+ "because world is invalid!");
-				continue;
+				plugin.getLogger().warning("Record has invalid world: " + worldName);
+			}
+			// else get current world name
+			else {
+				worldName = world.getName();
 			}
 
 			try {
@@ -832,9 +840,9 @@ class DataStoreSQLite extends DataStore {
 					preparedStatement.setString(8, graveyard.getGroup());
 					preparedStatement.setInt(9, graveyard.getSafetyRange());
 					preparedStatement.setLong(10, graveyard.getSafetyTime());
-					preparedStatement.setString(11, world.getName());
-					preparedStatement.setLong(12, world.getUID().getMostSignificantBits());
-					preparedStatement.setLong(13, world.getUID().getLeastSignificantBits());
+					preparedStatement.setString(11, worldName);
+					preparedStatement.setLong(12, worldUid.getMostSignificantBits());
+					preparedStatement.setLong(13, worldUid.getLeastSignificantBits());
 					preparedStatement.setDouble(14, graveyard.getX());
 					preparedStatement.setDouble(15, graveyard.getY());
 					preparedStatement.setDouble(16, graveyard.getZ());

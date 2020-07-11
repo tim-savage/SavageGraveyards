@@ -398,47 +398,33 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// get value by joining remaining arguments
 		String value = String.join(" ", arguments);
 
-		// only allow setting new location on graveyards with invalid location
-		if (graveyard.getLocation() == null && !attribute.equalsIgnoreCase("location")) {
-			Message.create(sender, COMMAND_FAIL_INVALID_LOCATION).send();
-			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
-			return true;
-		}
+		switch (attribute.toLowerCase()) {
+			case "location":
+					return setLocation(sender, graveyard);
 
-		if (attribute.equalsIgnoreCase("location")) {
-			return setLocation(sender, graveyard);
-		}
+			case "name":
+					return setName(sender, graveyard, value);
 
-		if (attribute.equalsIgnoreCase("name")) {
-			return setName(sender, graveyard, value);
-		}
+			case "enabled":
+					return setEnabled(sender, graveyard, value);
 
-		if (attribute.equalsIgnoreCase("enabled")) {
-			return setEnabled(sender, graveyard, value);
-		}
+			case "hidden":
+					return setHidden(sender, graveyard, value);
 
-		if (attribute.equalsIgnoreCase("hidden")) {
-			return setHidden(sender, graveyard, value);
-		}
+			case "discoveryrange":
+					return setDiscoveryRange(sender, graveyard, value);
 
-		if (attribute.equalsIgnoreCase("discoveryrange")) {
-			return setDiscoveryRange(sender, graveyard, value);
-		}
+			case "discoverymessage":
+					return setDiscoveryMessage(sender, graveyard, value);
 
-		if (attribute.equalsIgnoreCase("discoverymessage")) {
-			return setDiscoveryMessage(sender, graveyard, value);
-		}
+			case "respawnmessage":
+					return setRespawnMessage(sender, graveyard, value);
 
-		if (attribute.equalsIgnoreCase("respawnmessage")) {
-			return setRespawnMessage(sender, graveyard, value);
-		}
+			case "group":
+					return setGroup(sender, graveyard, value);
 
-		if (attribute.equalsIgnoreCase("group")) {
-			return setGroup(sender, graveyard, value);
-		}
-
-		if (attribute.equalsIgnoreCase("safetytime")) {
-			return setSafetyTime(sender, graveyard, value);
+			case "safetytime":
+					return setSafetyTime(sender, graveyard, value);
 		}
 
 		// no matching attribute, send error message
@@ -489,7 +475,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// send success message
 		Message.create(player, COMMAND_SUCCESS_SET_LOCATION)
 				.setMacro(GRAVEYARD, newGraveyard)
-				.setMacro(LOCATION, newGraveyard.getLocation()).send();
+				.setMacro(LOCATION, newGraveyard.getLocation())
+				.send();
 
 		// play success sound
 		plugin.soundConfig.playSound(player, SoundId.COMMAND_SUCCESS_SET);
@@ -620,7 +607,6 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// send success message
 		Message.create(sender, COMMAND_SUCCESS_SET_ENABLED)
 				.setMacro(GRAVEYARD, newGraveyard)
-				.setMacro(LOCATION, newGraveyard.getLocation())
 				.setMacro(VALUE, value)
 				.send();
 
@@ -695,7 +681,6 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// send success message
 		Message.create(sender, COMMAND_SUCCESS_SET_HIDDEN)
 				.setMacro(GRAVEYARD, newGraveyard)
-				.setMacro(LOCATION, newGraveyard.getLocation())
 				.setMacro(VALUE, value)
 				.send();
 
@@ -784,7 +769,6 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		else {
 			Message.create(sender, COMMAND_SUCCESS_SET_DISCOVERYRANGE)
 					.setMacro(GRAVEYARD, newGraveyard)
-					.setMacro(LOCATION, newGraveyard.getLocation())
 					.setMacro(VALUE, String.valueOf(discoveryRange))
 					.send();
 		}
@@ -840,13 +824,11 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		if (discoveryMessage.isEmpty()) {
 			Message.create(sender, COMMAND_SUCCESS_SET_DISCOVERYMESSAGE_DEFAULT)
 					.setMacro(GRAVEYARD, newGraveyard)
-					.setMacro(LOCATION, newGraveyard.getLocation())
 					.send();
 		}
 		else {
 			Message.create(sender, COMMAND_SUCCESS_SET_DISCOVERYMESSAGE)
 					.setMacro(GRAVEYARD, newGraveyard)
-					.setMacro(LOCATION, newGraveyard.getLocation())
 					.send();
 		}
 
@@ -899,13 +881,11 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		if (respawnMessage.isEmpty()) {
 			Message.create(sender, COMMAND_SUCCESS_SET_RESPAWNMESSAGE_DEFAULT)
 					.setMacro(GRAVEYARD, newGraveyard)
-					.setMacro(LOCATION, newGraveyard.getLocation())
 					.send();
 		}
 		else {
 			Message.create(sender, COMMAND_SUCCESS_SET_RESPAWNMESSAGE)
 					.setMacro(GRAVEYARD, newGraveyard)
-					.setMacro(LOCATION, newGraveyard.getLocation())
 					.send();
 		}
 
@@ -952,7 +932,6 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// send success message
 		Message.create(sender, COMMAND_SUCCESS_SET_GROUP)
 				.setMacro(GRAVEYARD, newGraveyard)
-				.setMacro(LOCATION, newGraveyard.getLocation())
 				.setMacro(VALUE, group)
 				.send();
 
@@ -1020,7 +999,6 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// send success message
 		Message.create(sender, COMMAND_SUCCESS_SET_SAFETYTIME)
 				.setMacro(GRAVEYARD, newGraveyard)
-				.setMacro(LOCATION, newGraveyard.getLocation())
 				.setMacro(VALUE, value)
 				.send();
 
@@ -1323,10 +1301,16 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		sender.sendMessage(ChatColor.DARK_AQUA + "Group: "
 				+ ChatColor.RESET + group);
 
+		// if world is invalid, set color to gray
+		ChatColor worldColor = ChatColor.AQUA;
+		if (graveyard.getLocation() == null) {
+			worldColor = ChatColor.GRAY;
+		}
+
 		// display graveyard location
 		String locationString = ChatColor.DARK_AQUA + "Location: "
 				+ ChatColor.RESET + "["
-				+ ChatColor.AQUA + graveyard.getWorldName()
+				+ worldColor + graveyard.getWorldName()
 				+ ChatColor.RESET + "] "
 				+ ChatColor.RESET + "X: " + ChatColor.AQUA + Math.round(graveyard.getX()) + " "
 				+ ChatColor.RESET + "Y: " + ChatColor.AQUA + Math.round(graveyard.getY()) + " "
@@ -1482,7 +1466,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 				Message.create(sender, LIST_ITEM_INVALID_WORLD)
 						.setMacro(GRAVEYARD, graveyard)
 						.setMacro(ITEM_NUMBER, itemNumber)
-						.setMacro(WORLD, graveyard.getWorldName())
+						.setMacro(INVALID_WORLD, graveyard.getWorldName())
 						.send();
 				continue;
 			}
@@ -1646,7 +1630,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			// send message
 			Message.create(sender, COMMAND_FAIL_TELEPORT_WORLD_INVALID)
 					.setMacro(GRAVEYARD, graveyard)
-					.setMacro(WORLD, graveyard.getWorldName())
+					.setMacro(INVALID_WORLD, graveyard.getWorldName())
 					.send();
 
 			// play sound
