@@ -20,7 +20,6 @@ import org.bukkit.scheduler.BukkitTask;
  * for the player will be chosen at the time of death.
  * 
  * @author      Tim Savage
- * @version		1.0
  */
 public final class PluginMain extends JavaPlugin {
 
