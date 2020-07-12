@@ -157,61 +157,54 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			return true;
 		}
 
-		// closest command
-		if (subcommand.equalsIgnoreCase("closest")
-				|| subcommand.equalsIgnoreCase("nearest")) {
-			return closestCommand(sender);
-		}
+		// handle subcommands
+		switch (subcommand.toLowerCase()) {
 
-		// status command
-		if (subcommand.equalsIgnoreCase("status")) {
-			return statusCommand(sender);
-		}
+			// closest command
+			case "closest":
+			case "nearest":
+				return closestCommand(sender);
 
-		// reload command
-		if (subcommand.equalsIgnoreCase("reload")) {
-			return reloadCommand(sender, args);
-		}
+			// status command
+			case "status":
+				return statusCommand(sender);
 
-		//create command
-		if (subcommand.equalsIgnoreCase("create")) {
-			return createCommand(sender, args);
-		}
+			// reload command
+			case "reload":
+				return reloadCommand(sender, args);
 
-		// delete command
-		if (subcommand.equalsIgnoreCase("delete")) {
-			return deleteCommand(sender, args);
-		}
+			//create command
+			case"create":
+				return createCommand(sender, args);
 
-		// list command
-		if (subcommand.equalsIgnoreCase("list")) {
-			return listCommand(sender, args);
-		}
+			// delete command
+			case "delete":
+				return deleteCommand(sender, args);
 
-		// set command
-		if (subcommand.equalsIgnoreCase("set")) {
-			return setCommand(sender, args);
-		}
+			// list command
+			case "list":
+				return listCommand(sender, args);
 
-		// show command
-		if (subcommand.equalsIgnoreCase("show")) {
-			return showCommand(sender, args);
-		}
+			// set command
+			case "set":
+				return setCommand(sender, args);
 
-		// teleport command
-		if (subcommand.equalsIgnoreCase("teleport")
-				|| subcommand.equalsIgnoreCase("tp")) {
-			return teleportCommand(sender, args);
-		}
+			// show command
+			case "show":
+				return showCommand(sender, args);
 
-		// forget command
-		if (subcommand.equalsIgnoreCase("forget")) {
-			return forgetCommand(sender, args);
-		}
+			// teleport command
+			case "teleport":
+			case "tp":
+				return teleportCommand(sender, args);
 
-		// help command
-		if (subcommand.equalsIgnoreCase("help")) {
-			return helpCommand(sender, args);
+			// forget command
+			case "forget":
+				return forgetCommand(sender, args);
+
+			// help command
+			case "help":
+				return helpCommand(sender, args);
 		}
 
 		Message.create(sender, COMMAND_FAIL_INVALID_COMMAND).send();
