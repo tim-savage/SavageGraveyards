@@ -25,9 +25,6 @@ import static com.winterhaven_mc.savagegraveyards.messages.Macro.*;
 
 /**
  * Implements command executor for {@code SavageGraveyards} commands.
- *
- * @author Tim Savage
- * @version 1.0
  */
 public class CommandManager implements CommandExecutor, TabCompleter {
 
