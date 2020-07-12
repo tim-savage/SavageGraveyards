@@ -400,31 +400,31 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 		switch (attribute.toLowerCase()) {
 			case "location":
-					return setLocation(sender, graveyard);
+				return setLocation(sender, graveyard);
 
 			case "name":
-					return setName(sender, graveyard, value);
+				return setName(sender, graveyard, value);
 
 			case "enabled":
-					return setEnabled(sender, graveyard, value);
+				return setEnabled(sender, graveyard, value);
 
 			case "hidden":
-					return setHidden(sender, graveyard, value);
+				return setHidden(sender, graveyard, value);
 
 			case "discoveryrange":
-					return setDiscoveryRange(sender, graveyard, value);
+				return setDiscoveryRange(sender, graveyard, value);
 
 			case "discoverymessage":
-					return setDiscoveryMessage(sender, graveyard, value);
+				return setDiscoveryMessage(sender, graveyard, value);
 
 			case "respawnmessage":
-					return setRespawnMessage(sender, graveyard, value);
+				return setRespawnMessage(sender, graveyard, value);
 
 			case "group":
-					return setGroup(sender, graveyard, value);
+				return setGroup(sender, graveyard, value);
 
 			case "safetytime":
-					return setSafetyTime(sender, graveyard, value);
+				return setSafetyTime(sender, graveyard, value);
 		}
 
 		// no matching attribute, send error message
