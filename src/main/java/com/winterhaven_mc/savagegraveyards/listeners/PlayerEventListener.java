@@ -126,8 +126,7 @@ public class PlayerEventListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
 	void onPlayerRespawnHIGHEST(final PlayerRespawnEvent event) {
-		if (Objects.requireNonNull(plugin.getConfig().getString("respawn-priority"))
-				.equalsIgnoreCase("HIGHEST")) {
+		if ("HIGHEST".equalsIgnoreCase(plugin.getConfig().getString("respawn-priority"))) {
 			onPlayerRespawnHandler(event);
 		}
 	}
