@@ -160,49 +160,38 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// handle subcommands
 		switch (subcommand.toLowerCase()) {
 
-			// closest command
 			case "closest":
 			case "nearest":
 				return closestCommand(sender);
 
-			// status command
 			case "status":
 				return statusCommand(sender);
 
-			// reload command
 			case "reload":
 				return reloadCommand(sender, args);
 
-			//create command
 			case"create":
 				return createCommand(sender, args);
 
-			// delete command
 			case "delete":
 				return deleteCommand(sender, args);
 
-			// list command
 			case "list":
 				return listCommand(sender, args);
 
-			// set command
 			case "set":
 				return setCommand(sender, args);
 
-			// show command
 			case "show":
 				return showCommand(sender, args);
 
-			// teleport command
 			case "teleport":
 			case "tp":
 				return teleportCommand(sender, args);
 
-			// forget command
 			case "forget":
 				return forgetCommand(sender, args);
 
-			// help command
 			case "help":
 				return helpCommand(sender, args);
 		}
