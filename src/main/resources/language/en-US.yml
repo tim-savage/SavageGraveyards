@@ -116,6 +116,11 @@ MESSAGES:
     enabled: true
     string: '&3[Graveyards]&b configuration reloaded.'
 
+  COMMAND_SUCCESS_TELEPORT:
+    enabled: true
+    string: '&3[Graveyards]&b Successfully teleported to %GRAVEYARD%.'
+
+
   COMMAND_SUCCESS_SET_DISCOVERYMESSAGE:
     enabled: true
     string: '&3[Graveyards]&b Set custom discovery message for &2%GRAVEYARD%&b.'
@@ -126,11 +131,11 @@ MESSAGES:
 
   COMMAND_SUCCESS_SET_DISCOVERYRANGE:
     enabled: true
-    string: '&3[Graveyards]&b Set discovery range: &2%VALUE%&b for &2%GRAVEYARD%&b.'
+    string: '&3[Graveyards]&b Set discovery range for &2%GRAVEYARD%&b to &2%VALUE%&b.'
 
   COMMAND_SUCCESS_SET_DISCOVERYRANGE_DEFAULT:
     enabled: true
-    string: '&3[Graveyards]&b Set discovery range to configured default for &2%GRAVEYARD%&b.'
+    string: '&3[Graveyards]&b Set discovery range for &2%GRAVEYARD%&b to use configured default (currently &2%VALUE%&b).'
 
   COMMAND_SUCCESS_SET_NAME:
     enabled: true
@@ -162,11 +167,11 @@ MESSAGES:
 
   COMMAND_SUCCESS_SET_SAFETYTIME:
     enabled: true
-    string: '&3[Graveyards]&b Set safety time: &2%VALUE%&b for &2%GRAVEYARD%&b.'
+    string: '&3[Graveyards]&b Set safety time for &2%GRAVEYARD%&b to &2%DURATION%&b.'
 
-  COMMAND_SUCCESS_TELEPORT:
+  COMMAND_SUCCESS_SET_SAFETYTIME_DEFAULT:
     enabled: true
-    string: '&3[Graveyards]&b Successfully teleported to %GRAVEYARD%.'
+    string: '&3[Graveyards]&b Set safety time for &2%GRAVEYARD%&b to use configured default (currently &2%DURATION%&b).'
 
 
   DEFAULT_DISCOVERY:
