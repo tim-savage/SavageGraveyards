@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
 import static com.winterhaven_mc.savagegraveyards.messages.Macro.*;
@@ -553,6 +554,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			value = "true";
 		}
 
+		// if value is "default", set to configured default setting
 		if (value.equalsIgnoreCase("default")) {
 			enabled = plugin.getConfig().getBoolean("default-enabled");
 		}
@@ -572,7 +574,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			return true;
 		}
 
-		// set value to string representation of boolean
+		// set value to string representation of enabled boolean
 		value = String.valueOf(enabled);
 
 		// create new graveyard object from existing graveyard with new enabled setting
@@ -698,25 +700,26 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		String value = passedString.trim();
 
 		// declare discovery range to be set
-		int discoveryRange;
+		int discoveryRange = CONFIG_DEFAULT;
 
-		// if passed string is "default", set discovery range to negative to use configured default
-		if (value.equalsIgnoreCase("default")) {
+		// if no distance given, or string "default",
+		// set to CONFIG_DEFAULT to use configured default value
+		if (value.isEmpty() || value.equalsIgnoreCase("default")) {
+			//noinspection ConstantConditions
 			discoveryRange = CONFIG_DEFAULT;
 		}
 
-		// if no distance given...
-		else if (value.isEmpty()) {
+		// if value is string "player", attempt to use player distance
+		else if (value.equalsIgnoreCase("player")
+				|| value.equalsIgnoreCase("current")) {
 
 			// if sender is player, use player's current distance
 			if (sender instanceof Player && graveyard.getLocation() != null) {
 				Player player = (Player) sender;
-				discoveryRange = (int) player.getLocation().distance(graveyard.getLocation());
-			}
-
-			// if command sender is not in game player, set negative discovery range to use configured default
-			else {
-				discoveryRange = CONFIG_DEFAULT;
+				// check that player is in same world as graveyard
+				if (player.getWorld().getUID().equals(graveyard.getWorldUid())) {
+					discoveryRange = (int) player.getLocation().distance(graveyard.getLocation());
+				}
 			}
 		}
 		else {
@@ -743,6 +746,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		if (discoveryRange < 0) {
 			Message.create(sender, COMMAND_SUCCESS_SET_DISCOVERYRANGE_DEFAULT)
 					.setMacro(GRAVEYARD, newGraveyard)
+					.setMacro(VALUE, plugin.getConfig().getInt("discovery-range"))
 					.send();
 		}
 		else {
@@ -976,10 +980,18 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		plugin.dataStore.updateGraveyard(newGraveyard);
 
 		// send success message
-		Message.create(sender, COMMAND_SUCCESS_SET_SAFETYTIME)
-				.setMacro(GRAVEYARD, newGraveyard)
-				.setMacro(VALUE, value)
-				.send();
+		if (safetyTime == CONFIG_DEFAULT) {
+			Message.create(sender, COMMAND_SUCCESS_SET_SAFETYTIME_DEFAULT)
+					.setMacro(GRAVEYARD, newGraveyard)
+					.setMacro(DURATION, TimeUnit.SECONDS.toMillis(plugin.getConfig().getInt("safety-time")))
+					.send();
+		}
+		else {
+			Message.create(sender, COMMAND_SUCCESS_SET_SAFETYTIME)
+					.setMacro(GRAVEYARD, newGraveyard)
+					.setMacro(DURATION, TimeUnit.SECONDS.toMillis(safetyTime))
+					.send();
+		}
 
 		// play success sound
 		plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
