@@ -29,7 +29,9 @@ public class ClosestCommand implements Subcommand {
 
 	@Override
 	public boolean execute() {
-		// if command sender does not have permission to display help, output error message and return true
+
+		// if command sender does not have permission to display closest graveyard,
+		// output error message and return true
 		if (!sender.hasPermission("graveyard.closest")) {
 			Message.create(sender, PERMISSION_DENIED_CLOSEST).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
