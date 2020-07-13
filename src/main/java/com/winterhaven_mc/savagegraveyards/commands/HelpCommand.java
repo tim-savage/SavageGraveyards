@@ -2,6 +2,7 @@ package com.winterhaven_mc.savagegraveyards.commands;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
 import com.winterhaven_mc.savagegraveyards.messages.Message;
+import com.winterhaven_mc.savagegraveyards.messages.MessageId;
 import com.winterhaven_mc.savagegraveyards.sounds.SoundId;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -44,6 +45,7 @@ public class HelpCommand implements Subcommand {
 			return true;
 		}
 
+		// if no arguments, display usage for all commands
 		if (args.size() == 0) {
 			displayUsage(sender,"all");
 			return true;
@@ -51,62 +53,66 @@ public class HelpCommand implements Subcommand {
 
 		// set default command
 		String commandName = args.get(0);
+		MessageId messageId;
 
+		// switch on command name to select MessageId
 		switch (commandName.toLowerCase()) {
 			case "create":
-				Message.create(sender, COMMAND_HELP_CREATE).send();
+				messageId = COMMAND_HELP_CREATE;
 				break;
 
 			case "closest":
 			case "nearest":
-				Message.create(sender, COMMAND_HELP_CLOSEST).send();
+				messageId = COMMAND_HELP_CLOSEST;
 				break;
 
 			case "delete":
-				Message.create(sender, COMMAND_HELP_DELETE).send();
+				messageId = COMMAND_HELP_DELETE;
 				break;
 
 			case "forget":
-				Message.create(sender, COMMAND_HELP_FORGET).send();
+				messageId = COMMAND_HELP_FORGET;
 				break;
 
 			case "help":
-				Message.create(sender, COMMAND_HELP_HELP).send();
+				messageId = COMMAND_HELP_HELP;
 				break;
 
 			case "list":
-				Message.create(sender, COMMAND_HELP_LIST).send();
+				messageId = COMMAND_HELP_LIST;
 				break;
 
 			case "reload":
-				Message.create(sender, COMMAND_HELP_RELOAD).send();
+				messageId = COMMAND_HELP_RELOAD;
 				break;
 
 			case "set":
-				Message.create(sender, COMMAND_HELP_SET).send();
+				messageId = COMMAND_HELP_SET;
 				break;
 
 			case "show":
-				Message.create(sender, COMMAND_HELP_SHOW).send();
+				messageId = COMMAND_HELP_SHOW;
 				break;
 
 			case "status":
-				Message.create(sender, COMMAND_HELP_STATUS).send();
+				messageId = COMMAND_HELP_STATUS;
 				break;
 
 			case "teleport":
 			case "tp":
-				Message.create(sender, COMMAND_HELP_TELEPORT).send();
+				messageId = COMMAND_HELP_TELEPORT;
 				break;
 
 			default:
-				Message.create(sender, COMMAND_HELP_INVALID).send();
+				messageId = COMMAND_HELP_INVALID;
 				commandName = "all";
+				break;
 		}
 
+		// display help message and command usage
+		Message.create(sender, messageId).send();
 		displayUsage(sender, commandName);
 		return true;
-
 	}
 
 
@@ -123,75 +129,76 @@ public class HelpCommand implements Subcommand {
 		Objects.requireNonNull(sender);
 		Objects.requireNonNull(passedCommand);
 
-		String command = passedCommand.trim();
+		String commandName = passedCommand;
 
-		if (command.isEmpty()) {
-			command = "all";
+		if (commandName.isEmpty()) {
+			commandName = "all";
 		}
-		if ((command.equalsIgnoreCase("status")
-				|| command.equalsIgnoreCase("all"))
+
+		if ((commandName.equalsIgnoreCase("status")
+				|| commandName.equalsIgnoreCase("all"))
 				&& sender.hasPermission("graveyard.status")) {
 			sender.sendMessage(USAGE_COLOR + StatusCommand.usageString);
 		}
 
-		if ((command.equalsIgnoreCase("reload")
-				|| command.equalsIgnoreCase("all"))
+		if ((commandName.equalsIgnoreCase("reload")
+				|| commandName.equalsIgnoreCase("all"))
 				&& sender.hasPermission("graveyard.reload")) {
 			sender.sendMessage(USAGE_COLOR + ReloadCommand.usageString);
 		}
 
-		if ((command.equalsIgnoreCase("create")
-				|| command.equalsIgnoreCase("all"))
+		if ((commandName.equalsIgnoreCase("create")
+				|| commandName.equalsIgnoreCase("all"))
 				&& sender.hasPermission("graveyard.create")) {
 			sender.sendMessage(USAGE_COLOR + CreateCommand.usageString);
 		}
 
-		if ((command.equalsIgnoreCase("closest")
-				|| command.equalsIgnoreCase("nearest")
-				|| command.equalsIgnoreCase("all"))
+		if ((commandName.equalsIgnoreCase("closest")
+				|| commandName.equalsIgnoreCase("nearest")
+				|| commandName.equalsIgnoreCase("all"))
 				&& sender.hasPermission("graveyard.closest")) {
 			sender.sendMessage(USAGE_COLOR + ClosestCommand.usageString);
 		}
 
-		if ((command.equalsIgnoreCase("delete")
-				|| command.equalsIgnoreCase("all"))
+		if ((commandName.equalsIgnoreCase("delete")
+				|| commandName.equalsIgnoreCase("all"))
 				&& sender.hasPermission("graveyard.delete")) {
 			sender.sendMessage(USAGE_COLOR + DeleteCommand.usageString);
 		}
 
-		if ((command.equalsIgnoreCase("forget")
-				|| command.equalsIgnoreCase("all"))
+		if ((commandName.equalsIgnoreCase("forget")
+				|| commandName.equalsIgnoreCase("all"))
 				&& sender.hasPermission("graveyard.forget")) {
 			sender.sendMessage(USAGE_COLOR + ForgetCommand.usageString);
 		}
 
-		if ((command.equalsIgnoreCase("help")
-				|| command.equalsIgnoreCase("all"))
+		if ((commandName.equalsIgnoreCase("help")
+				|| commandName.equalsIgnoreCase("all"))
 				&& sender.hasPermission("graveyard.help")) {
 			sender.sendMessage(USAGE_COLOR + HelpCommand.usageString);
 		}
 
-		if ((command.equalsIgnoreCase("list")
-				|| command.equalsIgnoreCase("all"))
+		if ((commandName.equalsIgnoreCase("list")
+				|| commandName.equalsIgnoreCase("all"))
 				&& sender.hasPermission("graveyard.list")) {
 			sender.sendMessage(USAGE_COLOR + ListCommand.usageString);
 		}
 
-		if ((command.equalsIgnoreCase("set")
-				|| command.equalsIgnoreCase("all"))
+		if ((commandName.equalsIgnoreCase("set")
+				|| commandName.equalsIgnoreCase("all"))
 				&& sender.hasPermission("graveyard.set")) {
 			sender.sendMessage(USAGE_COLOR + SetCommand.usageString);
 		}
 
-		if ((command.equalsIgnoreCase("show")
-				|| command.equalsIgnoreCase("all"))
+		if ((commandName.equalsIgnoreCase("show")
+				|| commandName.equalsIgnoreCase("all"))
 				&& sender.hasPermission("graveyard.show")) {
 			sender.sendMessage(USAGE_COLOR + ShowCommand.usageString);
 		}
 
-		if ((command.equalsIgnoreCase("teleport")
-				|| command.equalsIgnoreCase("tp")
-				|| command.equalsIgnoreCase("all"))
+		if ((commandName.equalsIgnoreCase("teleport")
+				|| commandName.equalsIgnoreCase("tp")
+				|| commandName.equalsIgnoreCase("all"))
 				&& sender.hasPermission("graveyard.teleport")) {
 			sender.sendMessage(USAGE_COLOR + TeleportCommand.usageString);
 		}
