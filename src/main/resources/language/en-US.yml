@@ -174,6 +174,55 @@ MESSAGES:
     string: '&3[Graveyards]&b Set safety time for &2%GRAVEYARD%&b to use configured default (currently &2%DURATION%&b).'
 
 
+  COMMAND_HELP_CLOSEST:
+    enabled: true
+    string: '&eDisplay the nearest graveyard to player''s current location.'
+
+  COMMAND_HELP_CREATE:
+    enabled: true
+    string: '&eCreates a graveyard at current player location.'
+
+  COMMAND_HELP_DELETE:
+    enabled: true
+    string: '&eRemoves a graveyard location.'
+
+  COMMAND_HELP_FORGET:
+    enabled: true
+    string: '&eRemove graveyard from player''s memory.'
+
+  COMMAND_HELP_HELP:
+    enabled: true
+    string: '&eDisplays help for graveyard commands.'
+
+  COMMAND_HELP_LIST:
+    enabled: true
+    string: '&eDisplays a list of all graveyard locations.'
+
+  COMMAND_HELP_RELOAD:
+    enabled: true
+    string: '&eReloads the configuration without needing to restart the server.'
+
+  COMMAND_HELP_SET:
+    enabled: true
+    string: '&eUpdate a graveyard attribute with a new value.'
+
+  COMMAND_HELP_SHOW:
+    enabled: true
+    string: '&eDisplay a graveyard''s settings.'
+
+  COMMAND_HELP_STATUS:
+    enabled: true
+    string: '&eDisplays current configuration settings.'
+
+  COMMAND_HELP_TELEPORT:
+    enabled: true
+    string: '&eTeleport player to graveyard location.'
+
+  COMMAND_HELP_INVALID:
+    enabled: true
+    string: '&eThat is not a valid command.'
+
+
   DEFAULT_DISCOVERY:
     enabled: true
     string: '&3You have discovered %GRAVEYARD%!'
