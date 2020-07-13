@@ -23,11 +23,11 @@ This plugin implements discoverable graveyards. Players will respawn at the near
 Player's are granted all necessary permissions by default.  
 All admin permissions are granted with `graveyard.admin`  
 
-*Complete list of permission nodes to come*
+[Permission Nodes](https://github.com/tim-savage/SavageGraveyards/wiki/Permission-Nodes)
 
 ### Commands:
 
-*Complete command reference to come*
+[Command Reference](https://github.com/tim-savage/SavageGraveyards/wiki/Command-Summary)
 
 ### Installation
 
