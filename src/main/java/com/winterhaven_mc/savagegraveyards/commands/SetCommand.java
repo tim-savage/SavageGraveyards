@@ -71,7 +71,7 @@ public class SetCommand implements Subcommand {
 		String attribute = args.remove(0);
 
 		// get value by joining remaining arguments
-		String value = String.join(" ", args);
+		String value = String.join(" ", args).trim();
 
 		switch (attribute.toLowerCase()) {
 			case "location":
@@ -242,7 +242,7 @@ public class SetCommand implements Subcommand {
 		}
 
 		// get value from passed string trimmed
-		String value = passedString.trim();
+		String value = passedString;
 		boolean enabled;
 
 		// if value is empty, set to true
@@ -318,8 +318,8 @@ public class SetCommand implements Subcommand {
 			return true;
 		}
 
-		// get value from passed string trimmed
-		String value = passedString.trim();
+		// get value from passed string
+		String value = passedString;
 		boolean hidden;
 
 		// if value is empty, set to true
@@ -392,22 +392,19 @@ public class SetCommand implements Subcommand {
 			return true;
 		}
 
-		// get value from passed string trimmed
-		String value = passedString.trim();
-
 		// declare discovery range to be set
 		int discoveryRange = CONFIG_DEFAULT;
 
 		// if no distance given, or string "default",
 		// set to CONFIG_DEFAULT to use configured default value
-		if (value.isEmpty() || value.equalsIgnoreCase("default")) {
+		if (passedString.isEmpty() || passedString.equalsIgnoreCase("default")) {
 			//noinspection ConstantConditions
 			discoveryRange = CONFIG_DEFAULT;
 		}
 
 		// if value is string "player", attempt to use player distance
-		else if (value.equalsIgnoreCase("player")
-				|| value.equalsIgnoreCase("current")) {
+		else if (passedString.equalsIgnoreCase("player")
+				|| passedString.equalsIgnoreCase("current")) {
 
 			// if sender is player, use player's current distance
 			if (sender instanceof Player && graveyard.getLocation() != null) {
@@ -421,7 +418,7 @@ public class SetCommand implements Subcommand {
 		else {
 			// try to parse entered range as integer
 			try {
-				discoveryRange = Integer.parseInt(value);
+				discoveryRange = Integer.parseInt(passedString);
 			}
 			catch (NumberFormatException e) {
 				Message.create(sender, COMMAND_FAIL_SET_INVALID_INTEGER).send();
@@ -483,8 +480,8 @@ public class SetCommand implements Subcommand {
 			return true;
 		}
 
-		// get discovery message from passed string trimmed
-		String discoveryMessage = passedString.trim();
+		// get discovery message from passed string
+		String discoveryMessage = passedString;
 
 		// if message is 'default', set message to empty string
 		if (discoveryMessage.equalsIgnoreCase("default")) {
@@ -542,8 +539,8 @@ public class SetCommand implements Subcommand {
 			return true;
 		}
 
-		// get respawn message from passed string trimmed
-		String respawnMessage = passedString.trim();
+		// get respawn message from passed string
+		String respawnMessage = passedString;
 
 		// if message is 'default', set message to empty string
 		if (respawnMessage.equalsIgnoreCase("default")) {
@@ -599,11 +596,8 @@ public class SetCommand implements Subcommand {
 			return true;
 		}
 
-		// get group name from passed string trimmed
-		String group = passedString.trim();
-
 		// create new graveyard object from existing graveyard with new group
-		Graveyard newGraveyard = new Graveyard.Builder(graveyard).group(group).build();
+		Graveyard newGraveyard = new Graveyard.Builder(graveyard).group(passedString).build();
 
 		// update graveyard record in datastore
 		plugin.dataStore.updateGraveyard(newGraveyard);
@@ -611,7 +605,7 @@ public class SetCommand implements Subcommand {
 		// send success message
 		Message.create(sender, COMMAND_SUCCESS_SET_GROUP)
 				.setMacro(GRAVEYARD, newGraveyard)
-				.setMacro(VALUE, group)
+				.setMacro(VALUE, passedString)
 				.send();
 
 		// play success sound
@@ -645,20 +639,17 @@ public class SetCommand implements Subcommand {
 			return true;
 		}
 
-		// get value from passed string trimmed
-		String value = passedString.trim();
-
 		// declare safety time to be set
 		int safetyTime;
 
 		// if passed string is "default" or empty, set safety time to negative to use configured default
-		if (value.equalsIgnoreCase("default") || value.isEmpty()) {
+		if (passedString.equalsIgnoreCase("default") || passedString.isEmpty()) {
 			safetyTime = CONFIG_DEFAULT;
 		}
 		else {
 			// try to parse entered safety time as integer
 			try {
-				safetyTime = Integer.parseInt(value);
+				safetyTime = Integer.parseInt(passedString);
 			}
 			catch (NumberFormatException e) {
 				Message.create(sender, COMMAND_FAIL_SET_INVALID_INTEGER).send();
