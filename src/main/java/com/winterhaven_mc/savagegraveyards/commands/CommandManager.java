@@ -63,9 +63,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 		List<String> returnList = new ArrayList<>();
 
-		// return list of valid matching subcommands
+		// return list of subcommands for which sender has permission
 		if (args.length == 1) {
-
 			for (String subcommand : SUBCOMMANDS) {
 				if (sender.hasPermission("graveyard." + subcommand)
 						&& subcommand.startsWith(args[0].toLowerCase())) {
@@ -74,8 +73,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			}
 		}
 
-		// return list of valid matching graveyard names
 		else if (args.length == 2) {
+			// return list of valid matching graveyard names
 			if (args[0].equalsIgnoreCase("teleport")
 					|| args[0].equalsIgnoreCase("tp")
 					|| args[0].equalsIgnoreCase("set")
@@ -83,6 +82,15 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 					|| args[0].equalsIgnoreCase("delete")
 					|| args[0].equalsIgnoreCase("forget")) {
 				returnList = plugin.dataStore.selectMatchingGraveyardNames(args[1]);
+			}
+			// return list of subcommands for which sender has permission
+			else if (args[0].equalsIgnoreCase("help")) {
+				for (String subcommand : SUBCOMMANDS) {
+					if (sender.hasPermission("graveyard." + subcommand)
+							&& subcommand.startsWith(args[1].toLowerCase())) {
+						returnList.add(subcommand);
+					}
+				}
 			}
 		}
 
