@@ -212,7 +212,7 @@ MESSAGES:
 
   COMMAND_HELP_STATUS:
     enabled: true
-    string: '&eDisplays current configuration settings.'
+    string: '&eDisplays plugin configuration settings.'
 
   COMMAND_HELP_TELEPORT:
     enabled: true
