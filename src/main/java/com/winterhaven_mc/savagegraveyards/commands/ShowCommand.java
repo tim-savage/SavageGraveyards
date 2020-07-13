@@ -51,7 +51,7 @@ public class ShowCommand implements Subcommand {
 		}
 
 		// get display name from remaining arguments joined with spaces
-		String displayName = String.join(" ", args);
+		String displayName = String.join(" ", args).trim();
 
 		// retrieve graveyard from data store
 		Graveyard graveyard = plugin.dataStore.selectGraveyard(displayName);
