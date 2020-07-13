@@ -174,7 +174,10 @@ public class PlayerEventListener implements Listener {
 			}
 			// else send default respawn message
 			else {
-				Message.create(player, MessageId.DEFAULT_RESPAWN).setMacro(Macro.GRAVEYARD, graveyard).send();
+				Message.create(player, MessageId.DEFAULT_RESPAWN)
+						.setMacro(Macro.GRAVEYARD, graveyard)
+						.setMacro(Macro.LOCATION, graveyard.getLocation())
+						.send();
 			}
 
 			// put player in safety cooldown map
