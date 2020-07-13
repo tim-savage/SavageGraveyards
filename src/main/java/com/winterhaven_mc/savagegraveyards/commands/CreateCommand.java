@@ -14,6 +14,10 @@ import static com.winterhaven_mc.savagegraveyards.messages.Macro.*;
 import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
 
 
+/**
+ * Create command implementation<br>
+ * Creates new graveyard at player location with given name
+ */
 public class CreateCommand implements Subcommand {
 
 	private final PluginMain plugin;

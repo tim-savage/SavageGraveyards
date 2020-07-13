@@ -14,6 +14,10 @@ import static com.winterhaven_mc.savagegraveyards.messages.Macro.*;
 import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
 
 
+/**
+ * Show command implementation<br>
+ * displays graveyard settings
+ */
 public class ShowCommand implements Subcommand {
 
 	private final PluginMain plugin;

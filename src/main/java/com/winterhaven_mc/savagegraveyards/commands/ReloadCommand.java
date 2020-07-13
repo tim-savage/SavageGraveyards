@@ -12,6 +12,10 @@ import java.util.Objects;
 import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
 
 
+/**
+ * Reload command implementation<br>
+ * reloads plugin configuration
+ */
 public class ReloadCommand implements Subcommand {
 
 	private final PluginMain plugin;

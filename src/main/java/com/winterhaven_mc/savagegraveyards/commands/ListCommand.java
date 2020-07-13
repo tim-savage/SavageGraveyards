@@ -13,6 +13,10 @@ import static com.winterhaven_mc.savagegraveyards.messages.Macro.*;
 import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
 
 
+/**
+ * List command implementation<br>
+ * Displays listing of graveyards
+ */
 public class ListCommand implements Subcommand {
 
 	private final PluginMain plugin;

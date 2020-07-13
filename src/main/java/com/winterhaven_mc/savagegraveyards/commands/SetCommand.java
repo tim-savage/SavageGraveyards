@@ -16,6 +16,10 @@ import static com.winterhaven_mc.savagegraveyards.messages.Macro.*;
 import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
 
 
+/**
+ * Set command implementation<br>
+ * changes graveyard settings
+ */
 public class SetCommand implements Subcommand {
 
 	private final PluginMain plugin;

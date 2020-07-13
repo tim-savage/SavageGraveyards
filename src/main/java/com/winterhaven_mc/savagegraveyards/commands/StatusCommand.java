@@ -11,13 +11,10 @@ import java.util.Objects;
 import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
 
 
-//	/**
-//	 * Display plugin settings
-//	 *
-//	 * @param sender the command sender
-//	 * @return always returns {@code true}, to prevent display of bukkit usage message
-//	 * @throws NullPointerException if any parameter is null
-//	 */
+/**
+ * Status command implementation<br>
+ * Display plugin settings
+ */
 public class StatusCommand implements Subcommand {
 
 	private final PluginMain plugin;

@@ -15,7 +15,7 @@ import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
 
 
 /**
- * Implements command executor for {@code SavageGraveyards} commands.
+ * Implements command executor for SavageGraveyards commands.
  */
 public class CommandManager implements CommandExecutor, TabCompleter {
 

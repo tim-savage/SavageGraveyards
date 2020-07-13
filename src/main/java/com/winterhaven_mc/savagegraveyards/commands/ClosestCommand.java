@@ -13,6 +13,10 @@ import static com.winterhaven_mc.savagegraveyards.messages.Macro.*;
 import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
 
 
+/**
+ * Closest command implementation<br>
+ * Returns name of closest graveyard to player position
+ */
 public class ClosestCommand implements Subcommand {
 
 	private final PluginMain plugin;

@@ -13,6 +13,10 @@ import static com.winterhaven_mc.savagegraveyards.messages.Macro.*;
 import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
 
 
+/**
+ * Delete command implementation<br>
+ * Removes graveyard record from datastore
+ */
 public class DeleteCommand implements Subcommand {
 
 	private final PluginMain plugin;

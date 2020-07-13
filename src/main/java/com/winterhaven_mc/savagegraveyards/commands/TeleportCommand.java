@@ -16,6 +16,10 @@ import static com.winterhaven_mc.savagegraveyards.messages.Macro.*;
 import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
 
 
+/**
+ * Teleport command implementation<br>
+ * teleports player to graveyard location
+ */
 public class TeleportCommand implements Subcommand {
 
 	private final PluginMain plugin;
