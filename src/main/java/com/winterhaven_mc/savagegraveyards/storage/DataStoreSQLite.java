@@ -2,6 +2,7 @@ package com.winterhaven_mc.savagegraveyards.storage;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -657,6 +658,46 @@ class DataStoreSQLite extends DataStore {
 
 
 	@Override
+	public Collection<String> selectDiscoveredKeys(final UUID playerUid) {
+
+		// create empty set of Graveyard for return
+		Collection<String> returnSet = new HashSet<>();
+
+		try {
+			PreparedStatement preparedStatement =
+					connection.prepareStatement(getQuery("SelectGraveyardsKnownByPlayer"));
+
+			preparedStatement.setLong(1, playerUid.getMostSignificantBits());
+			preparedStatement.setLong(2, playerUid.getLeastSignificantBits());
+
+			// execute sql query
+			ResultSet rs = preparedStatement.executeQuery();
+
+			while (rs.next()) {
+
+				// add display name to return set
+				returnSet.add(rs.getString("searchKey"));
+			}
+		}
+		catch (Exception e) {
+
+			// output simple error message
+			plugin.getLogger().warning("An error occurred while trying to "
+					+ "select discovered Graveyard records from the SQLite datastore.");
+			plugin.getLogger().warning(e.getLocalizedMessage());
+
+			// if debugging is enabled, output stack trace
+			if (plugin.debug) {
+				e.printStackTrace();
+			}
+		}
+
+		// return results
+		return returnSet;
+	}
+
+
+	@Override
 	public Collection<String> selectUndiscoveredKeys(final Player player) {
 
 		// if player is null, return empty set
@@ -982,60 +1023,6 @@ class DataStoreSQLite extends DataStore {
 	}
 
 
-	@Override
-	public Collection<UUID> selectPlayersDiscovered(final String displayName) {
-
-		// get search key from passed display name
-		String searchKey = Graveyard.createSearchKey(displayName);
-
-		// if search key is null or empty, return empty list
-		if (searchKey == null || displayName.isEmpty()) {
-			return Collections.emptyList();
-		}
-
-		// create empty set for return
-		Collection<UUID> returnSet = new HashSet<>();
-
-		try {
-			PreparedStatement preparedStatement =
-					connection.prepareStatement(getQuery("SelectPlayersDiscovered"));
-
-			preparedStatement.setString(1, searchKey);
-
-			// execute sql query
-			ResultSet rs = preparedStatement.executeQuery();
-
-			while (rs.next()) {
-
-				// get player uid components
-				long playerUidMsb = rs.getLong("PlayerUidMsb");
-				long playerUidLsb = rs.getLong("PlayerUidLsb");
-
-				// reconstitute player uid
-				UUID playerUid = new UUID(playerUidMsb,playerUidLsb);
-
-				// add player uid to return set
-				returnSet.add(playerUid);
-			}
-		}
-		catch (SQLException e) {
-
-			// output simple error message
-			plugin.getLogger().warning("An error occurred while trying to "
-					+ "select player discovery records from the SQLite datastore.");
-			plugin.getLogger().warning(e.getLocalizedMessage());
-
-			// if debugging is enabled, output stack trace
-			if (plugin.debug) {
-				e.printStackTrace();
-			}
-		}
-
-		// return results
-		return returnSet;
-	}
-
-
 	private Collection<Discovery> selectAllDiscoveries() {
 
 		Collection<Discovery> returnSet = new ArrayList<>();
@@ -1133,6 +1120,50 @@ class DataStoreSQLite extends DataStore {
 	}
 
 
+	@Override
+	public Collection<String> selectPlayersWithDiscoveries() {
+
+		Collection<String> returnSet = new ArrayList<>();
+
+		try {
+			PreparedStatement preparedStatement =
+					connection.prepareStatement(getQuery("SelectPlayersWithDiscovery"));
+
+			// execute sql query
+			ResultSet rs = preparedStatement.executeQuery();
+
+			while (rs.next()) {
+
+				// get player uid components
+				long playerUidMsb = rs.getLong("PlayerUidMsb");
+				long playerUidLsb = rs.getLong("PlayerUidLsb");
+
+				// reconstitute player uid from components
+				UUID playerUid = new UUID(playerUidMsb, playerUidLsb);
+
+				// get offline player from uid
+				OfflinePlayer offlinePlayer = plugin.getServer().getOfflinePlayer(playerUid);
+
+				// if offline player name is not null, add to return set
+				if (offlinePlayer.getName() != null) {
+					returnSet.add(offlinePlayer.getName());
+				}
+			}
+
+			// close statement
+			preparedStatement.close();
+		}
+		catch (SQLException e) {
+			plugin.getLogger().warning("An error occurred while trying to " +
+					"select all discovery records from the SQLite datastore.");
+			plugin.getLogger().warning(e.getLocalizedMessage());
+			if (plugin.debug) {
+				e.printStackTrace();
+			}
+		}
+
+		return returnSet;
+	}
 
 
 	@Override

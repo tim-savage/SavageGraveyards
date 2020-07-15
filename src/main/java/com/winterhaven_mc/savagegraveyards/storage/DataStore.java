@@ -125,12 +125,18 @@ public abstract class DataStore {
 
 
 	/**
-	 * Select player UUIDs that have discovered a graveyard
-	 *
-	 * @param displayName the display name or search key of the graveyard
-	 * @return List of UUID - player UUIDs that have discovered the graveyard
+	 * select graveyard keys that player has discovered
+	 * @param playerUid the player uid to query
+	 * @return Collection of String - graveyard keys
 	 */
-	public abstract Collection<UUID> selectPlayersDiscovered(final String displayName);
+	public abstract Collection<String> selectDiscoveredKeys(final UUID playerUid);
+
+
+	/**
+	 * Select players who have discovered any graveyards
+	 * @return Collection of String - player names with discovered graveyards
+	 */
+	public abstract Collection<String> selectPlayersWithDiscoveries();
 
 
 	/**
