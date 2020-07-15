@@ -1,14 +1,11 @@
 package com.winterhaven_mc.savagegraveyards.commands;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class SubcommandMap {
 
-	Map<String, Subcommand> subcommandMap = new HashMap<>();
+	SortedMap<String, Subcommand> subcommandMap = new TreeMap<>();
 	Map<String, String> aliasMap = new HashMap<>();
 
 
