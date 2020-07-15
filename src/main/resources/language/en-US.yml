@@ -188,7 +188,7 @@ MESSAGES:
 
   COMMAND_HELP_FORGET:
     enabled: true
-    string: '&eRemove graveyard from player''s memory.'
+    string: '&eRemove a graveyard from a player''s memory.'
 
   COMMAND_HELP_HELP:
     enabled: true
