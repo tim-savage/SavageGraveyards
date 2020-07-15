@@ -595,7 +595,7 @@ public final class Graveyard {
 	 * @param displayName the graveyard display name
 	 * @return String - a search key derived from graveyard display name
 	 */
-	static String createSearchKey(String displayName) {
+	public static String createSearchKey(String displayName) {
 		displayName = ChatColor.translateAlternateColorCodes('&', displayName);
 		return ChatColor.stripColor(displayName.replace(' ', '_'));
 	}
