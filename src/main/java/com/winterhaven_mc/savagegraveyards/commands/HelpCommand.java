@@ -3,6 +3,7 @@ package com.winterhaven_mc.savagegraveyards.commands;
 import com.winterhaven_mc.savagegraveyards.PluginMain;
 import com.winterhaven_mc.savagegraveyards.messages.Message;
 import com.winterhaven_mc.savagegraveyards.sounds.SoundId;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -46,7 +47,7 @@ public class HelpCommand extends AbstractCommand implements Subcommand {
 
 		// if no arguments, display usage for all commands
 		if (args.size() == 0) {
-			Message.create(sender, COMMAND_HELP_INVALID).send();
+			sender.sendMessage(ChatColor.YELLOW + "Command usage:");
 			displayUsageAll(sender);
 			return true;
 		}
