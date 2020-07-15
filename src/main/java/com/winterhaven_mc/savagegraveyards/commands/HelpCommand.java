@@ -67,7 +67,7 @@ public class HelpCommand extends AbstractCommand implements Subcommand {
 	void displayHelp(final CommandSender sender, final String commandName) {
 
 		// get subcommand from map by name
-		Subcommand subcommand = subcommandMap.get(commandName);
+		Subcommand subcommand = subcommandMap.getCommand(commandName);
 
 		// if subcommand found in map, display help message and usage
 		if (subcommand != null) {
@@ -91,8 +91,8 @@ public class HelpCommand extends AbstractCommand implements Subcommand {
 	void displayUsageAll(CommandSender sender) {
 
 		for (String subcommandName : subcommandMap.getKeys()) {
-			if (subcommandMap.get(subcommandName) != null) {
-				subcommandMap.get(subcommandName).displayUsage(sender);
+			if (subcommandMap.getCommand(subcommandName) != null) {
+				subcommandMap.getCommand(subcommandName).displayUsage(sender);
 			}
 		}
 	}

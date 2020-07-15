@@ -9,7 +9,12 @@ public class SubcommandMap {
 	Map<String, String> aliasMap = new HashMap<>();
 
 
-	void put(final String name, final Subcommand command) {
+	/**
+	 * Register a subcommand in the map by name.
+	 * @param name the command name
+	 * @param command an instance of the command
+	 */
+	void register(final String name, final Subcommand command) {
 
 		command.setName(name);
 
@@ -23,7 +28,12 @@ public class SubcommandMap {
 	}
 
 
-	Subcommand get(final String name) {
+	/**
+	 * Get command instance from map by name
+	 * @param name the command to retrieve from the map
+	 * @return Subcommand - the subcommand instance, or null if no matching name
+	 */
+	Subcommand getCommand(final String name) {
 
 		String key = name;
 
@@ -34,6 +44,11 @@ public class SubcommandMap {
 		return (subcommandMap.get(key));
 	}
 
+
+	/**
+	 * Get list of keys (subcommand names) from the subcommand map
+	 * @return List of String - keys of the subcommand map
+	 */
 	List<String> getKeys() {
 		return new ArrayList<>(subcommandMap.keySet());
 	}

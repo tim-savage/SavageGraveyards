@@ -56,18 +56,18 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// register this class as tab completer
 		plugin.getCommand("graveyard").setTabCompleter(this);
 
-		// put subcommands in map
-		subcommandMap.put("closest", new ClosestCommand(plugin));
-		subcommandMap.put("create", new CreateCommand(plugin));
-		subcommandMap.put("delete", new DeleteCommand(plugin));
-		subcommandMap.put("forget", new ForgetCommand(plugin));
-		subcommandMap.put("help", new HelpCommand(plugin, subcommandMap));
-		subcommandMap.put("list", new ListCommand(plugin));
-		subcommandMap.put("reload", new ReloadCommand(plugin));
-		subcommandMap.put("set", new SetCommand(plugin));
-		subcommandMap.put("show", new ShowCommand(plugin));
-		subcommandMap.put("status", new StatusCommand(plugin));
-		subcommandMap.put("teleport", new TeleportCommand(plugin));
+		// register subcommands in subcommand map
+		subcommandMap.register("closest", new ClosestCommand(plugin));
+		subcommandMap.register("create", new CreateCommand(plugin));
+		subcommandMap.register("delete", new DeleteCommand(plugin));
+		subcommandMap.register("forget", new ForgetCommand(plugin));
+		subcommandMap.register("help", new HelpCommand(plugin, subcommandMap));
+		subcommandMap.register("list", new ListCommand(plugin));
+		subcommandMap.register("reload", new ReloadCommand(plugin));
+		subcommandMap.register("set", new SetCommand(plugin));
+		subcommandMap.register("show", new ShowCommand(plugin));
+		subcommandMap.register("status", new StatusCommand(plugin));
+		subcommandMap.register("teleport", new TeleportCommand(plugin));
 	}
 
 
@@ -198,11 +198,11 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		}
 
 		// get subcommand from map by name
-		Subcommand subcommand = subcommandMap.get(subcommandName);
+		Subcommand subcommand = subcommandMap.getCommand(subcommandName);
 
 		// if subcommand is null, get help command from map
 		if (subcommand == null) {
-			subcommand = subcommandMap.get("help");
+			subcommand = subcommandMap.getCommand("help");
 			Message.create(sender, COMMAND_FAIL_INVALID_COMMAND).send();
 			plugin.soundConfig.playSound(sender, COMMAND_INVALID);
 		}
