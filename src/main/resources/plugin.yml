@@ -7,7 +7,7 @@ api-version: 1.16
 
 commands:
   graveyard:
-    description: This is the Graveyard command.
+    description: This is the Graveyard base command.
     aliases: gy
     usage: /graveyard [command]
 
