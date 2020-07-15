@@ -7,9 +7,11 @@ import com.winterhaven_mc.savagegraveyards.storage.Graveyard;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.Objects;
 
-import static com.winterhaven_mc.savagegraveyards.messages.Macro.*;
+import static com.winterhaven_mc.savagegraveyards.messages.Macro.GRAVEYARD;
+import static com.winterhaven_mc.savagegraveyards.messages.Macro.LOCATION;
 import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
 
 
@@ -17,22 +19,25 @@ import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
  * Closest command implementation<br>
  * Returns name of closest graveyard to player position
  */
-public class ClosestCommand implements Subcommand {
+public class ClosestCommand extends AbstractCommand implements Subcommand {
 
 	private final PluginMain plugin;
-	private final CommandSender sender;
-
-	final static String usageString = "/graveyard closest";
 
 
-	ClosestCommand(final PluginMain plugin, final CommandSender sender) {
+	/**
+	 * Class constructor
+	 * @param plugin reference to plugin main class instance
+	 */
+	ClosestCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.sender = Objects.requireNonNull(sender);
+		setUsage("/graveyard closest");
+		setDescription(COMMAND_HELP_CLOSEST);
+		addAlias("nearest");
 	}
 
 
 	@Override
-	public boolean execute() {
+	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// if command sender does not have permission to display closest graveyard,
 		// output error message and return true
@@ -66,7 +71,6 @@ public class ClosestCommand implements Subcommand {
 				.setMacro(GRAVEYARD, graveyard)
 				.setMacro(LOCATION, graveyard.getLocation())
 				.send();
-
 		return true;
 	}
 

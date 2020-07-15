@@ -2,41 +2,40 @@ package com.winterhaven_mc.savagegraveyards.commands;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
 import com.winterhaven_mc.savagegraveyards.messages.Message;
-import com.winterhaven_mc.savagegraveyards.messages.MessageId;
 import com.winterhaven_mc.savagegraveyards.sounds.SoundId;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
 import java.util.Objects;
 
 import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
+import static com.winterhaven_mc.savagegraveyards.sounds.SoundId.COMMAND_INVALID;
 
 
 /**
  * Help command implementation<br>
  * displays help and usage messages for plugin commands
  */
-public class HelpCommand implements Subcommand {
+public class HelpCommand extends AbstractCommand implements Subcommand {
 
 	private final PluginMain plugin;
-	private final CommandSender sender;
-	private final List<String> args;
-
-	final static String usageString = "/graveyard help [command]";
-
-	private final static ChatColor USAGE_COLOR = ChatColor.GOLD;
+	private final SubcommandMap subcommandMap;
 
 
-	HelpCommand(final PluginMain plugin, final CommandSender sender, final List<String> args) {
+	/**
+	 * Class constructor
+	 * @param plugin reference to plugin main class instance
+	 */
+	HelpCommand(final PluginMain plugin, final SubcommandMap subcommandMap) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.sender = Objects.requireNonNull(sender);
-		this.args = Objects.requireNonNull(args);
+		this.subcommandMap = Objects.requireNonNull(subcommandMap);
+		setUsage("/graveyard help [command]");
+		setDescription(COMMAND_HELP_HELP);
 	}
 
 
 	@Override
-	public boolean execute() {
+	public boolean onCommand(CommandSender sender, List<String> args) {
 
 		// if command sender does not have permission to display help, output error message and return true
 		if (!sender.hasPermission("graveyard.help")) {
@@ -47,160 +46,53 @@ public class HelpCommand implements Subcommand {
 
 		// if no arguments, display usage for all commands
 		if (args.size() == 0) {
-			displayUsage(sender,"all");
+			Message.create(sender, COMMAND_HELP_INVALID).send();
+			displayUsageAll(sender);
 			return true;
 		}
 
-		// set default command
-		String commandName = args.get(0);
-		MessageId messageId;
-
-		// switch on command name to select MessageId
-		switch (commandName.toLowerCase()) {
-			case "create":
-				messageId = COMMAND_HELP_CREATE;
-				break;
-
-			case "closest":
-			case "nearest":
-				messageId = COMMAND_HELP_CLOSEST;
-				break;
-
-			case "delete":
-				messageId = COMMAND_HELP_DELETE;
-				break;
-
-			case "forget":
-				messageId = COMMAND_HELP_FORGET;
-				break;
-
-			case "help":
-				messageId = COMMAND_HELP_HELP;
-				break;
-
-			case "list":
-				messageId = COMMAND_HELP_LIST;
-				break;
-
-			case "reload":
-				messageId = COMMAND_HELP_RELOAD;
-				break;
-
-			case "set":
-				messageId = COMMAND_HELP_SET;
-				break;
-
-			case "show":
-				messageId = COMMAND_HELP_SHOW;
-				break;
-
-			case "status":
-				messageId = COMMAND_HELP_STATUS;
-				break;
-
-			case "teleport":
-			case "tp":
-				messageId = COMMAND_HELP_TELEPORT;
-				break;
-
-			default:
-				messageId = COMMAND_HELP_INVALID;
-				commandName = "all";
-				break;
-		}
-
-		// display help message and command usage
-		Message.create(sender, messageId).send();
-		displayUsage(sender, commandName);
+		// get subcommand name
+		String subcommandName = args.get(0);
+		displayHelp(sender, subcommandName);
 		return true;
 	}
 
 
 	/**
-	 * Display command usage
-	 *
-	 * @param sender        the command sender
-	 * @param passedCommand the command for which to display usage
-	 * @throws NullPointerException if any parameter is null
+	 * Display help message and usage for a command
+	 * @param sender the command sender
+	 * @param commandName the name of the command for which to show help and usage
 	 */
-	static void displayUsage(final CommandSender sender, final String passedCommand) {
+	void displayHelp(final CommandSender sender, final String commandName) {
 
-		// check for null parameters
-		Objects.requireNonNull(sender);
-		Objects.requireNonNull(passedCommand);
+		// get subcommand from map by name
+		Subcommand subcommand = subcommandMap.get(commandName);
 
-		String commandName = passedCommand;
-
-		if (commandName.isEmpty()) {
-			commandName = "all";
+		// if subcommand found in map, display help message and usage
+		if (subcommand != null) {
+			Message.create(sender, subcommand.getDescription()).send();
+			subcommand.displayUsage(sender);
 		}
 
-		if ((commandName.equalsIgnoreCase("status")
-				|| commandName.equalsIgnoreCase("all"))
-				&& sender.hasPermission("graveyard.status")) {
-			sender.sendMessage(USAGE_COLOR + StatusCommand.usageString);
+		// else display invalid command help message and usage for all commands
+		else {
+			Message.create(sender, COMMAND_HELP_INVALID).send();
+			plugin.soundConfig.playSound(sender, COMMAND_INVALID);
+			displayUsageAll(sender);
 		}
+	}
 
-		if ((commandName.equalsIgnoreCase("reload")
-				|| commandName.equalsIgnoreCase("all"))
-				&& sender.hasPermission("graveyard.reload")) {
-			sender.sendMessage(USAGE_COLOR + ReloadCommand.usageString);
-		}
 
-		if ((commandName.equalsIgnoreCase("create")
-				|| commandName.equalsIgnoreCase("all"))
-				&& sender.hasPermission("graveyard.create")) {
-			sender.sendMessage(USAGE_COLOR + CreateCommand.usageString);
-		}
+	/**
+	 * Display usage message for all commands
+	 * @param sender the command sender
+	 */
+	void displayUsageAll(CommandSender sender) {
 
-		if ((commandName.equalsIgnoreCase("closest")
-				|| commandName.equalsIgnoreCase("nearest")
-				|| commandName.equalsIgnoreCase("all"))
-				&& sender.hasPermission("graveyard.closest")) {
-			sender.sendMessage(USAGE_COLOR + ClosestCommand.usageString);
-		}
-
-		if ((commandName.equalsIgnoreCase("delete")
-				|| commandName.equalsIgnoreCase("all"))
-				&& sender.hasPermission("graveyard.delete")) {
-			sender.sendMessage(USAGE_COLOR + DeleteCommand.usageString);
-		}
-
-		if ((commandName.equalsIgnoreCase("forget")
-				|| commandName.equalsIgnoreCase("all"))
-				&& sender.hasPermission("graveyard.forget")) {
-			sender.sendMessage(USAGE_COLOR + ForgetCommand.usageString);
-		}
-
-		if ((commandName.equalsIgnoreCase("help")
-				|| commandName.equalsIgnoreCase("all"))
-				&& sender.hasPermission("graveyard.help")) {
-			sender.sendMessage(USAGE_COLOR + HelpCommand.usageString);
-		}
-
-		if ((commandName.equalsIgnoreCase("list")
-				|| commandName.equalsIgnoreCase("all"))
-				&& sender.hasPermission("graveyard.list")) {
-			sender.sendMessage(USAGE_COLOR + ListCommand.usageString);
-		}
-
-		if ((commandName.equalsIgnoreCase("set")
-				|| commandName.equalsIgnoreCase("all"))
-				&& sender.hasPermission("graveyard.set")) {
-			sender.sendMessage(USAGE_COLOR + SetCommand.usageString);
-		}
-
-		if ((commandName.equalsIgnoreCase("show")
-				|| commandName.equalsIgnoreCase("all"))
-				&& sender.hasPermission("graveyard.show")) {
-			sender.sendMessage(USAGE_COLOR + ShowCommand.usageString);
-		}
-
-		if ((commandName.equalsIgnoreCase("teleport")
-				|| commandName.equalsIgnoreCase("tp")
-				|| commandName.equalsIgnoreCase("all"))
-				&& sender.hasPermission("graveyard.teleport")) {
-			sender.sendMessage(USAGE_COLOR + TeleportCommand.usageString);
+		for (String subcommandName : subcommandMap.getKeys()) {
+			if (subcommandMap.get(subcommandName) != null) {
+				subcommandMap.get(subcommandName).displayUsage(sender);
+			}
 		}
 	}
 

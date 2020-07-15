@@ -20,34 +20,34 @@ import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
  * Set command implementation<br>
  * changes graveyard settings
  */
-public class SetCommand implements Subcommand {
+public class SetCommand extends AbstractCommand implements Subcommand {
 
 	private final PluginMain plugin;
-	private final CommandSender sender;
-	private final List<String> args;
-
-	final static String usageString = "/graveyard set <graveyard> <attribute> <value>";
 
 	private final static int CONFIG_DEFAULT = -1;
 
 
-	SetCommand(final PluginMain plugin, final CommandSender sender, final List<String> args) {
+	/**
+	 * Class constructor
+	 * @param plugin reference to plugin main class instance
+	 */
+	SetCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.sender = Objects.requireNonNull(sender);
-		this.args = Objects.requireNonNull(args);
+		setUsage("/graveyard set <graveyard> <attribute> <value>");
+		setDescription(COMMAND_HELP_SET);
 	}
 
 
 	@Override
-	public boolean execute() {
+	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		int minArgs = 3;
 
 		// check min arguments
 		if (args.size() < minArgs) {
 			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send();
+			displayUsage(sender);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
-			HelpCommand.displayUsage(sender, "set");
 			return true;
 		}
 

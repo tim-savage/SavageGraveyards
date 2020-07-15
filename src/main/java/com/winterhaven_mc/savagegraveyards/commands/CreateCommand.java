@@ -18,24 +18,24 @@ import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
  * Create command implementation<br>
  * Creates new graveyard at player location with given name
  */
-public class CreateCommand implements Subcommand {
+public class CreateCommand extends AbstractCommand implements Subcommand {
 
 	private final PluginMain plugin;
-	private final CommandSender sender;
-	private final List<String> args;
-
-	final static String usageString = "/graveyard create <graveyard name>";
 
 
-	CreateCommand(final PluginMain plugin, final CommandSender sender, final List<String> args) {
+	/**
+	 * Class constructor
+	 * @param plugin reference to plugin main class instance
+	 */
+	CreateCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.sender = Objects.requireNonNull(sender);
-		this.args = Objects.requireNonNull(args);
+		this.setUsage("/graveyard create <graveyard name>");
+		this.setDescription(COMMAND_HELP_CREATE);
 	}
 
 
 	@Override
-	public boolean execute() {
+	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// sender must be in game player
 		if (!(sender instanceof Player)) {
@@ -56,8 +56,8 @@ public class CreateCommand implements Subcommand {
 		if (args.size() < minArgs) {
 			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
-			HelpCommand.displayUsage(sender, "create");
-			return false;
+			displayUsage(sender);
+			return true;
 		}
 
 		// cast sender to player

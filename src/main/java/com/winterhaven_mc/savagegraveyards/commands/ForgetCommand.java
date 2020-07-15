@@ -10,7 +10,8 @@ import org.bukkit.command.CommandSender;
 import java.util.List;
 import java.util.Objects;
 
-import static com.winterhaven_mc.savagegraveyards.messages.Macro.*;
+import static com.winterhaven_mc.savagegraveyards.messages.Macro.GRAVEYARD;
+import static com.winterhaven_mc.savagegraveyards.messages.Macro.TARGET_PLAYER;
 import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
 
 
@@ -18,24 +19,24 @@ import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
  * Forget command implementation<br>
  * Removes graveyard discovery record for player
  */
-public class ForgetCommand implements Subcommand {
+public class ForgetCommand extends AbstractCommand implements Subcommand {
 
 	private final PluginMain plugin;
-	private final CommandSender sender;
-	private final List<String> args;
-
-	final static String usageString = "/graveyard forget <graveyard_name> <player>";
 
 
-	ForgetCommand(final PluginMain plugin, final CommandSender sender, final List<String> args) {
+	/**
+	 * Class constructor
+	 * @param plugin reference to plugin main class instance
+	 */
+	ForgetCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.sender = Objects.requireNonNull(sender);
-		this.args = Objects.requireNonNull(args);
+		setUsage("/graveyard forget <player> <graveyard name>");
+		setDescription(COMMAND_HELP_FORGET);
 	}
 
 
 	@Override
-	public boolean execute() {
+	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// check for permission
 		if (!sender.hasPermission("graveyard.forget")) {
@@ -50,29 +51,7 @@ public class ForgetCommand implements Subcommand {
 		// check for minimum arguments
 		if (args.size() < minArgs) {
 			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send();
-			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
-			HelpCommand.displayUsage(sender, "forget");
-			return true;
-		}
-
-		// get graveyard search key
-		String searchKey = args.remove(0);
-
-		// get graveyard (for messages)
-		Graveyard graveyard = plugin.dataStore.selectGraveyard(searchKey);
-
-		// if no matching graveyard found, send message and return
-		if (graveyard == null) {
-
-			// create dummy graveyard for message
-			Graveyard dummyGraveyard = new Graveyard.Builder().displayName(searchKey).build();
-
-			// send graveyard not found message
-			Message.create(sender, COMMAND_FAIL_FORGET_INVALID_GRAVEYARD)
-					.setMacro(GRAVEYARD, dummyGraveyard)
-					.send();
-
-			// play command fail sound
+			displayUsage(sender);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -96,6 +75,49 @@ public class ForgetCommand implements Subcommand {
 			Message.create(sender, COMMAND_FAIL_FORGET_INVALID_PLAYER).send();
 			return true;
 		}
+
+		// get graveyard search key
+//		String searchKey = args.remove(0);
+		String searchKey = String.join("_", args);
+
+		// get graveyard (for messages)
+		Graveyard graveyard = plugin.dataStore.selectGraveyard(searchKey);
+
+		// if no matching graveyard found, send message and return
+		if (graveyard == null) {
+
+			// create dummy graveyard for message
+			Graveyard dummyGraveyard = new Graveyard.Builder().displayName(searchKey).build();
+
+			// send graveyard not found message
+			Message.create(sender, COMMAND_FAIL_FORGET_INVALID_GRAVEYARD)
+					.setMacro(GRAVEYARD, dummyGraveyard)
+					.send();
+
+			// play command fail sound
+			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
+			return true;
+		}
+
+//		// get player name
+//		String playerName = args.remove(0);
+//
+//		// get list of offline players
+//		OfflinePlayer[] offlinePlayers = plugin.getServer().getOfflinePlayers();
+//
+//		OfflinePlayer player = null;
+//
+//		for (OfflinePlayer offlinePlayer : offlinePlayers) {
+//			if (playerName.equals(offlinePlayer.getName())) {
+//				player = offlinePlayer;
+//			}
+//		}
+//
+//		// if player not found, send message and return
+//		if (player == null) {
+//			Message.create(sender, COMMAND_FAIL_FORGET_INVALID_PLAYER).send();
+//			return true;
+//		}
 
 		// delete discovery record
 		if (plugin.dataStore.deleteDiscovery(searchKey, player.getUniqueId())) {

@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 import java.util.List;
 import java.util.Objects;
 
-import static com.winterhaven_mc.savagegraveyards.messages.Macro.*;
+import static com.winterhaven_mc.savagegraveyards.messages.Macro.GRAVEYARD;
 import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
 
 
@@ -18,23 +18,24 @@ import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
  * Show command implementation<br>
  * displays graveyard settings
  */
-public class ShowCommand implements Subcommand {
+public class ShowCommand extends AbstractCommand implements Subcommand {
 
 	private final PluginMain plugin;
-	private final CommandSender sender;
-	private final List<String> args;
-
-	final static String usageString = "/graveyard show <graveyard>";
 
 
-	ShowCommand(final PluginMain plugin, final CommandSender sender, final List<String> args) {
+	/**
+	 * Class constructor
+	 * @param plugin reference to plugin main class instance
+	 */
+	ShowCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.sender = Objects.requireNonNull(sender);
-		this.args = Objects.requireNonNull(args);
+		setUsage("/graveyard show <graveyard>");
+		setDescription(COMMAND_HELP_SHOW);
 	}
 
+
 	@Override
-	public boolean execute() {
+	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// if command sender does not have permission to show graveyards, output error message and return true
 		if (!sender.hasPermission("graveyard.show")) {
@@ -49,8 +50,8 @@ public class ShowCommand implements Subcommand {
 		// if too few arguments, display error and usage messages and return
 		if (args.size() < minArgs) {
 			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send();
+			displayUsage(sender);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
-			HelpCommand.displayUsage(sender, "show");
 			return true;
 		}
 

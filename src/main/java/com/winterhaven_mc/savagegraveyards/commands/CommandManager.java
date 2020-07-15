@@ -2,8 +2,8 @@ package com.winterhaven_mc.savagegraveyards.commands;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
 import com.winterhaven_mc.savagegraveyards.messages.Message;
-import com.winterhaven_mc.savagegraveyards.sounds.SoundId;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,6 +12,7 @@ import org.bukkit.command.TabCompleter;
 import java.util.*;
 
 import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
+import static com.winterhaven_mc.savagegraveyards.sounds.SoundId.*;
 
 
 /**
@@ -21,6 +22,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 	// reference to main class
 	private final PluginMain plugin;
+
+	// map of subcommands
+	private final SubcommandMap subcommandMap = new SubcommandMap();
 
 	// list of possible subcommands
 	private final static List<String> SUBCOMMANDS =
@@ -51,6 +55,19 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 		// register this class as tab completer
 		plugin.getCommand("graveyard").setTabCompleter(this);
+
+		// put subcommands in map
+		subcommandMap.put("closest", new ClosestCommand(plugin));
+		subcommandMap.put("create", new CreateCommand(plugin));
+		subcommandMap.put("delete", new DeleteCommand(plugin));
+		subcommandMap.put("forget", new ForgetCommand(plugin));
+		subcommandMap.put("help", new HelpCommand(plugin, subcommandMap));
+		subcommandMap.put("list", new ListCommand(plugin));
+		subcommandMap.put("reload", new ReloadCommand(plugin));
+		subcommandMap.put("set", new SetCommand(plugin));
+		subcommandMap.put("show", new ShowCommand(plugin));
+		subcommandMap.put("status", new StatusCommand(plugin));
+		subcommandMap.put("teleport", new TeleportCommand(plugin));
 	}
 
 
@@ -65,12 +82,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 		// return list of subcommands for which sender has permission
 		if (args.length == 1) {
-			for (String subcommand : SUBCOMMANDS) {
-				if (sender.hasPermission("graveyard." + subcommand)
-						&& subcommand.startsWith(args[0].toLowerCase())) {
-					returnList.add(subcommand);
-				}
-			}
+			returnList = matchCommandsForPlayer(sender, args[0]);
 		}
 
 		else if (args.length == 2) {
@@ -79,24 +91,40 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 					|| args[0].equalsIgnoreCase("tp")
 					|| args[0].equalsIgnoreCase("set")
 					|| args[0].equalsIgnoreCase("show")
-					|| args[0].equalsIgnoreCase("delete")
-					|| args[0].equalsIgnoreCase("forget")) {
+					|| args[0].equalsIgnoreCase("delete")) {
 				returnList = plugin.dataStore.selectMatchingGraveyardNames(args[1]);
 			}
-			// return list of subcommands for which sender has permission
+
+			// if forget command, return list of players that have discovered graveyards
+			else if (args[0].equalsIgnoreCase("forget")) {
+
+				// get collection of players with discoveries
+				Collection<String> playerNames = plugin.dataStore.selectPlayersWithDiscoveries();
+
+				// add matching player names to return list
+				for (String playerName : playerNames) {
+					if (playerName != null && playerName.toLowerCase().startsWith(args[1].toLowerCase())) {
+						returnList.add(playerName);
+					}
+				}
+			}
+
+			// if help command, return list of subcommands for which sender has permission,
+			// except help command itself
 			else if (args[0].equalsIgnoreCase("help")) {
 				for (String subcommand : SUBCOMMANDS) {
 					if (sender.hasPermission("graveyard." + subcommand)
-							&& subcommand.startsWith(args[1].toLowerCase())) {
+							&& subcommand.startsWith(args[1].toLowerCase())
+							&& !subcommand.equalsIgnoreCase("help")) {
 						returnList.add(subcommand);
 					}
 				}
 			}
 		}
 
-		// return list of valid matching attributes
 		else if (args.length == 3) {
 
+			// if set command, return list of attributes that player has permission to change
 			if (args[0].equalsIgnoreCase("set")) {
 				for (String attribute : ATTRIBUTES) {
 					if (sender.hasPermission("graveyard.set." + attribute)
@@ -105,24 +133,44 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 					}
 				}
 			}
+
+			// if forget command, return list of discovered graveyards for player
 			else if (args[0].equalsIgnoreCase("forget")) {
-				// select playerUUIDs for graveyard from Discovered table
-				Collection<UUID> playerUUIDs = plugin.dataStore.selectPlayersDiscovered(args[1]);
 
-				// iterate over list of playerUUIDs and add player names to return list that match prefix
-				for (UUID playerUUID : playerUUIDs) {
+				// get uid for player name in args[1]
+				String playerName = args[1];
 
-					// get player name from UUID
-					String playerName = plugin.getServer().getOfflinePlayer(playerUUID).getName();
+				// get all offline players
+				List<OfflinePlayer> offlinePlayers = new ArrayList<>(Arrays.asList(
+						plugin.getServer().getOfflinePlayers()));
 
-					// if player name begins with arg[2] (ignoring case), add player name to return list
-					if (playerName != null && playerName.toLowerCase().startsWith(args[2].toLowerCase())) {
-						returnList.add(playerName);
+				UUID playerUid = null;
+
+				// iterate over offline players trying to match name
+				for (OfflinePlayer offlinePlayer : offlinePlayers) {
+					if (playerName.equalsIgnoreCase(offlinePlayer.getName())) {
+						playerUid = offlinePlayer.getUniqueId();
+						break;
+					}
+				}
+
+				// if playerUid is null, return empty list
+				if (playerUid == null) {
+					return Collections.emptyList();
+				}
+
+				// get graveyard keys discovered by player
+				Collection<String> graveyardKeys =
+						plugin.dataStore.selectDiscoveredKeys(playerUid);
+
+				// iterate over graveyards
+				for (String graveyardKey : graveyardKeys) {
+					if (graveyardKey.startsWith(args[2])) {
+						returnList.add(graveyardKey);
 					}
 				}
 			}
 		}
-
 		return returnList;
 	}
 
@@ -137,79 +185,44 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// convert args array to list
 		List<String> argsList = new ArrayList<>(Arrays.asList(args));
 
-		String subcommandString;
+		String subcommandName;
 
 		// get subcommand, remove from front of list
-		if (args.length > 0) {
-			subcommandString = argsList.remove(0);
+		if (argsList.size() > 0) {
+			subcommandName = argsList.remove(0);
 		}
 
-		// if no arguments, display usage for all commands
+		// if no arguments, set command to help
 		else {
-			HelpCommand.displayUsage(sender, "all");
-			return true;
+			subcommandName = "help";
 		}
 
-		Subcommand subcommand;
+		// get subcommand from map by name
+		Subcommand subcommand = subcommandMap.get(subcommandName);
 
-		// handle subcommands
-		switch (subcommandString.toLowerCase()) {
-
-			case "closest":
-			case "nearest":
-				subcommand = new ClosestCommand(plugin, sender);
-				break;
-
-			case "status":
-				subcommand = new StatusCommand(plugin, sender);
-				break;
-
-			case "reload":
-				subcommand = new ReloadCommand(plugin, sender);
-				break;
-
-			case"create":
-				subcommand = new CreateCommand(plugin, sender, argsList);
-				break;
-
-			case "delete":
-				subcommand = new DeleteCommand(plugin, sender, argsList);
-				break;
-
-			case "list":
-				subcommand = new ListCommand(plugin, sender, argsList);
-				break;
-
-			case "set":
-				subcommand = new SetCommand(plugin, sender, argsList);
-				break;
-
-			case "show":
-				subcommand = new ShowCommand(plugin, sender, argsList);
-				break;
-
-			case "teleport":
-			case "tp":
-				subcommand = new TeleportCommand(plugin, sender, argsList);
-				break;
-
-			case "forget":
-				subcommand = new ForgetCommand(plugin, sender, argsList);
-				break;
-
-			case "help":
-				subcommand = new HelpCommand(plugin, sender, argsList);
-				break;
-
-			default:
-				Message.create(sender, COMMAND_FAIL_INVALID_COMMAND).send();
-				plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
-				HelpCommand.displayUsage(sender, "all");
-				return true;
+		// if subcommand is null, get help command from map
+		if (subcommand == null) {
+			subcommand = subcommandMap.get("help");
+			Message.create(sender, COMMAND_FAIL_INVALID_COMMAND).send();
+			plugin.soundConfig.playSound(sender, COMMAND_INVALID);
 		}
 
 		// execute subcommand
-		return subcommand.execute();
+		 return subcommand.onCommand(sender, argsList);
+	}
+
+
+	private List<String> matchCommandsForPlayer(CommandSender sender, String matchString) {
+
+		List<String> returnList = new ArrayList<>();
+
+		for (String subcommand : SUBCOMMANDS) {
+			if (sender.hasPermission("graveyard." + subcommand)
+					&& subcommand.startsWith(matchString.toLowerCase())) {
+				returnList.add(subcommand);
+			}
+		}
+		return returnList;
 	}
 
 }

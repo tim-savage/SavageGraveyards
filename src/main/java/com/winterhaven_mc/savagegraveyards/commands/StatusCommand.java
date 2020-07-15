@@ -2,10 +2,14 @@ package com.winterhaven_mc.savagegraveyards.commands;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
 import com.winterhaven_mc.savagegraveyards.messages.Message;
+import com.winterhaven_mc.savagegraveyards.messages.MessageId;
 import com.winterhaven_mc.savagegraveyards.sounds.SoundId;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
@@ -15,28 +19,24 @@ import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
  * Status command implementation<br>
  * Display plugin settings
  */
-public class StatusCommand implements Subcommand {
+public class StatusCommand extends AbstractCommand implements Subcommand {
 
 	private final PluginMain plugin;
-	private final CommandSender sender;
-
-	final static String usageString = "/graveyard status";
 
 
 	/**
 	 * Class constructor
-	 *
-	 * @param sender the command sender
-	 * @throws NullPointerException if any parameter is null
+	 * @param plugin reference to plugin main class instance
 	 */
-	StatusCommand(PluginMain plugin, CommandSender sender) {
+	StatusCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.sender = Objects.requireNonNull(sender);
+		setUsage("/graveyard status");
+		setDescription(COMMAND_HELP_SHOW);
 	}
 
 
 	@Override
-	public boolean execute() {
+	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// if command sender does not have permission to view status, output error message and return true
 		if (!sender.hasPermission("graveyard.status")) {

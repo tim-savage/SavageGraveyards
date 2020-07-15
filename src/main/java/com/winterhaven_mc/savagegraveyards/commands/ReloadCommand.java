@@ -7,6 +7,7 @@ import com.winterhaven_mc.savagegraveyards.storage.DataStore;
 import com.winterhaven_mc.util.LanguageManager;
 import org.bukkit.command.CommandSender;
 
+import java.util.List;
 import java.util.Objects;
 
 import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
@@ -16,21 +17,24 @@ import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
  * Reload command implementation<br>
  * reloads plugin configuration
  */
-public class ReloadCommand implements Subcommand {
+public class ReloadCommand extends AbstractCommand implements Subcommand {
 
 	private final PluginMain plugin;
-	private final CommandSender sender;
-
-	final static String usageString = "/graveyard reload";
 
 
-	ReloadCommand(final PluginMain plugin, final CommandSender sender) {
+	/**
+	 * Class constructor
+	 * @param plugin reference to plugin main class instance
+	 */
+	ReloadCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.sender = Objects.requireNonNull(sender);
+		setUsage("/graveyard reload");
+		setDescription(COMMAND_HELP_RELOAD);
 	}
 
 
-	public boolean execute() {
+	@Override
+	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// if sender does not have permission to reload config, send error message and return true
 		if (!sender.hasPermission("graveyard.reload")) {

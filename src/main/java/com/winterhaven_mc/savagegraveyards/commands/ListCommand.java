@@ -17,24 +17,24 @@ import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
  * List command implementation<br>
  * Displays listing of graveyards
  */
-public class ListCommand implements Subcommand {
+public class ListCommand extends AbstractCommand implements Subcommand {
 
 	private final PluginMain plugin;
-	private final CommandSender sender;
-	private final List<String> args;
-
-	final static String usageString = "/graveyard list [page]";
 
 
-	ListCommand(final PluginMain plugin, final CommandSender sender, final List<String> args) {
+	/**
+	 * Class constructor
+	 * @param plugin reference to plugin main class instance
+	 */
+	ListCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.sender = Objects.requireNonNull(sender);
-		this.args = Objects.requireNonNull(args);
+		setUsage("/graveyard list [page]");
+		setDescription(COMMAND_HELP_LIST);
 	}
 
 
 	@Override
-	public boolean execute() {
+	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// if command sender does not have permission to list graveyards, output error message and return true
 		if (!sender.hasPermission("graveyard.list")) {
@@ -48,8 +48,8 @@ public class ListCommand implements Subcommand {
 
 		if (args.size() > maxArgs) {
 			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send();
+			displayUsage(sender);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
-			HelpCommand.displayUsage(sender, "list");
 			return true;
 		}
 

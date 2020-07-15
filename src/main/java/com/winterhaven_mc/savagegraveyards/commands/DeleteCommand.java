@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 import java.util.List;
 import java.util.Objects;
 
-import static com.winterhaven_mc.savagegraveyards.messages.Macro.*;
+import static com.winterhaven_mc.savagegraveyards.messages.Macro.GRAVEYARD;
 import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
 
 
@@ -17,24 +17,24 @@ import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
  * Delete command implementation<br>
  * Removes graveyard record from datastore
  */
-public class DeleteCommand implements Subcommand {
+public class DeleteCommand extends AbstractCommand implements Subcommand {
 
 	private final PluginMain plugin;
-	private final CommandSender sender;
-	private final List<String> args;
-
-	final static String usageString = "/graveyard delete <graveyard name>";
 
 
-	DeleteCommand(final PluginMain plugin, final CommandSender sender, final List<String> args) {
+	/**
+	 * Class constructor
+	 * @param plugin reference to plugin main class instance
+	 */
+	DeleteCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.sender = Objects.requireNonNull(sender);
-		this.args = Objects.requireNonNull(args);
+		setDescription(COMMAND_HELP_DELETE);
+		setUsage("/graveyard delete <graveyard name>");
 	}
 
 
 	@Override
-	public boolean execute() {
+	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// check for permission
 		if (!sender.hasPermission("graveyard.delete")) {
@@ -48,7 +48,7 @@ public class DeleteCommand implements Subcommand {
 		// check min arguments
 		if (args.size() < minArgs) {
 			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send();
-			HelpCommand.displayUsage(sender, "delete");
+			displayUsage(sender);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}

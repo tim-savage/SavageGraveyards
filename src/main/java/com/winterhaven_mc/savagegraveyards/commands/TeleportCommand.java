@@ -9,8 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static com.winterhaven_mc.savagegraveyards.messages.Macro.*;
 import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
@@ -20,24 +19,25 @@ import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
  * Teleport command implementation<br>
  * teleports player to graveyard location
  */
-public class TeleportCommand implements Subcommand {
+public class TeleportCommand extends AbstractCommand implements Subcommand {
 
 	private final PluginMain plugin;
-	private final CommandSender sender;
-	private final List<String> args;
-
-	final static String usageString = "/graveyard teleport <name>";
 
 
-	TeleportCommand(final PluginMain plugin, final CommandSender sender, final List<String> args) {
+	/**
+	 * Class constructor
+	 * @param plugin reference to plugin main class instance
+	 */
+	TeleportCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.sender = Objects.requireNonNull(sender);
-		this.args = Objects.requireNonNull(args);
+		this.setUsage("/graveyard teleport <name>");
+		this.setDescription(COMMAND_HELP_TELEPORT);
+		this.addAlias("tp");
 	}
 
 
 	@Override
-	public boolean execute() {
+	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// sender must be in game player
 		if (!(sender instanceof Player)) {
@@ -57,8 +57,8 @@ public class TeleportCommand implements Subcommand {
 
 		if (args.size() < minArgs) {
 			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send();
+			displayUsage(sender);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
-			HelpCommand.displayUsage(sender, "teleport");
 			return true;
 		}
 
