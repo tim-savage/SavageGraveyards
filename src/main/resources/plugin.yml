@@ -15,11 +15,11 @@ permissions:
   graveyard.respawn:
     description: Allow player to respawn after death at nearest graveyard location.
     default: true
-        
+
   graveyard.closest:
     description: View the closest graveyard to player's current location.
     default: op
-    
+
   graveyard.create:
     description: Create a new graveyard at current location.
     default: op
