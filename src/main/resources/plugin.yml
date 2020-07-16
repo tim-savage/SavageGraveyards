@@ -25,7 +25,7 @@ permissions:
     default: op
 
   graveyard.overwrite:
-    description: Overwrite an existing graveyard with a new graveyard at current location.
+    description: Create a new graveyard with an existing name, overwriting the existing graveyard.
     default: op
 
   graveyard.delete:
@@ -156,16 +156,7 @@ permissions:
       graveyard.list.disabled: true
       graveyard.list.hidden: true
       graveyard.reload: true
-      graveyard.set: true
-      graveyard.set.enabled: true
-      graveyard.set.group: true
-      graveyard.set.hidden: true
-      graveyard.set.location: true
-      graveyard.set.name: true
-      graveyard.set.discoveryrange: true
-      graveyard.set.discoverymessage: true
-      graveyard.set.respawnmessage: true
-      graveyard.set.safetytime: true
+      graveyard.set.*: true
       graveyard.show: true
       graveyard.status: true
       graveyard.teleport: true
