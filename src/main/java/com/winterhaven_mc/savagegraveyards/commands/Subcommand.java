@@ -1,6 +1,7 @@
 package com.winterhaven_mc.savagegraveyards.commands;
 
 import com.winterhaven_mc.savagegraveyards.messages.MessageId;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -9,6 +10,9 @@ import java.util.List;
 public interface Subcommand {
 
 	boolean onCommand(CommandSender sender, List<String> argsList);
+
+	List<String> onTabComplete(final CommandSender sender, final Command command,
+							   final String alias, final String[] args);
 
 	String getName();
 

@@ -4,8 +4,10 @@ import com.winterhaven_mc.savagegraveyards.PluginMain;
 import com.winterhaven_mc.savagegraveyards.messages.Message;
 import com.winterhaven_mc.savagegraveyards.sounds.SoundId;
 import com.winterhaven_mc.savagegraveyards.storage.Graveyard;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,6 +32,19 @@ public class DeleteCommand extends AbstractCommand implements Subcommand {
 		this.plugin = Objects.requireNonNull(plugin);
 		setDescription(COMMAND_HELP_DELETE);
 		setUsage("/graveyard delete <graveyard name>");
+	}
+
+
+	@Override
+	public List<String> onTabComplete(final CommandSender sender, final Command command,
+									  final String alias, final String[] args) {
+
+		if (args.length == 2) {
+			// return list of valid matching graveyard names
+			return plugin.dataStore.selectMatchingGraveyardNames(args[1]);
+		}
+
+		return Collections.emptyList();
 	}
 
 

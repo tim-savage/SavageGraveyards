@@ -1,9 +1,11 @@
 package com.winterhaven_mc.savagegraveyards.commands;
 
 import com.winterhaven_mc.savagegraveyards.messages.MessageId;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -62,6 +64,13 @@ public abstract class AbstractCommand implements Subcommand {
 	@Override
 	public void setDescription(MessageId description) {
 		this.description = description;
+	}
+
+	@Override
+	public List<String> onTabComplete(final CommandSender sender, final Command command,
+									  final String alias, final String[] args) {
+
+		return Collections.emptyList();
 	}
 
 }

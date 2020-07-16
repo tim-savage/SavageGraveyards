@@ -3,7 +3,6 @@ package com.winterhaven_mc.savagegraveyards.commands;
 import com.winterhaven_mc.savagegraveyards.PluginMain;
 import com.winterhaven_mc.savagegraveyards.messages.Message;
 
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -25,18 +24,6 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 	// map of subcommands
 	private final SubcommandMap subcommandMap = new SubcommandMap();
-
-	// list of possible subcommands
-	private final static List<String> SUBCOMMANDS =
-			Collections.unmodifiableList(new ArrayList<>(Arrays.asList(
-					"closest", "create", "delete", "forget", "list", "reload",
-					"set", "show", "status", "teleport", "help")));
-
-	// list of possible attributes
-	private final static List<String> ATTRIBUTES =
-			Collections.unmodifiableList(new ArrayList<>(Arrays.asList(
-					"enabled", "hidden", "location", "name", "safetytime",
-					"discoveryrange", "discoverymessage", "respawnmessage")));
 
 
 	/**
@@ -78,100 +65,23 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	public List<String> onTabComplete(final CommandSender sender, final Command command,
 									  final String alias, final String[] args) {
 
-		List<String> returnList = new ArrayList<>();
+		// if more than one argument, use tab completer of subcommand
+		if (args.length > 1) {
+
+			// get subcommand from map
+			Subcommand subcommand = subcommandMap.getCommand(args[0]);
+
+			// if no subcommand returned from map, return empty list
+			if (subcommand == null) {
+				return Collections.emptyList();
+			}
+
+			// return subcommand tab completer output
+			return subcommand.onTabComplete(sender, command, alias, args);
+		}
 
 		// return list of subcommands for which sender has permission
-		if (args.length == 1) {
-			returnList = matchCommandsForPlayer(sender, args[0]);
-		}
-
-		else if (args.length == 2) {
-			// return list of valid matching graveyard names
-			if (args[0].equalsIgnoreCase("teleport")
-					|| args[0].equalsIgnoreCase("tp")
-					|| args[0].equalsIgnoreCase("set")
-					|| args[0].equalsIgnoreCase("show")
-					|| args[0].equalsIgnoreCase("delete")) {
-				returnList = plugin.dataStore.selectMatchingGraveyardNames(args[1]);
-			}
-
-			// if forget command, return list of players that have discovered graveyards
-			else if (args[0].equalsIgnoreCase("forget")) {
-
-				// get collection of players with discoveries
-				Collection<String> playerNames = plugin.dataStore.selectPlayersWithDiscoveries();
-
-				// add matching player names to return list
-				for (String playerName : playerNames) {
-					if (playerName != null && playerName.toLowerCase().startsWith(args[1].toLowerCase())) {
-						returnList.add(playerName);
-					}
-				}
-			}
-
-			// if help command, return list of subcommands for which sender has permission,
-			// except help command itself
-			else if (args[0].equalsIgnoreCase("help")) {
-				for (String subcommand : SUBCOMMANDS) {
-					if (sender.hasPermission("graveyard." + subcommand)
-							&& subcommand.startsWith(args[1].toLowerCase())
-							&& !subcommand.equalsIgnoreCase("help")) {
-						returnList.add(subcommand);
-					}
-				}
-			}
-		}
-
-		else if (args.length == 3) {
-
-			// if set command, return list of attributes that player has permission to change
-			if (args[0].equalsIgnoreCase("set")) {
-				for (String attribute : ATTRIBUTES) {
-					if (sender.hasPermission("graveyard.set." + attribute)
-							&& attribute.startsWith(args[2])) {
-						returnList.add(attribute);
-					}
-				}
-			}
-
-			// if forget command, return list of discovered graveyards for player
-			else if (args[0].equalsIgnoreCase("forget")) {
-
-				// get uid for player name in args[1]
-				String playerName = args[1];
-
-				// get all offline players
-				List<OfflinePlayer> offlinePlayers = new ArrayList<>(Arrays.asList(
-						plugin.getServer().getOfflinePlayers()));
-
-				UUID playerUid = null;
-
-				// iterate over offline players trying to match name
-				for (OfflinePlayer offlinePlayer : offlinePlayers) {
-					if (playerName.equalsIgnoreCase(offlinePlayer.getName())) {
-						playerUid = offlinePlayer.getUniqueId();
-						break;
-					}
-				}
-
-				// if playerUid is null, return empty list
-				if (playerUid == null) {
-					return Collections.emptyList();
-				}
-
-				// get graveyard keys discovered by player
-				Collection<String> graveyardKeys =
-						plugin.dataStore.selectDiscoveredKeys(playerUid);
-
-				// iterate over graveyards
-				for (String graveyardKey : graveyardKeys) {
-					if (graveyardKey.startsWith(args[2])) {
-						returnList.add(graveyardKey);
-					}
-				}
-			}
-		}
-		return returnList;
+		return matchingCommands(sender, args[0]);
 	}
 
 
@@ -212,11 +122,17 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	}
 
 
-	private List<String> matchCommandsForPlayer(CommandSender sender, String matchString) {
+	/**
+	 * Get matching list of subcommands for which sender has permission
+	 * @param sender the command sender
+	 * @param matchString the string prefix to match against command names
+	 * @return List of String - command names that match prefix and sender has permission
+	 */
+	private List<String> matchingCommands(CommandSender sender, String matchString) {
 
 		List<String> returnList = new ArrayList<>();
 
-		for (String subcommand : SUBCOMMANDS) {
+		for (String subcommand : subcommandMap.getKeys()) {
 			if (sender.hasPermission("graveyard." + subcommand)
 					&& subcommand.startsWith(matchString.toLowerCase())) {
 				returnList.add(subcommand);

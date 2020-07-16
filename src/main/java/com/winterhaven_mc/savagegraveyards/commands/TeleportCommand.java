@@ -5,6 +5,7 @@ import com.winterhaven_mc.savagegraveyards.messages.Message;
 import com.winterhaven_mc.savagegraveyards.sounds.SoundId;
 import com.winterhaven_mc.savagegraveyards.storage.Graveyard;
 import org.bukkit.Location;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -33,6 +34,19 @@ public class TeleportCommand extends AbstractCommand implements Subcommand {
 		this.setUsage("/graveyard teleport <name>");
 		this.setDescription(COMMAND_HELP_TELEPORT);
 		this.addAlias("tp");
+	}
+
+
+	@Override
+	public List<String> onTabComplete(final CommandSender sender, final Command command,
+									  final String alias, final String[] args) {
+
+		if (args.length == 2) {
+			// return list of valid matching graveyard names
+			return plugin.dataStore.selectMatchingGraveyardNames(args[1]);
+		}
+
+		return Collections.emptyList();
 	}
 
 

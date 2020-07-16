@@ -4,8 +4,10 @@ import com.winterhaven_mc.savagegraveyards.PluginMain;
 import com.winterhaven_mc.savagegraveyards.messages.Message;
 import com.winterhaven_mc.savagegraveyards.sounds.SoundId;
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,6 +34,28 @@ public class HelpCommand extends AbstractCommand implements Subcommand {
 		this.subcommandMap = Objects.requireNonNull(subcommandMap);
 		setUsage("/graveyard help [command]");
 		setDescription(COMMAND_HELP_HELP);
+	}
+
+
+	@Override
+	public List<String> onTabComplete(final CommandSender sender, final Command command,
+									  final String alias, final String[] args) {
+
+		List<String> returnList = new ArrayList<>();
+
+		if (args.length == 2) {
+			if (args[0].equalsIgnoreCase("help")) {
+				for (String subcommand : subcommandMap.getKeys()) {
+					if (sender.hasPermission("graveyard." + subcommand)
+							&& subcommand.startsWith(args[1].toLowerCase())
+							&& !subcommand.equalsIgnoreCase("help")) {
+						returnList.add(subcommand);
+					}
+				}
+			}
+		}
+
+		return returnList;
 	}
 
 

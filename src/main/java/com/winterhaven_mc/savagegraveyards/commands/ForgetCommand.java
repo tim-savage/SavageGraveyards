@@ -5,10 +5,10 @@ import com.winterhaven_mc.savagegraveyards.messages.Message;
 import com.winterhaven_mc.savagegraveyards.sounds.SoundId;
 import com.winterhaven_mc.savagegraveyards.storage.Graveyard;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static com.winterhaven_mc.savagegraveyards.messages.Macro.GRAVEYARD;
 import static com.winterhaven_mc.savagegraveyards.messages.Macro.TARGET_PLAYER;
@@ -32,6 +32,65 @@ public class ForgetCommand extends AbstractCommand implements Subcommand {
 		this.plugin = Objects.requireNonNull(plugin);
 		setUsage("/graveyard forget <player> <graveyard name>");
 		setDescription(COMMAND_HELP_FORGET);
+	}
+
+
+	@Override
+	public List<String> onTabComplete(final CommandSender sender, final Command command,
+									  final String alias, final String[] args) {
+
+		List<String> returnList = new ArrayList<>();
+
+		if (args.length == 2) {
+
+			// get collection of players with discoveries
+			Collection<String> playerNames = plugin.dataStore.selectPlayersWithDiscoveries();
+
+			// add matching player names to return list
+			for (String playerName : playerNames) {
+				if (playerName != null && playerName.toLowerCase().startsWith(args[1].toLowerCase())) {
+					returnList.add(playerName);
+				}
+			}
+		}
+
+		else if (args.length == 3) {
+
+			// get uid for player name in args[1]
+			String playerName = args[1];
+
+			// get all offline players
+			List<OfflinePlayer> offlinePlayers = new ArrayList<>(Arrays.asList(
+					plugin.getServer().getOfflinePlayers()));
+
+			UUID playerUid = null;
+
+			// iterate over offline players trying to match name
+			for (OfflinePlayer offlinePlayer : offlinePlayers) {
+				if (playerName.equalsIgnoreCase(offlinePlayer.getName())) {
+					playerUid = offlinePlayer.getUniqueId();
+					break;
+				}
+			}
+
+			// if playerUid is null, return empty list
+			if (playerUid == null) {
+				return Collections.emptyList();
+			}
+
+			// get graveyard keys discovered by player
+			Collection<String> graveyardKeys =
+					plugin.dataStore.selectDiscoveredKeys(playerUid);
+
+			// iterate over graveyards
+			for (String graveyardKey : graveyardKeys) {
+				if (graveyardKey.startsWith(args[2])) {
+					returnList.add(graveyardKey);
+				}
+			}
+		}
+
+		return returnList;
 	}
 
 

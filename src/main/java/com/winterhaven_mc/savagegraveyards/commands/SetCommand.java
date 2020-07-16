@@ -5,11 +5,11 @@ import com.winterhaven_mc.savagegraveyards.messages.Message;
 import com.winterhaven_mc.savagegraveyards.sounds.SoundId;
 import com.winterhaven_mc.savagegraveyards.storage.Graveyard;
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static com.winterhaven_mc.savagegraveyards.messages.Macro.*;
@@ -26,6 +26,12 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 
 	private final static int CONFIG_DEFAULT = -1;
 
+	// list of possible attributes
+	private final static List<String> ATTRIBUTES =
+			Collections.unmodifiableList(new ArrayList<>(Arrays.asList(
+					"enabled", "hidden", "location", "name", "safetytime",
+					"discoveryrange", "discoverymessage", "respawnmessage")));
+
 
 	/**
 	 * Class constructor
@@ -35,6 +41,31 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 		this.plugin = Objects.requireNonNull(plugin);
 		setUsage("/graveyard set <graveyard> <attribute> <value>");
 		setDescription(COMMAND_HELP_SET);
+	}
+
+
+	@Override
+	public List<String> onTabComplete(final CommandSender sender, final Command command,
+									  final String alias, final String[] args) {
+
+		List<String> returnList = new ArrayList<>();
+
+		if (args.length == 2) {
+			// return list of valid matching graveyard names
+			returnList = plugin.dataStore.selectMatchingGraveyardNames(args[1]);
+		}
+
+		else if (args.length == 3) {
+
+			for (String attribute : ATTRIBUTES) {
+				if (sender.hasPermission("graveyard.set." + attribute)
+						&& attribute.startsWith(args[2])) {
+					returnList.add(attribute);
+				}
+			}
+		}
+
+		return returnList;
 	}
 
 
