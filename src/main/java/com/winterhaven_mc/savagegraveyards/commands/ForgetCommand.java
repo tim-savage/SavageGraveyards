@@ -30,6 +30,7 @@ public class ForgetCommand extends AbstractCommand implements Subcommand {
 	 */
 	ForgetCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
+		this.setName("forget");
 		setUsage("/graveyard forget <player> <graveyard name>");
 		setDescription(COMMAND_HELP_FORGET);
 	}

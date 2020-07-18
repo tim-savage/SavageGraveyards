@@ -39,8 +39,9 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 	 */
 	SetCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		setUsage("/graveyard set <graveyard> <attribute> <value>");
-		setDescription(COMMAND_HELP_SET);
+		this.setName("set");
+		this.setUsage("/graveyard set <graveyard> <attribute> <value>");
+		this.setDescription(COMMAND_HELP_SET);
 	}
 
 

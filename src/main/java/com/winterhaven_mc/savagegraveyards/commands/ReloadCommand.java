@@ -28,8 +28,9 @@ public class ReloadCommand extends AbstractCommand implements Subcommand {
 	 */
 	ReloadCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		setUsage("/graveyard reload");
-		setDescription(COMMAND_HELP_RELOAD);
+		this.setName("reload");
+		this.setUsage("/graveyard reload");
+		this.setDescription(COMMAND_HELP_RELOAD);
 	}
 
 

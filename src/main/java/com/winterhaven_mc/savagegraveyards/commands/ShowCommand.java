@@ -31,8 +31,9 @@ public class ShowCommand extends AbstractCommand implements Subcommand {
 	 */
 	ShowCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		setUsage("/graveyard show <graveyard>");
-		setDescription(COMMAND_HELP_SHOW);
+		this.setName("show");
+		this.setUsage("/graveyard show <graveyard>");
+		this.setDescription(COMMAND_HELP_SHOW);
 	}
 
 

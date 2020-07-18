@@ -30,8 +30,9 @@ public class DeleteCommand extends AbstractCommand implements Subcommand {
 	 */
 	DeleteCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		setDescription(COMMAND_HELP_DELETE);
-		setUsage("/graveyard delete <graveyard name>");
+		this.setName("delete");
+		this.setDescription(COMMAND_HELP_DELETE);
+		this.setUsage("/graveyard delete <graveyard name>");
 	}
 
 

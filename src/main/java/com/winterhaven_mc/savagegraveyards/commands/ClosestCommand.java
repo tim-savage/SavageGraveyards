@@ -30,9 +30,10 @@ public class ClosestCommand extends AbstractCommand implements Subcommand {
 	 */
 	ClosestCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		setUsage("/graveyard closest");
-		setDescription(COMMAND_HELP_CLOSEST);
-		addAlias("nearest");
+		this.setName("closest");
+		this.setUsage("/graveyard closest");
+		this.setDescription(COMMAND_HELP_CLOSEST);
+		this.addAlias("nearest");
 	}
 
 

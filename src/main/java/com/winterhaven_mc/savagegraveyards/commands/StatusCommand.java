@@ -27,8 +27,9 @@ public class StatusCommand extends AbstractCommand implements Subcommand {
 	 */
 	StatusCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		setUsage("/graveyard status");
-		setDescription(COMMAND_HELP_SHOW);
+		this.setName("status");
+		this.setUsage("/graveyard status");
+		this.setDescription(COMMAND_HELP_STATUS);
 	}
 
 

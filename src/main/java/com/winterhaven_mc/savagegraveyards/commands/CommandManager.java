@@ -31,30 +31,19 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 *
 	 * @param plugin reference to main class
 	 */
-	@SuppressWarnings("ConstantConditions")
 	public CommandManager(final PluginMain plugin) {
 
 		// set reference to main class
 		this.plugin = plugin;
 
 		// register this class as command executor
+		//noinspection ConstantConditions
 		plugin.getCommand("graveyard").setExecutor(this);
 
-		// register this class as tab completer
-		plugin.getCommand("graveyard").setTabCompleter(this);
-
-		// register subcommands in subcommand map
-		subcommandMap.register("closest", new ClosestCommand(plugin));
-		subcommandMap.register("create", new CreateCommand(plugin));
-		subcommandMap.register("delete", new DeleteCommand(plugin));
-		subcommandMap.register("forget", new ForgetCommand(plugin));
-		subcommandMap.register("help", new HelpCommand(plugin, subcommandMap));
-		subcommandMap.register("list", new ListCommand(plugin));
-		subcommandMap.register("reload", new ReloadCommand(plugin));
-		subcommandMap.register("set", new SetCommand(plugin));
-		subcommandMap.register("show", new ShowCommand(plugin));
-		subcommandMap.register("status", new StatusCommand(plugin));
-		subcommandMap.register("teleport", new TeleportCommand(plugin));
+		// register subcommands
+		for (SubcommandType subcommandType : SubcommandType.values()) {
+			subcommandType.register(plugin, subcommandMap);
+		}
 	}
 
 

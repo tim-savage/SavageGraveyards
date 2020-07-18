@@ -11,18 +11,17 @@ public class SubcommandMap {
 
 	/**
 	 * Register a subcommand in the map by name.
-	 * @param name the command name
-	 * @param command an instance of the command
+	 * @param subcommand an instance of the command
 	 */
-	void register(final String name, final Subcommand command) {
+	void register(final Subcommand subcommand) {
 
-		command.setName(name);
+		String name = subcommand.getName();
 
-		subcommandMap.put(name.toLowerCase(), command);
+		subcommandMap.put(name.toLowerCase(), subcommand);
 
-		command.getAliases();
+		subcommand.getAliases();
 
-		for (String alias : command.getAliases()) {
+		for (String alias : subcommand.getAliases()) {
 			aliasMap.put(alias.toLowerCase(), name.toLowerCase());
 		}
 	}

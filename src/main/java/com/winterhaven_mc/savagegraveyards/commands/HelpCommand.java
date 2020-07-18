@@ -3,7 +3,6 @@ package com.winterhaven_mc.savagegraveyards.commands;
 import com.winterhaven_mc.savagegraveyards.PluginMain;
 import com.winterhaven_mc.savagegraveyards.messages.Message;
 import com.winterhaven_mc.savagegraveyards.sounds.SoundId;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -32,8 +31,9 @@ public class HelpCommand extends AbstractCommand implements Subcommand {
 	HelpCommand(final PluginMain plugin, final SubcommandMap subcommandMap) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.subcommandMap = Objects.requireNonNull(subcommandMap);
-		setUsage("/graveyard help [command]");
-		setDescription(COMMAND_HELP_HELP);
+		this.setName("help");
+		this.setUsage("/graveyard help [command]");
+		this.setDescription(COMMAND_HELP_HELP);
 	}
 
 
@@ -71,7 +71,6 @@ public class HelpCommand extends AbstractCommand implements Subcommand {
 
 		// if no arguments, display usage for all commands
 		if (args.size() == 0) {
-			sender.sendMessage(ChatColor.YELLOW + "Command usage:");
 			displayUsageAll(sender);
 			return true;
 		}
@@ -113,6 +112,8 @@ public class HelpCommand extends AbstractCommand implements Subcommand {
 	 * @param sender the command sender
 	 */
 	void displayUsageAll(CommandSender sender) {
+
+		Message.create(sender, COMMAND_HELP_USAGE_HEADER).send();
 
 		for (String subcommandName : subcommandMap.getKeys()) {
 			if (subcommandMap.getCommand(subcommandName) != null) {

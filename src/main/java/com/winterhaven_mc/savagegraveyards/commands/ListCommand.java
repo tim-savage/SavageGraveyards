@@ -28,8 +28,9 @@ public class ListCommand extends AbstractCommand implements Subcommand {
 	 */
 	ListCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		setUsage("/graveyard list [page]");
-		setDescription(COMMAND_HELP_LIST);
+		this.setName("list");
+		this.setUsage("/graveyard list [page]");
+		this.setDescription(COMMAND_HELP_LIST);
 	}
 
 

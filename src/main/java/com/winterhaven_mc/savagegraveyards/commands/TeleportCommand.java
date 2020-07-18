@@ -31,6 +31,7 @@ public class TeleportCommand extends AbstractCommand implements Subcommand {
 	 */
 	TeleportCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
+		this.setName("teleport");
 		this.setUsage("/graveyard teleport <name>");
 		this.setDescription(COMMAND_HELP_TELEPORT);
 		this.addAlias("tp");

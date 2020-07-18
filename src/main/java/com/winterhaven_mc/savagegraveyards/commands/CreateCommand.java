@@ -29,6 +29,7 @@ public class CreateCommand extends AbstractCommand implements Subcommand {
 	 */
 	CreateCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
+		this.setName("create");
 		this.setUsage("/graveyard create <graveyard name>");
 		this.setDescription(COMMAND_HELP_CREATE);
 	}

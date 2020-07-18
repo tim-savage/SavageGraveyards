@@ -62,9 +62,10 @@ public abstract class AbstractCommand implements Subcommand {
 	}
 
 	@Override
-	public void setDescription(MessageId description) {
+	public void setDescription(final MessageId description) {
 		this.description = description;
 	}
+
 
 	@Override
 	public List<String> onTabComplete(final CommandSender sender, final Command command,
