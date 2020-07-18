@@ -220,7 +220,11 @@ MESSAGES:
 
   COMMAND_HELP_INVALID:
     enabled: true
-    string: '&eThat is not a valid command.'
+    string: '&3[Graveyards]&c That is not a valid command!'
+
+  COMMAND_HELP_USAGE_HEADER:
+    enabled: true
+    string: '&eCommand usage:'
 
 
   DEFAULT_DISCOVERY:
