@@ -43,14 +43,14 @@ public class ClosestCommand extends AbstractCommand implements Subcommand {
 		// if command sender does not have permission to display closest graveyard,
 		// output error message and return true
 		if (!sender.hasPermission("graveyard.closest")) {
-			Message.create(sender, PERMISSION_DENIED_CLOSEST).send();
+			Message.create(sender, PERMISSION_DENIED_CLOSEST).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// sender must be in game player
 		if (!(sender instanceof Player)) {
-			Message.create(sender, COMMAND_FAIL_CONSOLE).send();
+			Message.create(sender, COMMAND_FAIL_CONSOLE).send(plugin.languageHandler);
 			return true;
 		}
 
@@ -62,7 +62,7 @@ public class ClosestCommand extends AbstractCommand implements Subcommand {
 
 		// if no graveyard returned from datastore, send failure message and return
 		if (graveyard == null || graveyard.getLocation() == null) {
-			Message.create(sender, COMMAND_FAIL_CLOSEST_NO_MATCH).send();
+			Message.create(sender, COMMAND_FAIL_CLOSEST_NO_MATCH).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -71,7 +71,7 @@ public class ClosestCommand extends AbstractCommand implements Subcommand {
 		Message.create(sender, COMMAND_SUCCESS_CLOSEST)
 				.setMacro(GRAVEYARD, graveyard)
 				.setMacro(LOCATION, graveyard.getLocation())
-				.send();
+				.send(plugin.languageHandler);
 		return true;
 	}
 

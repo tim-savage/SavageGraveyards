@@ -88,7 +88,7 @@ public class DiscoveryTask extends BukkitRunnable {
 								Message.create(player, MessageId.DEFAULT_DISCOVERY)
 										.setMacro(Macro.GRAVEYARD, graveyard)
 										.setMacro(Macro.LOCATION, graveyardLocation)
-										.send();
+										.send(plugin.languageHandler);
 							}
 
 							// call discovery event

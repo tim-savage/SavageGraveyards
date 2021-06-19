@@ -5,10 +5,7 @@ import com.winterhaven_mc.savagegraveyards.listeners.PlayerEventListener;
 import com.winterhaven_mc.savagegraveyards.storage.DataStore;
 import com.winterhaven_mc.savagegraveyards.tasks.DiscoveryTask;
 import com.winterhaven_mc.savagegraveyards.util.SafetyManager;
-import com.winterhaven_mc.util.LanguageManager;
-import com.winterhaven_mc.util.SoundConfiguration;
-import com.winterhaven_mc.util.WorldManager;
-import com.winterhaven_mc.util.YamlSoundConfiguration;
+import com.winterhaven_mc.util.*;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
@@ -23,13 +20,16 @@ import org.bukkit.scheduler.BukkitTask;
  */
 public final class PluginMain extends JavaPlugin {
 
-	public Boolean debug = getConfig().getBoolean("debug");
+	public boolean debug = getConfig().getBoolean("debug");
 
 	public DataStore dataStore;
 	public WorldManager worldManager;
 	public SoundConfiguration soundConfig;
 	public SafetyManager safetyManager;
+	public LanguageHandler languageHandler;
 	private BukkitTask discoveryTask;
+
+	protected PlayerEventListener playerEventListener;
 
 
 	@Override
@@ -39,7 +39,7 @@ public final class PluginMain extends JavaPlugin {
 		saveDefaultConfig();
 
 		// initialize language manager
-		LanguageManager.init();
+		languageHandler = new LanguageHandler(this);
 
 		// instantiate world manager
 		worldManager = new WorldManager(this);
@@ -54,7 +54,7 @@ public final class PluginMain extends JavaPlugin {
 		safetyManager = new SafetyManager(this);
 
 		// instantiate player event listener
-		new PlayerEventListener(this);
+		playerEventListener = new PlayerEventListener(this);
 
 		// instantiate command manager
 		new CommandManager(this);

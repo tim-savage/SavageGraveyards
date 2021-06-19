@@ -40,13 +40,13 @@ public class CreateCommand extends AbstractCommand implements Subcommand {
 
 		// sender must be in game player
 		if (!(sender instanceof Player)) {
-			Message.create(sender, COMMAND_FAIL_CONSOLE).send();
+			Message.create(sender, COMMAND_FAIL_CONSOLE).send(plugin.languageHandler);
 			return true;
 		}
 
 		// check for permission
 		if (!sender.hasPermission("graveyard.create")) {
-			Message.create(sender, PERMISSION_DENIED_CREATE).send();
+			Message.create(sender, PERMISSION_DENIED_CREATE).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -55,7 +55,7 @@ public class CreateCommand extends AbstractCommand implements Subcommand {
 
 		// check min arguments
 		if (args.size() < minArgs) {
-			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send();
+			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
@@ -91,7 +91,7 @@ public class CreateCommand extends AbstractCommand implements Subcommand {
 			Message.create(sender, COMMAND_SUCCESS_CREATE)
 					.setMacro(GRAVEYARD, newGraveyard)
 					.setMacro(LOCATION, location)
-					.send();
+					.send(plugin.languageHandler);
 
 			// play sound effect
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
@@ -115,7 +115,7 @@ public class CreateCommand extends AbstractCommand implements Subcommand {
 			Message.create(sender, COMMAND_SUCCESS_CREATE)
 					.setMacro(GRAVEYARD, newGraveyard)
 					.setMacro(LOCATION, newGraveyard.getLocation())
-					.send();
+					.send(plugin.languageHandler);
 
 			// play sound effect
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
@@ -125,7 +125,7 @@ public class CreateCommand extends AbstractCommand implements Subcommand {
 		// send graveyard exists error message
 		Message.create(sender, COMMAND_FAIL_CREATE_EXISTS)
 				.setMacro(GRAVEYARD, existingGraveyard)
-				.send();
+				.send(plugin.languageHandler);
 
 		// play sound effect
 		plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);

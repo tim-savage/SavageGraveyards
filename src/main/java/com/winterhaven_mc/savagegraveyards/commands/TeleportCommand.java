@@ -56,13 +56,13 @@ public class TeleportCommand extends AbstractCommand implements Subcommand {
 
 		// sender must be in game player
 		if (!(sender instanceof Player)) {
-			Message.create(sender, COMMAND_FAIL_CONSOLE).send();
+			Message.create(sender, COMMAND_FAIL_CONSOLE).send(plugin.languageHandler);
 			return true;
 		}
 
 		// check for permission
 		if (!sender.hasPermission("graveyard.teleport")) {
-			Message.create(sender, PERMISSION_DENIED_TELEPORT).send();
+			Message.create(sender, PERMISSION_DENIED_TELEPORT).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -71,7 +71,7 @@ public class TeleportCommand extends AbstractCommand implements Subcommand {
 		int minArgs = 1;
 
 		if (args.size() < minArgs) {
-			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send();
+			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send(plugin.languageHandler);
 			displayUsage(sender);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
@@ -95,7 +95,7 @@ public class TeleportCommand extends AbstractCommand implements Subcommand {
 			// send message
 			Message.create(sender, COMMAND_FAIL_NO_RECORD)
 					.setMacro(GRAVEYARD, dummyGraveyard)
-					.send();
+					.send(plugin.languageHandler);
 
 			// play sound
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
@@ -112,7 +112,7 @@ public class TeleportCommand extends AbstractCommand implements Subcommand {
 			Message.create(sender, COMMAND_FAIL_TELEPORT_WORLD_INVALID)
 					.setMacro(GRAVEYARD, graveyard)
 					.setMacro(INVALID_WORLD, graveyard.getWorldName())
-					.send();
+					.send(plugin.languageHandler);
 
 			// play sound
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
@@ -125,12 +125,12 @@ public class TeleportCommand extends AbstractCommand implements Subcommand {
 			Message.create(sender, COMMAND_SUCCESS_TELEPORT)
 					.setMacro(GRAVEYARD, graveyard)
 					.setMacro(LOCATION, graveyard.getLocation())
-					.send();
+					.send(plugin.languageHandler);
 			plugin.soundConfig.playSound(player, SoundId.TELEPORT_SUCCESS_ARRIVAL);
 		}
 		else {
 			// send message
-			Message.create(sender, COMMAND_FAIL_TELEPORT).setMacro(GRAVEYARD, graveyard).send();
+			Message.create(sender, COMMAND_FAIL_TELEPORT).setMacro(GRAVEYARD, graveyard).send(plugin.languageHandler);
 
 			// play sound
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
