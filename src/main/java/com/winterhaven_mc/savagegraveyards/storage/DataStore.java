@@ -316,8 +316,8 @@ public abstract class DataStore {
 		// if old datastore file exists, attempt to read all records
 		if (oldDataStore.exists()) {
 
-			plugin.getLogger().info("Converting existing " + oldDataStore.toString() + " datastore to "
-					+ newDataStore.toString() + " datastore...");
+			plugin.getLogger().info("Converting existing " + oldDataStore + " datastore to "
+					+ newDataStore + " datastore...");
 
 			// initialize old datastore if necessary
 			if (!oldDataStore.isInitialized()) {
@@ -326,7 +326,7 @@ public abstract class DataStore {
 				}
 				catch (Exception e) {
 					plugin.getLogger().warning("Could not initialize "
-							+ oldDataStore.toString() + " datastore for conversion.");
+							+ oldDataStore + " datastore for conversion.");
 					plugin.getLogger().warning(e.getLocalizedMessage());
 					return;
 				}
@@ -334,7 +334,7 @@ public abstract class DataStore {
 
 			int count = newDataStore.insertGraveyards(oldDataStore.selectAllGraveyards());
 
-			plugin.getLogger().info(count + " records converted to " + newDataStore.toString() + " datastore.");
+			plugin.getLogger().info(count + " records converted to " + newDataStore + " datastore.");
 
 			newDataStore.sync();
 

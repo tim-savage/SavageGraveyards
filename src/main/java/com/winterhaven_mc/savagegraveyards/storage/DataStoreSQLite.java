@@ -52,7 +52,7 @@ class DataStoreSQLite extends DataStore {
 
 		// if data store is already initialized, do nothing and return
 		if (this.isInitialized()) {
-			plugin.getLogger().info(this.toString() + " datastore already initialized.");
+			plugin.getLogger().info(this + " datastore already initialized.");
 			return;
 		}
 
@@ -77,7 +77,7 @@ class DataStoreSQLite extends DataStore {
 
 		// set initialized true
 		setInitialized(true);
-		plugin.getLogger().info(this.toString() + " datastore initialized.");
+		plugin.getLogger().info(this + " datastore initialized.");
 	}
 
 

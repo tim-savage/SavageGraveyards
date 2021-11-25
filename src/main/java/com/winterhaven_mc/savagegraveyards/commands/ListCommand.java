@@ -39,7 +39,7 @@ public class ListCommand extends AbstractCommand implements Subcommand {
 
 		// if command sender does not have permission to list graveyards, output error message and return true
 		if (!sender.hasPermission("graveyard.list")) {
-			Message.create(sender, PERMISSION_DENIED_LIST).send();
+			Message.create(sender, PERMISSION_DENIED_LIST).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -48,7 +48,7 @@ public class ListCommand extends AbstractCommand implements Subcommand {
 		int maxArgs = 1;
 
 		if (args.size() > maxArgs) {
-			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send();
+			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send(plugin.languageHandler);
 			displayUsage(sender);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
@@ -132,7 +132,7 @@ public class ListCommand extends AbstractCommand implements Subcommand {
 
 		// if display list is empty, output list empty message and return
 		if (displayRecords.isEmpty()) {
-			Message.create(sender, LIST_EMPTY).send();
+			Message.create(sender, LIST_EMPTY).send(plugin.languageHandler);
 			return true;
 		}
 
@@ -149,7 +149,7 @@ public class ListCommand extends AbstractCommand implements Subcommand {
 		int itemNumber = startIndex;
 
 		// display list header
-		Message.create(sender, LIST_HEADER).setMacro(PAGE_NUMBER, page).setMacro(PAGE_TOTAL, pageCount).send();
+		Message.create(sender, LIST_HEADER).setMacro(PAGE_NUMBER, page).setMacro(PAGE_TOTAL, pageCount).send(plugin.languageHandler);
 
 		for (Graveyard graveyard : displayRange) {
 
@@ -162,7 +162,7 @@ public class ListCommand extends AbstractCommand implements Subcommand {
 						.setMacro(GRAVEYARD, graveyard)
 						.setMacro(ITEM_NUMBER, itemNumber)
 						.setMacro(INVALID_WORLD, graveyard.getWorldName())
-						.send();
+						.send(plugin.languageHandler);
 				continue;
 			}
 
@@ -173,7 +173,7 @@ public class ListCommand extends AbstractCommand implements Subcommand {
 						.setMacro(GRAVEYARD, graveyard)
 						.setMacro(ITEM_NUMBER, itemNumber)
 						.setMacro(LOCATION, graveyard.getLocation())
-						.send();
+						.send(plugin.languageHandler);
 				continue;
 			}
 
@@ -183,7 +183,7 @@ public class ListCommand extends AbstractCommand implements Subcommand {
 						.setMacro(GRAVEYARD, graveyard)
 						.setMacro(ITEM_NUMBER, itemNumber)
 						.setMacro(LOCATION, graveyard.getLocation())
-						.send();
+						.send(plugin.languageHandler);
 				continue;
 			}
 
@@ -192,11 +192,11 @@ public class ListCommand extends AbstractCommand implements Subcommand {
 					.setMacro(GRAVEYARD, graveyard)
 					.setMacro(ITEM_NUMBER, itemNumber)
 					.setMacro(LOCATION, graveyard.getLocation())
-					.send();
+					.send(plugin.languageHandler);
 		}
 
 		// display list footer
-		Message.create(sender, LIST_FOOTER).setMacro(PAGE_NUMBER, page).setMacro(PAGE_TOTAL, pageCount).send();
+		Message.create(sender, LIST_FOOTER).setMacro(PAGE_NUMBER, page).setMacro(PAGE_TOTAL, pageCount).send(plugin.languageHandler);
 
 		return true;	}
 }

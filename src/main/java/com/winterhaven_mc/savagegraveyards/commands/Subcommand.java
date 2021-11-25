@@ -20,10 +20,12 @@ public interface Subcommand {
 
 	List<String> getAliases();
 
+	@SuppressWarnings("unused")
 	void setAliases(List<String> aliases);
 
 	void addAlias(String alias);
 
+	@SuppressWarnings("unused")
 	String getUsage();
 
 	void setUsage(String usageString);

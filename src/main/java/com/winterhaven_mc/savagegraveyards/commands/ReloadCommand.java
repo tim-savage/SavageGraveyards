@@ -4,7 +4,6 @@ import com.winterhaven_mc.savagegraveyards.PluginMain;
 import com.winterhaven_mc.savagegraveyards.messages.Message;
 import com.winterhaven_mc.savagegraveyards.sounds.SoundId;
 import com.winterhaven_mc.savagegraveyards.storage.DataStore;
-import com.winterhaven_mc.util.LanguageManager;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -39,7 +38,7 @@ public class ReloadCommand extends AbstractCommand implements Subcommand {
 
 		// if sender does not have permission to reload config, send error message and return true
 		if (!sender.hasPermission("graveyard.reload")) {
-			Message.create(sender, PERMISSION_DENIED_RELOAD).send();
+			Message.create(sender, PERMISSION_DENIED_RELOAD).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -51,7 +50,7 @@ public class ReloadCommand extends AbstractCommand implements Subcommand {
 		plugin.worldManager.reload();
 
 		// reload messages
-		LanguageManager.reload();
+		plugin.languageHandler.reload();
 
 		// reload sounds
 		plugin.soundConfig.reload();
@@ -63,7 +62,7 @@ public class ReloadCommand extends AbstractCommand implements Subcommand {
 		plugin.debug = plugin.getConfig().getBoolean("debug");
 
 		// send reloaded message
-		Message.create(sender, COMMAND_SUCCESS_RELOAD).send();
+		Message.create(sender, COMMAND_SUCCESS_RELOAD).send(plugin.languageHandler);
 
 		// return true to suppress bukkit usage message
 		return true;

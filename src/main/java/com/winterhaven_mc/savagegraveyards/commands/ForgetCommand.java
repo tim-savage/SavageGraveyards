@@ -100,7 +100,7 @@ public class ForgetCommand extends AbstractCommand implements Subcommand {
 
 		// check for permission
 		if (!sender.hasPermission("graveyard.forget")) {
-			Message.create(sender, PERMISSION_DENIED_FORGET).send();
+			Message.create(sender, PERMISSION_DENIED_FORGET).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -110,7 +110,7 @@ public class ForgetCommand extends AbstractCommand implements Subcommand {
 
 		// check for minimum arguments
 		if (args.size() < minArgs) {
-			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send();
+			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send(plugin.languageHandler);
 			displayUsage(sender);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
@@ -132,12 +132,11 @@ public class ForgetCommand extends AbstractCommand implements Subcommand {
 
 		// if player not found, send message and return
 		if (player == null) {
-			Message.create(sender, COMMAND_FAIL_FORGET_INVALID_PLAYER).send();
+			Message.create(sender, COMMAND_FAIL_FORGET_INVALID_PLAYER).send(plugin.languageHandler);
 			return true;
 		}
 
 		// get graveyard search key
-//		String searchKey = args.remove(0);
 		String searchKey = String.join("_", args);
 
 		// get graveyard (for messages)
@@ -152,32 +151,12 @@ public class ForgetCommand extends AbstractCommand implements Subcommand {
 			// send graveyard not found message
 			Message.create(sender, COMMAND_FAIL_FORGET_INVALID_GRAVEYARD)
 					.setMacro(GRAVEYARD, dummyGraveyard)
-					.send();
+					.send(plugin.languageHandler);
 
 			// play command fail sound
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
-
-//		// get player name
-//		String playerName = args.remove(0);
-//
-//		// get list of offline players
-//		OfflinePlayer[] offlinePlayers = plugin.getServer().getOfflinePlayers();
-//
-//		OfflinePlayer player = null;
-//
-//		for (OfflinePlayer offlinePlayer : offlinePlayers) {
-//			if (playerName.equals(offlinePlayer.getName())) {
-//				player = offlinePlayer;
-//			}
-//		}
-//
-//		// if player not found, send message and return
-//		if (player == null) {
-//			Message.create(sender, COMMAND_FAIL_FORGET_INVALID_PLAYER).send();
-//			return true;
-//		}
 
 		// delete discovery record
 		if (plugin.dataStore.deleteDiscovery(searchKey, player.getUniqueId())) {
@@ -186,7 +165,7 @@ public class ForgetCommand extends AbstractCommand implements Subcommand {
 			Message.create(sender, COMMAND_SUCCESS_FORGET)
 					.setMacro(GRAVEYARD, graveyard)
 					.setMacro(TARGET_PLAYER, player)
-					.send();
+					.send(plugin.languageHandler);
 
 			// play success sound
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_FORGET);
@@ -196,7 +175,7 @@ public class ForgetCommand extends AbstractCommand implements Subcommand {
 			Message.create(sender, COMMAND_FAIL_FORGET)
 					.setMacro(GRAVEYARD, graveyard)
 					.setMacro(TARGET_PLAYER, player)
-					.send();
+					.send(plugin.languageHandler);
 
 			// send command fail sound
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
