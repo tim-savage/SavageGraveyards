@@ -137,7 +137,6 @@ public class ForgetCommand extends AbstractCommand implements Subcommand {
 		}
 
 		// get graveyard search key
-//		String searchKey = args.remove(0);
 		String searchKey = String.join("_", args);
 
 		// get graveyard (for messages)
@@ -158,26 +157,6 @@ public class ForgetCommand extends AbstractCommand implements Subcommand {
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
-
-//		// get player name
-//		String playerName = args.remove(0);
-//
-//		// get list of offline players
-//		OfflinePlayer[] offlinePlayers = plugin.getServer().getOfflinePlayers();
-//
-//		OfflinePlayer player = null;
-//
-//		for (OfflinePlayer offlinePlayer : offlinePlayers) {
-//			if (playerName.equals(offlinePlayer.getName())) {
-//				player = offlinePlayer;
-//			}
-//		}
-//
-//		// if player not found, send message and return
-//		if (player == null) {
-//			Message.create(sender, COMMAND_FAIL_FORGET_INVALID_PLAYER).send(plugin.languageHandler);
-//			return true;
-//		}
 
 		// delete discovery record
 		if (plugin.dataStore.deleteDiscovery(searchKey, player.getUniqueId())) {

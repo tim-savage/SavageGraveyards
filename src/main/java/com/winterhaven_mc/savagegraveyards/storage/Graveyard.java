@@ -137,7 +137,7 @@ public final class Graveyard {
 		 * @param value int value to assign to builder primary key field
 		 * @return this Builder object
 		 */
-		public final Builder primaryKey(final int value) {
+		public Builder primaryKey(final int value) {
 			primaryKey = value;
 			return this;
 		}
@@ -149,7 +149,7 @@ public final class Graveyard {
 		 * @param value string value to assign to builder display name field
 		 * @return this Builder object
 		 */
-		public final Builder displayName(final String value) {
+		public Builder displayName(final String value) {
 			displayName = value;
 			searchKey = createSearchKey(value);
 			return this;
@@ -162,7 +162,7 @@ public final class Graveyard {
 		 * @param value string value to assign to builder search key field
 		 * @return this Builder object
 		 */
-		final Builder searchKey(final String value) {
+		Builder searchKey(final String value) {
 			searchKey = value;
 			return this;
 		}
@@ -174,7 +174,7 @@ public final class Graveyard {
 		 * @param value boolean value to assign to builder enabled field
 		 * @return this Builder object
 		 */
-		public final Builder enabled(final boolean value) {
+		public Builder enabled(final boolean value) {
 			enabled = value;
 			return this;
 		}
@@ -186,7 +186,7 @@ public final class Graveyard {
 		 * @param value boolean value to assign to builder hidden field
 		 * @return this Builder object
 		 */
-		public final Builder hidden(final boolean value) {
+		public Builder hidden(final boolean value) {
 			hidden = value;
 			return this;
 		}
@@ -198,7 +198,7 @@ public final class Graveyard {
 		 * @param value int value to assign to builder discovery range field
 		 * @return this Builder object
 		 */
-		public final Builder discoveryRange(final int value) {
+		public Builder discoveryRange(final int value) {
 			discoveryRange = value;
 			return this;
 		}
@@ -210,7 +210,7 @@ public final class Graveyard {
 		 * @param value string value to assign to builder discover message field
 		 * @return this Builder object
 		 */
-		public final Builder discoveryMessage(final String value) {
+		public Builder discoveryMessage(final String value) {
 			discoveryMessage = value;
 			return this;
 		}
@@ -222,7 +222,7 @@ public final class Graveyard {
 		 * @param value string value to assign to builder respawn message field
 		 * @return this Builder object
 		 */
-		public final Builder respawnMessage(final String value) {
+		public Builder respawnMessage(final String value) {
 			respawnMessage = value;
 			return this;
 		}
@@ -234,7 +234,7 @@ public final class Graveyard {
 		 * @param value string value to assign to builder group field
 		 * @return this Builder object
 		 */
-		public final Builder group(final String value) {
+		public Builder group(final String value) {
 			group = value;
 			return this;
 		}
@@ -246,7 +246,7 @@ public final class Graveyard {
 		 * @param value int value to assign to builder safety range field
 		 * @return this Builder object
 		 */
-		final Builder safetyRange(final int value) {
+		Builder safetyRange(final int value) {
 			safetyRange = value;
 			return this;
 		}
@@ -258,7 +258,7 @@ public final class Graveyard {
 		 * @param value int value to assign to builder safety time field
 		 * @return this Builder object
 		 */
-		public final Builder safetyTime(final int value) {
+		public Builder safetyTime(final int value) {
 			safetyTime = value;
 			return this;
 		}
@@ -270,7 +270,7 @@ public final class Graveyard {
 		 * @param value location value to assign to builder location fields
 		 * @return this Builder object
 		 */
-		public final Builder location(final Location value) {
+		public Builder location(final Location value) {
 
 			// if passed location is null, set worldUid null and let other values default to zero
 			if (value == null || value.getWorld() == null) {
@@ -293,7 +293,7 @@ public final class Graveyard {
 		 * @param value String value to assign to builder worldName field
 		 * @return this builder object
 		 */
-		public final Builder worldName(final String value) {
+		public Builder worldName(final String value) {
 			worldName = value;
 			return this;
 		}
@@ -305,7 +305,7 @@ public final class Graveyard {
 		 * @param value UUID value to assign to builder worldUid field
 		 * @return this builder object
 		 */
-		public final Builder worldUid(final UUID value) {
+		public Builder worldUid(final UUID value) {
 			worldUid = value;
 			return this;
 		}
@@ -316,7 +316,7 @@ public final class Graveyard {
 		 * @param value double value to assign to builder x field
 		 * @return this builder object
 		 */
-		public final Builder x(final double value) {
+		public Builder x(final double value) {
 			x = value;
 			return this;
 		}
@@ -327,7 +327,7 @@ public final class Graveyard {
 		 * @param value double value to assign to builder y field
 		 * @return this builder object
 		 */
-		public final Builder y(final double value) {
+		public Builder y(final double value) {
 			y = value;
 			return this;
 		}
@@ -338,7 +338,7 @@ public final class Graveyard {
 		 * @param value double value to assign to builder z field
 		 * @return this builder object
 		 */
-		public final Builder z(final double value) {
+		public Builder z(final double value) {
 			z = value;
 			return this;
 		}
@@ -349,7 +349,7 @@ public final class Graveyard {
 		 * @param value float value to assign to builder yaw field
 		 * @return this builder object
 		 */
-		public final Builder yaw(final float value) {
+		public Builder yaw(final float value) {
 			yaw = value;
 			return this;
 		}
@@ -360,7 +360,7 @@ public final class Graveyard {
 		 * @param value float value to assign to builder pitch field
 		 * @return this builder object
 		 */
-		public final Builder pitch(final float value) {
+		public Builder pitch(final float value) {
 			pitch = value;
 			return this;
 		}
@@ -371,7 +371,7 @@ public final class Graveyard {
 		 *
 		 * @return new Graveyard object
 		 */
-		public final Graveyard build() {
+		public Graveyard build() {
 			return new Graveyard(this);
 		}
 	}
@@ -392,7 +392,7 @@ public final class Graveyard {
 	 *
 	 * @return int - primary key
 	 */
-	public final int getPrimaryKey() {
+	public int getPrimaryKey() {
 		return primaryKey;
 	}
 
@@ -402,7 +402,7 @@ public final class Graveyard {
 	 *
 	 * @return String - display name
 	 */
-	public final String getDisplayName() {
+	public String getDisplayName() {
 		return displayName;
 	}
 
@@ -412,7 +412,7 @@ public final class Graveyard {
 	 *
 	 * @return String - search key
 	 */
-	public final String getSearchKey() {
+	public String getSearchKey() {
 		return searchKey;
 	}
 
@@ -422,7 +422,7 @@ public final class Graveyard {
 	 *
 	 * @return boolean - enabled
 	 */
-	public final boolean isEnabled() {
+	public boolean isEnabled() {
 		return enabled;
 	}
 
@@ -432,7 +432,7 @@ public final class Graveyard {
 	 *
 	 * @return boolean - hidden
 	 */
-	public final boolean isHidden() {
+	public boolean isHidden() {
 		return hidden;
 	}
 
@@ -442,7 +442,7 @@ public final class Graveyard {
 	 *
 	 * @return int - discovery range
 	 */
-	public final int getDiscoveryRange() {
+	public int getDiscoveryRange() {
 		return discoveryRange;
 	}
 
@@ -452,7 +452,7 @@ public final class Graveyard {
 	 *
 	 * @return String - group
 	 */
-	public final String getGroup() {
+	public String getGroup() {
 		return group;
 	}
 
@@ -462,7 +462,7 @@ public final class Graveyard {
 	 *
 	 * @return String - discovery message
 	 */
-	public final String getDiscoveryMessage() {
+	public String getDiscoveryMessage() {
 		return discoveryMessage;
 	}
 
@@ -472,7 +472,7 @@ public final class Graveyard {
 	 *
 	 * @return String - respawn message
 	 */
-	public final String getRespawnMessage() {
+	public String getRespawnMessage() {
 		return respawnMessage;
 	}
 
@@ -484,7 +484,7 @@ public final class Graveyard {
 	 *
 	 * @return Location - location
 	 */
-	public final Location getLocation() {
+	public Location getLocation() {
 
 		// if worldUid is null, return null
 		if (worldUid == null) {
@@ -508,7 +508,7 @@ public final class Graveyard {
 	 * Getter for worldName
 	 * @return String - worldName
 	 */
-	public final String getWorldName() {
+	public String getWorldName() {
 		return worldName;
 	}
 
@@ -517,7 +517,7 @@ public final class Graveyard {
 	 * Getter for worldUid
 	 * @return UUID - worldUid
 	 */
-	public final UUID getWorldUid() {
+	public UUID getWorldUid() {
 		return worldUid;
 	}
 
@@ -526,7 +526,7 @@ public final class Graveyard {
 	 * Getter for x
 	 * @return double - x
 	 */
-	public final double getX() {
+	public double getX() {
 		return x;
 	}
 
@@ -535,7 +535,7 @@ public final class Graveyard {
 	 * Getter for y
 	 * @return double - y
 	 */
-	public final double getY() {
+	public double getY() {
 		return y;
 	}
 
@@ -544,7 +544,7 @@ public final class Graveyard {
 	 * Getter for z
 	 * @return double - z
 	 */
-	public final double getZ() {
+	public double getZ() {
 		return z;
 	}
 
@@ -553,7 +553,7 @@ public final class Graveyard {
 	 * Getter for yaw
 	 * @return float - yaw
 	 */
-	public final float getYaw() {
+	public float getYaw() {
 		return yaw;
 	}
 
@@ -572,7 +572,7 @@ public final class Graveyard {
 	 *
 	 * @return int - safety range
 	 */
-	final int getSafetyRange() {
+	int getSafetyRange() {
 		return safetyRange;
 	}
 
@@ -582,7 +582,7 @@ public final class Graveyard {
 	 *
 	 * @return int - safety time
 	 */
-	public final long getSafetyTime() {
+	public long getSafetyTime() {
 		return safetyTime;
 	}
 

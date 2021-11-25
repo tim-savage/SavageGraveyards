@@ -20,16 +20,14 @@ import org.bukkit.scheduler.BukkitTask;
  */
 public final class PluginMain extends JavaPlugin {
 
-	public boolean debug = getConfig().getBoolean("debug");
+	public Boolean debug = getConfig().getBoolean("debug");
 
+	public LanguageHandler languageHandler;
 	public DataStore dataStore;
 	public WorldManager worldManager;
 	public SoundConfiguration soundConfig;
 	public SafetyManager safetyManager;
-	public LanguageHandler languageHandler;
 	private BukkitTask discoveryTask;
-
-	protected PlayerEventListener playerEventListener;
 
 
 	@Override
@@ -38,7 +36,7 @@ public final class PluginMain extends JavaPlugin {
 		// install default config.yml if not present
 		saveDefaultConfig();
 
-		// initialize language manager
+		// instantiate language manager
 		languageHandler = new LanguageHandler(this);
 
 		// instantiate world manager
@@ -54,7 +52,7 @@ public final class PluginMain extends JavaPlugin {
 		safetyManager = new SafetyManager(this);
 
 		// instantiate player event listener
-		playerEventListener = new PlayerEventListener(this);
+		new PlayerEventListener(this);
 
 		// instantiate command manager
 		new CommandManager(this);
