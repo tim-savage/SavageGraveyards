@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.winterhaven-mc</groupId>
   <artifactId>SavageGraveyards</artifactId>
-  <version>1.16.1-SNAPSHOT</version>
+  <version>1.16.1</version>
   <name>SavageGraveyards</name>
 
 	<properties>
@@ -39,21 +39,21 @@
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>messenger-lib</artifactId>
-			<version>1.16.1-SNAPSHOT</version>
+			<version>1.16.0</version>
 		</dependency>
 
 		<!-- SoundConfigLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>sound-config-lib</artifactId>
-			<version>1.16.1-SNAPSHOT</version>
+			<version>1.0.5</version>
 		</dependency>
 
 		<!-- WorldManagerLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>world-manager-lib</artifactId>
-			<version>1.16.1-SNAPSHOT</version>
+			<version>1.16.0</version>
 		</dependency>
 
 		<!-- Spigot API -->
@@ -63,40 +63,15 @@
 			<version>1.16.5-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
-
-		<!-- Unit Testing Dependencies -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- Mock Bukkit Framework -->
-		<dependency>
-			<groupId>com.github.seeseemelk</groupId>
-			<artifactId>MockBukkit-v1.16</artifactId>
-			<version>1.0.0</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 
 	<build>
-		<!-- Resources -->
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
 			</resource>
 		</resources>
-
-		<!-- Test Resources -->
-		<testResources>
-			<testResource>
-				<directory>src/test/resources</directory>
-				<filtering>true</filtering>
-			</testResource>
-		</testResources>
 
 		<plugins>
 			<!-- Compile Java jar -->
@@ -107,6 +82,9 @@
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
+					<compilerArgs>
+						<arg>-parameters</arg>
+					</compilerArgs>
 				</configuration>
 			</plugin>
 
@@ -148,10 +126,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.0.1</version>
+				<version>3.2.0</version>
 				<configuration>
 					<source>8</source>
-					<doclint>none</doclint>
+					<doclint>all,-missing</doclint>
 				</configuration>
 				<executions>
 					<execution>
@@ -176,18 +154,6 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
-
-			<!-- Plugin for Unit Tests -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.2</version>
-
-				<configuration>
-					<junitArtifactName>org.junit.jupiter:junit-jupiter</junitArtifactName>
-					<trimStackTrace>false</trimStackTrace>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
