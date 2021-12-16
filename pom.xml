@@ -1,9 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.winterhaven-mc</groupId>
-  <artifactId>SavageGraveyards</artifactId>
-  <version>1.18.1</version>
-  <name>SavageGraveyards</name>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.winterhaven-mc</groupId>
+	<artifactId>SavageGraveyards</artifactId>
+	<version>1.18.1</version>
+	<name>SavageGraveyards</name>
+
+	<url>https://github.com/tim-savage/SavageGraveyards</url>
 
 	<properties>
 		<project.author>Tim Savage</project.author>
