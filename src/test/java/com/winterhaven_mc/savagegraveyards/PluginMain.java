@@ -2,6 +2,7 @@ package com.winterhaven_mc.savagegraveyards;
 
 import com.winterhaven_mc.savagegraveyards.commands.CommandManager;
 import com.winterhaven_mc.savagegraveyards.listeners.PlayerEventListener;
+import com.winterhaven_mc.savagegraveyards.storage.DataStore;
 import com.winterhaven_mc.savagegraveyards.tasks.DiscoveryTask;
 import com.winterhaven_mc.savagegraveyards.util.SafetyManager;
 import com.winterhaven_mc.util.*;
@@ -13,16 +14,17 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 
+@SuppressWarnings("FieldCanBeLocal")
 public final class PluginMain extends JavaPlugin {
 
-    protected WorldManager worldManager;
+    WorldManager worldManager;
     public SoundConfiguration soundConfig;
-    protected LanguageHandler languageHandler;
-    protected SafetyManager safetyManager;
-    protected PlayerEventListener playerEventListener;
-    protected CommandManager commandManager;
-    protected BukkitTask discoveryTask;
-
+    LanguageHandler languageHandler;
+    private SafetyManager safetyManager;
+    private PlayerEventListener playerEventListener;
+    private CommandManager commandManager;
+    private BukkitTask discoveryTask;
+    private DataStore dataStore;
 
     @SuppressWarnings("unused")
     public PluginMain() {
@@ -31,7 +33,7 @@ public final class PluginMain extends JavaPlugin {
 
 
     @SuppressWarnings("unused")
-    protected PluginMain(JavaPluginLoader loader, PluginDescriptionFile descriptionFile, File dataFolder, File file) {
+    private PluginMain(JavaPluginLoader loader, PluginDescriptionFile descriptionFile, File dataFolder, File file) {
         super(loader, descriptionFile, dataFolder, file);
     }
 
@@ -64,14 +66,14 @@ public final class PluginMain extends JavaPlugin {
         commandManager = new CommandManager(this);
 
         // run discovery task
-        discoveryTask = new DiscoveryTask(this)
-                .runTaskTimer(this, 0, getConfig().getInt("discovery-interval"));
+//        discoveryTask = new DiscoveryTask(this)
+//                .runTaskTimer(this, 0, getConfig().getInt("discovery-interval"));
 
     }
 
     @Override
     public void onDisable() {
-        discoveryTask.cancel();
+//        discoveryTask.cancel();
     }
 
 }
