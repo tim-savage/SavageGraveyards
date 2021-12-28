@@ -29,6 +29,10 @@ public class PluginMainTests {
 
     @AfterAll
     public void tearDown() {
+
+        // cancel all tasks
+        server.getScheduler().cancelTasks(plugin);
+
         // Stop the mock server
         MockBukkit.unmock();
     }

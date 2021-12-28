@@ -55,10 +55,7 @@ public class ReloadCommand extends AbstractCommand implements Subcommand {
 		plugin.soundConfig.reload();
 
 		// reload datastore
-		DataStore.reload();
-
-		// set debug field
-		plugin.debug = plugin.getConfig().getBoolean("debug");
+		DataStore.reload(plugin);
 
 		// send reloaded message
 		plugin.messageBuilder.build(sender, COMMAND_SUCCESS_RELOAD).send(plugin.languageHandler);

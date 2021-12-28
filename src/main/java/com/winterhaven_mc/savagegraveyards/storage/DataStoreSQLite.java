@@ -1,10 +1,10 @@
 package com.winterhaven_mc.savagegraveyards.storage;
 
-import com.winterhaven_mc.savagegraveyards.PluginMain;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
@@ -17,10 +17,10 @@ import static com.winterhaven_mc.savagegraveyards.storage.Queries.getQuery;
 /**
  * Concrete SQLite datastore class
  */
-class DataStoreSQLite extends DataStore {
+class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 
 	// reference to main class
-	private final PluginMain plugin;
+	private final JavaPlugin plugin;
 
 	// database connection object
 	private Connection connection;
@@ -34,7 +34,7 @@ class DataStoreSQLite extends DataStore {
 	 *
 	 * @param plugin reference to main class
 	 */
-	DataStoreSQLite(final PluginMain plugin) {
+	public DataStoreSQLite(final JavaPlugin plugin) {
 
 		// reference to main class
 		this.plugin = plugin;
@@ -48,7 +48,7 @@ class DataStoreSQLite extends DataStore {
 
 
 	@Override
-	void initialize() throws SQLException, ClassNotFoundException {
+	public void initialize() throws SQLException, ClassNotFoundException {
 
 		// if data store is already initialized, do nothing and return
 		if (this.isInitialized()) {
@@ -89,7 +89,7 @@ class DataStoreSQLite extends DataStore {
 		// enable foreign keys
 		statement.executeUpdate(getQuery("EnableForeignKeys"));
 
-		if (plugin.debug) {
+		if (plugin.getConfig().getBoolean("debug")) {
 			plugin.getLogger().info("Enabled foreign keys.");
 		}
 
@@ -113,7 +113,7 @@ class DataStoreSQLite extends DataStore {
 			while (rs.next()) {
 				version = rs.getInt(1);
 
-				if (plugin.debug) {
+				if (plugin.getConfig().getBoolean("debug")) {
 					plugin.getLogger().info("Read schema version: " + version);
 				}
 			}
@@ -147,7 +147,7 @@ class DataStoreSQLite extends DataStore {
 		catch (SQLException e) {
 			plugin.getLogger().warning("Could not set schema user version!");
 			plugin.getLogger().warning(e.getLocalizedMessage());
-			if (plugin.debug) {
+			if (plugin.getConfig().getBoolean("debug")) {
 				e.printStackTrace();
 			}
 		}
@@ -197,25 +197,25 @@ class DataStoreSQLite extends DataStore {
 
 				// drop discovered table with old schema
 				statement.executeUpdate(Queries.getQuery("DropDiscoveredTable"));
-				if (plugin.debug) {
+				if (plugin.getConfig().getBoolean("debug")) {
 					plugin.getLogger().info("Discovered table dropped.");
 				}
 
 				// drop graveyards table with old schema
 				statement.executeUpdate(Queries.getQuery("DropGraveyardsTable"));
-				if (plugin.debug) {
+				if (plugin.getConfig().getBoolean("debug")) {
 					plugin.getLogger().info("Graveyards table dropped.");
 				}
 
 				// create graveyards table with new schema
 				statement.executeUpdate(getQuery("CreateGraveyardsTable"));
-				if (plugin.debug) {
+				if (plugin.getConfig().getBoolean("debug")) {
 					plugin.getLogger().info("Graveyards table created.");
 				}
 
 				// create discovered table with new schema
 				statement.executeUpdate(getQuery("CreateDiscoveredTable"));
-				if (plugin.debug) {
+				if (plugin.getConfig().getBoolean("debug")) {
 					plugin.getLogger().info("Discovered table created.");
 				}
 
@@ -346,7 +346,7 @@ class DataStoreSQLite extends DataStore {
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
-			if (plugin.debug) {
+			if (plugin.getConfig().getBoolean("debug")) {
 				e.printStackTrace();
 			}
 		}
@@ -433,7 +433,7 @@ class DataStoreSQLite extends DataStore {
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
-			if (plugin.debug) {
+			if (plugin.getConfig().getBoolean("debug")) {
 				e.printStackTrace();
 			}
 			return null;
@@ -528,7 +528,7 @@ class DataStoreSQLite extends DataStore {
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
-			if (plugin.debug) {
+			if (plugin.getConfig().getBoolean("debug")) {
 				e.printStackTrace();
 			}
 		}
@@ -565,7 +565,7 @@ class DataStoreSQLite extends DataStore {
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
-			if (plugin.debug) {
+			if (plugin.getConfig().getBoolean("debug")) {
 				e.printStackTrace();
 			}
 		}
@@ -647,7 +647,7 @@ class DataStoreSQLite extends DataStore {
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
-			if (plugin.debug) {
+			if (plugin.getConfig().getBoolean("debug")) {
 				e.printStackTrace();
 			}
 		}
@@ -687,7 +687,7 @@ class DataStoreSQLite extends DataStore {
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
-			if (plugin.debug) {
+			if (plugin.getConfig().getBoolean("debug")) {
 				e.printStackTrace();
 			}
 		}
@@ -732,7 +732,7 @@ class DataStoreSQLite extends DataStore {
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
-			if (plugin.debug) {
+			if (plugin.getConfig().getBoolean("debug")) {
 				e.getStackTrace();
 			}
 		}
@@ -776,7 +776,7 @@ class DataStoreSQLite extends DataStore {
 					plugin.getLogger().warning(e.getLocalizedMessage());
 
 					// if debugging is enabled, output stack trace
-					if (plugin.debug) {
+					if (plugin.getConfig().getBoolean("debug")) {
 						e.printStackTrace();
 					}
 				}
@@ -818,7 +818,7 @@ class DataStoreSQLite extends DataStore {
 				plugin.getLogger().warning(e.getLocalizedMessage());
 
 				// if debugging is enabled, output stack trace
-				if (plugin.debug) {
+				if (plugin.getConfig().getBoolean("debug")) {
 					e.printStackTrace();
 				}
 			}
@@ -832,7 +832,7 @@ class DataStoreSQLite extends DataStore {
 
 		// if graveyard collection is null, do nothing and return
 		if (graveyards == null) {
-			if (plugin.debug) {
+			if (plugin.getConfig().getBoolean("debug")) {
 				plugin.getLogger().warning("Could not insert graveyard records in data store "
 						+ "because collection is null!");
 			}
@@ -901,7 +901,7 @@ class DataStoreSQLite extends DataStore {
 				plugin.getLogger().warning(e.getLocalizedMessage());
 
 				// if debugging is enabled, output stack trace
-				if (plugin.debug) {
+				if (plugin.getConfig().getBoolean("debug")) {
 					e.printStackTrace();
 				}
 			}
@@ -963,7 +963,7 @@ class DataStoreSQLite extends DataStore {
 					plugin.getLogger().warning(e.getLocalizedMessage());
 
 					// if debugging is enabled, output stack trace
-					if (plugin.debug) {
+					if (plugin.getConfig().getBoolean("debug")) {
 						e.printStackTrace();
 					}
 				}
@@ -1000,7 +1000,7 @@ class DataStoreSQLite extends DataStore {
 					}
 
 					// output debugging information
-					if (plugin.debug) {
+					if (plugin.getConfig().getBoolean("debug")) {
 						plugin.getLogger().info(rowsAffected + " graveyards deleted.");
 					}
 				}
@@ -1012,7 +1012,7 @@ class DataStoreSQLite extends DataStore {
 					plugin.getLogger().warning(e.getLocalizedMessage());
 
 					// if debugging is enabled, output stack trace
-					if (plugin.debug) {
+					if (plugin.getConfig().getBoolean("debug")) {
 						e.getStackTrace();
 					}
 				}
@@ -1053,7 +1053,7 @@ class DataStoreSQLite extends DataStore {
 						plugin.getLogger().warning("A record in the Discovered table " +
 								"has an invalid UUID! Skipping record.");
 						plugin.getLogger().warning(e.getLocalizedMessage());
-						if (plugin.debug) {
+						if (plugin.getConfig().getBoolean("debug")) {
 							e.printStackTrace();
 						}
 						continue;
@@ -1070,7 +1070,7 @@ class DataStoreSQLite extends DataStore {
 				plugin.getLogger().warning("An error occurred while trying to " +
 						"select all discovery records from the SQLite datastore.");
 				plugin.getLogger().warning(e.getLocalizedMessage());
-				if (plugin.debug) {
+				if (plugin.getConfig().getBoolean("debug")) {
 					e.printStackTrace();
 				}
 			}
@@ -1110,7 +1110,7 @@ class DataStoreSQLite extends DataStore {
 				plugin.getLogger().warning("An error occurred while trying to " +
 						"select all discovery records from the SQLite datastore.");
 				plugin.getLogger().warning(e.getLocalizedMessage());
-				if (plugin.debug) {
+				if (plugin.getConfig().getBoolean("debug")) {
 					e.printStackTrace();
 				}
 			}
@@ -1157,7 +1157,7 @@ class DataStoreSQLite extends DataStore {
 			plugin.getLogger().warning("An error occurred while trying to " +
 					"select all discovery records from the SQLite datastore.");
 			plugin.getLogger().warning(e.getLocalizedMessage());
-			if (plugin.debug) {
+			if (plugin.getConfig().getBoolean("debug")) {
 				e.printStackTrace();
 			}
 		}
@@ -1194,7 +1194,7 @@ class DataStoreSQLite extends DataStore {
 			}
 
 			// output debugging information
-			if (plugin.debug) {
+			if (plugin.getConfig().getBoolean("debug")) {
 				plugin.getLogger().info(rowsAffected + " discoveries deleted.");
 			}
 		}
@@ -1206,7 +1206,7 @@ class DataStoreSQLite extends DataStore {
 			plugin.getLogger().warning(e.getLocalizedMessage());
 
 			// if debugging is enabled, output stack trace
-			if (plugin.debug) {
+			if (plugin.getConfig().getBoolean("debug")) {
 				e.printStackTrace();
 			}
 		}
@@ -1228,7 +1228,7 @@ class DataStoreSQLite extends DataStore {
 			plugin.getLogger().warning(e.getMessage());
 
 			// if debugging is enabled, output stack trace
-			if (plugin.debug) {
+			if (plugin.getConfig().getBoolean("debug")) {
 				e.printStackTrace();
 			}
 		}
@@ -1237,7 +1237,7 @@ class DataStoreSQLite extends DataStore {
 
 
 	@Override
-	void sync() {
+	public void sync() {
 
 		// no action necessary for this storage type
 
@@ -1245,7 +1245,7 @@ class DataStoreSQLite extends DataStore {
 
 
 	@Override
-	boolean delete() {
+	public boolean delete() {
 
 		// get path name to data store file
 		File dataStoreFile = new File(plugin.getDataFolder() + File.separator + this.getFilename());
@@ -1258,7 +1258,7 @@ class DataStoreSQLite extends DataStore {
 
 
 	@Override
-	boolean exists() {
+	public boolean exists() {
 
 		// get path name to data store file
 		File dataStoreFile = new File(plugin.getDataFolder() + File.separator + this.getFilename());

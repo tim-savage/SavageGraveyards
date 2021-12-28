@@ -72,7 +72,7 @@ public class ListCommand extends AbstractCommand implements Subcommand {
 		// get all records from datastore
 		final Collection<Graveyard> allRecords = plugin.dataStore.selectAllGraveyards();
 
-		if (plugin.debug) {
+		if (plugin.getConfig().getBoolean("debug")) {
 			plugin.getLogger().info("Records fetched from datastore: " + allRecords.size());
 		}
 
@@ -97,7 +97,7 @@ public class ListCommand extends AbstractCommand implements Subcommand {
 
 			// if graveyard is not enabled and sender does not have override permission, do not add to display list
 			if (!graveyard.isEnabled() && !sender.hasPermission("graveyard.list.disabled")) {
-				if (plugin.debug) {
+				if (plugin.getConfig().getBoolean("debug")) {
 					plugin.getLogger().info(graveyard.getDisplayName()
 							+ " is disabled and player does not have graveyard.list.disabled permission.");
 				}
@@ -108,7 +108,7 @@ public class ListCommand extends AbstractCommand implements Subcommand {
 			if (graveyard.isHidden()
 					&& undiscoveredKeys.contains(graveyard.getSearchKey())
 					&& !sender.hasPermission("graveyard.list.hidden")) {
-				if (plugin.debug) {
+				if (plugin.getConfig().getBoolean("debug")) {
 					plugin.getLogger().info(graveyard.getDisplayName()
 							+ " is undiscovered and player does not have graveyard.list.hidden permission.");
 				}
@@ -118,7 +118,7 @@ public class ListCommand extends AbstractCommand implements Subcommand {
 			// if graveyard has group set and sender does not have group permission, do not add to display list
 			String group = graveyard.getGroup();
 			if (group != null && !group.isEmpty() && !sender.hasPermission("group." + graveyard.getGroup())) {
-				if (plugin.debug) {
+				if (plugin.getConfig().getBoolean("debug")) {
 					plugin.getLogger().info(graveyard.getDisplayName()
 							+ " is in group that player does not have permission.");
 				}

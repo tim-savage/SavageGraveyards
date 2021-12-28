@@ -11,20 +11,20 @@ import com.winterhaven_mc.util.*;
 
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.MessageBuilder;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.JavaPluginLoader;
 import org.bukkit.scheduler.BukkitTask;
+
+import java.io.File;
 
 
 /**
  * Bukkit plugin to allow creation of graveyard locations where players
  * will respawn on death. The nearest graveyard location that is valid
  * for the player will be chosen at the time of death.
- * 
- * @author      Tim Savage
  */
-public final class PluginMain extends JavaPlugin {
-
-	public Boolean debug = getConfig().getBoolean("debug");
+public class PluginMain extends JavaPlugin {
 
 	public LanguageHandler languageHandler;
 	public MessageBuilder<MessageId, Macro> messageBuilder;
@@ -35,6 +35,23 @@ public final class PluginMain extends JavaPlugin {
 	private BukkitTask discoveryTask;
 
 
+	/**
+	 * Class constructor for testing
+	 */
+	public PluginMain() {
+		super();
+	}
+
+
+	/**
+	 * Class constructor for testing
+	 */
+	@SuppressWarnings("unused")
+	PluginMain(JavaPluginLoader loader, PluginDescriptionFile descriptionFile, File dataFolder, File file) {
+		super(loader, descriptionFile, dataFolder, file);
+	}
+
+
 	@Override
 	public void onEnable() {
 
@@ -43,6 +60,8 @@ public final class PluginMain extends JavaPlugin {
 
 		// instantiate language manager
 		languageHandler = new LanguageHandler(this);
+
+		// instantiate message builder
 		messageBuilder = new MessageBuilder<>();
 
 		// instantiate world manager
@@ -52,7 +71,7 @@ public final class PluginMain extends JavaPlugin {
 		soundConfig = new YamlSoundConfiguration(this);
 
 		// get initialized destination storage object
-		dataStore = DataStore.create();
+		dataStore = DataStore.create(this);
 
 		// instantiate safety manager
 		safetyManager = new SafetyManager(this);

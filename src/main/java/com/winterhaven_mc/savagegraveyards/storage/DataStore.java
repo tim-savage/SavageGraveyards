@@ -1,6 +1,7 @@
 package com.winterhaven_mc.savagegraveyards.storage;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -10,21 +11,16 @@ import java.util.*;
 /**
  * Abstract datastore class
  */
-public abstract class DataStore {
-
-	private final static PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
-
-	private boolean initialized;
-	DataStoreType type;
-	String filename;
-
+public interface DataStore {
 
 	/**
 	 * Initialize storage
 	 *
 	 * @throws Exception if datastore cannot be initialized
 	 */
-	abstract void initialize() throws Exception;
+	void initialize() throws Exception;
+
+	boolean isInitialized();
 
 
 	/**
@@ -32,7 +28,7 @@ public abstract class DataStore {
 	 *
 	 * @return List of all graveyard objects in alphabetical order
 	 */
-	public abstract Collection<Graveyard> selectAllGraveyards();
+	Collection<Graveyard> selectAllGraveyards();
 
 
 	/**
@@ -41,7 +37,7 @@ public abstract class DataStore {
 	 * @param displayName the name of the Graveyard to be retrieved
 	 * @return Graveyard object or null if no matching record
 	 */
-	public abstract Graveyard selectGraveyard(final String displayName);
+	Graveyard selectGraveyard(final String displayName);
 
 
 	/**
@@ -50,7 +46,7 @@ public abstract class DataStore {
 	 * @param player the player for whom to retrieve undiscovered Graveyards
 	 * @return HashSet of Graveyard objects that are undiscovered for player
 	 */
-	public abstract Collection<Graveyard> selectUndiscoveredGraveyards(final Player player);
+	Collection<Graveyard> selectUndiscoveredGraveyards(final Player player);
 
 
 	/**
@@ -59,7 +55,7 @@ public abstract class DataStore {
 	 * @param player the player for whom to retrieve undiscovered Graveyard keys
 	 * @return HashSet of Graveyard search keys that are undiscovered for player
 	 */
-	public abstract Collection<String> selectUndiscoveredKeys(final Player player);
+	Collection<String> selectUndiscoveredKeys(final Player player);
 
 
 	/**
@@ -68,7 +64,7 @@ public abstract class DataStore {
 	 * @param player the player for whom to retrieve the nearest Graveyard
 	 * @return Graveyard object
 	 */
-	public abstract Graveyard selectNearestGraveyard(final Player player);
+	Graveyard selectNearestGraveyard(final Player player);
 
 
 	/**
@@ -76,7 +72,7 @@ public abstract class DataStore {
 	 *
 	 * @param record the discovery record to be inserted
 	 */
-	public abstract void insertDiscovery(Discovery record);
+	void insertDiscovery(Discovery record);
 
 
 	/**
@@ -85,7 +81,7 @@ public abstract class DataStore {
 	 * @param insertSet set of records to be inserted
 	 * @return number of records successfully inserted
 	 */
-	public abstract int insertDiscoveries(Collection<Discovery> insertSet);
+	int insertDiscoveries(Collection<Discovery> insertSet);
 
 
 	/**
@@ -94,7 +90,7 @@ public abstract class DataStore {
 	 * @param graveyards a collection of graveyard records
 	 * @return int - the number of records successfully inserted
 	 */
-	public abstract int insertGraveyards(final Collection<Graveyard> graveyards);
+	int insertGraveyards(final Collection<Graveyard> graveyards);
 
 
 	/**
@@ -102,7 +98,7 @@ public abstract class DataStore {
 	 *
 	 * @param graveyard the Graveyard to update in the datastore
 	 */
-	public abstract void updateGraveyard(final Graveyard graveyard);
+	void updateGraveyard(final Graveyard graveyard);
 
 
 	/**
@@ -111,7 +107,7 @@ public abstract class DataStore {
 	 * @param displayName display name or search key of record to be deleted
 	 * @return Deleted graveyard record
 	 */
-	public abstract Graveyard deleteGraveyard(final String displayName);
+	Graveyard deleteGraveyard(final String displayName);
 
 
 	/**
@@ -121,7 +117,7 @@ public abstract class DataStore {
 	 * @param playerUUID the player unique id
 	 * @return boolean - {@code true} if deletion was successful, {@code false} if not
 	 */
-	public abstract boolean deleteDiscovery(final String displayName, final UUID playerUUID);
+	boolean deleteDiscovery(final String displayName, final UUID playerUUID);
 
 
 	/**
@@ -129,33 +125,33 @@ public abstract class DataStore {
 	 * @param playerUid the player uid to query
 	 * @return Collection of String - graveyard keys
 	 */
-	public abstract Collection<String> selectDiscoveredKeys(final UUID playerUid);
+	Collection<String> selectDiscoveredKeys(final UUID playerUid);
 
 
 	/**
 	 * Select players who have discovered any graveyards
 	 * @return Collection of String - player names with discovered graveyards
 	 */
-	public abstract Collection<String> selectPlayersWithDiscoveries();
+	Collection<String> selectPlayersWithDiscoveries();
 
 
 	/**
 	 * Close datastore connection
 	 */
-	public abstract void close();
+	void close();
 
 
 	/**
 	 * Sync datastore to disk if supported
 	 */
-	abstract void sync();
+	void sync();
 
 
 	/**
 	 * Delete datastore
 	 */
 	@SuppressWarnings("UnusedReturnValue")
-	abstract boolean delete();
+	boolean delete();
 
 
 	/**
@@ -163,58 +159,7 @@ public abstract class DataStore {
 	 *
 	 * @return true if datastore exists, false if it does not
 	 */
-	abstract boolean exists();
-
-
-	/**
-	 * Get datastore filename or equivalent
-	 *
-	 * @return datastore filename
-	 */
-	String getFilename() {
-		return this.filename;
-	}
-
-
-	/**
-	 * Get datastore type
-	 *
-	 * @return Enum value of DataStoreType
-	 */
-	private DataStoreType getType() {
-		return this.type;
-	}
-
-
-	/**
-	 * Get datastore name
-	 *
-	 * @return String containing datastore name
-	 */
-	@Override
-	public String toString() {
-		return this.getType().toString();
-	}
-
-
-	/**
-	 * Get datastore initialized field
-	 *
-	 * @return true if datastore is initialized, false if it is not
-	 */
-	boolean isInitialized() {
-		return this.initialized;
-	}
-
-
-	/**
-	 * Set initialized field
-	 *
-	 * @param initialized the initialized value of the datastore
-	 */
-	void setInitialized(final boolean initialized) {
-		this.initialized = initialized;
-	}
+	boolean exists();
 
 
 	/**
@@ -223,7 +168,7 @@ public abstract class DataStore {
 	 * @param match the prefix to match
 	 * @return String collection of names with matching prefix
 	 */
-	public abstract List<String> selectMatchingGraveyardNames(final String match);
+	List<String> selectMatchingGraveyardNames(final String match);
 
 
 	/**
@@ -233,14 +178,14 @@ public abstract class DataStore {
 	 *
 	 * @return new datastore of configured type
 	 */
-	public static DataStore create() {
+	static DataStore create(JavaPlugin plugin) {
 
 		// get data store type from config
 		DataStoreType dataStoreType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
 		if (dataStoreType == null) {
 			dataStoreType = DataStoreType.getDefaultType();
 		}
-		return create(dataStoreType, null);
+		return create(plugin, dataStoreType, null);
 	}
 
 
@@ -252,28 +197,28 @@ public abstract class DataStore {
 	 * @param oldDataStore  existing datastore reference
 	 * @return a new datastore instance of the given type
 	 */
-	private static DataStore create(final DataStoreType dataStoreType, final DataStore oldDataStore) {
+	static DataStore create(JavaPlugin plugin, final DataStoreType dataStoreType, final DataStore oldDataStore) {
 
 		// get new data store of specified type
-		DataStore newDataStore = dataStoreType.create();
+		DataStore newDataStore = dataStoreType.create(plugin);
 
 		// initialize new data store
 		try {
 			newDataStore.initialize();
 		}
 		catch (Exception e) {
-			plugin.getLogger().severe("Could not initialize " + newDataStore.toString() + " datastore!");
-			if (plugin.debug) {
+			Bukkit.getLogger().severe("Could not initialize " + newDataStore.toString() + " datastore!");
+			if (plugin.getConfig().getBoolean("debug")) {
 				e.printStackTrace();
 			}
 		}
 
 		// if old data store was passed, convert to new data store
 		if (oldDataStore != null) {
-			convert(oldDataStore, newDataStore);
+			DataStoreType.convert(oldDataStore, newDataStore);
 		}
 		else {
-			convertAll(newDataStore);
+			DataStoreType.convertAll(plugin, newDataStore);
 		}
 		// return initialized data store
 		return newDataStore;
@@ -283,7 +228,7 @@ public abstract class DataStore {
 	/**
 	 * Reload data store if configured type has changed
 	 */
-	public static void reload() {
+	static void reload(PluginMain plugin) {
 
 		// get current datastore type
 		DataStoreType currentType = plugin.dataStore.getType();
@@ -295,83 +240,11 @@ public abstract class DataStore {
 		if (!currentType.equals(newType)) {
 
 			// create new datastore
-			plugin.dataStore = create(newType, plugin.dataStore);
+			plugin.dataStore = create(plugin, newType, plugin.dataStore);
 		}
 	}
 
+	DataStoreType getType();
 
-	/**
-	 * convert old data store to new data store
-	 *
-	 * @param oldDataStore the old datastore to convert from
-	 * @param newDataStore the new datastore to convert to
-	 */
-	private static void convert(final DataStore oldDataStore, final DataStore newDataStore) {
-
-		// if datastores are same type, do not convert
-		if (oldDataStore.getType().equals(newDataStore.getType())) {
-			return;
-		}
-
-		// if old datastore file exists, attempt to read all records
-		if (oldDataStore.exists()) {
-
-			plugin.getLogger().info("Converting existing " + oldDataStore + " datastore to "
-					+ newDataStore + " datastore...");
-
-			// initialize old datastore if necessary
-			if (!oldDataStore.isInitialized()) {
-				try {
-					oldDataStore.initialize();
-				}
-				catch (Exception e) {
-					plugin.getLogger().warning("Could not initialize "
-							+ oldDataStore + " datastore for conversion.");
-					plugin.getLogger().warning(e.getLocalizedMessage());
-					return;
-				}
-			}
-
-			int count = newDataStore.insertGraveyards(oldDataStore.selectAllGraveyards());
-
-			plugin.getLogger().info(count + " records converted to " + newDataStore + " datastore.");
-
-			newDataStore.sync();
-
-			oldDataStore.close();
-			oldDataStore.delete();
-		}
-	}
-
-
-	/**
-	 * convert all existing data stores to new data store
-	 *
-	 * @param newDataStore the new datastore to convert all other existing datastores into
-	 */
-	private static void convertAll(final DataStore newDataStore) {
-
-		// get array list of all data store types
-		ArrayList<DataStoreType> dataStores = new ArrayList<>(Arrays.asList(DataStoreType.values()));
-
-		// remove newDataStore from list of types to convert
-		dataStores.remove(newDataStore.getType());
-
-		for (DataStoreType type : dataStores) {
-
-			// create oldDataStore holder
-			DataStore oldDataStore = null;
-
-			if (type.equals(DataStoreType.SQLITE)) {
-				oldDataStore = new DataStoreSQLite(plugin);
-			}
-
-			// add additional datastore types here as they become available
-
-			if (oldDataStore != null) {
-				convert(oldDataStore, newDataStore);
-			}
-		}
-	}
 
 }

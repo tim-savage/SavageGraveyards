@@ -1,7 +1,10 @@
 package com.winterhaven_mc.savagegraveyards.storage;
 
-import com.winterhaven_mc.savagegraveyards.PluginMain;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 /**
@@ -11,15 +14,12 @@ enum DataStoreType {
 
 	SQLITE("SQLite") {
 		@Override
-		public DataStore create() {
+		public DataStore create(JavaPlugin plugin) {
 
 			// create new sqlite datastore object
 			return new DataStoreSQLite(plugin);
 		}
 	};
-
-	// static reference to main class
-	private final static PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
 
 	// DataStoreType display name
 	private final String displayName;
@@ -32,7 +32,7 @@ enum DataStoreType {
 	 * Get new instance of DataStore of configured type
 	 * @return new instance of DataStore
 	 */
-	abstract DataStore create();
+	abstract DataStore create(JavaPlugin plugin);
 
 
 	/**
@@ -81,6 +81,81 @@ enum DataStoreType {
 	 */
 	public static DataStoreType getDefaultType() {
 		return defaultType;
+	}
+
+
+	/**
+	 * convert old data store to new data store
+	 *
+	 * @param oldDataStore the old datastore to convert from
+	 * @param newDataStore the new datastore to convert to
+	 */
+	static void convert(final DataStore oldDataStore, final DataStore newDataStore) {
+
+		// if datastores are same type, do not convert
+		if (oldDataStore.getType().equals(newDataStore.getType())) {
+			return;
+		}
+
+		// if old datastore file exists, attempt to read all records
+		if (oldDataStore.exists()) {
+
+			Bukkit.getLogger().info("Converting existing " + oldDataStore + " datastore to "
+					+ newDataStore + " datastore...");
+
+			// initialize old datastore if necessary
+			if (!oldDataStore.isInitialized()) {
+				try {
+					oldDataStore.initialize();
+				}
+				catch (Exception e) {
+					Bukkit.getLogger().warning("Could not initialize "
+							+ oldDataStore + " datastore for conversion.");
+					Bukkit.getLogger().warning(e.getLocalizedMessage());
+					return;
+				}
+			}
+
+			int count = newDataStore.insertGraveyards(oldDataStore.selectAllGraveyards());
+
+			Bukkit.getLogger().info(count + " records converted to " + newDataStore + " datastore.");
+
+			newDataStore.sync();
+
+			oldDataStore.close();
+			oldDataStore.delete();
+		}
+	}
+
+
+	/**
+	 * convert all existing data stores to new data store
+	 *
+	 * @param newDataStore the new datastore to convert all other existing datastores into
+	 */
+	static void convertAll(final JavaPlugin plugin, final DataStore newDataStore) {
+
+		// get array list of all data store types
+		ArrayList<DataStoreType> dataStores = new ArrayList<>(Arrays.asList(DataStoreType.values()));
+
+		// remove newDataStore from list of types to convert
+		dataStores.remove(newDataStore.getType());
+
+		for (DataStoreType type : dataStores) {
+
+			// create oldDataStore holder
+			DataStore oldDataStore = null;
+
+			if (type.equals(DataStoreType.SQLITE)) {
+				oldDataStore = new DataStoreSQLite(plugin);
+			}
+
+			// add additional datastore types here as they become available
+
+			if (oldDataStore != null) {
+				convert(oldDataStore, newDataStore);
+			}
+		}
 	}
 
 }
