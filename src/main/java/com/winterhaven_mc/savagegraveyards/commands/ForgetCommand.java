@@ -1,7 +1,6 @@
 package com.winterhaven_mc.savagegraveyards.commands;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
-import com.winterhaven_mc.savagegraveyards.messages.Message;
 import com.winterhaven_mc.savagegraveyards.sounds.SoundId;
 import com.winterhaven_mc.savagegraveyards.storage.Graveyard;
 import org.bukkit.OfflinePlayer;
@@ -100,7 +99,7 @@ public class ForgetCommand extends AbstractCommand implements Subcommand {
 
 		// check for permission
 		if (!sender.hasPermission("graveyard.forget")) {
-			Message.create(sender, PERMISSION_DENIED_FORGET).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, PERMISSION_DENIED_FORGET).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -110,7 +109,7 @@ public class ForgetCommand extends AbstractCommand implements Subcommand {
 
 		// check for minimum arguments
 		if (args.size() < minArgs) {
-			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send(plugin.languageHandler);
 			displayUsage(sender);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
@@ -132,7 +131,7 @@ public class ForgetCommand extends AbstractCommand implements Subcommand {
 
 		// if player not found, send message and return
 		if (player == null) {
-			Message.create(sender, COMMAND_FAIL_FORGET_INVALID_PLAYER).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_FORGET_INVALID_PLAYER).send(plugin.languageHandler);
 			return true;
 		}
 
@@ -149,7 +148,7 @@ public class ForgetCommand extends AbstractCommand implements Subcommand {
 			Graveyard dummyGraveyard = new Graveyard.Builder().displayName(searchKey).build();
 
 			// send graveyard not found message
-			Message.create(sender, COMMAND_FAIL_FORGET_INVALID_GRAVEYARD)
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_FORGET_INVALID_GRAVEYARD)
 					.setMacro(GRAVEYARD, dummyGraveyard)
 					.send(plugin.languageHandler);
 
@@ -162,7 +161,7 @@ public class ForgetCommand extends AbstractCommand implements Subcommand {
 		if (plugin.dataStore.deleteDiscovery(searchKey, player.getUniqueId())) {
 
 			// send success message
-			Message.create(sender, COMMAND_SUCCESS_FORGET)
+			plugin.messageBuilder.build(sender, COMMAND_SUCCESS_FORGET)
 					.setMacro(GRAVEYARD, graveyard)
 					.setMacro(TARGET_PLAYER, player)
 					.send(plugin.languageHandler);
@@ -172,7 +171,7 @@ public class ForgetCommand extends AbstractCommand implements Subcommand {
 		}
 		else {
 			// send failure message
-			Message.create(sender, COMMAND_FAIL_FORGET)
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_FORGET)
 					.setMacro(GRAVEYARD, graveyard)
 					.setMacro(TARGET_PLAYER, player)
 					.send(plugin.languageHandler);

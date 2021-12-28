@@ -1,7 +1,6 @@
 package com.winterhaven_mc.savagegraveyards.commands;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
-import com.winterhaven_mc.savagegraveyards.messages.Message;
 import com.winterhaven_mc.savagegraveyards.sounds.SoundId;
 import com.winterhaven_mc.savagegraveyards.storage.Graveyard;
 import org.bukkit.command.CommandSender;
@@ -39,7 +38,7 @@ public class ListCommand extends AbstractCommand implements Subcommand {
 
 		// if command sender does not have permission to list graveyards, output error message and return true
 		if (!sender.hasPermission("graveyard.list")) {
-			Message.create(sender, PERMISSION_DENIED_LIST).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, PERMISSION_DENIED_LIST).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -48,7 +47,7 @@ public class ListCommand extends AbstractCommand implements Subcommand {
 		int maxArgs = 1;
 
 		if (args.size() > maxArgs) {
-			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send(plugin.languageHandler);
 			displayUsage(sender);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
@@ -132,7 +131,7 @@ public class ListCommand extends AbstractCommand implements Subcommand {
 
 		// if display list is empty, output list empty message and return
 		if (displayRecords.isEmpty()) {
-			Message.create(sender, LIST_EMPTY).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, LIST_EMPTY).send(plugin.languageHandler);
 			return true;
 		}
 
@@ -149,7 +148,7 @@ public class ListCommand extends AbstractCommand implements Subcommand {
 		int itemNumber = startIndex;
 
 		// display list header
-		Message.create(sender, LIST_HEADER).setMacro(PAGE_NUMBER, page).setMacro(PAGE_TOTAL, pageCount).send(plugin.languageHandler);
+		plugin.messageBuilder.build(sender, LIST_HEADER).setMacro(PAGE_NUMBER, page).setMacro(PAGE_TOTAL, pageCount).send(plugin.languageHandler);
 
 		for (Graveyard graveyard : displayRange) {
 
@@ -158,7 +157,7 @@ public class ListCommand extends AbstractCommand implements Subcommand {
 
 			// display invalid world list item
 			if (graveyard.getLocation() == null) {
-				Message.create(sender, LIST_ITEM_INVALID_WORLD)
+				plugin.messageBuilder.build(sender, LIST_ITEM_INVALID_WORLD)
 						.setMacro(GRAVEYARD, graveyard)
 						.setMacro(ITEM_NUMBER, itemNumber)
 						.setMacro(INVALID_WORLD, graveyard.getWorldName())
@@ -169,7 +168,7 @@ public class ListCommand extends AbstractCommand implements Subcommand {
 			// display disabled list item
 			if (!graveyard.isEnabled()) {
 
-				Message.create(sender, LIST_ITEM_DISABLED)
+				plugin.messageBuilder.build(sender, LIST_ITEM_DISABLED)
 						.setMacro(GRAVEYARD, graveyard)
 						.setMacro(ITEM_NUMBER, itemNumber)
 						.setMacro(LOCATION, graveyard.getLocation())
@@ -179,7 +178,7 @@ public class ListCommand extends AbstractCommand implements Subcommand {
 
 			// display undiscovered list item
 			if (graveyard.isHidden() && undiscoveredKeys.contains(graveyard.getSearchKey())) {
-				Message.create(sender, LIST_ITEM_UNDISCOVERED)
+				plugin.messageBuilder.build(sender, LIST_ITEM_UNDISCOVERED)
 						.setMacro(GRAVEYARD, graveyard)
 						.setMacro(ITEM_NUMBER, itemNumber)
 						.setMacro(LOCATION, graveyard.getLocation())
@@ -188,7 +187,7 @@ public class ListCommand extends AbstractCommand implements Subcommand {
 			}
 
 			// display normal list item
-			Message.create(sender, LIST_ITEM)
+			plugin.messageBuilder.build(sender, LIST_ITEM)
 					.setMacro(GRAVEYARD, graveyard)
 					.setMacro(ITEM_NUMBER, itemNumber)
 					.setMacro(LOCATION, graveyard.getLocation())
@@ -196,7 +195,7 @@ public class ListCommand extends AbstractCommand implements Subcommand {
 		}
 
 		// display list footer
-		Message.create(sender, LIST_FOOTER).setMacro(PAGE_NUMBER, page).setMacro(PAGE_TOTAL, pageCount).send(plugin.languageHandler);
+		plugin.messageBuilder.build(sender, LIST_FOOTER).setMacro(PAGE_NUMBER, page).setMacro(PAGE_TOTAL, pageCount).send(plugin.languageHandler);
 
 		return true;	}
 }

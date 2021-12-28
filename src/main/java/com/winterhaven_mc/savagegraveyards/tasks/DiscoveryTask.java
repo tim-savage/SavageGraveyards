@@ -3,7 +3,6 @@ package com.winterhaven_mc.savagegraveyards.tasks;
 import com.winterhaven_mc.savagegraveyards.PluginMain;
 import com.winterhaven_mc.savagegraveyards.events.DiscoveryEvent;
 import com.winterhaven_mc.savagegraveyards.messages.Macro;
-import com.winterhaven_mc.savagegraveyards.messages.Message;
 import com.winterhaven_mc.savagegraveyards.storage.Discovery;
 import com.winterhaven_mc.savagegraveyards.storage.Graveyard;
 import com.winterhaven_mc.savagegraveyards.messages.MessageId;
@@ -85,7 +84,7 @@ public class DiscoveryTask extends BukkitRunnable {
 										.translateAlternateColorCodes('&', graveyard.getDiscoveryMessage()));
 							}
 							else {
-								Message.create(player, MessageId.DEFAULT_DISCOVERY)
+								plugin.messageBuilder.build(player, MessageId.DEFAULT_DISCOVERY)
 										.setMacro(Macro.GRAVEYARD, graveyard)
 										.setMacro(Macro.LOCATION, graveyardLocation)
 										.send(plugin.languageHandler);

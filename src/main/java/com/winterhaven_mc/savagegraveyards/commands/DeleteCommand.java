@@ -1,7 +1,6 @@
 package com.winterhaven_mc.savagegraveyards.commands;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
-import com.winterhaven_mc.savagegraveyards.messages.Message;
 import com.winterhaven_mc.savagegraveyards.sounds.SoundId;
 import com.winterhaven_mc.savagegraveyards.storage.Graveyard;
 import org.bukkit.command.Command;
@@ -54,7 +53,7 @@ public class DeleteCommand extends AbstractCommand implements Subcommand {
 
 		// check for permission
 		if (!sender.hasPermission("graveyard.delete")) {
-			Message.create(sender, PERMISSION_DENIED_DELETE).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, PERMISSION_DENIED_DELETE).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -63,7 +62,7 @@ public class DeleteCommand extends AbstractCommand implements Subcommand {
 
 		// check min arguments
 		if (args.size() < minArgs) {
-			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send(plugin.languageHandler);
 			displayUsage(sender);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
@@ -82,7 +81,7 @@ public class DeleteCommand extends AbstractCommand implements Subcommand {
 			Graveyard dummyGraveyard = new Graveyard.Builder().displayName(displayName).build();
 
 			// send message
-			Message.create(sender, COMMAND_FAIL_NO_RECORD).setMacro(GRAVEYARD, dummyGraveyard).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_NO_RECORD).setMacro(GRAVEYARD, dummyGraveyard).send(plugin.languageHandler);
 
 			// play sound
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
@@ -90,7 +89,7 @@ public class DeleteCommand extends AbstractCommand implements Subcommand {
 		}
 
 		// send success message to player
-		Message.create(sender, COMMAND_SUCCESS_DELETE)
+		plugin.messageBuilder.build(sender, COMMAND_SUCCESS_DELETE)
 				.setMacro(GRAVEYARD, graveyard)
 				.send(plugin.languageHandler);
 

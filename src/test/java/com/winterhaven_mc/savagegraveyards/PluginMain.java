@@ -7,6 +7,7 @@ import com.winterhaven_mc.savagegraveyards.tasks.DiscoveryTask;
 import com.winterhaven_mc.savagegraveyards.util.SafetyManager;
 import com.winterhaven_mc.util.*;
 
+import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;

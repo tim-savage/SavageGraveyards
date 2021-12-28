@@ -1,7 +1,6 @@
 package com.winterhaven_mc.savagegraveyards.commands;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
-import com.winterhaven_mc.savagegraveyards.messages.Message;
 import com.winterhaven_mc.savagegraveyards.sounds.SoundId;
 import com.winterhaven_mc.savagegraveyards.storage.Graveyard;
 import org.bukkit.Location;
@@ -40,13 +39,13 @@ public class CreateCommand extends AbstractCommand implements Subcommand {
 
 		// sender must be in game player
 		if (!(sender instanceof Player)) {
-			Message.create(sender, COMMAND_FAIL_CONSOLE).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_CONSOLE).send(plugin.languageHandler);
 			return true;
 		}
 
 		// check for permission
 		if (!sender.hasPermission("graveyard.create")) {
-			Message.create(sender, PERMISSION_DENIED_CREATE).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, PERMISSION_DENIED_CREATE).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -55,7 +54,7 @@ public class CreateCommand extends AbstractCommand implements Subcommand {
 
 		// check min arguments
 		if (args.size() < minArgs) {
-			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
@@ -88,7 +87,7 @@ public class CreateCommand extends AbstractCommand implements Subcommand {
 			plugin.dataStore.insertGraveyards(insertSet);
 
 			// send success message
-			Message.create(sender, COMMAND_SUCCESS_CREATE)
+			plugin.messageBuilder.build(sender, COMMAND_SUCCESS_CREATE)
 					.setMacro(GRAVEYARD, newGraveyard)
 					.setMacro(LOCATION, location)
 					.send(plugin.languageHandler);
@@ -112,7 +111,7 @@ public class CreateCommand extends AbstractCommand implements Subcommand {
 			plugin.dataStore.updateGraveyard(newGraveyard);
 
 			// send success message
-			Message.create(sender, COMMAND_SUCCESS_CREATE)
+			plugin.messageBuilder.build(sender, COMMAND_SUCCESS_CREATE)
 					.setMacro(GRAVEYARD, newGraveyard)
 					.setMacro(LOCATION, newGraveyard.getLocation())
 					.send(plugin.languageHandler);
@@ -123,7 +122,7 @@ public class CreateCommand extends AbstractCommand implements Subcommand {
 		}
 
 		// send graveyard exists error message
-		Message.create(sender, COMMAND_FAIL_CREATE_EXISTS)
+		plugin.messageBuilder.build(sender, COMMAND_FAIL_CREATE_EXISTS)
 				.setMacro(GRAVEYARD, existingGraveyard)
 				.send(plugin.languageHandler);
 

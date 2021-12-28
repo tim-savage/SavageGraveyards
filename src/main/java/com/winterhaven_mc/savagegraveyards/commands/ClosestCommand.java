@@ -1,7 +1,6 @@
 package com.winterhaven_mc.savagegraveyards.commands;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
-import com.winterhaven_mc.savagegraveyards.messages.Message;
 import com.winterhaven_mc.savagegraveyards.sounds.SoundId;
 import com.winterhaven_mc.savagegraveyards.storage.Graveyard;
 import org.bukkit.command.CommandSender;
@@ -43,14 +42,14 @@ public class ClosestCommand extends AbstractCommand implements Subcommand {
 		// if command sender does not have permission to display closest graveyard,
 		// output error message and return true
 		if (!sender.hasPermission("graveyard.closest")) {
-			Message.create(sender, PERMISSION_DENIED_CLOSEST).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, PERMISSION_DENIED_CLOSEST).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// sender must be in game player
 		if (!(sender instanceof Player)) {
-			Message.create(sender, COMMAND_FAIL_CONSOLE).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_CONSOLE).send(plugin.languageHandler);
 			return true;
 		}
 
@@ -62,13 +61,13 @@ public class ClosestCommand extends AbstractCommand implements Subcommand {
 
 		// if no graveyard returned from datastore, send failure message and return
 		if (graveyard == null || graveyard.getLocation() == null) {
-			Message.create(sender, COMMAND_FAIL_CLOSEST_NO_MATCH).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_CLOSEST_NO_MATCH).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// send success message
-		Message.create(sender, COMMAND_SUCCESS_CLOSEST)
+		plugin.messageBuilder.build(sender, COMMAND_SUCCESS_CLOSEST)
 				.setMacro(GRAVEYARD, graveyard)
 				.setMacro(LOCATION, graveyard.getLocation())
 				.send(plugin.languageHandler);

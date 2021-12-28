@@ -2,7 +2,6 @@ package com.winterhaven_mc.savagegraveyards.util;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
 import com.winterhaven_mc.savagegraveyards.messages.Macro;
-import com.winterhaven_mc.savagegraveyards.messages.Message;
 import com.winterhaven_mc.savagegraveyards.messages.MessageId;
 
 import org.bukkit.entity.Player;
@@ -64,7 +63,7 @@ public class SafetyManager {
 		}
 
 		// send safety message to player
-		Message.create(player, MessageId.SAFETY_COOLDOWN_START)
+		plugin.messageBuilder.build(player, MessageId.SAFETY_COOLDOWN_START)
 				.setMacro(Macro.DURATION, TimeUnit.SECONDS.toMillis(safetyTime))
 				.send(plugin.languageHandler);
 
@@ -73,7 +72,7 @@ public class SafetyManager {
 			@Override
 			public void run() {
 				removePlayer(player);
-				Message.create(player, MessageId.SAFETY_COOLDOWN_END).send(plugin.languageHandler);
+				plugin.messageBuilder.build(player, MessageId.SAFETY_COOLDOWN_END).send(plugin.languageHandler);
 			}
 		}.runTaskLater(plugin, safetyTime * 20L);
 

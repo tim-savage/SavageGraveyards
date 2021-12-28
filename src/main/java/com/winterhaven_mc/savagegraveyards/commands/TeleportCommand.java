@@ -1,7 +1,6 @@
 package com.winterhaven_mc.savagegraveyards.commands;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
-import com.winterhaven_mc.savagegraveyards.messages.Message;
 import com.winterhaven_mc.savagegraveyards.sounds.SoundId;
 import com.winterhaven_mc.savagegraveyards.storage.Graveyard;
 import org.bukkit.Location;
@@ -56,13 +55,13 @@ public class TeleportCommand extends AbstractCommand implements Subcommand {
 
 		// sender must be in game player
 		if (!(sender instanceof Player)) {
-			Message.create(sender, COMMAND_FAIL_CONSOLE).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_CONSOLE).send(plugin.languageHandler);
 			return true;
 		}
 
 		// check for permission
 		if (!sender.hasPermission("graveyard.teleport")) {
-			Message.create(sender, PERMISSION_DENIED_TELEPORT).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, PERMISSION_DENIED_TELEPORT).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -71,7 +70,7 @@ public class TeleportCommand extends AbstractCommand implements Subcommand {
 		int minArgs = 1;
 
 		if (args.size() < minArgs) {
-			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send(plugin.languageHandler);
 			displayUsage(sender);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
@@ -93,7 +92,7 @@ public class TeleportCommand extends AbstractCommand implements Subcommand {
 			Graveyard dummyGraveyard = new Graveyard.Builder().displayName(displayName).build();
 
 			// send message
-			Message.create(sender, COMMAND_FAIL_NO_RECORD)
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_NO_RECORD)
 					.setMacro(GRAVEYARD, dummyGraveyard)
 					.send(plugin.languageHandler);
 
@@ -109,7 +108,7 @@ public class TeleportCommand extends AbstractCommand implements Subcommand {
 		if (destination == null) {
 
 			// send message
-			Message.create(sender, COMMAND_FAIL_TELEPORT_WORLD_INVALID)
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_TELEPORT_WORLD_INVALID)
 					.setMacro(GRAVEYARD, graveyard)
 					.setMacro(INVALID_WORLD, graveyard.getWorldName())
 					.send(plugin.languageHandler);
@@ -122,7 +121,7 @@ public class TeleportCommand extends AbstractCommand implements Subcommand {
 		// play teleport departure sound
 		plugin.soundConfig.playSound(player, SoundId.TELEPORT_SUCCESS_DEPARTURE);
 		if (player.teleport(destination, PlayerTeleportEvent.TeleportCause.PLUGIN)) {
-			Message.create(sender, COMMAND_SUCCESS_TELEPORT)
+			plugin.messageBuilder.build(sender, COMMAND_SUCCESS_TELEPORT)
 					.setMacro(GRAVEYARD, graveyard)
 					.setMacro(LOCATION, graveyard.getLocation())
 					.send(plugin.languageHandler);
@@ -130,7 +129,7 @@ public class TeleportCommand extends AbstractCommand implements Subcommand {
 		}
 		else {
 			// send message
-			Message.create(sender, COMMAND_FAIL_TELEPORT).setMacro(GRAVEYARD, graveyard).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_TELEPORT).setMacro(GRAVEYARD, graveyard).send(plugin.languageHandler);
 
 			// play sound
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);

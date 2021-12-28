@@ -1,7 +1,6 @@
 package com.winterhaven_mc.savagegraveyards.commands;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
-import com.winterhaven_mc.savagegraveyards.messages.Message;
 import com.winterhaven_mc.savagegraveyards.sounds.SoundId;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -38,7 +37,7 @@ public class StatusCommand extends AbstractCommand implements Subcommand {
 
 		// if command sender does not have permission to view status, output error message and return true
 		if (!sender.hasPermission("graveyard.status")) {
-			Message.create(sender, PERMISSION_DENIED_STATUS).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, PERMISSION_DENIED_STATUS).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
