@@ -84,8 +84,7 @@ public class PluginMainTests {
         Configuration config = plugin.getConfig();
         Set<String> enumConfigKeyStrings = new HashSet<>();
 
-        @SuppressWarnings("unused")
-        public void Config() {
+        public ConfigTests() {
             for (ConfigSetting configSetting : ConfigSetting.values()) {
                 this.enumConfigKeyStrings.add(configSetting.getKey());
             }
@@ -103,24 +102,26 @@ public class PluginMainTests {
             Assertions.assertEquals("en-US", config.getString("language"));
         }
 
+        @SuppressWarnings("unused")
         Set<String> ConfigFileKeys() {
-            return config.getKeys(false);
+            return plugin.getConfig().getKeys(false);
         }
 
-//        @ParameterizedTest
-//        @DisplayName("file config key is contained in enum.")
-//        @MethodSource("ConfigFileKeys")
-//        void ConfigFileKeyNotNull(String key) {
-//            Assertions.assertNotNull(key);
-//            Assertions.assertTrue(enumConfigKeyStrings.contains(key));
-//        }
+        @ParameterizedTest
+        @DisplayName("file config key is contained in ConfigSetting enum.")
+        @MethodSource("ConfigFileKeys")
+        void ConfigFileKeyNotNull(String key) {
+            Assertions.assertNotNull(key);
+            Assertions.assertTrue(enumConfigKeyStrings.contains(key),
+                    "file config key is not contained in ConfigSetting enum.");
+        }
 
-//        @ParameterizedTest
-//        @EnumSource(ConfigSetting.class)
-//        @DisplayName("ConfigSetting enum matches config file key/value pairs.")
-//        void ConfigFileKeysContainsEnumKey(ConfigSetting configSetting) {
-//            Assertions.assertEquals(configSetting.getValue(), plugin.getConfig().getString(configSetting.getKey()));
-//        }
+        @ParameterizedTest
+        @EnumSource(ConfigSetting.class)
+        @DisplayName("ConfigSetting enum matches config file key/value pairs.")
+        void ConfigFileKeysContainsEnumKey(ConfigSetting configSetting) {
+            Assertions.assertEquals(configSetting.getValue(), plugin.getConfig().getString(configSetting.getKey()));
+        }
     }
 
 }
