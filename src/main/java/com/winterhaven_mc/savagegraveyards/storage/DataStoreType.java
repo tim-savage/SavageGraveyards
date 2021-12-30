@@ -1,8 +1,8 @@
 package com.winterhaven_mc.savagegraveyards.storage;
 
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -13,11 +13,21 @@ import java.util.Arrays;
 enum DataStoreType {
 
 	SQLITE("SQLite") {
+
+		final String filename = "graveyards.db";
+
 		@Override
-		public DataStore create(JavaPlugin plugin) {
+		public DataStore connect(JavaPlugin plugin) {
 
 			// create new sqlite datastore object
 			return new DataStoreSQLite(plugin);
+		}
+
+		@Override
+		boolean storageObjectExists(JavaPlugin plugin) {
+			// get path name to data store file
+			File dataStoreFile = new File(plugin.getDataFolder() + File.separator + filename);
+			return dataStoreFile.exists();
 		}
 	};
 
@@ -30,10 +40,19 @@ enum DataStoreType {
 
 	/**
 	 * Get new instance of DataStore of configured type
+	 *
 	 * @return new instance of DataStore
 	 */
-	abstract DataStore create(JavaPlugin plugin);
+	abstract DataStore connect(JavaPlugin plugin);
 
+
+	/**
+	 * Test if datastore backing object (file, database) exists
+	 *
+	 * @param plugin reference to plugin main class
+	 * @return true if backing object exists, false if not
+	 */
+	abstract boolean storageObjectExists(JavaPlugin plugin);
 
 	/**
 	 * Class constructor
@@ -60,8 +79,7 @@ enum DataStoreType {
 	 * Attempt to match a DataStoreType by name
 	 *
 	 * @param name the name to attempt to match to a DataStoreType
-	 * @return A DataStoreType whose name matched the passed string,
-	 * or the default DataStoreType if no match
+	 * @return A DataStoreType whose name matched the passed string, else the default DataStoreType if no match
 	 */
 	public static DataStoreType match(final String name) {
 		for (DataStoreType type : DataStoreType.values()) {
@@ -90,17 +108,17 @@ enum DataStoreType {
 	 * @param oldDataStore the old datastore to convert from
 	 * @param newDataStore the new datastore to convert to
 	 */
-	static void convert(final DataStore oldDataStore, final DataStore newDataStore) {
+	static void convert(JavaPlugin plugin, final DataStore oldDataStore, final DataStore newDataStore) {
 
 		// if datastores are same type, do not convert
 		if (oldDataStore.getType().equals(newDataStore.getType())) {
 			return;
 		}
 
-		// if old datastore file exists, attempt to read all records
-		if (oldDataStore.exists()) {
+		// if old datastore exists, attempt to read all records
+		if (oldDataStore.getType().storageObjectExists(plugin)) {
 
-			Bukkit.getLogger().info("Converting existing " + oldDataStore + " datastore to "
+			plugin.getLogger().info("Converting existing " + oldDataStore + " datastore to "
 					+ newDataStore + " datastore...");
 
 			// initialize old datastore if necessary
@@ -109,16 +127,16 @@ enum DataStoreType {
 					oldDataStore.initialize();
 				}
 				catch (Exception e) {
-					Bukkit.getLogger().warning("Could not initialize "
+					plugin.getLogger().warning("Could not initialize "
 							+ oldDataStore + " datastore for conversion.");
-					Bukkit.getLogger().warning(e.getLocalizedMessage());
+					plugin.getLogger().warning(e.getLocalizedMessage());
 					return;
 				}
 			}
 
 			int count = newDataStore.insertGraveyards(oldDataStore.selectAllGraveyards());
 
-			Bukkit.getLogger().info(count + " records converted to " + newDataStore + " datastore.");
+			plugin.getLogger().info(count + " records converted to " + newDataStore + " datastore.");
 
 			newDataStore.sync();
 
@@ -138,22 +156,12 @@ enum DataStoreType {
 		// get array list of all data store types
 		ArrayList<DataStoreType> dataStores = new ArrayList<>(Arrays.asList(DataStoreType.values()));
 
-		// remove newDataStore from list of types to convert
+		// remove newDataStore type from list of types to convert
 		dataStores.remove(newDataStore.getType());
 
 		for (DataStoreType type : dataStores) {
-
-			// create oldDataStore holder
-			DataStore oldDataStore = null;
-
-			if (type.equals(DataStoreType.SQLITE)) {
-				oldDataStore = new DataStoreSQLite(plugin);
-			}
-
-			// add additional datastore types here as they become available
-
-			if (oldDataStore != null) {
-				convert(oldDataStore, newDataStore);
+			if (type.storageObjectExists(plugin)) {
+				convert(plugin, type.connect(plugin), newDataStore);
 			}
 		}
 	}

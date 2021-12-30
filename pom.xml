@@ -169,6 +169,14 @@
 						</goals>
 						<configuration>
 							<minimizeJar>true</minimizeJar>
+							<filters>
+								<filter>
+									<artifact>com.winterhaven-mc:*</artifact>
+									<excludes>
+										<exclude>META-INF/MANIFEST.MF</exclude>
+									</excludes>
+								</filter>
+							</filters>
 							<artifactSet>
 								<includes>
 									<include>com.winterhaven-mc:message-builder</include>

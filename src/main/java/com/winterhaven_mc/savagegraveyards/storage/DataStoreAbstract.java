@@ -37,16 +37,6 @@ public abstract class DataStoreAbstract implements DataStore {
 
 
 	/**
-	 * Get datastore name, formatted for display
-	 *
-	 * @return String containing datastore name
-	 */
-	public String getDisplayName() {
-		return this.getType().toString();
-	}
-
-
-	/**
 	 * Get datastore initialized field
 	 *
 	 * @return true if datastore is initialized, false if it is not

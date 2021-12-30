@@ -46,6 +46,10 @@ class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 		this.filename = "graveyards.db";
 	}
 
+	@Override
+	public String toString() {
+		return type.toString();
+	}
 
 	@Override
 	public void initialize() throws SQLException, ClassNotFoundException {
@@ -1219,12 +1223,12 @@ class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 
 		try {
 			connection.close();
-			plugin.getLogger().info("SQLite datastore connection closed.");
+			plugin.getLogger().info(this + " datastore connection closed.");
 		}
 		catch (SQLException e) {
 
 			// output simple error message
-			plugin.getLogger().warning("An error occurred while closing the SQLite datastore.");
+			plugin.getLogger().warning("An error occurred while closing the " + this + " datastore.");
 			plugin.getLogger().warning(e.getMessage());
 
 			// if debugging is enabled, output stack trace
@@ -1238,9 +1242,7 @@ class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 
 	@Override
 	public void sync() {
-
 		// no action necessary for this storage type
-
 	}
 
 
@@ -1254,15 +1256,6 @@ class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 			result = dataStoreFile.delete();
 		}
 		return result;
-	}
-
-
-	@Override
-	public boolean exists() {
-
-		// get path name to data store file
-		File dataStoreFile = new File(plugin.getDataFolder() + File.separator + this.getFilename());
-		return dataStoreFile.exists();
 	}
 
 }

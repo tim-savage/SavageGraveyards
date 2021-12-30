@@ -1,9 +1,9 @@
 package com.winterhaven_mc.savagegraveyards.storage;
 
 import com.winterhaven_mc.savagegraveyards.PluginMain;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.entity.Player;
 
 import java.util.*;
 
@@ -65,6 +65,15 @@ public interface DataStore {
 	 * @return Graveyard object
 	 */
 	Graveyard selectNearestGraveyard(final Player player);
+
+
+	/**
+	 * Get records that prefix match string
+	 *
+	 * @param match the prefix to match
+	 * @return String collection of names with matching prefix
+	 */
+	List<String> selectMatchingGraveyardNames(final String match);
 
 
 	/**
@@ -155,37 +164,17 @@ public interface DataStore {
 
 
 	/**
-	 * Check that datastore exists
-	 *
-	 * @return true if datastore exists, false if it does not
-	 */
-	boolean exists();
-
-
-	/**
-	 * Get records that prefix match string
-	 *
-	 * @param match the prefix to match
-	 * @return String collection of names with matching prefix
-	 */
-	List<String> selectMatchingGraveyardNames(final String match);
-
-
-	/**
 	 * Create new data store of given type.<br>
 	 * No parameter version used when no current datastore exists
 	 * and datastore type should be read from configuration
 	 *
 	 * @return new datastore of configured type
 	 */
-	static DataStore create(JavaPlugin plugin) {
+	static DataStore connect(final JavaPlugin plugin) {
 
 		// get data store type from config
 		DataStoreType dataStoreType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
-		if (dataStoreType == null) {
-			dataStoreType = DataStoreType.getDefaultType();
-		}
-		return create(plugin, dataStoreType, null);
+		return connect(plugin, dataStoreType);
 	}
 
 
@@ -194,32 +183,27 @@ public interface DataStore {
 	 * Two parameter version used when a datastore instance already exists
 	 *
 	 * @param dataStoreType new datastore type
-	 * @param oldDataStore  existing datastore reference
 	 * @return a new datastore instance of the given type
 	 */
-	static DataStore create(JavaPlugin plugin, final DataStoreType dataStoreType, final DataStore oldDataStore) {
+	static DataStore connect(final JavaPlugin plugin, final DataStoreType dataStoreType) {
 
 		// get new data store of specified type
-		DataStore newDataStore = dataStoreType.create(plugin);
+		DataStore newDataStore = dataStoreType.connect(plugin);
 
 		// initialize new data store
 		try {
 			newDataStore.initialize();
 		}
 		catch (Exception e) {
-			Bukkit.getLogger().severe("Could not initialize " + newDataStore.toString() + " datastore!");
+			plugin.getLogger().severe("Could not initialize " + newDataStore.toString() + " datastore!");
 			if (plugin.getConfig().getBoolean("debug")) {
 				e.printStackTrace();
 			}
 		}
 
-		// if old data store was passed, convert to new data store
-		if (oldDataStore != null) {
-			DataStoreType.convert(oldDataStore, newDataStore);
-		}
-		else {
-			DataStoreType.convertAll(plugin, newDataStore);
-		}
+		// convert any existing data stores to new type
+		DataStoreType.convertAll(plugin, newDataStore);
+
 		// return initialized data store
 		return newDataStore;
 	}
@@ -240,7 +224,7 @@ public interface DataStore {
 		if (!currentType.equals(newType)) {
 
 			// create new datastore
-			plugin.dataStore = create(plugin, newType, plugin.dataStore);
+			plugin.dataStore = connect(plugin, newType);
 		}
 	}
 

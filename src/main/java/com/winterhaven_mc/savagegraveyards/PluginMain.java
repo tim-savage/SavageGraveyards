@@ -70,8 +70,8 @@ public class PluginMain extends JavaPlugin {
 		// instantiate sound configuration
 		soundConfig = new YamlSoundConfiguration(this);
 
-		// get initialized destination storage object
-		dataStore = DataStore.create(this);
+		// connect to storage object
+		dataStore = DataStore.connect(this);
 
 		// instantiate safety manager
 		safetyManager = new SafetyManager(this);
