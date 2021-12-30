@@ -41,15 +41,8 @@ class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 
 		// set datastore type
 		this.type = DataStoreType.SQLITE;
-
-		// set datastore filename
-		this.filename = "graveyards.db";
 	}
 
-	@Override
-	public String toString() {
-		return type.toString();
-	}
 
 	@Override
 	public void initialize() throws SQLException, ClassNotFoundException {
@@ -66,7 +59,7 @@ class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 		Class.forName(jdbcDriverName);
 
 		// create database url
-		String dataFilePath = plugin.getDataFolder() + File.separator + filename;
+		String dataFilePath = plugin.getDataFolder() + File.separator + type.getStorageName();
 		String jdbc = "jdbc:sqlite";
 		String dbUrl = jdbc + ":" + dataFilePath;
 

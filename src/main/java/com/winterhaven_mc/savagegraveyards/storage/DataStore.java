@@ -24,6 +24,14 @@ public interface DataStore {
 
 
 	/**
+	 * Get data store type
+	 *
+	 * @return the datastore type
+	 */
+	DataStoreType getType();
+
+
+	/**
 	 * get all graveyard records
 	 *
 	 * @return List of all graveyard objects in alphabetical order
@@ -164,28 +172,16 @@ public interface DataStore {
 
 
 	/**
-	 * Create new data store of given type.<br>
-	 * No parameter version used when no current datastore exists
-	 * and datastore type should be read from configuration
+	 * Create new data store of given type and convert old data store.<br>
+	 * Two parameter version used when a datastore instance already exists
 	 *
-	 * @return new datastore of configured type
+	 * @param plugin reference to plugin main class
+	 * @return a new datastore instance of the given type
 	 */
 	static DataStore connect(final JavaPlugin plugin) {
 
 		// get data store type from config
 		DataStoreType dataStoreType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
-		return connect(plugin, dataStoreType);
-	}
-
-
-	/**
-	 * Create new data store of given type and convert old data store.<br>
-	 * Two parameter version used when a datastore instance already exists
-	 *
-	 * @param dataStoreType new datastore type
-	 * @return a new datastore instance of the given type
-	 */
-	static DataStore connect(final JavaPlugin plugin, final DataStoreType dataStoreType) {
 
 		// get new data store of specified type
 		DataStore newDataStore = dataStoreType.connect(plugin);
@@ -195,7 +191,8 @@ public interface DataStore {
 			newDataStore.initialize();
 		}
 		catch (Exception e) {
-			plugin.getLogger().severe("Could not initialize " + newDataStore.toString() + " datastore!");
+			plugin.getLogger().severe("Could not initialize " + newDataStore + " datastore!");
+			plugin.getLogger().severe(e.getLocalizedMessage());
 			if (plugin.getConfig().getBoolean("debug")) {
 				e.printStackTrace();
 			}
@@ -224,11 +221,8 @@ public interface DataStore {
 		if (!currentType.equals(newType)) {
 
 			// create new datastore
-			plugin.dataStore = connect(plugin, newType);
+			plugin.dataStore = connect(plugin);
 		}
 	}
-
-	DataStoreType getType();
-
 
 }
