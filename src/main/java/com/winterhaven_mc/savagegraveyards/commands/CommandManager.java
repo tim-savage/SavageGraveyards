@@ -7,6 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 import static com.winterhaven_mc.savagegraveyards.messages.MessageId.*;
@@ -50,8 +51,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * Tab completer for SavageGraveyards commands
 	 */
 	@Override
-	public List<String> onTabComplete(final CommandSender sender, final Command command,
-									  final String alias, final String[] args) {
+	public List<String> onTabComplete(final @Nonnull CommandSender sender, final @Nonnull Command command,
+	                                  final @Nonnull String alias, final String[] args) {
 
 		// if more than one argument, use tab completer of subcommand
 		if (args.length > 1) {
@@ -77,8 +78,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * Command Executor for SavageGraveyards
 	 */
 	@Override
-	public boolean onCommand(final CommandSender sender, final Command command,
-							 final String label, final String[] args) {
+	public boolean onCommand(final @Nonnull CommandSender sender, final @Nonnull Command command,
+							 final @Nonnull String label, final String[] args) {
 
 		// convert args array to list
 		List<String> argsList = new ArrayList<>(Arrays.asList(args));
@@ -101,7 +102,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// if subcommand is null, get help command from map
 		if (subcommand == null) {
 			subcommand = subcommandMap.getCommand("help");
-			plugin.messageBuilder.build(sender, COMMAND_FAIL_INVALID_COMMAND).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_INVALID_COMMAND).send();
 			plugin.soundConfig.playSound(sender, COMMAND_INVALID);
 		}
 

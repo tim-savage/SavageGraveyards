@@ -37,7 +37,7 @@ public class StatusCommand extends AbstractCommand implements Subcommand {
 
 		// if command sender does not have permission to view status, output error message and return true
 		if (!sender.hasPermission("graveyard.status")) {
-			plugin.messageBuilder.build(sender, PERMISSION_DENIED_STATUS).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, PERMISSION_DENIED_STATUS).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}

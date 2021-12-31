@@ -176,7 +176,7 @@ public class PlayerEventListener implements Listener {
 				plugin.messageBuilder.build(player, MessageId.DEFAULT_RESPAWN)
 						.setMacro(Macro.GRAVEYARD, graveyard)
 						.setMacro(Macro.LOCATION, graveyard.getLocation())
-						.send(plugin.languageHandler);
+						.send();
 			}
 
 			// put player in safety cooldown map

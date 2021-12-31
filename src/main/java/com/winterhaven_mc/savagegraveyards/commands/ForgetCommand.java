@@ -99,7 +99,7 @@ public class ForgetCommand extends AbstractCommand implements Subcommand {
 
 		// check for permission
 		if (!sender.hasPermission("graveyard.forget")) {
-			plugin.messageBuilder.build(sender, PERMISSION_DENIED_FORGET).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, PERMISSION_DENIED_FORGET).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -109,7 +109,7 @@ public class ForgetCommand extends AbstractCommand implements Subcommand {
 
 		// check for minimum arguments
 		if (args.size() < minArgs) {
-			plugin.messageBuilder.build(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send();
 			displayUsage(sender);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
@@ -131,7 +131,7 @@ public class ForgetCommand extends AbstractCommand implements Subcommand {
 
 		// if player not found, send message and return
 		if (player == null) {
-			plugin.messageBuilder.build(sender, COMMAND_FAIL_FORGET_INVALID_PLAYER).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_FORGET_INVALID_PLAYER).send();
 			return true;
 		}
 
@@ -150,7 +150,7 @@ public class ForgetCommand extends AbstractCommand implements Subcommand {
 			// send graveyard not found message
 			plugin.messageBuilder.build(sender, COMMAND_FAIL_FORGET_INVALID_GRAVEYARD)
 					.setMacro(GRAVEYARD, dummyGraveyard)
-					.send(plugin.languageHandler);
+					.send();
 
 			// play command fail sound
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
@@ -164,7 +164,7 @@ public class ForgetCommand extends AbstractCommand implements Subcommand {
 			plugin.messageBuilder.build(sender, COMMAND_SUCCESS_FORGET)
 					.setMacro(GRAVEYARD, graveyard)
 					.setMacro(TARGET_PLAYER, player)
-					.send(plugin.languageHandler);
+					.send();
 
 			// play success sound
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_FORGET);
@@ -174,7 +174,7 @@ public class ForgetCommand extends AbstractCommand implements Subcommand {
 			plugin.messageBuilder.build(sender, COMMAND_FAIL_FORGET)
 					.setMacro(GRAVEYARD, graveyard)
 					.setMacro(TARGET_PLAYER, player)
-					.send(plugin.languageHandler);
+					.send();
 
 			// send command fail sound
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);

@@ -37,7 +37,7 @@ public class ReloadCommand extends AbstractCommand implements Subcommand {
 
 		// if sender does not have permission to reload config, send error message and return true
 		if (!sender.hasPermission("graveyard.reload")) {
-			plugin.messageBuilder.build(sender, PERMISSION_DENIED_RELOAD).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, PERMISSION_DENIED_RELOAD).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -49,7 +49,7 @@ public class ReloadCommand extends AbstractCommand implements Subcommand {
 		plugin.worldManager.reload();
 
 		// reload messages
-		plugin.languageHandler.reload();
+		plugin.messageBuilder.reload();
 
 		// reload sounds
 		plugin.soundConfig.reload();
@@ -58,7 +58,7 @@ public class ReloadCommand extends AbstractCommand implements Subcommand {
 		DataStore.reload(plugin);
 
 		// send reloaded message
-		plugin.messageBuilder.build(sender, COMMAND_SUCCESS_RELOAD).send(plugin.languageHandler);
+		plugin.messageBuilder.build(sender, COMMAND_SUCCESS_RELOAD).send();
 
 		// return true to suppress bukkit usage message
 		return true;

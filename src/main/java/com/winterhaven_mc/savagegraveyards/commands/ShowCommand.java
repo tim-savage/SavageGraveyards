@@ -54,7 +54,7 @@ public class ShowCommand extends AbstractCommand implements Subcommand {
 
 		// if command sender does not have permission to show graveyards, output error message and return true
 		if (!sender.hasPermission("graveyard.show")) {
-			plugin.messageBuilder.build(sender, PERMISSION_DENIED_SHOW).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, PERMISSION_DENIED_SHOW).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -64,7 +64,7 @@ public class ShowCommand extends AbstractCommand implements Subcommand {
 
 		// if too few arguments, display error and usage messages and return
 		if (args.size() < minArgs) {
-			plugin.messageBuilder.build(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send();
 			displayUsage(sender);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
@@ -83,7 +83,7 @@ public class ShowCommand extends AbstractCommand implements Subcommand {
 			Graveyard dummyGraveyard = new Graveyard.Builder().displayName(displayName).build();
 
 			// send message
-			plugin.messageBuilder.build(sender, COMMAND_FAIL_NO_RECORD).setMacro(GRAVEYARD, dummyGraveyard).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_NO_RECORD).setMacro(GRAVEYARD, dummyGraveyard).send();
 
 			// play sound
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);

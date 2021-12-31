@@ -76,7 +76,7 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 
 		// check min arguments
 		if (args.size() < minArgs) {
-			plugin.messageBuilder.build(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send();
 			displayUsage(sender);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
@@ -138,7 +138,7 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 		}
 
 		// no matching attribute, send error message
-		plugin.messageBuilder.build(sender, COMMAND_FAIL_INVALID_ATTRIBUTE).send(plugin.languageHandler);
+		plugin.messageBuilder.build(sender, COMMAND_FAIL_INVALID_ATTRIBUTE).send();
 		plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 
 		return true;
@@ -161,7 +161,7 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 
 		// sender must be in game player
 		if (!(sender instanceof Player)) {
-			plugin.messageBuilder.build(sender, COMMAND_FAIL_CONSOLE).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_CONSOLE).send();
 			return true;
 		}
 
@@ -170,7 +170,7 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 
 		// check player permission
 		if (!player.hasPermission("graveyard.set.location")) {
-			plugin.messageBuilder.build(sender, PERMISSION_DENIED_SET_LOCATION).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, PERMISSION_DENIED_SET_LOCATION).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -187,7 +187,7 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 		plugin.messageBuilder.build(player, COMMAND_SUCCESS_SET_LOCATION)
 				.setMacro(GRAVEYARD, newGraveyard)
 				.setMacro(LOCATION, newGraveyard.getLocation())
-				.send(plugin.languageHandler);
+				.send();
 
 		// play success sound
 		plugin.soundConfig.playSound(player, SoundId.COMMAND_SUCCESS_SET);
@@ -215,7 +215,7 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.name")) {
-			plugin.messageBuilder.build(sender, PERMISSION_DENIED_SET_NAME).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, PERMISSION_DENIED_SET_NAME).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -225,7 +225,7 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 
 		// if new name is blank, send invalid name message
 		if (ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', newName)).isEmpty()) {
-			plugin.messageBuilder.build(sender, COMMAND_FAIL_SET_INVALID_NAME).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_SET_INVALID_NAME).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -243,7 +243,7 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 		plugin.messageBuilder.build(sender, COMMAND_SUCCESS_SET_NAME)
 				.setMacro(GRAVEYARD, newGraveyard)
 				.setMacro(VALUE, oldName)
-				.send(plugin.languageHandler);
+				.send();
 
 		// play success sound
 		plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
@@ -271,7 +271,7 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.enabled")) {
-			plugin.messageBuilder.build(sender, PERMISSION_DENIED_SET_ENABLED).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, PERMISSION_DENIED_SET_ENABLED).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -300,7 +300,7 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 			enabled = false;
 		}
 		else {
-			plugin.messageBuilder.build(sender, COMMAND_FAIL_SET_INVALID_BOOLEAN).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_SET_INVALID_BOOLEAN).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -320,7 +320,7 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 		plugin.messageBuilder.build(sender, COMMAND_SUCCESS_SET_ENABLED)
 				.setMacro(GRAVEYARD, newGraveyard)
 				.setMacro(VALUE, value)
-				.send(plugin.languageHandler);
+				.send();
 
 		// play success sound
 		plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
@@ -348,7 +348,7 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.hidden")) {
-			plugin.messageBuilder.build(sender, PERMISSION_DENIED_SET_HIDDEN).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, PERMISSION_DENIED_SET_HIDDEN).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -376,7 +376,7 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 			hidden = false;
 		}
 		else {
-			plugin.messageBuilder.build(sender, COMMAND_FAIL_SET_INVALID_BOOLEAN).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_SET_INVALID_BOOLEAN).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -394,7 +394,7 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 		plugin.messageBuilder.build(sender, COMMAND_SUCCESS_SET_HIDDEN)
 				.setMacro(GRAVEYARD, newGraveyard)
 				.setMacro(VALUE, value)
-				.send(plugin.languageHandler);
+				.send();
 
 		// play success sound
 		plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
@@ -422,7 +422,7 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.discoveryrange")) {
-			plugin.messageBuilder.build(sender, PERMISSION_DENIED_SET_DISCOVERYRANGE).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, PERMISSION_DENIED_SET_DISCOVERYRANGE).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -456,7 +456,7 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 				discoveryRange = Integer.parseInt(passedString);
 			}
 			catch (NumberFormatException e) {
-				plugin.messageBuilder.build(sender, COMMAND_FAIL_SET_INVALID_INTEGER).send(plugin.languageHandler);
+				plugin.messageBuilder.build(sender, COMMAND_FAIL_SET_INVALID_INTEGER).send();
 				plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 				return true;
 			}
@@ -475,13 +475,13 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 			plugin.messageBuilder.build(sender, COMMAND_SUCCESS_SET_DISCOVERYRANGE_DEFAULT)
 					.setMacro(GRAVEYARD, newGraveyard)
 					.setMacro(VALUE, plugin.getConfig().getInt("discovery-range"))
-					.send(plugin.languageHandler);
+					.send();
 		}
 		else {
 			plugin.messageBuilder.build(sender, COMMAND_SUCCESS_SET_DISCOVERYRANGE)
 					.setMacro(GRAVEYARD, newGraveyard)
 					.setMacro(VALUE, String.valueOf(discoveryRange))
-					.send(plugin.languageHandler);
+					.send();
 		}
 
 		// play success sound
@@ -510,7 +510,7 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.discoverymessage")) {
-			plugin.messageBuilder.build(sender, PERMISSION_DENIED_SET_DISCOVERYMESSAGE).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, PERMISSION_DENIED_SET_DISCOVERYMESSAGE).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -535,12 +535,12 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 		if (discoveryMessage.isEmpty()) {
 			plugin.messageBuilder.build(sender, COMMAND_SUCCESS_SET_DISCOVERYMESSAGE_DEFAULT)
 					.setMacro(GRAVEYARD, newGraveyard)
-					.send(plugin.languageHandler);
+					.send();
 		}
 		else {
 			plugin.messageBuilder.build(sender, COMMAND_SUCCESS_SET_DISCOVERYMESSAGE)
 					.setMacro(GRAVEYARD, newGraveyard)
-					.send(plugin.languageHandler);
+					.send();
 		}
 
 		// play success sound
@@ -569,7 +569,7 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.respawnmessage")) {
-			plugin.messageBuilder.build(sender, PERMISSION_DENIED_SET_RESPAWNMESSAGE).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, PERMISSION_DENIED_SET_RESPAWNMESSAGE).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -592,12 +592,12 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 		if (respawnMessage.isEmpty()) {
 			plugin.messageBuilder.build(sender, COMMAND_SUCCESS_SET_RESPAWNMESSAGE_DEFAULT)
 					.setMacro(GRAVEYARD, newGraveyard)
-					.send(plugin.languageHandler);
+					.send();
 		}
 		else {
 			plugin.messageBuilder.build(sender, COMMAND_SUCCESS_SET_RESPAWNMESSAGE)
 					.setMacro(GRAVEYARD, newGraveyard)
-					.send(plugin.languageHandler);
+					.send();
 		}
 
 		// play success sound
@@ -626,7 +626,7 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.group")) {
-			plugin.messageBuilder.build(sender, PERMISSION_DENIED_SET_GROUP).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, PERMISSION_DENIED_SET_GROUP).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -641,7 +641,7 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 		plugin.messageBuilder.build(sender, COMMAND_SUCCESS_SET_GROUP)
 				.setMacro(GRAVEYARD, newGraveyard)
 				.setMacro(VALUE, passedString)
-				.send(plugin.languageHandler);
+				.send();
 
 		// play success sound
 		plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
@@ -669,7 +669,7 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 
 		// check sender permission
 		if (!sender.hasPermission("graveyard.set.safetytime")) {
-			plugin.messageBuilder.build(sender, PERMISSION_DENIED_SET_SAFETYTIME).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, PERMISSION_DENIED_SET_SAFETYTIME).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -687,7 +687,7 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 				safetyTime = Integer.parseInt(passedString);
 			}
 			catch (NumberFormatException e) {
-				plugin.messageBuilder.build(sender, COMMAND_FAIL_SET_INVALID_INTEGER).send(plugin.languageHandler);
+				plugin.messageBuilder.build(sender, COMMAND_FAIL_SET_INVALID_INTEGER).send();
 				plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 				return true;
 			}
@@ -706,13 +706,13 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 			plugin.messageBuilder.build(sender, COMMAND_SUCCESS_SET_SAFETYTIME_DEFAULT)
 					.setMacro(GRAVEYARD, newGraveyard)
 					.setMacro(DURATION, TimeUnit.SECONDS.toMillis(plugin.getConfig().getInt("safety-time")))
-					.send(plugin.languageHandler);
+					.send();
 		}
 		else {
 			plugin.messageBuilder.build(sender, COMMAND_SUCCESS_SET_SAFETYTIME)
 					.setMacro(GRAVEYARD, newGraveyard)
 					.setMacro(DURATION, TimeUnit.SECONDS.toMillis(safetyTime))
-					.send(plugin.languageHandler);
+					.send();
 		}
 
 		// play success sound

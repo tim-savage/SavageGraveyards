@@ -60,7 +60,7 @@ public class PluginMainTests {
         @Test
         @DisplayName("language manager not null.")
         void LanguageManagerNotNull() {
-            Assertions.assertNotNull(plugin.languageHandler);
+            Assertions.assertNotNull(plugin.messageBuilder);
         }
 
         @Test

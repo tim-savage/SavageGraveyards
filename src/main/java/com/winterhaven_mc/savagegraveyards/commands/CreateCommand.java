@@ -39,13 +39,13 @@ public class CreateCommand extends AbstractCommand implements Subcommand {
 
 		// sender must be in game player
 		if (!(sender instanceof Player)) {
-			plugin.messageBuilder.build(sender, COMMAND_FAIL_CONSOLE).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_CONSOLE).send();
 			return true;
 		}
 
 		// check for permission
 		if (!sender.hasPermission("graveyard.create")) {
-			plugin.messageBuilder.build(sender, PERMISSION_DENIED_CREATE).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, PERMISSION_DENIED_CREATE).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -54,7 +54,7 @@ public class CreateCommand extends AbstractCommand implements Subcommand {
 
 		// check min arguments
 		if (args.size() < minArgs) {
-			plugin.messageBuilder.build(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
@@ -90,7 +90,7 @@ public class CreateCommand extends AbstractCommand implements Subcommand {
 			plugin.messageBuilder.build(sender, COMMAND_SUCCESS_CREATE)
 					.setMacro(GRAVEYARD, newGraveyard)
 					.setMacro(LOCATION, location)
-					.send(plugin.languageHandler);
+					.send();
 
 			// play sound effect
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
@@ -114,7 +114,7 @@ public class CreateCommand extends AbstractCommand implements Subcommand {
 			plugin.messageBuilder.build(sender, COMMAND_SUCCESS_CREATE)
 					.setMacro(GRAVEYARD, newGraveyard)
 					.setMacro(LOCATION, newGraveyard.getLocation())
-					.send(plugin.languageHandler);
+					.send();
 
 			// play sound effect
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_SET);
@@ -124,7 +124,7 @@ public class CreateCommand extends AbstractCommand implements Subcommand {
 		// send graveyard exists error message
 		plugin.messageBuilder.build(sender, COMMAND_FAIL_CREATE_EXISTS)
 				.setMacro(GRAVEYARD, existingGraveyard)
-				.send(plugin.languageHandler);
+				.send();
 
 		// play sound effect
 		plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);

@@ -9,7 +9,6 @@ import com.winterhaven_mc.savagegraveyards.tasks.DiscoveryTask;
 import com.winterhaven_mc.savagegraveyards.util.SafetyManager;
 import com.winterhaven_mc.util.*;
 
-import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.MessageBuilder;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -26,7 +25,6 @@ import java.io.File;
  */
 public class PluginMain extends JavaPlugin {
 
-	public LanguageHandler languageHandler;
 	public MessageBuilder<MessageId, Macro> messageBuilder;
 	public DataStore dataStore;
 	public WorldManager worldManager;
@@ -58,11 +56,8 @@ public class PluginMain extends JavaPlugin {
 		// install default config.yml if not present
 		saveDefaultConfig();
 
-		// instantiate language manager
-		languageHandler = new LanguageHandler(this);
-
 		// instantiate message builder
-		messageBuilder = new MessageBuilder<>();
+		messageBuilder = new MessageBuilder<>(this);
 
 		// instantiate world manager
 		worldManager = new WorldManager(this);

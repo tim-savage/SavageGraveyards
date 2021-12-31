@@ -65,14 +65,14 @@ public class SafetyManager {
 		// send safety message to player
 		plugin.messageBuilder.build(player, MessageId.SAFETY_COOLDOWN_START)
 				.setMacro(Macro.DURATION, TimeUnit.SECONDS.toMillis(safetyTime))
-				.send(plugin.languageHandler);
+				.send();
 
 		// create task to remove player from map after safetyTime duration
 		BukkitTask task = new BukkitRunnable() {
 			@Override
 			public void run() {
 				removePlayer(player);
-				plugin.messageBuilder.build(player, MessageId.SAFETY_COOLDOWN_END).send(plugin.languageHandler);
+				plugin.messageBuilder.build(player, MessageId.SAFETY_COOLDOWN_END).send();
 			}
 		}.runTaskLater(plugin, safetyTime * 20L);
 
