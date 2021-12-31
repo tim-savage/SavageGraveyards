@@ -15,14 +15,14 @@ enum DataStoreType {
 	SQLITE("SQLite", "graveyards.db") {
 
 		@Override
-		public DataStore connect(JavaPlugin plugin) {
+		public DataStore connect(final JavaPlugin plugin) {
 
 			// create new sqlite datastore object
 			return new DataStoreSQLite(plugin);
 		}
 
 		@Override
-		boolean storageObjectExists(JavaPlugin plugin) {
+		boolean storageObjectExists(final JavaPlugin plugin) {
 			// get path name to data store file
 			File dataStoreFile = new File(plugin.getDataFolder() + File.separator + this.getStorageName());
 			return dataStoreFile.exists();
