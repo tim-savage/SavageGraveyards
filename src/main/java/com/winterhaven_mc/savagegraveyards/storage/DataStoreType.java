@@ -55,7 +55,7 @@ enum DataStoreType {
 	 *
 	 * @return new instance of DataStore
 	 */
-	abstract DataStore connect(JavaPlugin plugin);
+	abstract DataStore connect(final JavaPlugin plugin);
 
 
 	/**
@@ -74,7 +74,7 @@ enum DataStoreType {
 	 * @param plugin reference to plugin main class
 	 * @return true if backing object exists, false if not
 	 */
-	abstract boolean storageObjectExists(JavaPlugin plugin);
+	abstract boolean storageObjectExists(final JavaPlugin plugin);
 
 
 	/**
@@ -111,7 +111,7 @@ enum DataStoreType {
 	 * @param oldDataStore the old datastore to convert from
 	 * @param newDataStore the new datastore to convert to
 	 */
-	private static void convert(JavaPlugin plugin, final DataStore oldDataStore, final DataStore newDataStore) {
+	private static void convert(final JavaPlugin plugin, final DataStore oldDataStore, final DataStore newDataStore) {
 
 		// if datastores are same type, do not convert
 		if (oldDataStore.getType().equals(newDataStore.getType())) {
