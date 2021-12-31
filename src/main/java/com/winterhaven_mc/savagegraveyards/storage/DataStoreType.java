@@ -51,6 +51,14 @@ enum DataStoreType {
 
 
 	/**
+	 * Get new instance of DataStore of configured type
+	 *
+	 * @return new instance of DataStore
+	 */
+	abstract DataStore connect(JavaPlugin plugin);
+
+
+	/**
 	 * Getter for storage object name.
 	 *
 	 * @return the name of the backing store object for a data store type
@@ -58,14 +66,6 @@ enum DataStoreType {
 	String getStorageName() {
 		return storageName;
 	}
-
-
-	/**
-	 * Get new instance of DataStore of configured type
-	 *
-	 * @return new instance of DataStore
-	 */
-	abstract DataStore connect(JavaPlugin plugin);
 
 
 	/**

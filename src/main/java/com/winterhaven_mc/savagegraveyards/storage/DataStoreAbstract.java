@@ -12,9 +12,6 @@ public abstract class DataStoreAbstract implements DataStore {
 	// datastore type
 	DataStoreType type;
 
-	// datastore filename
-	String filename;
-
 
 	/**
 	 * Get datastore initialized field
@@ -43,16 +40,6 @@ public abstract class DataStoreAbstract implements DataStore {
 	 */
 	public DataStoreType getType() {
 		return this.type;
-	}
-
-
-	/**
-	 * Get datastore filename or equivalent
-	 *
-	 * @return datastore filename
-	 */
-	String getFilename() {
-		return this.filename;
 	}
 
 

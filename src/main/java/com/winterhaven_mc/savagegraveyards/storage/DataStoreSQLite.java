@@ -25,6 +25,9 @@ class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 	// database connection object
 	private Connection connection;
 
+	// file path for datastore file
+	private final String dataFilePath;
+
 	// schema version
 	private int schemaVersion;
 
@@ -41,6 +44,9 @@ class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 
 		// set datastore type
 		this.type = DataStoreType.SQLITE;
+
+		// set datastore file path
+		this.dataFilePath = plugin.getDataFolder() + File.separator + type.getStorageName();
 	}
 
 
@@ -59,7 +65,7 @@ class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 		Class.forName(jdbcDriverName);
 
 		// create database url
-		String dataFilePath = plugin.getDataFolder() + File.separator + type.getStorageName();
+//		String dataFilePath = plugin.getDataFolder() + File.separator + type.getStorageName();
 		String jdbc = "jdbc:sqlite";
 		String dbUrl = jdbc + ":" + dataFilePath;
 
@@ -243,6 +249,47 @@ class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 
 		// close statement
 		statement.close();
+	}
+
+
+	@Override
+	public void close() {
+
+		try {
+			connection.close();
+			plugin.getLogger().info(this + " datastore connection closed.");
+		}
+		catch (SQLException e) {
+
+			// output simple error message
+			plugin.getLogger().warning("An error occurred while closing the " + this + " datastore.");
+			plugin.getLogger().warning(e.getMessage());
+
+			// if debugging is enabled, output stack trace
+			if (plugin.getConfig().getBoolean("debug")) {
+				e.printStackTrace();
+			}
+		}
+		setInitialized(false);
+	}
+
+
+	@Override
+	public void sync() {
+		// no action necessary for this storage type
+	}
+
+
+	@Override
+	public boolean delete() {
+
+		// get path name to data store file
+		File dataStoreFile = new File(dataFilePath);
+		boolean result = false;
+		if (dataStoreFile.exists()) {
+			result = dataStoreFile.delete();
+		}
+		return result;
 	}
 
 
@@ -1206,47 +1253,6 @@ class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 			if (plugin.getConfig().getBoolean("debug")) {
 				e.printStackTrace();
 			}
-		}
-		return result;
-	}
-
-
-	@Override
-	public void close() {
-
-		try {
-			connection.close();
-			plugin.getLogger().info(this + " datastore connection closed.");
-		}
-		catch (SQLException e) {
-
-			// output simple error message
-			plugin.getLogger().warning("An error occurred while closing the " + this + " datastore.");
-			plugin.getLogger().warning(e.getMessage());
-
-			// if debugging is enabled, output stack trace
-			if (plugin.getConfig().getBoolean("debug")) {
-				e.printStackTrace();
-			}
-		}
-		setInitialized(false);
-	}
-
-
-	@Override
-	public void sync() {
-		// no action necessary for this storage type
-	}
-
-
-	@Override
-	public boolean delete() {
-
-		// get path name to data store file
-		File dataStoreFile = new File(plugin.getDataFolder() + File.separator + this.getFilename());
-		boolean result = false;
-		if (dataStoreFile.exists()) {
-			result = dataStoreFile.delete();
 		}
 		return result;
 	}
