@@ -65,7 +65,6 @@ class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 		Class.forName(jdbcDriverName);
 
 		// create database url
-//		String dataFilePath = plugin.getDataFolder() + File.separator + type.getStorageName();
 		String jdbc = "jdbc:sqlite";
 		String dbUrl = jdbc + ":" + dataFilePath;
 
