@@ -9,7 +9,6 @@ import com.winterhaven_mc.savagegraveyards.tasks.DiscoveryTask;
 import com.winterhaven_mc.savagegraveyards.util.SafetyManager;
 
 import com.winterhavenmc.util.messagebuilder.MessageBuilder;
-import com.winterhavenmc.util.messagebuilder.YamlMessageBuilder;
 import com.winterhavenmc.util.soundconfig.SoundConfiguration;
 import com.winterhavenmc.util.soundconfig.YamlSoundConfiguration;
 import com.winterhavenmc.util.worldmanager.WorldManager;
@@ -61,7 +60,7 @@ public class PluginMain extends JavaPlugin {
 		saveDefaultConfig();
 
 		// instantiate message builder
-		messageBuilder = new YamlMessageBuilder<>(this);
+		messageBuilder = new MessageBuilder<>(this);
 
 		// instantiate world manager
 		worldManager = new WorldManager(this);
