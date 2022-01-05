@@ -196,5 +196,7 @@ public class ListCommand extends AbstractCommand implements Subcommand {
 		// display list footer
 		plugin.messageBuilder.build(sender, MessageId.LIST_FOOTER).setMacro(Macro.PAGE_NUMBER, page).setMacro(Macro.PAGE_TOTAL, pageCount).send();
 
-		return true;	}
+		return true;
+	}
+
 }

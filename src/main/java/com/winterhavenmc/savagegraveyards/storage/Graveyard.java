@@ -110,7 +110,7 @@ public final class Graveyard {
 		 *
 		 * @param graveyard existing graveyard object from which all values are copied
 		 */
-		public Builder(Graveyard graveyard) {
+		public Builder(final Graveyard graveyard) {
 			this.primaryKey = graveyard.getPrimaryKey();
 			this.displayName = graveyard.getDisplayName();
 			this.searchKey = graveyard.getSearchKey();
@@ -595,9 +595,9 @@ public final class Graveyard {
 	 * @param displayName the graveyard display name
 	 * @return String - a search key derived from graveyard display name
 	 */
-	public static String createSearchKey(String displayName) {
-		displayName = ChatColor.translateAlternateColorCodes('&', displayName);
-		return ChatColor.stripColor(displayName.replace(' ', '_'));
+	public static String createSearchKey(final String displayName) {
+		String displayNameCopy = ChatColor.translateAlternateColorCodes('&', displayName);
+		return ChatColor.stripColor(displayNameCopy.replace(' ', '_'));
 	}
 
 }

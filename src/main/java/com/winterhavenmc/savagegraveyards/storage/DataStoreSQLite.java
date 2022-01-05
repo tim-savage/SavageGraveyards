@@ -130,7 +130,7 @@ class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 
 
 	@SuppressWarnings("SameParameterValue")
-	private void setSchemaVersion(int version) {
+	private void setSchemaVersion(final int version) {
 
 		try {
 			Statement statement = connection.createStatement();
@@ -784,7 +784,7 @@ class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 
 
 	@Override
-	public void insertDiscovery(Discovery discovery) {
+	public void insertDiscovery(final Discovery discovery) {
 
 		final UUID playerUid = discovery.getPlayerUid();
 		final String searchKey = discovery.getSearchKey();
@@ -827,7 +827,7 @@ class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 
 
 	@Override
-	public int insertDiscoveries(Collection<Discovery> discoveries) {
+	public int insertDiscoveries(final Collection<Discovery> discoveries) {
 
 		int count = 0;
 

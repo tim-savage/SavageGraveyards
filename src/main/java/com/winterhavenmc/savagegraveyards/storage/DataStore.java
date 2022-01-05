@@ -88,7 +88,7 @@ public interface DataStore {
 	/**
 	 * Reload data store if configured type has changed
 	 */
-	static void reload(PluginMain plugin) {
+	static void reload(final PluginMain plugin) {
 
 		// get current datastore type
 		DataStoreType currentType = plugin.dataStore.getType();
@@ -163,7 +163,7 @@ public interface DataStore {
 	 *
 	 * @param record the discovery record to be inserted
 	 */
-	void insertDiscovery(Discovery record);
+	void insertDiscovery(final Discovery record);
 
 
 	/**
@@ -172,7 +172,7 @@ public interface DataStore {
 	 * @param insertSet set of records to be inserted
 	 * @return number of records successfully inserted
 	 */
-	int insertDiscoveries(Collection<Discovery> insertSet);
+	int insertDiscoveries(final Collection<Discovery> insertSet);
 
 
 	/**

@@ -51,4 +51,5 @@ public class SubcommandMap {
 	List<String> getKeys() {
 		return new ArrayList<>(subcommandMap.keySet());
 	}
+
 }

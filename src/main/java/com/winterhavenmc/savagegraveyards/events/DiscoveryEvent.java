@@ -6,6 +6,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import javax.annotation.Nonnull;
+
 
 @SuppressWarnings("unused")
 public final class DiscoveryEvent extends Event {
@@ -22,6 +24,7 @@ public final class DiscoveryEvent extends Event {
 
 
 	@Override
+	@Nonnull
 	public HandlerList getHandlers() {
 		return handlers;
 	}
