@@ -8,7 +8,7 @@ import java.util.UUID;
  * Class that defines a value object representing
  * a graveyard discovery for an individual player
  */
-public class Discovery {
+public final class Discovery {
 
 	private final String searchKey;
 	private final UUID playerUid;
