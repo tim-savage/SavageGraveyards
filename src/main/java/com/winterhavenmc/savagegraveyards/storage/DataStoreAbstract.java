@@ -18,6 +18,7 @@ public abstract class DataStoreAbstract implements DataStore {
 	 *
 	 * @return true if datastore is initialized, false if it is not
 	 */
+	@Override
 	public boolean isInitialized() {
 		return this.initialized;
 	}
@@ -38,6 +39,7 @@ public abstract class DataStoreAbstract implements DataStore {
 	 *
 	 * @return Enum value of DataStoreType
 	 */
+	@Override
 	public DataStoreType getType() {
 		return this.type;
 	}
