@@ -7,12 +7,10 @@ import com.winterhavenmc.savagegraveyards.messages.MessageId;
 import com.winterhavenmc.savagegraveyards.storage.DataStore;
 import com.winterhavenmc.savagegraveyards.tasks.DiscoveryTask;
 import com.winterhavenmc.savagegraveyards.util.SafetyManager;
-
 import com.winterhavenmc.util.messagebuilder.MessageBuilder;
 import com.winterhavenmc.util.soundconfig.SoundConfiguration;
 import com.winterhavenmc.util.soundconfig.YamlSoundConfiguration;
 import com.winterhavenmc.util.worldmanager.WorldManager;
-
 import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -59,11 +57,6 @@ public class PluginMain extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-
-		// bstats
-		final int pluginId = 13924;
-		@SuppressWarnings("unused")
-		Metrics metrics = new Metrics(this, pluginId);
 
 		// install default config.yml if not present
 		saveDefaultConfig();
