@@ -20,16 +20,16 @@ import static com.winterhavenmc.savagegraveyards.sounds.SoundId.COMMAND_INVALID;
 public class HelpCommand extends AbstractCommand implements Subcommand {
 
 	private final PluginMain plugin;
-	private final SubcommandMap subcommandMap;
+	private final SubcommandRegistry subcommandRegistry;
 
 
 	/**
 	 * Class constructor
 	 * @param plugin reference to plugin main class instance
 	 */
-	HelpCommand(final PluginMain plugin, final SubcommandMap subcommandMap) {
+	HelpCommand(final PluginMain plugin, final SubcommandRegistry subcommandRegistry) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.subcommandMap = Objects.requireNonNull(subcommandMap);
+		this.subcommandRegistry = Objects.requireNonNull(subcommandRegistry);
 		this.setName("help");
 		this.setUsage("/graveyard help [command]");
 		this.setDescription(MessageId.COMMAND_HELP_HELP);
@@ -44,7 +44,7 @@ public class HelpCommand extends AbstractCommand implements Subcommand {
 
 		if (args.length == 2) {
 			if (args[0].equalsIgnoreCase("help")) {
-				for (String subcommand : subcommandMap.getKeys()) {
+				for (String subcommand : subcommandRegistry.getKeys()) {
 					if (sender.hasPermission("graveyard." + subcommand)
 							&& subcommand.startsWith(args[1].toLowerCase())
 							&& !subcommand.equalsIgnoreCase("help")) {
@@ -89,7 +89,7 @@ public class HelpCommand extends AbstractCommand implements Subcommand {
 	void displayHelp(final CommandSender sender, final String commandName) {
 
 		// get subcommand from map by name
-		Subcommand subcommand = subcommandMap.getCommand(commandName);
+		Subcommand subcommand = subcommandRegistry.getCommand(commandName);
 
 		// if subcommand found in map, display help message and usage
 		if (subcommand != null) {
@@ -114,9 +114,9 @@ public class HelpCommand extends AbstractCommand implements Subcommand {
 
 		plugin.messageBuilder.build(sender, MessageId.COMMAND_HELP_USAGE_HEADER).send();
 
-		for (String subcommandName : subcommandMap.getKeys()) {
-			if (subcommandMap.getCommand(subcommandName) != null) {
-				subcommandMap.getCommand(subcommandName).displayUsage(sender);
+		for (String subcommandName : subcommandRegistry.getKeys()) {
+			if (subcommandRegistry.getCommand(subcommandName) != null) {
+				subcommandRegistry.getCommand(subcommandName).displayUsage(sender);
 			}
 		}
 	}

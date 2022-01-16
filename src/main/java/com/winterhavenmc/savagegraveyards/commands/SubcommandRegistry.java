@@ -3,9 +3,9 @@ package com.winterhavenmc.savagegraveyards.commands;
 import java.util.*;
 
 
-public class SubcommandMap {
+public class SubcommandRegistry {
 
-	SortedMap<String, Subcommand> subcommandMap = new TreeMap<>();
+	Map<String, Subcommand> subcommandMap = new LinkedHashMap<>();
 	Map<String, String> aliasMap = new HashMap<>();
 
 
@@ -48,8 +48,8 @@ public class SubcommandMap {
 	 * Get list of keys (subcommand names) from the subcommand map
 	 * @return List of String - keys of the subcommand map
 	 */
-	List<String> getKeys() {
-		return new ArrayList<>(subcommandMap.keySet());
+	Collection<String> getKeys() {
+		return new LinkedHashSet<>(subcommandMap.keySet());
 	}
 
 }
