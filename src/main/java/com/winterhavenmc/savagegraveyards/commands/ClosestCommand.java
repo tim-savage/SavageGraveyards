@@ -16,7 +16,7 @@ import java.util.Objects;
  * Closest command implementation<br>
  * Returns name of closest graveyard to player position
  */
-public class ClosestCommand extends AbstractCommand implements Subcommand {
+class ClosestCommand extends AbstractCommand implements Subcommand {
 
 	private final PluginMain plugin;
 

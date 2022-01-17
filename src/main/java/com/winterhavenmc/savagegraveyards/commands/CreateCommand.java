@@ -17,7 +17,7 @@ import static com.winterhavenmc.savagegraveyards.messages.Macro.*;
  * Create command implementation<br>
  * Creates new graveyard at player location with given name
  */
-public class CreateCommand extends AbstractCommand implements Subcommand {
+class CreateCommand extends AbstractCommand implements Subcommand {
 
 	private final PluginMain plugin;
 

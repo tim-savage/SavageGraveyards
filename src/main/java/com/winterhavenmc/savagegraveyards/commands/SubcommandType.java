@@ -3,7 +3,7 @@ package com.winterhavenmc.savagegraveyards.commands;
 import com.winterhavenmc.savagegraveyards.PluginMain;
 
 
-public enum SubcommandType {
+enum SubcommandType {
 
 	CLOSEST() {
 		@Override

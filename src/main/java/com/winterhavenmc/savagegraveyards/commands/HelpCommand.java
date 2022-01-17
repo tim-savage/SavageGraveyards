@@ -17,7 +17,7 @@ import static com.winterhavenmc.savagegraveyards.sounds.SoundId.COMMAND_INVALID;
  * Help command implementation<br>
  * displays help and usage messages for plugin commands
  */
-public class HelpCommand extends AbstractCommand implements Subcommand {
+class HelpCommand extends AbstractCommand implements Subcommand {
 
 	private final PluginMain plugin;
 	private final SubcommandRegistry subcommandRegistry;

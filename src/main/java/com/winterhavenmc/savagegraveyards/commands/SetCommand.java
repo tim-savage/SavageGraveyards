@@ -18,16 +18,15 @@ import java.util.concurrent.TimeUnit;
  * Set command implementation<br>
  * changes graveyard settings
  */
-public class SetCommand extends AbstractCommand implements Subcommand {
+class SetCommand extends AbstractCommand implements Subcommand {
 
 	private final PluginMain plugin;
 
 	private final static int CONFIG_DEFAULT = -1;
 
 	// list of possible attributes
-	private final static List<String> ATTRIBUTES = List.of(
-					"enabled", "hidden", "location", "name", "safetytime",
-					"discoveryrange", "discoverymessage", "respawnmessage" );
+	private final static List<String> ATTRIBUTES = List.of("enabled", "hidden", "location", "name", "safetytime",
+					"discoveryrange", "discoverymessage", "respawnmessage");
 
 
 	/**
