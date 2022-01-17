@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Implements Listener for player events
  */
-public class PlayerEventListener implements Listener {
+public final class PlayerEventListener implements Listener {
 
 	// reference to main class
 	private final PluginMain plugin;

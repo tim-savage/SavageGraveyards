@@ -15,7 +15,7 @@ import java.util.*;
 /**
  * Concrete SQLite datastore class
  */
-class DataStoreSQLite extends DataStoreAbstract implements DataStore {
+final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 
 	// reference to main class
 	private final JavaPlugin plugin;

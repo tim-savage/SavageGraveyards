@@ -8,7 +8,7 @@ import java.util.Properties;
 /**
  * Fetch database queries from properties file
  */
-class Queries {
+final class Queries {
 
 	private static final String propFileName = "queries.properties";
 

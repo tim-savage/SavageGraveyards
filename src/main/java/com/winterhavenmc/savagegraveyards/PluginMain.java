@@ -27,7 +27,7 @@ import java.io.File;
  * will respawn on death. The nearest graveyard location that is valid
  * for the player will be chosen at the time of death.
  */
-public class PluginMain extends JavaPlugin {
+public final class PluginMain extends JavaPlugin {
 
 	public MessageBuilder<MessageId, Macro> messageBuilder;
 	public DataStore dataStore;

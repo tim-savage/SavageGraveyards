@@ -19,7 +19,7 @@ import com.google.common.collect.ImmutableList;
  * Repeating task that checks if any players are
  * within discovery distance of undiscovered graveyard locations
  */
-public class DiscoveryTask extends BukkitRunnable {
+public final class DiscoveryTask extends BukkitRunnable {
 
 	private final PluginMain plugin;
 

@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Cancel mob targeting of players for configured period after respawn
  */
-public class SafetyManager {
+public final class SafetyManager {
 
 	// reference to main class
 	private final PluginMain plugin;
