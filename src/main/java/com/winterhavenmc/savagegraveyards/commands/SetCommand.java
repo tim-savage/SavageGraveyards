@@ -25,10 +25,9 @@ public class SetCommand extends AbstractCommand implements Subcommand {
 	private final static int CONFIG_DEFAULT = -1;
 
 	// list of possible attributes
-	private final static List<String> ATTRIBUTES =
-			Collections.unmodifiableList(new ArrayList<>(Arrays.asList(
+	private final static List<String> ATTRIBUTES = List.of(
 					"enabled", "hidden", "location", "name", "safetytime",
-					"discoveryrange", "discoverymessage", "respawnmessage")));
+					"discoveryrange", "discoverymessage", "respawnmessage" );
 
 
 	/**

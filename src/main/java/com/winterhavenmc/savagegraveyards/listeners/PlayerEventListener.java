@@ -31,11 +31,10 @@ public class PlayerEventListener implements Listener {
 	// player death respawn hash set, prevents setting respawn location to graveyards on non-death respawn events
 	private final Set<UUID> deathTriggeredRespawn = ConcurrentHashMap.newKeySet();
 
-	// set entity target cancel reasons
-	private final static Set<TargetReason> cancelReasons =
-			Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
-					TargetReason.CLOSEST_PLAYER,
-					TargetReason.RANDOM_TARGET)));
+	// unmodifiable set of entity target cancel reasons
+	private final static Set<TargetReason> cancelReasons = Set.of(
+			TargetReason.CLOSEST_PLAYER,
+			TargetReason.RANDOM_TARGET );
 
 
 	/**

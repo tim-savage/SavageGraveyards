@@ -14,7 +14,7 @@ import java.util.UUID;
  */
 public final class Graveyard {
 
-	// constant value for integer attributes to use configured default
+	// constant value for integer attributes to use as configured default
 	private final static int CONFIG_DEFAULT = -1;
 
 	private final int primaryKey;
