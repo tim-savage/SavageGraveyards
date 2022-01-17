@@ -3,7 +3,7 @@ package com.winterhavenmc.savagegraveyards.commands;
 import java.util.*;
 
 
-class SubcommandRegistry {
+final class SubcommandRegistry {
 
 	Map<String, Subcommand> subcommandMap = new LinkedHashMap<>();
 	Map<String, String> aliasMap = new HashMap<>();

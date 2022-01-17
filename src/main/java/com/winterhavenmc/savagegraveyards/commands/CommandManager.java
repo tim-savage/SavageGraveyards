@@ -17,7 +17,7 @@ import static com.winterhavenmc.savagegraveyards.sounds.SoundId.*;
 /**
  * Implements command executor for SavageGraveyards commands.
  */
-public class CommandManager implements CommandExecutor, TabCompleter {
+public final class CommandManager implements CommandExecutor, TabCompleter {
 
 	// reference to main class
 	private final PluginMain plugin;

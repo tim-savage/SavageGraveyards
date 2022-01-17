@@ -18,7 +18,7 @@ import static com.winterhavenmc.savagegraveyards.messages.Macro.TARGET_PLAYER;
  * Forget command implementation<br>
  * Removes graveyard discovery record for player
  */
-class ForgetCommand extends AbstractCommand implements Subcommand {
+final class ForgetCommand extends AbstractCommand implements Subcommand {
 
 	private final PluginMain plugin;
 
