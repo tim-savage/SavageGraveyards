@@ -293,8 +293,8 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 	@Override
 	public Collection<Graveyard> selectAllGraveyards() {
 
-		// create empty list for return collection
-		final Collection<Graveyard> returnSet = new ArrayList<>();
+		// create empty set for return collection
+		final Collection<Graveyard> returnSet = new HashSet<>();
 
 		try {
 			PreparedStatement preparedStatement =
@@ -1066,7 +1066,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 
 	private Collection<Discovery> selectAllDiscoveries() {
 
-		Collection<Discovery> returnSet = new ArrayList<>();
+		Collection<Discovery> returnSet = new HashSet<>();
 
 		if (schemaVersion == 0) {
 
@@ -1164,7 +1164,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 	@Override
 	public Collection<String> selectPlayersWithDiscoveries() {
 
-		Collection<String> returnSet = new ArrayList<>();
+		Collection<String> returnSet = new HashSet<>();
 
 		try {
 			PreparedStatement preparedStatement =
