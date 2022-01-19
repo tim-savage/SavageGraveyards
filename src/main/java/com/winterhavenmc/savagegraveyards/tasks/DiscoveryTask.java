@@ -7,6 +7,7 @@ import com.winterhavenmc.savagegraveyards.storage.Discovery;
 import com.winterhavenmc.savagegraveyards.storage.Graveyard;
 import com.winterhavenmc.savagegraveyards.messages.MessageId;
 import com.winterhavenmc.savagegraveyards.sounds.SoundId;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
