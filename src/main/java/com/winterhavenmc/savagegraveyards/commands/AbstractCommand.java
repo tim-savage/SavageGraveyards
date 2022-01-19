@@ -4,15 +4,13 @@ import com.winterhavenmc.savagegraveyards.messages.MessageId;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 
 abstract class AbstractCommand implements Subcommand {
 
 	private String name;
-	private List<String> aliases = new ArrayList<>();
+	private Collection<String> aliases = new HashSet<>();
 	private String usageString;
 	private MessageId description;
 
@@ -27,12 +25,12 @@ abstract class AbstractCommand implements Subcommand {
 	}
 
 	@Override
-	public List<String> getAliases() {
+	public Collection<String> getAliases() {
 		return aliases;
 	}
 
 	@Override
-	public void setAliases(final List<String> aliases) {
+	public void setAliases(final Collection<String> aliases) {
 		this.aliases = aliases;
 	}
 
