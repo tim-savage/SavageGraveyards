@@ -76,7 +76,7 @@ final class ListCommand extends AbstractCommand implements Subcommand {
 		}
 
 		// get undiscovered searchKeys for player
-		List<String> undiscoveredKeys = new ArrayList<>();
+		Collection<String> undiscoveredKeys = new HashSet<>();
 		if (sender instanceof Player) {
 			undiscoveredKeys.addAll(plugin.dataStore.selectUndiscoveredKeys((Player) sender));
 		}
