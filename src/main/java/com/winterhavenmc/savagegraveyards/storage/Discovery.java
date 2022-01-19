@@ -20,7 +20,7 @@ public final class Discovery {
 	 * @param searchKey graveyard search key
 	 * @param playerUid player uuid
 	 */
-	public Discovery(String searchKey, UUID playerUid) {
+	public Discovery(final String searchKey, final UUID playerUid) {
 		this.searchKey = searchKey;
 		this.playerUid = playerUid;
 	}
