@@ -60,8 +60,7 @@ final class ForgetCommand extends AbstractCommand implements Subcommand {
 			String playerName = args[1];
 
 			// get all offline players
-			List<OfflinePlayer> offlinePlayers = new ArrayList<>(Arrays.asList(
-					plugin.getServer().getOfflinePlayers()));
+			Collection<OfflinePlayer> offlinePlayers = Set.of(plugin.getServer().getOfflinePlayers());
 
 			UUID playerUid = null;
 
@@ -79,8 +78,7 @@ final class ForgetCommand extends AbstractCommand implements Subcommand {
 			}
 
 			// get graveyard keys discovered by player
-			Collection<String> graveyardKeys =
-					plugin.dataStore.selectDiscoveredKeys(playerUid);
+			Collection<String> graveyardKeys = plugin.dataStore.selectDiscoveredKeys(playerUid);
 
 			// iterate over graveyards
 			for (String graveyardKey : graveyardKeys) {
