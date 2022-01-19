@@ -4,6 +4,7 @@ import com.winterhavenmc.savagegraveyards.messages.MessageId;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+import java.util.Collection;
 import java.util.List;
 
 
@@ -18,10 +19,10 @@ interface Subcommand {
 
 	void setName(final String name);
 
-	List<String> getAliases();
+	Collection<String> getAliases();
 
 	@SuppressWarnings("unused")
-	void setAliases(final List<String> aliases);
+	void setAliases(final Collection<String> aliases);
 
 	void addAlias(final String alias);
 
