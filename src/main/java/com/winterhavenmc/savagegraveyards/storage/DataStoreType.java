@@ -3,8 +3,9 @@ package com.winterhavenmc.savagegraveyards.storage;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 
 
 /**
@@ -163,7 +164,7 @@ enum DataStoreType {
 	static void convertAll(final JavaPlugin plugin, final DataStore newDataStore) {
 
 		// get array list of all data store types
-		ArrayList<DataStoreType> dataStoreTypes = new ArrayList<>(Arrays.asList(DataStoreType.values()));
+		Collection<DataStoreType> dataStoreTypes = new HashSet<>(Arrays.asList(DataStoreType.values()));
 
 		// remove newDataStore type from list of types to convert
 		dataStoreTypes.remove(newDataStore.getType());
