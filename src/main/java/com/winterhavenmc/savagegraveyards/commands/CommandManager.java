@@ -37,8 +37,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		this.plugin = plugin;
 
 		// register this class as command executor
-		//noinspection ConstantConditions
-		plugin.getCommand("graveyard").setExecutor(this);
+		Objects.requireNonNull(plugin.getCommand("graveyard")).setExecutor(this);
 
 		// register subcommands
 		for (SubcommandType subcommandType : SubcommandType.values()) {
