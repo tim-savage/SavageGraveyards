@@ -147,7 +147,10 @@ final class ListCommand extends AbstractCommand implements Subcommand {
 		int itemNumber = startIndex;
 
 		// display list header
-		plugin.messageBuilder.build(sender, MessageId.LIST_HEADER).setMacro(Macro.PAGE_NUMBER, page).setMacro(Macro.PAGE_TOTAL, pageCount).send();
+		plugin.messageBuilder.build(sender, MessageId.LIST_HEADER)
+				.setMacro(Macro.PAGE_NUMBER, page)
+				.setMacro(Macro.PAGE_TOTAL, pageCount)
+				.send();
 
 		for (Graveyard graveyard : displayRange) {
 
@@ -194,7 +197,10 @@ final class ListCommand extends AbstractCommand implements Subcommand {
 		}
 
 		// display list footer
-		plugin.messageBuilder.build(sender, MessageId.LIST_FOOTER).setMacro(Macro.PAGE_NUMBER, page).setMacro(Macro.PAGE_TOTAL, pageCount).send();
+		plugin.messageBuilder.build(sender, MessageId.LIST_FOOTER)
+				.setMacro(Macro.PAGE_NUMBER, page)
+				.setMacro(Macro.PAGE_TOTAL, pageCount)
+				.send();
 
 		return true;
 	}
