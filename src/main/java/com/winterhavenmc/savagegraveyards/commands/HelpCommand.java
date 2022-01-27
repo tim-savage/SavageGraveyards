@@ -1,16 +1,15 @@
 package com.winterhavenmc.savagegraveyards.commands;
 
 import com.winterhavenmc.savagegraveyards.PluginMain;
-import com.winterhavenmc.savagegraveyards.sounds.SoundId;
 import com.winterhavenmc.savagegraveyards.messages.MessageId;
+import com.winterhavenmc.savagegraveyards.sounds.SoundId;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import static com.winterhavenmc.savagegraveyards.sounds.SoundId.COMMAND_INVALID;
 
 
 /**
@@ -100,7 +99,7 @@ final class HelpCommand extends AbstractCommand implements Subcommand {
 		// else display invalid command help message and usage for all commands
 		else {
 			plugin.messageBuilder.build(sender, MessageId.COMMAND_HELP_INVALID).send();
-			plugin.soundConfig.playSound(sender, COMMAND_INVALID);
+			plugin.soundConfig.playSound(sender, SoundId.COMMAND_INVALID);
 			displayUsageAll(sender);
 		}
 	}

@@ -1,16 +1,16 @@
 package com.winterhavenmc.savagegraveyards.commands;
 
 import com.winterhavenmc.savagegraveyards.PluginMain;
-import com.winterhavenmc.savagegraveyards.sounds.SoundId;
 import com.winterhavenmc.savagegraveyards.storage.Graveyard;
+import com.winterhavenmc.savagegraveyards.messages.Macro;
 import com.winterhavenmc.savagegraveyards.messages.MessageId;
+import com.winterhavenmc.savagegraveyards.sounds.SoundId;
+
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.*;
-
-import static com.winterhavenmc.savagegraveyards.messages.Macro.*;
 
 
 /**
@@ -88,8 +88,8 @@ final class CreateCommand extends AbstractCommand implements Subcommand {
 
 			// send success message
 			plugin.messageBuilder.build(sender, MessageId.COMMAND_SUCCESS_CREATE)
-					.setMacro(GRAVEYARD, newGraveyard)
-					.setMacro(LOCATION, location)
+					.setMacro(Macro.GRAVEYARD, newGraveyard)
+					.setMacro(Macro.LOCATION, location)
 					.send();
 
 			// play sound effect
@@ -112,8 +112,8 @@ final class CreateCommand extends AbstractCommand implements Subcommand {
 
 			// send success message
 			plugin.messageBuilder.build(sender, MessageId.COMMAND_SUCCESS_CREATE)
-					.setMacro(GRAVEYARD, newGraveyard)
-					.setMacro(LOCATION, newGraveyard.getLocation())
+					.setMacro(Macro.GRAVEYARD, newGraveyard)
+					.setMacro(Macro.LOCATION, newGraveyard.getLocation())
 					.send();
 
 			// play sound effect
@@ -123,7 +123,7 @@ final class CreateCommand extends AbstractCommand implements Subcommand {
 
 		// send graveyard exists error message
 		plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_CREATE_EXISTS)
-				.setMacro(GRAVEYARD, existingGraveyard)
+				.setMacro(Macro.GRAVEYARD, existingGraveyard)
 				.send();
 
 		// play sound effect

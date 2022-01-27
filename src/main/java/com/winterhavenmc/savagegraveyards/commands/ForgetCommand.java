@@ -1,17 +1,16 @@
 package com.winterhavenmc.savagegraveyards.commands;
 
 import com.winterhavenmc.savagegraveyards.PluginMain;
-import com.winterhavenmc.savagegraveyards.sounds.SoundId;
 import com.winterhavenmc.savagegraveyards.storage.Graveyard;
+import com.winterhavenmc.savagegraveyards.messages.Macro;
 import com.winterhavenmc.savagegraveyards.messages.MessageId;
-import org.bukkit.OfflinePlayer;
+import com.winterhavenmc.savagegraveyards.sounds.SoundId;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.OfflinePlayer;
 
 import java.util.*;
-
-import static com.winterhavenmc.savagegraveyards.messages.Macro.GRAVEYARD;
-import static com.winterhavenmc.savagegraveyards.messages.Macro.TARGET_PLAYER;
 
 
 /**
@@ -147,7 +146,7 @@ final class ForgetCommand extends AbstractCommand implements Subcommand {
 
 			// send graveyard not found message
 			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_FORGET_INVALID_GRAVEYARD)
-					.setMacro(GRAVEYARD, dummyGraveyard)
+					.setMacro(Macro.GRAVEYARD, dummyGraveyard)
 					.send();
 
 			// play command fail sound
@@ -160,8 +159,8 @@ final class ForgetCommand extends AbstractCommand implements Subcommand {
 
 			// send success message
 			plugin.messageBuilder.build(sender, MessageId.COMMAND_SUCCESS_FORGET)
-					.setMacro(GRAVEYARD, graveyard)
-					.setMacro(TARGET_PLAYER, player)
+					.setMacro(Macro.GRAVEYARD, graveyard)
+					.setMacro(Macro.TARGET_PLAYER, player)
 					.send();
 
 			// play success sound
@@ -170,8 +169,8 @@ final class ForgetCommand extends AbstractCommand implements Subcommand {
 		else {
 			// send failure message
 			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_FORGET)
-					.setMacro(GRAVEYARD, graveyard)
-					.setMacro(TARGET_PLAYER, player)
+					.setMacro(Macro.GRAVEYARD, graveyard)
+					.setMacro(Macro.TARGET_PLAYER, player)
 					.send();
 
 			// send command fail sound

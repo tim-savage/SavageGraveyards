@@ -1,8 +1,9 @@
 package com.winterhavenmc.savagegraveyards.commands;
 
 import com.winterhavenmc.savagegraveyards.PluginMain;
-
 import com.winterhavenmc.savagegraveyards.messages.MessageId;
+import com.winterhavenmc.savagegraveyards.sounds.SoundId;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -10,8 +11,6 @@ import org.bukkit.command.TabCompleter;
 
 import javax.annotation.Nonnull;
 import java.util.*;
-
-import static com.winterhavenmc.savagegraveyards.sounds.SoundId.*;
 
 
 /**
@@ -105,7 +104,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		if (subcommand == null) {
 			subcommand = subcommandRegistry.getCommand("help");
 			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_INVALID_COMMAND).send();
-			plugin.soundConfig.playSound(sender, COMMAND_INVALID);
+			plugin.soundConfig.playSound(sender, SoundId.COMMAND_INVALID);
 		}
 
 		// execute subcommand
