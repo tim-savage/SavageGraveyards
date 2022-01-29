@@ -25,9 +25,9 @@ final class ReloadCommand extends SubcommandAbstract implements Subcommand {
 	 */
 	ReloadCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.setName("reload");
-		this.setUsage("/graveyard reload");
-		this.setDescription(MessageId.COMMAND_HELP_RELOAD);
+		this.name = "reload";
+		this.usageString = "/graveyard reload";
+		this.description = MessageId.COMMAND_HELP_RELOAD;
 	}
 
 

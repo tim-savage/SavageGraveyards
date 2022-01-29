@@ -29,10 +29,10 @@ final class TeleportCommand extends SubcommandAbstract implements Subcommand {
 	 */
 	TeleportCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.setName("teleport");
-		this.setUsage("/graveyard teleport <name>");
-		this.setDescription(MessageId.COMMAND_HELP_TELEPORT);
-		this.addAlias("tp");
+		this.name = "teleport";
+		this.usageString = "/graveyard teleport <name>";
+		this.description = MessageId.COMMAND_HELP_TELEPORT;
+		this.aliases = Set.of("tp");
 	}
 
 

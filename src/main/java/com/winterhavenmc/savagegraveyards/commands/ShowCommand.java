@@ -29,9 +29,9 @@ final class ShowCommand extends SubcommandAbstract implements Subcommand {
 	 */
 	ShowCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.setName("show");
-		this.setUsage("/graveyard show <graveyard>");
-		this.setDescription(MessageId.COMMAND_HELP_SHOW);
+		this.name = "show";
+		this.usageString = "/graveyard show <graveyard>";
+		this.description = MessageId.COMMAND_HELP_SHOW;
 	}
 
 

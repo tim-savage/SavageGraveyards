@@ -28,9 +28,9 @@ final class ForgetCommand extends SubcommandAbstract implements Subcommand {
 	 */
 	ForgetCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.setName("forget");
-		setUsage("/graveyard forget <player> <graveyard name>");
-		setDescription(MessageId.COMMAND_HELP_FORGET);
+		this.name = "forget";
+		this.usageString = "/graveyard forget <player> <graveyard name>";
+		this.description = MessageId.COMMAND_HELP_FORGET;
 	}
 
 

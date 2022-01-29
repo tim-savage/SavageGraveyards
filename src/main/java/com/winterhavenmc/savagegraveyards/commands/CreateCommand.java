@@ -28,9 +28,9 @@ final class CreateCommand extends SubcommandAbstract implements Subcommand {
 	 */
 	CreateCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.setName("create");
-		this.setUsage("/graveyard create <graveyard name>");
-		this.setDescription(MessageId.COMMAND_HELP_CREATE);
+		this.name = "create";
+		this.usageString = "/graveyard create <graveyard name>";
+		this.description = MessageId.COMMAND_HELP_CREATE;
 	}
 
 

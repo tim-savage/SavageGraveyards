@@ -35,9 +35,9 @@ final class SetCommand extends SubcommandAbstract implements Subcommand {
 	 */
 	SetCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.setName("set");
-		this.setUsage("/graveyard set <graveyard> <attribute> <value>");
-		this.setDescription(MessageId.COMMAND_HELP_SET);
+		this.name = "set";
+		this.usageString = "/graveyard set <graveyard> <attribute> <value>";
+		this.description = MessageId.COMMAND_HELP_SET;
 	}
 
 

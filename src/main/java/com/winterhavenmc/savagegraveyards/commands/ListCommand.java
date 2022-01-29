@@ -26,9 +26,9 @@ final class ListCommand extends SubcommandAbstract implements Subcommand {
 	 */
 	ListCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.setName("list");
-		this.setUsage("/graveyard list [page]");
-		this.setDescription(MessageId.COMMAND_HELP_LIST);
+		this.name = "list";
+		this.usageString = "/graveyard list [page]";
+		this.description = MessageId.COMMAND_HELP_LIST;
 	}
 
 

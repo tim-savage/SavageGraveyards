@@ -28,9 +28,9 @@ final class DeleteCommand extends SubcommandAbstract implements Subcommand {
 	 */
 	DeleteCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.setName("delete");
-		this.setDescription(MessageId.COMMAND_HELP_DELETE);
-		this.setUsage("/graveyard delete <graveyard name>");
+		this.name = "delete";
+		this.usageString = "/graveyard delete <graveyard name>";
+		this.description = MessageId.COMMAND_HELP_DELETE;
 	}
 
 

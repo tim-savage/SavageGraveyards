@@ -29,9 +29,9 @@ final class HelpCommand extends SubcommandAbstract implements Subcommand {
 	HelpCommand(final PluginMain plugin, final SubcommandRegistry subcommandRegistry) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.subcommandRegistry = Objects.requireNonNull(subcommandRegistry);
-		this.setName("help");
-		this.setUsage("/graveyard help [command]");
-		this.setDescription(MessageId.COMMAND_HELP_HELP);
+		this.name = "help";
+		this.usageString = "/graveyard help [command]";
+		this.description = MessageId.COMMAND_HELP_HELP;
 	}
 
 

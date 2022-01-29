@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 
 /**
@@ -27,10 +28,10 @@ final class ClosestCommand extends SubcommandAbstract implements Subcommand {
 	 */
 	ClosestCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.setName("closest");
-		this.setUsage("/graveyard closest");
-		this.setDescription(MessageId.COMMAND_HELP_CLOSEST);
-		this.addAlias("nearest");
+		this.name = "closest";
+		this.usageString = "/graveyard closest";
+		this.description = MessageId.COMMAND_HELP_CLOSEST;
+		this.aliases = Set.of("nearest");
 	}
 
 
