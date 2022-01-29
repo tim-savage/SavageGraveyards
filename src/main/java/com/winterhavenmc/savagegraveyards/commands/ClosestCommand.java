@@ -52,6 +52,14 @@ final class ClosestCommand extends SubcommandAbstract implements Subcommand {
 			return true;
 		}
 
+		// check maximum arguments
+		if (args.size() > maxArgs) {
+			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
+			displayUsage(sender);
+			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
+			return true;
+		}
+
 		// cast sender to player
 		Player player = (Player) sender;
 
