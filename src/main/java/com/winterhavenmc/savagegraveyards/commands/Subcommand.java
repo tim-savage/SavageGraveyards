@@ -17,24 +17,15 @@ interface Subcommand {
 
 	String getName();
 
-	void setName(final String name);
-
 	Collection<String> getAliases();
-
-	@SuppressWarnings("unused")
-	void setAliases(final Collection<String> aliases);
 
 	void addAlias(final String alias);
 
 	@SuppressWarnings("unused")
 	String getUsage();
 
-	void setUsage(final String usageString);
-
 	void displayUsage(final CommandSender sender);
 
 	MessageId getDescription();
-
-	void setDescription(final MessageId messageId);
 
 }
