@@ -9,10 +9,10 @@ import java.util.*;
 
 abstract class SubcommandAbstract implements Subcommand {
 
-	private String name;
-	private Collection<String> aliases = new HashSet<>();
-	private String usageString;
-	private MessageId description;
+	protected String name;
+	protected Collection<String> aliases = new HashSet<>();
+	protected String usageString;
+	protected MessageId description;
 
 	@Override
 	public String getName() {
