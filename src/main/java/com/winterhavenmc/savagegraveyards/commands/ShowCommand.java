@@ -32,6 +32,7 @@ final class ShowCommand extends SubcommandAbstract implements Subcommand {
 		this.name = "show";
 		this.usageString = "/graveyard show <graveyard>";
 		this.description = MessageId.COMMAND_HELP_SHOW;
+		this.minArgs = 1;
 	}
 
 
@@ -58,10 +59,7 @@ final class ShowCommand extends SubcommandAbstract implements Subcommand {
 			return true;
 		}
 
-		// argument limits
-		int minArgs = 1;
-
-		// if too few arguments, display error and usage messages and return
+		// check minimum arguments
 		if (args.size() < minArgs) {
 			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER).send();
 			displayUsage(sender);

@@ -31,6 +31,7 @@ final class ForgetCommand extends SubcommandAbstract implements Subcommand {
 		this.name = "forget";
 		this.usageString = "/graveyard forget <player> <graveyard name>";
 		this.description = MessageId.COMMAND_HELP_FORGET;
+		this.minArgs = 2;
 	}
 
 
@@ -100,9 +101,6 @@ final class ForgetCommand extends SubcommandAbstract implements Subcommand {
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
-
-		// argument limits
-		int minArgs = 2;
 
 		// check for minimum arguments
 		if (args.size() < minArgs) {

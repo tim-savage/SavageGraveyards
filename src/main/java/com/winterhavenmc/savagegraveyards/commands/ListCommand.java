@@ -29,6 +29,7 @@ final class ListCommand extends SubcommandAbstract implements Subcommand {
 		this.name = "list";
 		this.usageString = "/graveyard list [page]";
 		this.description = MessageId.COMMAND_HELP_LIST;
+		this.maxArgs = 1;
 	}
 
 
@@ -42,9 +43,7 @@ final class ListCommand extends SubcommandAbstract implements Subcommand {
 			return true;
 		}
 
-		// argument limits
-		int maxArgs = 1;
-
+		// check maximum arguments
 		if (args.size() > maxArgs) {
 			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			displayUsage(sender);

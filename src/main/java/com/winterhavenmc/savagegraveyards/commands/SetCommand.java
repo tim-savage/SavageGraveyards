@@ -38,6 +38,7 @@ final class SetCommand extends SubcommandAbstract implements Subcommand {
 		this.name = "set";
 		this.usageString = "/graveyard set <graveyard> <attribute> <value>";
 		this.description = MessageId.COMMAND_HELP_SET;
+		this.minArgs = 3;
 	}
 
 
@@ -69,9 +70,7 @@ final class SetCommand extends SubcommandAbstract implements Subcommand {
 	@Override
 	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
-		int minArgs = 3;
-
-		// check min arguments
+		// check minimum arguments
 		if (args.size() < minArgs) {
 			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER).send();
 			displayUsage(sender);

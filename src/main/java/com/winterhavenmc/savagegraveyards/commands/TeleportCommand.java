@@ -33,6 +33,7 @@ final class TeleportCommand extends SubcommandAbstract implements Subcommand {
 		this.usageString = "/graveyard teleport <name>";
 		this.description = MessageId.COMMAND_HELP_TELEPORT;
 		this.aliases = Set.of("tp");
+		this.minArgs = 1;
 	}
 
 
@@ -65,9 +66,7 @@ final class TeleportCommand extends SubcommandAbstract implements Subcommand {
 			return true;
 		}
 
-		// argument limits
-		int minArgs = 1;
-
+		// check minimum arguments
 		if (args.size() < minArgs) {
 			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER).send();
 			displayUsage(sender);

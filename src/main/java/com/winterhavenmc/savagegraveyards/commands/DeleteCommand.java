@@ -31,6 +31,7 @@ final class DeleteCommand extends SubcommandAbstract implements Subcommand {
 		this.name = "delete";
 		this.usageString = "/graveyard delete <graveyard name>";
 		this.description = MessageId.COMMAND_HELP_DELETE;
+		this.minArgs = 1;
 	}
 
 
@@ -57,9 +58,7 @@ final class DeleteCommand extends SubcommandAbstract implements Subcommand {
 			return true;
 		}
 
-		int minArgs = 1;
-
-		// check min arguments
+		// check minimum arguments
 		if (args.size() < minArgs) {
 			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER).send();
 			displayUsage(sender);

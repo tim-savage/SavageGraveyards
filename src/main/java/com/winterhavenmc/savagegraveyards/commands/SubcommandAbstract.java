@@ -13,6 +13,8 @@ abstract class SubcommandAbstract implements Subcommand {
 	protected Collection<String> aliases = new HashSet<>();
 	protected String usageString;
 	protected MessageId description;
+	protected int minArgs;
+	protected int maxArgs;
 
 	@Override
 	public String getName() {
