@@ -17,7 +17,7 @@ import java.util.Objects;
  * Delete command implementation<br>
  * Removes graveyard record from datastore
  */
-final class DeleteCommand extends AbstractCommand implements Subcommand {
+final class DeleteCommand extends SubcommandAbstract implements Subcommand {
 
 	private final PluginMain plugin;
 

@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
  * Set command implementation<br>
  * changes graveyard settings
  */
-final class SetCommand extends AbstractCommand implements Subcommand {
+final class SetCommand extends SubcommandAbstract implements Subcommand {
 
 	private final PluginMain plugin;
 

@@ -17,7 +17,7 @@ import java.util.*;
  * Forget command implementation<br>
  * Removes graveyard discovery record for player
  */
-final class ForgetCommand extends AbstractCommand implements Subcommand {
+final class ForgetCommand extends SubcommandAbstract implements Subcommand {
 
 	private final PluginMain plugin;
 

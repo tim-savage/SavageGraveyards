@@ -18,7 +18,7 @@ import java.util.Objects;
  * Show command implementation<br>
  * displays graveyard settings
  */
-final class ShowCommand extends AbstractCommand implements Subcommand {
+final class ShowCommand extends SubcommandAbstract implements Subcommand {
 
 	private final PluginMain plugin;
 

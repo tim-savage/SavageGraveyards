@@ -14,7 +14,7 @@ import java.util.Objects;
  * Status command implementation<br>
  * Display plugin settings
  */
-final class StatusCommand extends AbstractCommand implements Subcommand {
+final class StatusCommand extends SubcommandAbstract implements Subcommand {
 
 	private final PluginMain plugin;
 

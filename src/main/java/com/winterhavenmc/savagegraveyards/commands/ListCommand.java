@@ -15,7 +15,7 @@ import java.util.*;
  * List command implementation<br>
  * Displays listing of graveyards
  */
-final class ListCommand extends AbstractCommand implements Subcommand {
+final class ListCommand extends SubcommandAbstract implements Subcommand {
 
 	private final PluginMain plugin;
 
