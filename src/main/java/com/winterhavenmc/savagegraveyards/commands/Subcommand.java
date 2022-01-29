@@ -19,8 +19,6 @@ interface Subcommand {
 
 	Collection<String> getAliases();
 
-	void addAlias(final String alias);
-
 	@SuppressWarnings("unused")
 	String getUsage();
 
