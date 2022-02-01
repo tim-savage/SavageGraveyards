@@ -46,6 +46,7 @@ final class ListCommand extends SubcommandAbstract implements Subcommand {
 		this.name = "list";
 		this.usageString = "/graveyard list [page]";
 		this.description = MessageId.COMMAND_HELP_LIST;
+		this.permission = "graveyard.list";
 		this.maxArgs = 1;
 	}
 
@@ -54,7 +55,7 @@ final class ListCommand extends SubcommandAbstract implements Subcommand {
 	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// if command sender does not have permission to list graveyards, output error message and return true
-		if (!sender.hasPermission("graveyard.list")) {
+		if (!sender.hasPermission(permission)) {
 			plugin.messageBuilder.build(sender, MessageId.PERMISSION_DENIED_LIST).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;

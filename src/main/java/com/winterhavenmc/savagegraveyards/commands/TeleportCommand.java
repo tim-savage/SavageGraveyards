@@ -49,6 +49,7 @@ final class TeleportCommand extends SubcommandAbstract implements Subcommand {
 		this.name = "teleport";
 		this.usageString = "/graveyard teleport <name>";
 		this.description = MessageId.COMMAND_HELP_TELEPORT;
+		this.permission = "graveyard.teleport";
 		this.aliases = Set.of("tp");
 		this.minArgs = 1;
 	}
@@ -77,7 +78,7 @@ final class TeleportCommand extends SubcommandAbstract implements Subcommand {
 		}
 
 		// check for permission
-		if (!sender.hasPermission("graveyard.teleport")) {
+		if (!sender.hasPermission(permission)) {
 			plugin.messageBuilder.build(sender, MessageId.PERMISSION_DENIED_TELEPORT).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;

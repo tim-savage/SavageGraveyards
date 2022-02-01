@@ -49,6 +49,7 @@ final class HelpCommand extends SubcommandAbstract implements Subcommand {
 		this.name = "help";
 		this.usageString = "/graveyard help [command]";
 		this.description = MessageId.COMMAND_HELP_HELP;
+		this.permission = "graveyard.help";
 	}
 
 
@@ -78,7 +79,7 @@ final class HelpCommand extends SubcommandAbstract implements Subcommand {
 	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// if command sender does not have permission to display help, output error message and return true
-		if (!sender.hasPermission("graveyard.help")) {
+		if (!sender.hasPermission(permission)) {
 			plugin.messageBuilder.build(sender, MessageId.PERMISSION_DENIED_HELP).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;

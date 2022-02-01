@@ -20,6 +20,7 @@ package com.winterhavenmc.savagegraveyards.commands;
 import com.winterhavenmc.savagegraveyards.messages.MessageId;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.Permission;
 
 import java.util.*;
 
@@ -30,6 +31,7 @@ abstract class SubcommandAbstract implements Subcommand {
 	protected Collection<String> aliases = new HashSet<>();
 	protected String usageString;
 	protected MessageId description;
+	protected String permission;
 	protected int minArgs;
 	protected int maxArgs;
 

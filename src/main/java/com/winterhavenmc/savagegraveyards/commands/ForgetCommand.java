@@ -48,6 +48,7 @@ final class ForgetCommand extends SubcommandAbstract implements Subcommand {
 		this.name = "forget";
 		this.usageString = "/graveyard forget <player> <graveyard name>";
 		this.description = MessageId.COMMAND_HELP_FORGET;
+		this.permission = "graveyard.forget";
 		this.minArgs = 2;
 	}
 
@@ -113,7 +114,7 @@ final class ForgetCommand extends SubcommandAbstract implements Subcommand {
 	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// check for permission
-		if (!sender.hasPermission("graveyard.forget")) {
+		if (!sender.hasPermission(permission)) {
 			plugin.messageBuilder.build(sender, MessageId.PERMISSION_DENIED_FORGET).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;

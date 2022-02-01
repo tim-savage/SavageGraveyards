@@ -48,6 +48,7 @@ final class DeleteCommand extends SubcommandAbstract implements Subcommand {
 		this.name = "delete";
 		this.usageString = "/graveyard delete <graveyard name>";
 		this.description = MessageId.COMMAND_HELP_DELETE;
+		this.permission = "graveyard.delete";
 		this.minArgs = 1;
 	}
 
@@ -69,7 +70,7 @@ final class DeleteCommand extends SubcommandAbstract implements Subcommand {
 	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// check for permission
-		if (!sender.hasPermission("graveyard.delete")) {
+		if (!sender.hasPermission(permission)) {
 			plugin.messageBuilder.build(sender, MessageId.PERMISSION_DENIED_DELETE).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;

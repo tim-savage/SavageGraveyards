@@ -45,6 +45,7 @@ final class StatusCommand extends SubcommandAbstract implements Subcommand {
 		this.name = "status";
 		this.usageString = "/graveyard status";
 		this.description = MessageId.COMMAND_HELP_STATUS;
+		this.permission = "graveyard.status";
 	}
 
 
@@ -52,7 +53,7 @@ final class StatusCommand extends SubcommandAbstract implements Subcommand {
 	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// if command sender does not have permission to view status, output error message and return true
-		if (!sender.hasPermission("graveyard.status")) {
+		if (!sender.hasPermission(permission)) {
 			plugin.messageBuilder.build(sender, MessageId.PERMISSION_DENIED_STATUS).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;

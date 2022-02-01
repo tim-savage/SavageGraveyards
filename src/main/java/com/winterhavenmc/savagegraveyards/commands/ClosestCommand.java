@@ -48,6 +48,7 @@ final class ClosestCommand extends SubcommandAbstract implements Subcommand {
 		this.name = "closest";
 		this.usageString = "/graveyard closest";
 		this.description = MessageId.COMMAND_HELP_CLOSEST;
+		this.permission = "graveyard.closest";
 		this.aliases = Set.of("nearest");
 	}
 
@@ -55,9 +56,9 @@ final class ClosestCommand extends SubcommandAbstract implements Subcommand {
 	@Override
 	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
-		// if command sender does not have permission to display closest graveyard,
+		// if command sender does not have permission to display the closest graveyard,
 		// output error message and return true
-		if (!sender.hasPermission("graveyard.closest")) {
+		if (!sender.hasPermission(permission)) {
 			plugin.messageBuilder.build(sender, MessageId.PERMISSION_DENIED_CLOSEST).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;

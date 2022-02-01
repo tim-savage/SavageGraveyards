@@ -49,6 +49,7 @@ final class ShowCommand extends SubcommandAbstract implements Subcommand {
 		this.name = "show";
 		this.usageString = "/graveyard show <graveyard>";
 		this.description = MessageId.COMMAND_HELP_SHOW;
+		this.permission = "graveyard.show";
 		this.minArgs = 1;
 	}
 
@@ -70,7 +71,7 @@ final class ShowCommand extends SubcommandAbstract implements Subcommand {
 	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// if command sender does not have permission to show graveyards, output error message and return true
-		if (!sender.hasPermission("graveyard.show")) {
+		if (!sender.hasPermission(permission)) {
 			plugin.messageBuilder.build(sender, MessageId.PERMISSION_DENIED_SHOW).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;

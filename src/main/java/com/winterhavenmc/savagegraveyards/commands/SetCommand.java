@@ -55,6 +55,7 @@ final class SetCommand extends SubcommandAbstract implements Subcommand {
 		this.name = "set";
 		this.usageString = "/graveyard set <graveyard> <attribute> <value>";
 		this.description = MessageId.COMMAND_HELP_SET;
+		this.permission = "graveyard.set";
 		this.minArgs = 3;
 	}
 
