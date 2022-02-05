@@ -104,6 +104,8 @@ public interface DataStore {
 
 	/**
 	 * Reload data store if configured type has changed
+	 *
+	 * @param plugin reference to plugin main class
 	 */
 	static void reload(final PluginMain plugin) {
 
@@ -230,6 +232,7 @@ public interface DataStore {
 
 	/**
 	 * select graveyard keys that player has discovered
+	 *
 	 * @param playerUid the player uid to query
 	 * @return Collection of String - graveyard keys
 	 */
@@ -238,6 +241,7 @@ public interface DataStore {
 
 	/**
 	 * Select players who have discovered any graveyards
+	 *
 	 * @return Collection of String - player names with discovered graveyards
 	 */
 	Collection<String> selectPlayersWithDiscoveries();
