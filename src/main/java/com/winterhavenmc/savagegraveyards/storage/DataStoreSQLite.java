@@ -1260,10 +1260,10 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 
 
 	@Override
-	public boolean deleteDiscovery(final String displayName, final UUID playerUUID) {
+	public boolean deleteDiscovery(final String displayName, final UUID playerUid) {
 
 		// if parameter is null, return false
-		if (displayName == null || playerUUID == null) {
+		if (displayName == null || playerUid == null) {
 			return false;
 		}
 
@@ -1279,8 +1279,8 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 				PreparedStatement preparedStatement =
 						connection.prepareStatement(Queries.getQuery("DeleteDiscovery"));
 
-				preparedStatement.setLong(1, playerUUID.getMostSignificantBits());
-				preparedStatement.setLong(2, playerUUID.getLeastSignificantBits());
+				preparedStatement.setLong(1, playerUid.getMostSignificantBits());
+				preparedStatement.setLong(2, playerUid.getLeastSignificantBits());
 				preparedStatement.setString(3, Graveyard.createSearchKey(displayName));
 
 				// execute prepared statement

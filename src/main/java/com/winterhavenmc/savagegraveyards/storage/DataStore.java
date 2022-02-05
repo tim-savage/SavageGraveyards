@@ -222,10 +222,10 @@ public interface DataStore {
 	 * Delete discovery record
 	 *
 	 * @param displayName display name or search key of record to be deleted
-	 * @param playerUUID the player unique id
+	 * @param playerUid the player unique id
 	 * @return boolean - {@code true} if deletion was successful, {@code false} if not
 	 */
-	boolean deleteDiscovery(final String displayName, final UUID playerUUID);
+	boolean deleteDiscovery(final String displayName, final UUID playerUid);
 
 
 	/**
