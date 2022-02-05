@@ -26,7 +26,7 @@ import java.util.*;
 
 
 /**
- * Abstract datastore class
+ * DataStore interface
  */
 public interface DataStore {
 
