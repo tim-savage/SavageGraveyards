@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.sql.*;
 import java.util.*;
@@ -599,6 +600,11 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 	@Override
 	public List<String> selectMatchingGraveyardNames(final String match) {
 
+		// if match is null, return empty list
+		if (match == null) {
+			return Collections.emptyList();
+		}
+
 		// create empty return list
 		List<String> returnList = new ArrayList<>();
 
@@ -635,6 +641,11 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 
 	@Override
 	public Collection<Graveyard> selectUndiscoveredGraveyards(final Player player) {
+
+		// if player is null, return empty set
+		if (player == null) {
+			return Collections.emptySet();
+		}
 
 		// create empty set of Graveyard for return
 		Collection<Graveyard> returnSet = new HashSet<>();
@@ -717,6 +728,11 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 
 	@Override
 	public Collection<String> selectDiscoveredKeys(final UUID playerUid) {
+
+		// if playerUid is null, return empty set
+		if (playerUid == null) {
+			return Collections.emptySet();
+		}
 
 		// create empty set of Graveyard for return
 		Collection<String> returnSet = new HashSet<>();
@@ -803,6 +819,11 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 	@Override
 	public void insertDiscovery(final Discovery discovery) {
 
+		// if discovery is null, do nothing and return
+		if (discovery == null) {
+			return;
+		}
+
 		final UUID playerUid = discovery.getPlayerUid();
 		final String searchKey = discovery.getSearchKey();
 
@@ -845,6 +866,15 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 
 	@Override
 	public int insertDiscoveries(final Collection<Discovery> discoveries) {
+
+		// if discoveries is null, return int 0
+		if (discoveries == null) {
+			if (plugin.getConfig().getBoolean("debug")) {
+				plugin.getLogger().warning("Could not insert graveyard records in data store "
+						+ "because collection is null!");
+			}
+			return 0;
+		}
 
 		int count = 0;
 
@@ -1032,6 +1062,11 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 
 	@Override
 	public Graveyard deleteGraveyard(final String displayName) {
+
+		// if displayName is null, return null
+		if (displayName == null) {
+			return null;
+		}
 
 		// get destination record to be deleted, for return
 		final Graveyard graveyard = this.selectGraveyard(displayName);
@@ -1226,6 +1261,11 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 
 	@Override
 	public boolean deleteDiscovery(final String displayName, final UUID playerUUID) {
+
+		// if parameter is null, return false
+		if (displayName == null || playerUUID == null) {
+			return false;
+		}
 
 		int rowsAffected;
 		boolean result = true;
