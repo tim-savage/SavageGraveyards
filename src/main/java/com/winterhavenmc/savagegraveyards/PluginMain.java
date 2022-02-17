@@ -23,6 +23,7 @@ import com.winterhavenmc.savagegraveyards.messages.Macro;
 import com.winterhavenmc.savagegraveyards.messages.MessageId;
 import com.winterhavenmc.savagegraveyards.storage.DataStore;
 import com.winterhavenmc.savagegraveyards.tasks.DiscoveryTask;
+import com.winterhavenmc.savagegraveyards.util.MetricsHandler;
 import com.winterhavenmc.savagegraveyards.util.SafetyManager;
 
 import com.winterhavenmc.util.messagebuilder.MessageBuilder;
@@ -30,7 +31,6 @@ import com.winterhavenmc.util.soundconfig.SoundConfiguration;
 import com.winterhavenmc.util.soundconfig.YamlSoundConfiguration;
 import com.winterhavenmc.util.worldmanager.WorldManager;
 
-import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -52,9 +52,6 @@ public final class PluginMain extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-
-		// bStats
-		new Metrics(this, 13924);
 
 		// install default config.yml if not present
 		saveDefaultConfig();
@@ -83,6 +80,9 @@ public final class PluginMain extends JavaPlugin {
 		// run discovery task
 		discoveryTask = new DiscoveryTask(this)
 			.runTaskTimer(this, 0, getConfig().getInt("discovery-interval"));
+
+		// bStats
+		new MetricsHandler(this);
 	}
 
 
