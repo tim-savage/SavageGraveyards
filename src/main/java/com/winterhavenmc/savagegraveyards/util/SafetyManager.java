@@ -28,7 +28,8 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
+
+import static com.winterhavenmc.savagegraveyards.util.BukkitTime.SECONDS;
 
 
 /**
@@ -81,7 +82,7 @@ public final class SafetyManager {
 
 		// send safety message to player
 		plugin.messageBuilder.build(player, MessageId.SAFETY_COOLDOWN_START)
-				.setMacro(Macro.DURATION, TimeUnit.SECONDS.toMillis(safetyTime))
+				.setMacro(Macro.DURATION, SECONDS.toMillis(safetyTime))
 				.send();
 
 		// create task to remove player from map after safetyTime duration
@@ -91,7 +92,7 @@ public final class SafetyManager {
 				removePlayer(player);
 				plugin.messageBuilder.build(player, MessageId.SAFETY_COOLDOWN_END).send();
 			}
-		}.runTaskLater(plugin, safetyTime * 20L);
+		}.runTaskLater(plugin, SECONDS.toTicks(safetyTime));
 
 		// if player is already in cooldown map, cancel existing task
 		if (isPlayerProtected(player)) {

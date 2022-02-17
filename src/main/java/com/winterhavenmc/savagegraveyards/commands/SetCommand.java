@@ -28,7 +28,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
+
+import static com.winterhavenmc.savagegraveyards.util.BukkitTime.SECONDS;
 
 
 /**
@@ -719,13 +720,13 @@ final class SetCommand extends SubcommandAbstract implements Subcommand {
 		if (safetyTime == CONFIG_DEFAULT) {
 			plugin.messageBuilder.build(sender, MessageId.COMMAND_SUCCESS_SET_SAFETYTIME_DEFAULT)
 					.setMacro(Macro.GRAVEYARD, newGraveyard)
-					.setMacro(Macro.DURATION, TimeUnit.SECONDS.toMillis(plugin.getConfig().getInt("safety-time")))
+					.setMacro(Macro.DURATION, SECONDS.toMillis(plugin.getConfig().getInt("safety-time")))
 					.send();
 		}
 		else {
 			plugin.messageBuilder.build(sender, MessageId.COMMAND_SUCCESS_SET_SAFETYTIME)
 					.setMacro(Macro.GRAVEYARD, newGraveyard)
-					.setMacro(Macro.DURATION, TimeUnit.SECONDS.toMillis(safetyTime))
+					.setMacro(Macro.DURATION, SECONDS.toMillis(safetyTime))
 					.send();
 		}
 
