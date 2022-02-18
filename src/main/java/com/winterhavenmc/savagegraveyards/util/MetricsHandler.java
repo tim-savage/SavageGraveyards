@@ -29,7 +29,7 @@ public class MetricsHandler {
 		Metrics metrics = new Metrics(plugin, 13924);
 
 		// get number of currently deployed chests
-		metrics.addCustomChart(new SingleLineChart("protected_blocks", () -> plugin.dataStore.selectAllGraveyards().size()));
+		metrics.addCustomChart(new SingleLineChart("graveyard_count", () -> plugin.dataStore.selectGraveyardCount()));
 
 	}
 
