@@ -246,4 +246,12 @@ public interface DataStore {
 	 */
 	Collection<String> selectPlayersWithDiscoveries();
 
+
+	/**
+	 * Select a count of graveyards in the datastore
+	 *
+	 * @return the count of graveyard records in the datastore
+	 */
+	int selectGraveyardCount();
+
 }

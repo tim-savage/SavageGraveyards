@@ -24,7 +24,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import javax.annotation.Nonnull;
 import java.io.File;
 import java.sql.*;
 import java.util.*;
@@ -1309,6 +1308,26 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 			}
 		}
 		return result;
+	}
+
+
+	@Override
+	public int selectGraveyardCount() {
+
+		int count = 0;
+
+		try {
+			PreparedStatement preparedStatement = connection.prepareStatement(Queries.getQuery("SelectGraveyardCount"));
+			ResultSet rs = preparedStatement.executeQuery();
+			if (rs.next()) {
+				count = rs.getInt("GraveyardCount");
+			}
+		}
+		catch (SQLException e) {
+			plugin.getLogger().warning("An error occurred while attempting to retrieve a count of all graveyard records.");
+			plugin.getLogger().warning(e.getLocalizedMessage());
+		}
+		return count;
 	}
 
 }
