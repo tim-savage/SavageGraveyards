@@ -17,14 +17,15 @@
 
 package com.winterhavenmc.savagegraveyards.util;
 
+@SuppressWarnings("unused")
 public enum BukkitTime {
 
-	DAYS(86400000),
-	HOURS(3600000),
-	MINUTES(60000),
-	SECONDS(1000),
+	MILLISECONDS(1),
 	TICKS(50),
-	MILLISECONDS(1);
+	SECONDS(1000),
+	MINUTES(60000),
+	HOURS(3600000),
+	DAYS(86400000);
 
 	private final long millis;
 
@@ -33,25 +34,50 @@ public enum BukkitTime {
 	}
 
 	public long toMillis(final long duration) {
-		return duration * millis;
+		if (duration < Long.MIN_VALUE / this.millis) return Long.MIN_VALUE;
+		if (duration > Long.MAX_VALUE / this.millis) return Long.MAX_VALUE;
+		return duration * this.millis / MILLISECONDS.millis;
+	}
+
+	public long toTicks(final long duration) {
+		if (duration < Long.MIN_VALUE / this.millis) return Long.MIN_VALUE;
+		if (duration > Long.MAX_VALUE / this.millis) return Long.MAX_VALUE;
+		return duration * this.millis / TICKS.millis;
 	}
 
 	public long toSeconds(final long duration) {
-		return duration * millis;
+		if (duration < Long.MIN_VALUE / this.millis) return Long.MIN_VALUE;
+		if (duration > Long.MAX_VALUE / this.millis) return Long.MAX_VALUE;
+		return duration * this.millis / SECONDS.millis;
 	}
 
 	public long toMinutes(final long duration) {
-		return duration * millis;
+		if (duration < Long.MIN_VALUE / this.millis) return Long.MIN_VALUE;
+		if (duration > Long.MAX_VALUE / this.millis) return Long.MAX_VALUE;
+		return duration * this.millis / MINUTES.millis;
 	}
 
 	public long toHours(final long duration) {
-		return duration * millis;
+		if (duration < Long.MIN_VALUE / this.millis) return Long.MIN_VALUE;
+		if (duration > Long.MAX_VALUE / this.millis) return Long.MAX_VALUE;
+		return duration * this.millis / HOURS.millis;
 	}
 
-	public long toDays(final long duration) { return duration * millis; }
+	public long toDays(final long duration) {
+		if (duration < Long.MIN_VALUE / this.millis) return Long.MIN_VALUE;
+		if (duration > Long.MAX_VALUE / this.millis) return Long.MAX_VALUE;
+		return duration * this.millis / DAYS.millis;
+	}
 
-	public long toTicks(final long duration) {
-		return duration * millis / 50;
+	public long convert(long duration, BukkitTime unit) { return (duration * this.millis / unit.millis); }
+
+	/**
+	 * For testing
+	 *
+	 * @return returns the number of milliseconds equal to each time unit
+	 */
+	long getMillis() {
+		return this.millis;
 	}
 
 }
