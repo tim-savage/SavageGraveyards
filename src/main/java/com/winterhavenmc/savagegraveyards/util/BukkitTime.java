@@ -29,43 +29,44 @@ public enum BukkitTime {
 
 	private final long millis;
 
-	BukkitTime(final long millis) {
+
+ BukkitTime(final long millis) {
 		this.millis = millis;
 	}
 
 	public long toMillis(final long duration) {
-		if (duration < Long.MIN_VALUE / this.millis) return Long.MIN_VALUE;
-		if (duration > Long.MAX_VALUE / this.millis) return Long.MAX_VALUE;
+		if (duration < Long.MIN_VALUE / (this.millis * MILLISECONDS.millis)) return Long.MIN_VALUE;
+		if (duration > Long.MAX_VALUE / (this.millis * MILLISECONDS.millis)) return Long.MAX_VALUE;
 		return duration * this.millis / MILLISECONDS.millis;
 	}
 
 	public long toTicks(final long duration) {
-		if (duration < Long.MIN_VALUE / this.millis) return Long.MIN_VALUE;
-		if (duration > Long.MAX_VALUE / this.millis) return Long.MAX_VALUE;
+		if (duration < Long.MIN_VALUE / (this.millis * TICKS.millis)) return Long.MIN_VALUE;
+		if (duration > Long.MAX_VALUE / (this.millis * TICKS.millis)) return Long.MAX_VALUE;
 		return duration * this.millis / TICKS.millis;
 	}
 
 	public long toSeconds(final long duration) {
-		if (duration < Long.MIN_VALUE / this.millis) return Long.MIN_VALUE;
-		if (duration > Long.MAX_VALUE / this.millis) return Long.MAX_VALUE;
+		if (duration < Long.MIN_VALUE / (this.millis * SECONDS.millis)) return Long.MIN_VALUE;
+		if (duration > Long.MAX_VALUE / (this.millis * SECONDS.millis)) return Long.MAX_VALUE;
 		return duration * this.millis / SECONDS.millis;
 	}
 
 	public long toMinutes(final long duration) {
-		if (duration < Long.MIN_VALUE / this.millis) return Long.MIN_VALUE;
-		if (duration > Long.MAX_VALUE / this.millis) return Long.MAX_VALUE;
+		if (duration < Long.MIN_VALUE / (this.millis * MINUTES.millis)) return Long.MIN_VALUE;
+		if (duration > Long.MAX_VALUE / (this.millis * MINUTES.millis)) return Long.MAX_VALUE;
 		return duration * this.millis / MINUTES.millis;
 	}
 
 	public long toHours(final long duration) {
-		if (duration < Long.MIN_VALUE / this.millis) return Long.MIN_VALUE;
-		if (duration > Long.MAX_VALUE / this.millis) return Long.MAX_VALUE;
+		if (duration < Long.MIN_VALUE / (this.millis * HOURS.millis)) return Long.MIN_VALUE;
+		if (duration > Long.MAX_VALUE / (this.millis * HOURS.millis)) return Long.MAX_VALUE;
 		return duration * this.millis / HOURS.millis;
 	}
 
 	public long toDays(final long duration) {
-		if (duration < Long.MIN_VALUE / this.millis) return Long.MIN_VALUE;
-		if (duration > Long.MAX_VALUE / this.millis) return Long.MAX_VALUE;
+		if (duration < Long.MIN_VALUE / (this.millis * DAYS.millis)) return Long.MIN_VALUE;
+		if (duration > Long.MAX_VALUE / (this.millis * DAYS.millis)) return Long.MAX_VALUE;
 		return duration * this.millis / DAYS.millis;
 	}
 

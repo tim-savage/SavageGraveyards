@@ -20,6 +20,8 @@ package com.winterhavenmc.savagegraveyards.util;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.stream.LongStream;
+
 import static com.winterhavenmc.savagegraveyards.util.BukkitTime.*;
 
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
@@ -28,102 +30,195 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class BukkitTimeTest {
 
 	@Test
-	void convert() {
-		Assertions.assertEquals(1, MILLISECONDS.convert(1000, SECONDS), "convert millis to seconds failed");
-		Assertions.assertEquals(1000, SECONDS.convert(1, MILLISECONDS), "convert seconds to millis failed");
-
-		Assertions.assertEquals(1, MINUTES.convert(60, HOURS), "convert minutes to hours failed");
-		Assertions.assertEquals(60, HOURS.convert(1, MINUTES), "convert hours to minutes failed");
-
-		Assertions.assertEquals(1, HOURS.convert(24, DAYS), "convert hours to days failed");
-		Assertions.assertEquals(24, DAYS.convert(1, HOURS), "convert days to hours failed");
-
-		Assertions.assertEquals(1, TICKS.convert(20, SECONDS), "convert ticks to seconds failed");
-		Assertions.assertEquals(20, SECONDS.convert(1, TICKS), "convert seconds to ticks failed");
-	}
-
-	@Test
 	void toMillis() {
+		// check that millis field holds correct value for milliseconds in a millisecond (1)
 		Assertions.assertEquals(1, MILLISECONDS.getMillis());
-		Assertions.assertEquals(86400000, DAYS.toMillis(1), "DAYS to millis failed.");
-		Assertions.assertEquals(3600000, HOURS.toMillis(1), "HOURS to millis failed.");
-		Assertions.assertEquals(60000, MINUTES.toMillis(1),"MINUTES to millis failed.");
-		Assertions.assertEquals(1000, SECONDS.toMillis(1), "SECONDS to millis failed.");
-		Assertions.assertEquals(50, TICKS.toMillis(1), "TICKS to millis failed.");
-		Assertions.assertEquals(1, MILLISECONDS.toMillis(1), "MILLISECONDS to millis failed.");
 
-		Assertions.assertEquals(Long.MAX_VALUE, DAYS.toMillis(Long.MAX_VALUE - 1), "MAX_VALUE exceeded.");
-		Assertions.assertEquals(Long.MIN_VALUE, DAYS.toMillis(Long.MIN_VALUE + 1), "MIN_VALUE exceeded.");
+		// iterate over range testing each time unit conversion to milliseconds
+		for (long duration : LongStream.range(-1000, 1000).toArray()) {
+			Assertions.assertEquals(duration, MILLISECONDS.toMillis(duration), "MILLISECONDS to millis failed with duration " + duration + ".");
+			Assertions.assertEquals(duration * 50, TICKS.toMillis(duration), "TICKS to millis failed with duration " + duration + ".");
+			Assertions.assertEquals(duration * 1000, SECONDS.toMillis(duration), "SECONDS to millis failed with duration " + duration + ".");
+			Assertions.assertEquals(duration * 60000, MINUTES.toMillis(duration), "MINUTES to millis failed with duration " + duration + ".");
+			Assertions.assertEquals(duration * 3600000, HOURS.toMillis(duration), "HOURS to millis failed with duration " + duration + ".");
+			Assertions.assertEquals(duration * 86400000, DAYS.toMillis(duration), "DAYS to millis failed with duration " + duration + ".");
+		}
+
+		// iterate through all time units and perform tests
+		for (BukkitTime timeUnit : BukkitTime.values()) {
+
+			// test all conversions with duration of zero
+			Assertions.assertEquals(0, timeUnit.toMillis(0), "zero " + timeUnit + " to milliseconds failed.");
+
+			// test overflow with min values
+			Assertions.assertEquals(Long.MIN_VALUE, DAYS.toMillis(Long.MIN_VALUE + 1), "MIN + 1 " + timeUnit + " to milliseconds failed overflow test.");
+
+			// skip overflow test for milliseconds to milliseconds, because it cannot overflow, even with max values
+			if (timeUnit == MILLISECONDS) continue;
+
+			// test overflow with max values
+			Assertions.assertEquals(Long.MAX_VALUE, timeUnit.toMillis(Long.MAX_VALUE - 1), "MAX - 1 " + timeUnit + " to milliseconds failed overflow test.");
+		}
 	}
 
 	@Test
 	void toTicks() {
+		// check that millis field holds correct value for milliseconds in a tick (50)
 		Assertions.assertEquals(50, TICKS.getMillis());
-		Assertions.assertEquals(1728000, DAYS.toTicks(1), "DAYS to seconds failed.");
-		Assertions.assertEquals(72000, HOURS.toTicks(1), "HOURS to seconds failed.");
-		Assertions.assertEquals(1200, MINUTES.toTicks(1), "MINUTES to seconds failed.");
-		Assertions.assertEquals(20, SECONDS.toTicks(1), "SECONDS to seconds failed.");
-		Assertions.assertEquals(1, TICKS.toTicks(1), "TICKS to seconds failed.");
-		Assertions.assertEquals(1, MILLISECONDS.toTicks(50), "MILLISECONDS to seconds failed.");
 
-		Assertions.assertEquals(Long.MAX_VALUE, DAYS.toTicks(Long.MAX_VALUE - 1), "MAX_VALUE exceeded.");
-		Assertions.assertEquals(Long.MIN_VALUE, DAYS.toTicks(Long.MIN_VALUE + 1), "MIN_VALUE exceeded.");
+		// iterate over range testing each time unit conversion to ticks
+		for (long duration : LongStream.range(-1000, 1000).toArray()) {
+			Assertions.assertEquals(duration / 50, MILLISECONDS.toTicks(duration), "MILLISECONDS to ticks failed with duration " + duration + ".");
+			Assertions.assertEquals(duration, TICKS.toTicks(duration), "TICKS to ticks failed with duration " + duration + ".");
+			Assertions.assertEquals(duration * 20, SECONDS.toTicks(duration), "SECONDS to ticks failed with duration " + duration + ".");
+			Assertions.assertEquals(duration * 1200, MINUTES.toTicks(duration), "MINUTES to ticks failed with duration " + duration + ".");
+			Assertions.assertEquals(duration * 72000, HOURS.toTicks(duration), "HOURS to ticks failed with duration " + duration + ".");
+			Assertions.assertEquals(duration * 1728000, DAYS.toTicks(duration), "DAYS to ticks failed with duration " + duration + ".");
+		}
+
+		// iterate through all time units and perform tests
+		for (BukkitTime timeUnit : BukkitTime.values()) {
+
+			// test all conversions with duration of zero
+			Assertions.assertEquals(0, timeUnit.toTicks(0), "zero " + timeUnit + " to ticks failed.");
+
+			// test overflow with max values
+			Assertions.assertEquals(Long.MAX_VALUE, timeUnit.toTicks(Long.MAX_VALUE - 1), "MAX - 1 " + timeUnit + " to ticks failed overflow test.");
+
+			// test overflow with min values
+			Assertions.assertEquals(Long.MIN_VALUE, DAYS.toTicks(Long.MIN_VALUE + 1), "MIN + 1 " + timeUnit + " to ticks failed overflow test.");
+		}
 	}
 
 	@Test
 	void toSeconds() {
+		// check that millis field holds correct value for milliseconds in a second (1000)
 		Assertions.assertEquals(1000, SECONDS.getMillis());
-		Assertions.assertEquals(86400, DAYS.toSeconds(1), "DAYS to seconds failed.");
-		Assertions.assertEquals(3600, HOURS.toSeconds(1), "HOURS to seconds failed.");
-		Assertions.assertEquals(60, MINUTES.toSeconds(1), "MINUTES to seconds failed.");
-		Assertions.assertEquals(1, SECONDS.toSeconds(1), "SECONDS to seconds failed.");
-		Assertions.assertEquals(1, TICKS.toSeconds(20), "TICKS to seconds failed.");
-		Assertions.assertEquals(1, MILLISECONDS.toSeconds(1000), "MILLISECONDS to seconds failed.");
 
-		Assertions.assertEquals(Long.MAX_VALUE, DAYS.toSeconds(Long.MAX_VALUE - 1), "MAX_VALUE exceeded.");
-		Assertions.assertEquals(Long.MIN_VALUE, DAYS.toSeconds(Long.MIN_VALUE + 1), "MIN_VALUE exceeded.");
+		// iterate over range testing each time unit conversion to seconds
+		for (long duration : LongStream.range(-1000, 1000).toArray()) {
+			Assertions.assertEquals(duration / 1000, MILLISECONDS.toSeconds(duration), "MILLISECONDS to seconds failed with duration " + duration + ".");
+			Assertions.assertEquals(duration / 20, TICKS.toSeconds(duration), "TICKS to seconds failed with duration " + duration + ".");
+			Assertions.assertEquals(duration, SECONDS.toSeconds(duration), "SECONDS to seconds failed with duration " + duration + ".");
+			Assertions.assertEquals(duration * 60, MINUTES.toSeconds(duration), "MINUTES to seconds failed with duration " + duration + ".");
+			Assertions.assertEquals(duration * 3600, HOURS.toSeconds(duration), "HOURS to seconds failed with duration " + duration + ".");
+			Assertions.assertEquals(duration * 86400, DAYS.toSeconds(duration), "DAYS to seconds failed with duration " + duration + ".");
+		}
+
+		// iterate through all time units and perform tests
+		for (BukkitTime timeUnit : BukkitTime.values()) {
+
+			// test all conversions with duration of zero
+			Assertions.assertEquals(0, timeUnit.toSeconds(0), "zero " + timeUnit + " to seconds failed.");
+
+			// test overflow with max values
+			Assertions.assertEquals(Long.MAX_VALUE, timeUnit.toSeconds(Long.MAX_VALUE - 1), "MAX - 1 " + timeUnit + " to seconds failed overflow test.");
+
+			// test overflow with min values
+			Assertions.assertEquals(Long.MIN_VALUE, timeUnit.toSeconds(Long.MIN_VALUE + 1), "MIN + 1 " + timeUnit + " to seconds failed overflow test.");
+		}
 	}
 
 	@Test
 	void toMinutes() {
-		Assertions.assertEquals(60000, MINUTES.getMillis());
-		Assertions.assertEquals(1440, DAYS.toMinutes(1), "DAYS to seconds failed.");
-		Assertions.assertEquals(60, HOURS.toMinutes(1), "HOURS to seconds failed.");
-		Assertions.assertEquals(1, MINUTES.toMinutes(1), "MINUTES to seconds failed.");
-		Assertions.assertEquals(1, SECONDS.toMinutes(60), "SECONDS to seconds failed.");
-		Assertions.assertEquals(1, TICKS.toMinutes(1200), "TICKS to seconds failed.");
-		Assertions.assertEquals(1, MILLISECONDS.toMinutes(60000), "MILLISECONDS to seconds failed.");
+		// check that millis field holds correct value for milliseconds in a minute (60000)
+		Assertions.assertEquals(60 * 1000, MINUTES.getMillis());
 
-		Assertions.assertEquals(Long.MAX_VALUE, DAYS.toMinutes(Long.MAX_VALUE - 1), "MAX_VALUE exceeded.");
-		Assertions.assertEquals(Long.MIN_VALUE, DAYS.toMinutes(Long.MIN_VALUE + 1), "MIN_VALUE exceeded.");
+		// iterate over range testing each time unit conversion to minutes
+		for (long duration : LongStream.range(-1000, 1000).toArray()) {
+			Assertions.assertEquals(duration / 6000, MILLISECONDS.toMinutes(duration), "MILLISECONDS to minutes failed with duration " + duration + ".");
+			Assertions.assertEquals(duration / 1200, TICKS.toMinutes(duration), "TICKS to minutes failed with duration " + duration + ".");
+			Assertions.assertEquals(duration / 60, SECONDS.toMinutes(duration), "SECONDS to minutes failed with duration " + duration + ".");
+			Assertions.assertEquals(duration, MINUTES.toMinutes(duration), "MINUTES to minutes failed with duration " + duration + ".");
+			Assertions.assertEquals(duration * 60, HOURS.toMinutes(duration), "HOURS to minutes failed with duration " + duration + ".");
+			Assertions.assertEquals(duration * 1440, DAYS.toMinutes(duration), "DAYS to minutes failed with duration " + duration + ".");
+		}
+
+		// iterate through all time units and perform tests
+		for (BukkitTime timeUnit : BukkitTime.values()) {
+
+			// test all conversions with duration of zero
+			Assertions.assertEquals(0, timeUnit.toMinutes(0), "zero " + timeUnit + " to minutes failed.");
+
+			// test overflow with max values
+			Assertions.assertEquals(Long.MAX_VALUE, timeUnit.toMinutes(Long.MAX_VALUE - 1), "MAX - 1 " + timeUnit + " to minutes failed overflow test.");
+
+			// test overflow with min values
+			Assertions.assertEquals(Long.MIN_VALUE, timeUnit.toMinutes(Long.MIN_VALUE + 1), "MIN + 1 " + timeUnit + " to minutes failed overflow test.");
+		}
 	}
 
 	@Test
 	void toHours() {
-		Assertions.assertEquals(3600000, HOURS.getMillis());
-		Assertions.assertEquals(24, DAYS.toHours(1), "DAYS to seconds failed.");
-		Assertions.assertEquals(1, HOURS.toHours(1), "HOURS to seconds failed.");
-		Assertions.assertEquals(1, MINUTES.toHours(60), "MINUTES to seconds failed.");
-		Assertions.assertEquals(1, SECONDS.toHours(3600), "SECONDS to seconds failed.");
-		Assertions.assertEquals(1, TICKS.toHours(72000), "TICKS to seconds failed.");
-		Assertions.assertEquals(1, MILLISECONDS.toHours(3600000), "MILLISECONDS to seconds failed.");
+		// check that millis field holds correct value for milliseconds in an hour (3600000)
+		Assertions.assertEquals(60 * 60 * 1000, HOURS.getMillis());
 
-		Assertions.assertEquals(Long.MAX_VALUE, DAYS.toTicks(Long.MAX_VALUE - 1), "MAX_VALUE exceeded.");
-		Assertions.assertEquals(Long.MIN_VALUE, DAYS.toTicks(Long.MIN_VALUE + 1), "MIN_VALUE exceeded.");
+		// iterate over range testing each time unit conversion to hours
+		for (long duration : LongStream.range(-1000, 1000).toArray()) {
+			Assertions.assertEquals(duration / 3600000, MILLISECONDS.toHours(duration), "MILLISECONDS to hours failed with duration " + duration + ".");
+			Assertions.assertEquals(duration / 72000, TICKS.toHours(duration), "TICKS to hours failed with duration " + duration + ".");
+			Assertions.assertEquals(duration / 3600, SECONDS.toHours(duration), "SECONDS to hours failed with duration " + duration + ".");
+			Assertions.assertEquals(duration / 60, MINUTES.toHours(duration), "MINUTES to hours failed with duration " + duration + ".");
+			Assertions.assertEquals(duration, HOURS.toHours(duration), "HOURS to hours failed with duration " + duration + ".");
+			Assertions.assertEquals(duration * 24, DAYS.toHours(duration), "DAYS to hours failed with duration " + duration + ".");
+		}
+
+		// iterate through all time units and perform tests
+		for (BukkitTime timeUnit : BukkitTime.values()) {
+
+			// test all conversions with duration of zero
+			Assertions.assertEquals(0, timeUnit.toHours(0), "zero " + timeUnit + " to hours failed.");
+
+			// test overflow with max values
+			Assertions.assertEquals(Long.MAX_VALUE, timeUnit.toHours(Long.MAX_VALUE - 1), "MAX - 1 " + timeUnit + " to hours failed overflow test.");
+
+			// test overflow with min values
+			Assertions.assertEquals(Long.MIN_VALUE, timeUnit.toHours(Long.MIN_VALUE + 1), "MIN + 1 " + timeUnit + " to hours failed overflow test.");
+		}
 	}
 
 	@Test
 	void toDays() {
-		Assertions.assertEquals(86400000, DAYS.getMillis());
-		Assertions.assertEquals(1, DAYS.toDays(1), "DAYS to seconds failed.");
-		Assertions.assertEquals(1, HOURS.toDays(24), "HOURS to seconds failed.");
-		Assertions.assertEquals(1, MINUTES.toDays(1440), "MINUTES to seconds failed.");
-		Assertions.assertEquals(1, SECONDS.toDays(86400), "SECONDS to seconds failed.");
-		Assertions.assertEquals(1, TICKS.toDays(1728000), "TICKS to seconds failed.");
-		Assertions.assertEquals(1, MILLISECONDS.toDays(86400000), "MILLISECONDS to seconds failed.");
+		// check that millis field holds correct value for milliseconds in a day (86400000)
+		Assertions.assertEquals(24 * 60 * 60 * 1000, DAYS.getMillis());
 
-		Assertions.assertEquals(Long.MAX_VALUE, DAYS.toTicks(Long.MAX_VALUE - 1), "MAX_VALUE exceeded.");
-		Assertions.assertEquals(Long.MIN_VALUE, DAYS.toTicks(Long.MIN_VALUE + 1), "MIN_VALUE exceeded.");
+		// iterate over range testing each time unit conversion to days
+		for (long duration : LongStream.range(-1000, 1000).toArray()) {
+			Assertions.assertEquals(duration / 86400000, MILLISECONDS.toDays(duration), "MILLISECONDS to days failed with duration " + duration + ".");
+			Assertions.assertEquals(duration / 1728000, TICKS.toDays(duration), "TICKS to days failed with duration " + duration + ".");
+			Assertions.assertEquals(duration / 86400, SECONDS.toDays(duration), "SECONDS to days failed with duration " + duration + ".");
+			Assertions.assertEquals(duration / 1440, MINUTES.toDays(duration), "MINUTES to days failed with duration " + duration + ".");
+			Assertions.assertEquals(duration / 24, HOURS.toDays(duration), "HOURS to days failed with duration " + duration + ".");
+			Assertions.assertEquals(duration, DAYS.toDays(duration), "DAYS to days failed with duration " + duration + ".");
+		}
+
+		// iterate through all time units and perform tests
+		for (BukkitTime timeUnit : BukkitTime.values()) {
+
+			// test all conversions with duration of zero
+			Assertions.assertEquals(0, timeUnit.toDays(0), "zero " + timeUnit + " to days failed.");
+
+			// test overflow with max values
+			Assertions.assertEquals(Long.MAX_VALUE, timeUnit.toDays(Long.MAX_VALUE - 1), "MAX - 1 " + timeUnit + " to days failed overflow test.");
+
+			// test overflow with min values
+			Assertions.assertEquals(Long.MIN_VALUE, timeUnit.toDays(Long.MIN_VALUE + 1), "MIN + 1 " + timeUnit + " to days failed overflow test.");
+		}
+	}
+
+	@Test
+	void convert() {
+		Assertions.assertEquals(1, MILLISECONDS.convert(1000, SECONDS), "convert millis to seconds failed.");
+		Assertions.assertEquals(1000, SECONDS.convert(1, MILLISECONDS), "convert seconds to millis failed.");
+
+		Assertions.assertEquals(1, MINUTES.convert(60, HOURS), "convert minutes to hours failed.");
+		Assertions.assertEquals(60, HOURS.convert(1, MINUTES), "convert hours to minutes failed.");
+
+		Assertions.assertEquals(1, HOURS.convert(24, DAYS), "convert hours to days failed.");
+		Assertions.assertEquals(24, DAYS.convert(1, HOURS), "convert days to hours failed.");
+
+		Assertions.assertEquals(1, TICKS.convert(20, SECONDS), "convert ticks to seconds failed.");
+		Assertions.assertEquals(20, SECONDS.convert(1, TICKS), "convert seconds to ticks failed.");
 	}
 
 	@Test
