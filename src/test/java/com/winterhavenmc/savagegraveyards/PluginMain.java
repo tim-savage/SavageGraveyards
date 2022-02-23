@@ -11,7 +11,7 @@ import com.winterhavenmc.util.messagebuilder.MessageBuilder;
 import com.winterhavenmc.util.soundconfig.SoundConfiguration;
 import com.winterhavenmc.util.soundconfig.YamlSoundConfiguration;
 import com.winterhavenmc.util.worldmanager.WorldManager;
-import org.bstats.bukkit.Metrics;
+
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
@@ -38,6 +38,7 @@ public class PluginMain extends JavaPlugin {
 	/**
 	 * Class constructor for testing
 	 */
+	@SuppressWarnings("unused")
 	public PluginMain() {
 		super();
 	}
@@ -84,7 +85,7 @@ public class PluginMain extends JavaPlugin {
 
 		// run discovery task
 		discoveryTask = new DiscoveryTask(this)
-			.runTaskTimer(this, 0, getConfig().getInt("discovery-interval"));
+			.runTaskTimer(this, 0, getConfig().getLong("discovery-interval"));
 	}
 
 
