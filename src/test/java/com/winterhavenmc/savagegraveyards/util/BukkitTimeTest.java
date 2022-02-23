@@ -17,233 +17,261 @@
 
 package com.winterhavenmc.savagegraveyards.util;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
-import java.util.stream.LongStream;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import static com.winterhavenmc.savagegraveyards.util.BukkitTime.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE;
 
-import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BukkitTimeTest {
 
-	@Test
-	void toMillis() {
-		// check that millis field holds correct value for milliseconds in a millisecond (1)
-		Assertions.assertEquals(1, MILLISECONDS.getMillis());
+	// these are the smallest/largest numbers that will not cause an overflow for any time unit
+	private final static long MIN = Long.MIN_VALUE / YEARS.getMillis();
+	private final static long MAX = Long.MAX_VALUE / YEARS.getMillis();
 
-		// iterate over range testing each time unit conversion to milliseconds
-		for (long duration : LongStream.range(-1000, 1000).toArray()) {
-			Assertions.assertEquals(duration, MILLISECONDS.toMillis(duration), "MILLISECONDS to millis failed with duration " + duration + ".");
-			Assertions.assertEquals(duration * 50, TICKS.toMillis(duration), "TICKS to millis failed with duration " + duration + ".");
-			Assertions.assertEquals(duration * 1000, SECONDS.toMillis(duration), "SECONDS to millis failed with duration " + duration + ".");
-			Assertions.assertEquals(duration * 60000, MINUTES.toMillis(duration), "MINUTES to millis failed with duration " + duration + ".");
-			Assertions.assertEquals(duration * 3600000, HOURS.toMillis(duration), "HOURS to millis failed with duration " + duration + ".");
-			Assertions.assertEquals(duration * 86400000, DAYS.toMillis(duration), "DAYS to millis failed with duration " + duration + ".");
+	// return an array of values that will be used as durations for tests
+	static long[] durationProvider() {
+		return new long[] {MIN, -86400001L, -3600001L, -60001L, -1001L, -51L, -1L, 0L, 1L, 51L, 1001L, 60001L, 3600001L, 86400001L, MAX};
+	}
+
+
+	@ParameterizedTest
+	@DisplayName("Overflow tests")
+	// exclude MILLISECONDS because it cannot overflow with any value of long
+	@EnumSource(mode = EXCLUDE, names = "MILLISECONDS" )
+	void overflowTests(final BukkitTime timeUnit) {
+
+		// calculate values that will cause overflow for time unit
+		long minOverflowValue = Long.MIN_VALUE / timeUnit.getMillis() - 1;
+		long maxOverflowValue = Long.MAX_VALUE / timeUnit.getMillis() + 1;
+
+		// negative overflow tests
+		assertThrows(IllegalArgumentException.class, () -> timeUnit.toMillis(minOverflowValue));
+		assertThrows(IllegalArgumentException.class, () -> timeUnit.toTicks(minOverflowValue));
+		assertThrows(IllegalArgumentException.class, () -> timeUnit.toSeconds(minOverflowValue));
+		assertThrows(IllegalArgumentException.class, () -> timeUnit.toMinutes(minOverflowValue));
+		assertThrows(IllegalArgumentException.class, () -> timeUnit.toHours(minOverflowValue));
+		assertThrows(IllegalArgumentException.class, () -> timeUnit.toDays(minOverflowValue));
+		assertThrows(IllegalArgumentException.class, () -> timeUnit.toWeeks(minOverflowValue));
+		assertThrows(IllegalArgumentException.class, () -> timeUnit.toMonths(minOverflowValue));
+		assertThrows(IllegalArgumentException.class, () -> timeUnit.toYears(minOverflowValue));
+
+		// test convert method for negative overflow
+		for (BukkitTime innerTimeUnit : BukkitTime.values()) {
+			assertThrows(IllegalArgumentException.class, () -> timeUnit.convert(minOverflowValue, innerTimeUnit));
 		}
 
-		// iterate through all time units and perform tests
-		for (BukkitTime timeUnit : BukkitTime.values()) {
+		// positive overflow tests
+		assertThrows(IllegalArgumentException.class, () -> timeUnit.toMillis(maxOverflowValue));
+		assertThrows(IllegalArgumentException.class, () -> timeUnit.toTicks(maxOverflowValue));
+		assertThrows(IllegalArgumentException.class, () -> timeUnit.toSeconds(maxOverflowValue));
+		assertThrows(IllegalArgumentException.class, () -> timeUnit.toMinutes(maxOverflowValue));
+		assertThrows(IllegalArgumentException.class, () -> timeUnit.toHours(maxOverflowValue));
+		assertThrows(IllegalArgumentException.class, () -> timeUnit.toDays(maxOverflowValue));
+		assertThrows(IllegalArgumentException.class, () -> timeUnit.toWeeks(maxOverflowValue));
+		assertThrows(IllegalArgumentException.class, () -> timeUnit.toMonths(maxOverflowValue));
+		assertThrows(IllegalArgumentException.class, () -> timeUnit.toYears(maxOverflowValue));
 
-			// test all conversions with duration of zero
-			Assertions.assertEquals(0, timeUnit.toMillis(0), "zero " + timeUnit + " to milliseconds failed.");
-
-			// test overflow with min values
-			Assertions.assertEquals(Long.MIN_VALUE, DAYS.toMillis(Long.MIN_VALUE + 1), "MIN + 1 " + timeUnit + " to milliseconds failed overflow test.");
-
-			// skip overflow test for milliseconds to milliseconds, because it cannot overflow, even with max values
-			if (timeUnit == MILLISECONDS) continue;
-
-			// test overflow with max values
-			Assertions.assertEquals(Long.MAX_VALUE, timeUnit.toMillis(Long.MAX_VALUE - 1), "MAX - 1 " + timeUnit + " to milliseconds failed overflow test.");
+		// test convert method for positive overflow
+		for (BukkitTime innerTimeUnit : BukkitTime.values()) {
+			assertThrows(IllegalArgumentException.class, () -> timeUnit.convert(maxOverflowValue, innerTimeUnit));
 		}
 	}
 
-	@Test
-	void toTicks() {
-		// check that millis field holds correct value for milliseconds in a tick (50)
-		Assertions.assertEquals(50, TICKS.getMillis());
 
-		// iterate over range testing each time unit conversion to ticks
-		for (long duration : LongStream.range(-1000, 1000).toArray()) {
-			Assertions.assertEquals(duration / 50, MILLISECONDS.toTicks(duration), "MILLISECONDS to ticks failed with duration " + duration + ".");
-			Assertions.assertEquals(duration, TICKS.toTicks(duration), "TICKS to ticks failed with duration " + duration + ".");
-			Assertions.assertEquals(duration * 20, SECONDS.toTicks(duration), "SECONDS to ticks failed with duration " + duration + ".");
-			Assertions.assertEquals(duration * 1200, MINUTES.toTicks(duration), "MINUTES to ticks failed with duration " + duration + ".");
-			Assertions.assertEquals(duration * 72000, HOURS.toTicks(duration), "HOURS to ticks failed with duration " + duration + ".");
-			Assertions.assertEquals(duration * 1728000, DAYS.toTicks(duration), "DAYS to ticks failed with duration " + duration + ".");
-		}
+	@ParameterizedTest
+	@MethodSource("durationProvider")
+	void toMillis(final long duration) {
+		assertEquals(duration, MILLISECONDS.toMillis(duration), "MILLISECONDS to millis failed with duration " + duration + ".");
+		assertEquals(duration * 50L, TICKS.toMillis(duration), "TICKS to millis failed with duration " + duration + ".");
+		assertEquals(duration * 1000L, SECONDS.toMillis(duration), "SECONDS to millis failed with duration " + duration + ".");
+		assertEquals(duration * 60000L, MINUTES.toMillis(duration), "MINUTES to millis failed with duration " + duration + ".");
+		assertEquals(duration * 3600000L, HOURS.toMillis(duration), "HOURS to millis failed with duration " + duration + ".");
+		assertEquals(duration * 86400000L, DAYS.toMillis(duration), "DAYS to millis failed with duration " + duration + ".");
+		assertEquals(duration * 604800000L, WEEKS.toMillis(duration), "WEEKS to millis failed with duration " + duration + ".");
+		assertEquals(duration * 2629800000L, MONTHS.toMillis(duration), "MONTHS to millis failed with duration " + duration + ".");
+		assertEquals(duration * 31557600000L, YEARS.toMillis(duration), "YEARS to millis failed with duration " + duration + ".");
+	}
 
-		// iterate through all time units and perform tests
-		for (BukkitTime timeUnit : BukkitTime.values()) {
 
-			// test all conversions with duration of zero
-			Assertions.assertEquals(0, timeUnit.toTicks(0), "zero " + timeUnit + " to ticks failed.");
+	@ParameterizedTest
+	@MethodSource("durationProvider")
+	void toTicks(final long duration) {
+		assertEquals(duration / 50L, MILLISECONDS.toTicks(duration), "MILLISECONDS to ticks failed with duration " + duration + ".");
+		assertEquals(duration, TICKS.toTicks(duration), "TICKS to ticks failed with duration " + duration + ".");
+		assertEquals(duration * 20L, SECONDS.toTicks(duration), "SECONDS to ticks failed with duration " + duration + ".");
+		assertEquals(duration * 1200L, MINUTES.toTicks(duration), "MINUTES to ticks failed with duration " + duration + ".");
+		assertEquals(duration * 72000L, HOURS.toTicks(duration), "HOURS to ticks failed with duration " + duration + ".");
+		assertEquals(duration * 1728000L, DAYS.toTicks(duration), "DAYS to ticks failed with duration " + duration + ".");
+		assertEquals(duration * 12096000L, WEEKS.toTicks(duration), "WEEKS to ticks failed with duration " + duration + ".");
+		assertEquals(duration * 52596000L, MONTHS.toTicks(duration), "MONTHS to ticks failed with duration " + duration + ".");
+		assertEquals(duration * 631152000L, YEARS.toTicks(duration), "YEARS to ticks failed with duration " + duration + ".");
+	}
 
-			// test overflow with max values
-			Assertions.assertEquals(Long.MAX_VALUE, timeUnit.toTicks(Long.MAX_VALUE - 1), "MAX - 1 " + timeUnit + " to ticks failed overflow test.");
 
-			// test overflow with min values
-			Assertions.assertEquals(Long.MIN_VALUE, DAYS.toTicks(Long.MIN_VALUE + 1), "MIN + 1 " + timeUnit + " to ticks failed overflow test.");
+	@ParameterizedTest
+	@MethodSource("durationProvider")
+	void toSeconds(final long duration) {
+		assertEquals(duration / 1000L, MILLISECONDS.toSeconds(duration), "MILLISECONDS to seconds failed with duration " + duration + ".");
+		assertEquals(duration / 20L, TICKS.toSeconds(duration), "TICKS to seconds failed with duration " + duration + ".");
+		assertEquals(duration, SECONDS.toSeconds(duration), "SECONDS to seconds failed with duration " + duration + ".");
+		assertEquals(duration * 60L, MINUTES.toSeconds(duration), "MINUTES to seconds failed with duration " + duration + ".");
+		assertEquals(duration * 3600L, HOURS.toSeconds(duration), "HOURS to seconds failed with duration " + duration + ".");
+		assertEquals(duration * 86400L, DAYS.toSeconds(duration), "DAYS to seconds failed with duration " + duration + ".");
+		assertEquals(duration * 604800L, WEEKS.toSeconds(duration), "WEEKS to seconds failed with duration " + duration + ".");
+		assertEquals(duration * 2629800L, MONTHS.toSeconds(duration), "MONTHS to seconds failed with duration " + duration + ".");
+		assertEquals(duration * 31557600L, YEARS.toSeconds(duration), "YEARS to seconds failed with duration " + duration + ".");
+	}
+
+
+	@ParameterizedTest
+	@MethodSource("durationProvider")
+	void toMinutes(final long duration) {
+		assertEquals(duration / 60000L, MILLISECONDS.toMinutes(duration), "MILLISECONDS to minutes failed with duration " + duration + ".");
+		assertEquals(duration / 1200L, TICKS.toMinutes(duration), "TICKS to minutes failed with duration " + duration + ".");
+		assertEquals(duration / 60L, SECONDS.toMinutes(duration), "SECONDS to minutes failed with duration " + duration + ".");
+		assertEquals(duration, MINUTES.toMinutes(duration), "MINUTES to minutes failed with duration " + duration + ".");
+		assertEquals(duration * 60L, HOURS.toMinutes(duration), "HOURS to minutes failed with duration " + duration + ".");
+		assertEquals(duration * 1440L, DAYS.toMinutes(duration), "DAYS to minutes failed with duration " + duration + ".");
+		assertEquals(duration * 10080L, WEEKS.toMinutes(duration), "DAYS to minutes failed with duration " + duration + ".");
+		assertEquals(duration * 43830L, MONTHS.toMinutes(duration), "MONTHS to minutes failed with duration " + duration + ".");
+		assertEquals(duration * 525960L, YEARS.toMinutes(duration), "YEARS to minutes failed with duration " + duration + ".");
+	}
+
+
+	@ParameterizedTest
+	@MethodSource("durationProvider")
+	void toHours(final long duration) {
+		assertEquals(duration / 3600000L, MILLISECONDS.toHours(duration), "MILLISECONDS to hours failed with duration " + duration + ".");
+		assertEquals(duration / 72000L, TICKS.toHours(duration), "TICKS to hours failed with duration " + duration + ".");
+		assertEquals(duration / 3600L, SECONDS.toHours(duration), "SECONDS to hours failed with duration " + duration + ".");
+		assertEquals(duration / 60L, MINUTES.toHours(duration), "MINUTES to hours failed with duration " + duration + ".");
+		assertEquals(duration, HOURS.toHours(duration), "HOURS to hours failed with duration " + duration + ".");
+		assertEquals(duration * 24L, DAYS.toHours(duration), "DAYS to hours failed with duration " + duration + ".");
+		assertEquals(duration * 168L, WEEKS.toHours(duration), "WEEKS to hours failed with duration " + duration + ".");
+		assertEquals(duration * 43830L / 60L, MONTHS.toHours(duration), "MONTHS to hours failed with duration " + duration + ".");
+		assertEquals(duration * 8766L, YEARS.toHours(duration), "YEARS to hours failed with duration " + duration + ".");
+	}
+
+
+	@ParameterizedTest
+	@MethodSource("durationProvider")
+	void toDays(final long duration) {
+		assertEquals(duration / 86400000L, MILLISECONDS.toDays(duration), "MILLISECONDS to days failed with duration " + duration + ".");
+		assertEquals(duration / 1728000L, TICKS.toDays(duration), "TICKS to days failed with duration " + duration + ".");
+		assertEquals(duration / 86400L, SECONDS.toDays(duration), "SECONDS to days failed with duration " + duration + ".");
+		assertEquals(duration / 1440L, MINUTES.toDays(duration), "MINUTES to days failed with duration " + duration + ".");
+		assertEquals(duration / 24L, HOURS.toDays(duration), "HOURS to days failed with duration " + duration + ".");
+		assertEquals(duration, DAYS.toDays(duration), "DAYS to days failed with duration " + duration + ".");
+		assertEquals(duration * 7L, WEEKS.toDays(duration), "WEEKS to days failed with duration " + duration + ".");
+		assertEquals(duration * 43830L / 1440L, MONTHS.toDays(duration), "MONTHS to days failed with duration " + duration + ".");
+		assertEquals(duration * 8766L / 24L, YEARS.toDays(duration), "YEARS to days failed with duration " + duration + ".");
+	}
+
+
+	@ParameterizedTest
+	@MethodSource("durationProvider")
+	void toWeeks(final long duration) {
+		assertEquals(duration / 604800000L, MILLISECONDS.toWeeks(duration), "MILLISECONDS to weeks failed with duration " + duration + ".");
+		assertEquals(duration / 12096000L, TICKS.toWeeks(duration), "TICKS to weeks failed with duration " + duration + ".");
+		assertEquals(duration / 604800L, SECONDS.toWeeks(duration), "SECONDS to weeks failed with duration " + duration + ".");
+		assertEquals(duration / 10080L, MINUTES.toWeeks(duration), "MINUTES to weeks failed with duration " + duration + ".");
+		assertEquals(duration / 168L, HOURS.toWeeks(duration), "HOURS to weeks failed with duration " + duration + ".");
+		assertEquals(duration / 7L, DAYS.toWeeks(duration), "DAYS to weeks failed with duration " + duration + ".");
+		assertEquals(duration, WEEKS.toWeeks(duration), "WEEKS to weeks failed with duration " + duration + ".");
+		assertEquals(duration * 43830L / 10080L, MONTHS.toWeeks(duration), "MONTHS to weeks failed with duration " + duration + ".");
+		assertEquals(duration * 8766L / 168L, YEARS.toWeeks(duration), "YEARS to weeks failed with duration " + duration + ".");
+	}
+
+
+	@ParameterizedTest
+	@MethodSource("durationProvider")
+	void toMonths(final long duration) {
+		assertEquals(duration / 2629800000L, MILLISECONDS.toMonths(duration), "MILLISECONDS to months failed with duration " + duration + ".");
+		assertEquals(duration / 52596000L, TICKS.toMonths(duration), "TICKS to months failed with duration " + duration + ".");
+		assertEquals(duration / 2629800L, SECONDS.toMonths(duration), "SECONDS to months failed with duration " + duration + ".");
+		assertEquals(duration / 43830L, MINUTES.toMonths(duration), "MINUTES to months failed with duration " + duration + ".");
+		assertEquals(duration * 60L / 43830L, HOURS.toMonths(duration), "HOURS to months failed with duration " + duration + ".");
+		assertEquals(duration * 1440L / 43830L, DAYS.toMonths(duration), "DAYS to months failed with duration " + duration + ".");
+		assertEquals(duration * 10080L / 43830L, WEEKS.toMonths(duration), "WEEKS to months failed with duration " + duration + ".");
+		assertEquals(duration, MONTHS.toMonths(duration), "MONTHS to months failed with duration " + duration + ".");
+		assertEquals(duration * 12L, YEARS.toMonths(duration), "YEARS to months failed with duration " + duration + ".");
+	}
+
+
+	@ParameterizedTest
+	@MethodSource("durationProvider")
+	void toYears(final long duration) {
+		assertEquals(duration / 31557600000L, MILLISECONDS.toYears(duration), "MILLISECONDS to years failed with duration " + duration + ".");
+		assertEquals(duration / 631152000L, TICKS.toYears(duration), "TICKS to years failed with duration " + duration + ".");
+		assertEquals(duration / 31557600L, SECONDS.toYears(duration), "SECONDS to years failed with duration " + duration + ".");
+		assertEquals(duration / 525960L, MINUTES.toYears(duration), "MINUTES to years failed with duration " + duration + ".");
+		assertEquals(duration / 8766L, HOURS.toYears(duration), "HOURS to years failed with duration " + duration + ".");
+		assertEquals(duration * 24L / 8766L, DAYS.toYears(duration), "DAYS to years failed with duration " + duration + ".");
+		assertEquals(duration * 168L / 8766L, WEEKS.toYears(duration), "WEEKS to years failed with duration " + duration + ".");
+		assertEquals(duration / 12L, MONTHS.toYears(duration), "MONTHS to years failed with duration " + duration + ".");
+		assertEquals(duration, YEARS.toYears(duration), "YEARS to years failed with duration " + duration + ".");
+	}
+
+	@ParameterizedTest
+	@EnumSource(BukkitTime.class)
+	@DisplayName("convert method tests")
+	void convert(final BukkitTime timeUnit) {
+		for (Long duration : durationProvider()) {
+			assertEquals(duration * timeUnit.getMillis(), timeUnit.convert(duration, MILLISECONDS), "convert " + timeUnit + " to milliseconds failed.");
+			assertEquals(duration * timeUnit.getMillis() / 50L, timeUnit.convert(duration, TICKS), "convert " + timeUnit + " to ticks failed.");
+			assertEquals(duration * timeUnit.getMillis() / 1000L, timeUnit.convert(duration, SECONDS), "convert " + timeUnit + " to seconds failed.");
+			assertEquals(duration * timeUnit.getMillis() / 60000L, timeUnit.convert(duration, MINUTES), "convert " + timeUnit + " to minutes failed.");
+			assertEquals(duration * timeUnit.getMillis() / 3600000L, timeUnit.convert(duration, HOURS), "convert " + timeUnit + " to hours failed.");
+			assertEquals(duration * timeUnit.getMillis() / 86400000L, timeUnit.convert(duration, DAYS), "convert " + timeUnit + " to days failed.");
+			assertEquals(duration * timeUnit.getMillis() / 604800000L, timeUnit.convert(duration, WEEKS), "convert " + timeUnit + " to days failed.");
+			assertEquals(duration * timeUnit.getMillis() / 2629800000L, timeUnit.convert(duration, MONTHS), "convert " + timeUnit + " to days failed.");
+			assertEquals(duration * timeUnit.getMillis() / 31557600000L, timeUnit.convert(duration, YEARS), "convert " + timeUnit + " to days failed.");
 		}
 	}
 
-	@Test
-	void toSeconds() {
-		// check that millis field holds correct value for milliseconds in a second (1000)
-		Assertions.assertEquals(1000, SECONDS.getMillis());
-
-		// iterate over range testing each time unit conversion to seconds
-		for (long duration : LongStream.range(-1000, 1000).toArray()) {
-			Assertions.assertEquals(duration / 1000, MILLISECONDS.toSeconds(duration), "MILLISECONDS to seconds failed with duration " + duration + ".");
-			Assertions.assertEquals(duration / 20, TICKS.toSeconds(duration), "TICKS to seconds failed with duration " + duration + ".");
-			Assertions.assertEquals(duration, SECONDS.toSeconds(duration), "SECONDS to seconds failed with duration " + duration + ".");
-			Assertions.assertEquals(duration * 60, MINUTES.toSeconds(duration), "MINUTES to seconds failed with duration " + duration + ".");
-			Assertions.assertEquals(duration * 3600, HOURS.toSeconds(duration), "HOURS to seconds failed with duration " + duration + ".");
-			Assertions.assertEquals(duration * 86400, DAYS.toSeconds(duration), "DAYS to seconds failed with duration " + duration + ".");
-		}
-
-		// iterate through all time units and perform tests
-		for (BukkitTime timeUnit : BukkitTime.values()) {
-
-			// test all conversions with duration of zero
-			Assertions.assertEquals(0, timeUnit.toSeconds(0), "zero " + timeUnit + " to seconds failed.");
-
-			// test overflow with max values
-			Assertions.assertEquals(Long.MAX_VALUE, timeUnit.toSeconds(Long.MAX_VALUE - 1), "MAX - 1 " + timeUnit + " to seconds failed overflow test.");
-
-			// test overflow with min values
-			Assertions.assertEquals(Long.MIN_VALUE, timeUnit.toSeconds(Long.MIN_VALUE + 1), "MIN + 1 " + timeUnit + " to seconds failed overflow test.");
-		}
-	}
-
-	@Test
-	void toMinutes() {
-		// check that millis field holds correct value for milliseconds in a minute (60000)
-		Assertions.assertEquals(60 * 1000, MINUTES.getMillis());
-
-		// iterate over range testing each time unit conversion to minutes
-		for (long duration : LongStream.range(-1000, 1000).toArray()) {
-			Assertions.assertEquals(duration / 6000, MILLISECONDS.toMinutes(duration), "MILLISECONDS to minutes failed with duration " + duration + ".");
-			Assertions.assertEquals(duration / 1200, TICKS.toMinutes(duration), "TICKS to minutes failed with duration " + duration + ".");
-			Assertions.assertEquals(duration / 60, SECONDS.toMinutes(duration), "SECONDS to minutes failed with duration " + duration + ".");
-			Assertions.assertEquals(duration, MINUTES.toMinutes(duration), "MINUTES to minutes failed with duration " + duration + ".");
-			Assertions.assertEquals(duration * 60, HOURS.toMinutes(duration), "HOURS to minutes failed with duration " + duration + ".");
-			Assertions.assertEquals(duration * 1440, DAYS.toMinutes(duration), "DAYS to minutes failed with duration " + duration + ".");
-		}
-
-		// iterate through all time units and perform tests
-		for (BukkitTime timeUnit : BukkitTime.values()) {
-
-			// test all conversions with duration of zero
-			Assertions.assertEquals(0, timeUnit.toMinutes(0), "zero " + timeUnit + " to minutes failed.");
-
-			// test overflow with max values
-			Assertions.assertEquals(Long.MAX_VALUE, timeUnit.toMinutes(Long.MAX_VALUE - 1), "MAX - 1 " + timeUnit + " to minutes failed overflow test.");
-
-			// test overflow with min values
-			Assertions.assertEquals(Long.MIN_VALUE, timeUnit.toMinutes(Long.MIN_VALUE + 1), "MIN + 1 " + timeUnit + " to minutes failed overflow test.");
-		}
-	}
-
-	@Test
-	void toHours() {
-		// check that millis field holds correct value for milliseconds in an hour (3600000)
-		Assertions.assertEquals(60 * 60 * 1000, HOURS.getMillis());
-
-		// iterate over range testing each time unit conversion to hours
-		for (long duration : LongStream.range(-1000, 1000).toArray()) {
-			Assertions.assertEquals(duration / 3600000, MILLISECONDS.toHours(duration), "MILLISECONDS to hours failed with duration " + duration + ".");
-			Assertions.assertEquals(duration / 72000, TICKS.toHours(duration), "TICKS to hours failed with duration " + duration + ".");
-			Assertions.assertEquals(duration / 3600, SECONDS.toHours(duration), "SECONDS to hours failed with duration " + duration + ".");
-			Assertions.assertEquals(duration / 60, MINUTES.toHours(duration), "MINUTES to hours failed with duration " + duration + ".");
-			Assertions.assertEquals(duration, HOURS.toHours(duration), "HOURS to hours failed with duration " + duration + ".");
-			Assertions.assertEquals(duration * 24, DAYS.toHours(duration), "DAYS to hours failed with duration " + duration + ".");
-		}
-
-		// iterate through all time units and perform tests
-		for (BukkitTime timeUnit : BukkitTime.values()) {
-
-			// test all conversions with duration of zero
-			Assertions.assertEquals(0, timeUnit.toHours(0), "zero " + timeUnit + " to hours failed.");
-
-			// test overflow with max values
-			Assertions.assertEquals(Long.MAX_VALUE, timeUnit.toHours(Long.MAX_VALUE - 1), "MAX - 1 " + timeUnit + " to hours failed overflow test.");
-
-			// test overflow with min values
-			Assertions.assertEquals(Long.MIN_VALUE, timeUnit.toHours(Long.MIN_VALUE + 1), "MIN + 1 " + timeUnit + " to hours failed overflow test.");
-		}
-	}
-
-	@Test
-	void toDays() {
-		// check that millis field holds correct value for milliseconds in a day (86400000)
-		Assertions.assertEquals(24 * 60 * 60 * 1000, DAYS.getMillis());
-
-		// iterate over range testing each time unit conversion to days
-		for (long duration : LongStream.range(-1000, 1000).toArray()) {
-			Assertions.assertEquals(duration / 86400000, MILLISECONDS.toDays(duration), "MILLISECONDS to days failed with duration " + duration + ".");
-			Assertions.assertEquals(duration / 1728000, TICKS.toDays(duration), "TICKS to days failed with duration " + duration + ".");
-			Assertions.assertEquals(duration / 86400, SECONDS.toDays(duration), "SECONDS to days failed with duration " + duration + ".");
-			Assertions.assertEquals(duration / 1440, MINUTES.toDays(duration), "MINUTES to days failed with duration " + duration + ".");
-			Assertions.assertEquals(duration / 24, HOURS.toDays(duration), "HOURS to days failed with duration " + duration + ".");
-			Assertions.assertEquals(duration, DAYS.toDays(duration), "DAYS to days failed with duration " + duration + ".");
-		}
-
-		// iterate through all time units and perform tests
-		for (BukkitTime timeUnit : BukkitTime.values()) {
-
-			// test all conversions with duration of zero
-			Assertions.assertEquals(0, timeUnit.toDays(0), "zero " + timeUnit + " to days failed.");
-
-			// test overflow with max values
-			Assertions.assertEquals(Long.MAX_VALUE, timeUnit.toDays(Long.MAX_VALUE - 1), "MAX - 1 " + timeUnit + " to days failed overflow test.");
-
-			// test overflow with min values
-			Assertions.assertEquals(Long.MIN_VALUE, timeUnit.toDays(Long.MIN_VALUE + 1), "MIN + 1 " + timeUnit + " to days failed overflow test.");
-		}
-	}
-
-	@Test
-	void convert() {
-		Assertions.assertEquals(1, MILLISECONDS.convert(1000, SECONDS), "convert millis to seconds failed.");
-		Assertions.assertEquals(1000, SECONDS.convert(1, MILLISECONDS), "convert seconds to millis failed.");
-
-		Assertions.assertEquals(1, MINUTES.convert(60, HOURS), "convert minutes to hours failed.");
-		Assertions.assertEquals(60, HOURS.convert(1, MINUTES), "convert hours to minutes failed.");
-
-		Assertions.assertEquals(1, HOURS.convert(24, DAYS), "convert hours to days failed.");
-		Assertions.assertEquals(24, DAYS.convert(1, HOURS), "convert days to hours failed.");
-
-		Assertions.assertEquals(1, TICKS.convert(20, SECONDS), "convert ticks to seconds failed.");
-		Assertions.assertEquals(20, SECONDS.convert(1, TICKS), "convert seconds to ticks failed.");
-	}
 
 	@Test
 	void values() {
-		BukkitTime[] bukkitTimes = { MILLISECONDS, TICKS, SECONDS, MINUTES, HOURS, DAYS };
+		BukkitTime[] bukkitTimes = { MILLISECONDS, TICKS, SECONDS, MINUTES, HOURS, DAYS, WEEKS, MONTHS, YEARS };
 		Assertions.assertArrayEquals(BukkitTime.values(), bukkitTimes, "BukkitTime values did not match.");
+
+		// check that millis field holds correct value for each time unit
+		assertEquals(1L, MILLISECONDS.getMillis());
+		assertEquals(50L, TICKS.getMillis());
+		assertEquals(1000L, SECONDS.getMillis());
+		assertEquals(1000L * 60L, MINUTES.getMillis());
+		assertEquals(1000L * 60L * 60L, HOURS.getMillis());
+		assertEquals(1000L * 60L * 60L * 24L, DAYS.getMillis());
+		assertEquals(1000L * 60L * 60L * 24L * 7L, WEEKS.getMillis());
+		assertEquals(1000L * 60L * 43830L, MONTHS.getMillis());
+		assertEquals(1000L * 60L * 60L * 8766L, YEARS.getMillis());
 	}
+
 
 	@Test
 	void valueOf() {
 		// test all valid member names
-		Assertions.assertEquals(MILLISECONDS, BukkitTime.valueOf("MILLISECONDS"));
-		Assertions.assertEquals(TICKS, BukkitTime.valueOf("TICKS"));
-		Assertions.assertEquals(SECONDS, BukkitTime.valueOf("SECONDS"));
-		Assertions.assertEquals(MINUTES, BukkitTime.valueOf("MINUTES"));
-		Assertions.assertEquals(HOURS, BukkitTime.valueOf("HOURS"));
-		Assertions.assertEquals(DAYS, BukkitTime.valueOf("DAYS"));
+		assertEquals(MILLISECONDS, BukkitTime.valueOf("MILLISECONDS"));
+		assertEquals(TICKS, BukkitTime.valueOf("TICKS"));
+		assertEquals(SECONDS, BukkitTime.valueOf("SECONDS"));
+		assertEquals(MINUTES, BukkitTime.valueOf("MINUTES"));
+		assertEquals(HOURS, BukkitTime.valueOf("HOURS"));
+		assertEquals(DAYS, BukkitTime.valueOf("DAYS"));
+		assertEquals(WEEKS, BukkitTime.valueOf("WEEKS"));
+		assertEquals(YEARS, BukkitTime.valueOf("YEARS"));
 
 		// test invalid member name
-		Exception exception = assertThrowsExactly(IllegalArgumentException.class, () -> BukkitTime.valueOf("invalid"));
+		Exception exception = Assertions.assertThrowsExactly(IllegalArgumentException.class, () -> BukkitTime.valueOf("invalid"));
 
 		String expectedMessage = "No enum constant";
 		String actualMessage = exception.getMessage();
 
-		assertTrue(actualMessage.startsWith(expectedMessage));
+		Assertions.assertTrue(actualMessage.startsWith(expectedMessage));
 	}
 
 }

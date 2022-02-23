@@ -17,67 +17,77 @@
 
 package com.winterhavenmc.savagegraveyards.util;
 
-@SuppressWarnings("unused")
 public enum BukkitTime {
 
-	MILLISECONDS(1),
-	TICKS(50),
-	SECONDS(1000),
-	MINUTES(60000),
-	HOURS(3600000),
-	DAYS(86400000);
+	MILLISECONDS(1L),
+	TICKS(50L),
+	SECONDS(1000L),
+	MINUTES(60000L),
+	HOURS(3600000L),
+	DAYS(86400000L),
+	WEEKS(604800000L),
+	MONTHS(2629800000L),
+	YEARS(31557600000L);
 
 	private final long millis;
 
 
- BukkitTime(final long millis) {
+	BukkitTime(final long millis) {
 		this.millis = millis;
 	}
 
-	public long toMillis(final long duration) {
-		if (duration < Long.MIN_VALUE / (this.millis * MILLISECONDS.millis)) return Long.MIN_VALUE;
-		if (duration > Long.MAX_VALUE / (this.millis * MILLISECONDS.millis)) return Long.MAX_VALUE;
-		return duration * this.millis / MILLISECONDS.millis;
+	public final long toMillis(final long duration) {
+		return convert(duration, MILLISECONDS);
 	}
 
-	public long toTicks(final long duration) {
-		if (duration < Long.MIN_VALUE / (this.millis * TICKS.millis)) return Long.MIN_VALUE;
-		if (duration > Long.MAX_VALUE / (this.millis * TICKS.millis)) return Long.MAX_VALUE;
-		return duration * this.millis / TICKS.millis;
+	public final long toTicks(final long duration) {
+		return convert(duration, TICKS);
 	}
 
-	public long toSeconds(final long duration) {
-		if (duration < Long.MIN_VALUE / (this.millis * SECONDS.millis)) return Long.MIN_VALUE;
-		if (duration > Long.MAX_VALUE / (this.millis * SECONDS.millis)) return Long.MAX_VALUE;
-		return duration * this.millis / SECONDS.millis;
+	public final long toSeconds(final long duration) {
+		return convert(duration, SECONDS);
 	}
 
-	public long toMinutes(final long duration) {
-		if (duration < Long.MIN_VALUE / (this.millis * MINUTES.millis)) return Long.MIN_VALUE;
-		if (duration > Long.MAX_VALUE / (this.millis * MINUTES.millis)) return Long.MAX_VALUE;
-		return duration * this.millis / MINUTES.millis;
+	public final long toMinutes(final long duration) {
+		return convert(duration, MINUTES);
 	}
 
-	public long toHours(final long duration) {
-		if (duration < Long.MIN_VALUE / (this.millis * HOURS.millis)) return Long.MIN_VALUE;
-		if (duration > Long.MAX_VALUE / (this.millis * HOURS.millis)) return Long.MAX_VALUE;
-		return duration * this.millis / HOURS.millis;
+	public final long toHours(final long duration) {
+		return convert(duration, HOURS);
 	}
 
-	public long toDays(final long duration) {
-		if (duration < Long.MIN_VALUE / (this.millis * DAYS.millis)) return Long.MIN_VALUE;
-		if (duration > Long.MAX_VALUE / (this.millis * DAYS.millis)) return Long.MAX_VALUE;
-		return duration * this.millis / DAYS.millis;
+	public final long toDays(final long duration) {
+		return convert(duration, DAYS);
 	}
 
-	public long convert(long duration, BukkitTime unit) { return (duration * this.millis / unit.millis); }
+	public final long toWeeks(final long duration) {
+		return convert(duration, WEEKS);
+	}
+
+	public final long toMonths(final long duration) {
+		return convert(duration, MONTHS);
+	}
+
+	public final long toYears(final long duration) {
+		return convert(duration, YEARS);
+	}
+
+	public final long convert(long duration, BukkitTime unit) {
+		if (duration < Long.MIN_VALUE / this.millis) {
+			throw new IllegalArgumentException("duration of " + duration + " " + this + " would cause an underflow in conversion to " + unit + ".");
+		}
+		if (duration > Long.MAX_VALUE / this.millis) {
+			throw new IllegalArgumentException("duration of " + duration + " " + this + " would cause an overflow in conversion to " + unit + ".");
+		}
+		return duration * this.millis / unit.millis;
+	}
 
 	/**
-	 * For testing
+	 * Get the number of milliseconds for each time unit.
 	 *
-	 * @return returns the number of milliseconds equal to each time unit
+	 * @return the number of milliseconds equal to each time unit
 	 */
-	long getMillis() {
+	public final long getMillis() {
 		return this.millis;
 	}
 
