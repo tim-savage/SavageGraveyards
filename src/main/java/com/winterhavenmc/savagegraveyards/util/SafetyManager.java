@@ -22,10 +22,10 @@ import com.winterhavenmc.savagegraveyards.messages.Macro;
 import com.winterhavenmc.savagegraveyards.messages.MessageId;
 
 import com.winterhavenmc.savagegraveyards.storage.Graveyard;
+import com.winterhavenmc.savagegraveyards.tasks.SafetyTask;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Map;
 import java.util.UUID;
@@ -43,7 +43,7 @@ public final class SafetyManager {
 	private final PluginMain plugin;
 
 	// safety cooldown map
-	private final Map<UUID, BukkitTask> safetyCooldownMap;
+	private final Map<UUID, BukkitRunnable> safetyCooldownMap;
 
 
 	/**
@@ -96,20 +96,11 @@ public final class SafetyManager {
 				.setMacro(Macro.DURATION, SECONDS.toMillis(safetyTime))
 				.send();
 
-		// create task to remove player from map after safetyTime duration
-		BukkitTask task = new BukkitRunnable() {
-			@Override
-			public void run() {
-				removePlayer(player);
-				if (plugin.getConfig().getBoolean("titles-enabled")) {
-					if (plugin.messageBuilder.isEnabled(MessageId.SAFETY_COOLDOWN_END_TITLE)) {
-						String safetyMessage = plugin.messageBuilder.compose(player, MessageId.SAFETY_COOLDOWN_END_TITLE).draft();
-						player.sendTitle(" ", safetyMessage, 10, 70, 20);
-					}
-				}
-				plugin.messageBuilder.compose(player, MessageId.SAFETY_COOLDOWN_END).send();
-			}
-		}.runTaskLater(plugin, SECONDS.toTicks(safetyTime));
+		// create task to display message and remove player from safety map after safetyTime duration
+		BukkitRunnable safetyTask = new SafetyTask(plugin, player);
+
+		// schedule task to display safety expired message after configured amount of time
+		safetyTask.runTaskLater(plugin, SECONDS.toTicks(safetyTime));
 
 		// if player is already in cooldown map, cancel existing task
 		if (isPlayerProtected(player)) {
@@ -117,7 +108,7 @@ public final class SafetyManager {
 		}
 
 		// add player to safety cooldown map
-		safetyCooldownMap.put(player.getUniqueId(), task);
+		safetyCooldownMap.put(player.getUniqueId(), safetyTask);
 	}
 
 
@@ -126,7 +117,7 @@ public final class SafetyManager {
 	 *
 	 * @param player the player to be removed from the safety cooldown map
 	 */
-	private void removePlayer(final Player player) {
+	public void removePlayer(final Player player) {
 		safetyCooldownMap.remove(player.getUniqueId());
 	}
 
