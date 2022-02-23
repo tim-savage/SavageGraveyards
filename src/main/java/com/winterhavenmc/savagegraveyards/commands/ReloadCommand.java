@@ -74,8 +74,11 @@ final class ReloadCommand extends SubcommandAbstract implements Subcommand {
 		// reload datastore
 		DataStore.reload(plugin);
 
-		// send reloaded message
+		// send reload success message
 		plugin.messageBuilder.build(sender, MessageId.COMMAND_SUCCESS_RELOAD).send();
+
+		// player reload success message
+		plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_RELOAD);
 
 		// return true to suppress bukkit usage message
 		return true;

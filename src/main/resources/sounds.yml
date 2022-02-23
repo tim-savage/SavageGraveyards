@@ -29,6 +29,13 @@ COMMAND_SUCCESS_FORGET:
   volume: 1
   pitch: 1
 
+COMMAND_SUCCESS_RELOAD:
+  enabled: true
+  player-only: true
+  sound: BLOCK_NOTE_BLOCK_CHIME
+  volume: 1
+  pitch: 1
+
 COMMAND_SUCCESS_SET:
   enabled: true
   player-only: true
