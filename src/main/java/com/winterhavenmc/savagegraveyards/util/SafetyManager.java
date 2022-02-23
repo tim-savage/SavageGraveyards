@@ -21,6 +21,8 @@ import com.winterhavenmc.savagegraveyards.PluginMain;
 import com.winterhavenmc.savagegraveyards.messages.Macro;
 import com.winterhavenmc.savagegraveyards.messages.MessageId;
 
+import com.winterhavenmc.savagegraveyards.storage.Graveyard;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -63,12 +65,12 @@ public final class SafetyManager {
 	 * Insert player uuid into safety cooldown map
 	 *
 	 * @param player   the player whose uuid will be used as key in the safety cooldown map
-	 * @param duration in seconds
+	 * @param graveyard the graveyard where the player has respawned
 	 */
-	public void putPlayer(final Player player, final long duration) {
+	public void putPlayer(final Player player, Graveyard graveyard) {
 
 		// get safety time from passed duration
-		long safetyTime = duration;
+		long safetyTime = graveyard.getSafetyTime();
 
 		// if safetyTime is negative, use configured default
 		if (safetyTime < 0L) {
@@ -80,8 +82,17 @@ public final class SafetyManager {
 			return;
 		}
 
-		// send safety message to player
-		plugin.messageBuilder.build(player, MessageId.SAFETY_COOLDOWN_START)
+		if (plugin.getConfig().getBoolean("titles-enabled")) {
+			if (plugin.messageBuilder.isEnabled(MessageId.SAFETY_COOLDOWN_START_TITLE)) {
+				String graveyardName = ChatColor.translateAlternateColorCodes('&', graveyard.getDisplayName());
+				String safetyMessage = plugin.messageBuilder.compose(player, MessageId.SAFETY_COOLDOWN_START_TITLE)
+						.setMacro(Macro.DURATION, SECONDS.toMillis((safetyTime)))
+						.draft();
+				player.sendTitle(graveyardName, safetyMessage, 10, 150, 20);
+			}
+		}
+
+		plugin.messageBuilder.compose(player, MessageId.SAFETY_COOLDOWN_START)
 				.setMacro(Macro.DURATION, SECONDS.toMillis(safetyTime))
 				.send();
 
@@ -90,7 +101,13 @@ public final class SafetyManager {
 			@Override
 			public void run() {
 				removePlayer(player);
-				plugin.messageBuilder.build(player, MessageId.SAFETY_COOLDOWN_END).send();
+				if (plugin.getConfig().getBoolean("titles-enabled")) {
+					if (plugin.messageBuilder.isEnabled(MessageId.SAFETY_COOLDOWN_END_TITLE)) {
+						String safetyMessage = plugin.messageBuilder.compose(player, MessageId.SAFETY_COOLDOWN_END_TITLE).draft();
+						player.sendTitle(" ", safetyMessage, 10, 70, 20);
+					}
+				}
+				plugin.messageBuilder.compose(player, MessageId.SAFETY_COOLDOWN_END).send();
 			}
 		}.runTaskLater(plugin, SECONDS.toTicks(safetyTime));
 

@@ -58,6 +58,11 @@ public final class DiscoveryTask extends BukkitRunnable {
 		// iterate through online players
 		for (Player player : ImmutableList.copyOf(plugin.getServer().getOnlinePlayers())) {
 
+			// if player does not have discover permission, skip to next player
+			if (!player.hasPermission("graveyard.discover")) {
+				continue;
+			}
+
 			// get player location
 			Location playerLocation = player.getLocation();
 
@@ -72,49 +77,67 @@ public final class DiscoveryTask extends BukkitRunnable {
 					continue;
 				}
 
-				// check that player has graveyard.discover permission
-				if (player.hasPermission("graveyard.discover")) {
+				// check if player is in graveyard group
+				if (graveyard.getGroup() == null
+						|| graveyard.getGroup().isEmpty()
+						|| player.hasPermission("group." + graveyard.getGroup())) {
 
-					// check if player is in graveyard group
-					if (graveyard.getGroup() == null
-							|| graveyard.getGroup().isEmpty()
-							|| player.hasPermission("group." + graveyard.getGroup())) {
+					// get graveyard discovery range, or config default if null or negative
+					int discoveryRange = graveyard.getDiscoveryRange();
+					if (discoveryRange < 0) {
+						discoveryRange = plugin.getConfig().getInt("discovery-range");
+					}
 
-						// get graveyard discovery range, or config default if null or negative
-						int discoveryRange = graveyard.getDiscoveryRange();
-						if (discoveryRange < 0) {
-							discoveryRange = plugin.getConfig().getInt("discovery-range");
+					// check if player is within discovery range of graveyard
+					if (graveyardLocation.distanceSquared(playerLocation) < Math.pow(discoveryRange, 2)) {
+
+						// create discovery record
+						Discovery record = new Discovery(graveyard.getSearchKey(), player.getUniqueId());
+
+						// set graveyard as discovered for player
+						plugin.dataStore.insertDiscovery(record);
+
+						// get discovery title
+						if (plugin.getConfig().getBoolean("titles-enabled")) {
+							if (plugin.messageBuilder.isEnabled(MessageId.DEFAULT_DISCOVERY_TITLE)) {
+
+								// get graveyard name with color codes translated
+								String graveyardName = ChatColor.translateAlternateColorCodes('&', graveyard.getDisplayName());
+
+								// get custom discovery message
+								String discoveryTitle = graveyard.getDiscoveryMessage();
+
+								// if no custom discovery message, get default discovery title from language file
+								if (discoveryTitle == null || discoveryTitle.isEmpty()) {
+
+									discoveryTitle = plugin.messageBuilder.compose(player, MessageId.DEFAULT_DISCOVERY_TITLE)
+											.setMacro(Macro.GRAVEYARD, graveyard)
+											.setMacro(Macro.LOCATION, graveyardLocation)
+											.draft();
+								}
+								if (!discoveryTitle.isEmpty()) {
+									player.sendTitle(graveyardName, discoveryTitle, 10, 70, 20);
+								}
+							}
 						}
 
-						// check if player is within discovery range of graveyard
-						if (graveyardLocation.distanceSquared(playerLocation) < Math.pow(discoveryRange, 2)) {
-
-							// create discovery record
-							Discovery record = new Discovery(graveyard.getSearchKey(), player.getUniqueId());
-
-							// set graveyard as discovered for player
-							plugin.dataStore.insertDiscovery(record);
-
-							// send discovery message to player
-							if (graveyard.getDiscoveryMessage() != null
-									&& !graveyard.getDiscoveryMessage().isEmpty()) {
-								player.sendMessage(ChatColor
-										.translateAlternateColorCodes('&', graveyard.getDiscoveryMessage()));
-							}
-							else {
-								plugin.messageBuilder.build(player, MessageId.DEFAULT_DISCOVERY)
-										.setMacro(Macro.GRAVEYARD, graveyard)
-										.setMacro(Macro.LOCATION, graveyardLocation)
-										.send();
-							}
-
-							// call discovery event
-							DiscoveryEvent event = new DiscoveryEvent(player, graveyard);
-							plugin.getServer().getPluginManager().callEvent(event);
-
-							// play discovery sound
-							plugin.soundConfig.playSound(player, SoundId.ACTION_DISCOVERY);
+						// send discovery message to player
+						if (graveyard.getDiscoveryMessage() != null && !graveyard.getDiscoveryMessage().isEmpty()) {
+							player.sendMessage(ChatColor.translateAlternateColorCodes('&', graveyard.getDiscoveryMessage()));
 						}
+						else {
+							plugin.messageBuilder.compose(player, MessageId.DEFAULT_DISCOVERY)
+									.setMacro(Macro.GRAVEYARD, graveyard)
+									.setMacro(Macro.LOCATION, graveyardLocation)
+									.send();
+						}
+
+						// call discovery event
+						DiscoveryEvent event = new DiscoveryEvent(player, graveyard);
+						plugin.getServer().getPluginManager().callEvent(event);
+
+						// play discovery sound
+						plugin.soundConfig.playSound(player, SoundId.ACTION_DISCOVERY);
 					}
 				}
 			}

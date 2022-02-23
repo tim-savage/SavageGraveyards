@@ -182,6 +182,25 @@ public final class PlayerEventListener implements Listener {
 		if (graveyard != null && graveyard.getLocation() != null) {
 			event.setRespawnLocation(graveyard.getLocation());
 
+			if (plugin.getConfig().getBoolean("titles-enabled")) {
+
+				// if graveyard has custom respawn message, display title with custom message
+				if (graveyard.getRespawnMessage() != null && !graveyard.getRespawnMessage().isEmpty()) {
+					String graveyardName = ChatColor.translateAlternateColorCodes('&', graveyard.getDisplayName());
+					String respawnMessage = ChatColor.translateAlternateColorCodes('&', graveyard.getRespawnMessage());
+					player.sendTitle(graveyardName, respawnMessage, 10, 70, 20);
+				}
+				// else get default respawn title
+				else if (plugin.messageBuilder.isEnabled(MessageId.DEFAULT_RESPAWN_TITLE)) {
+					String graveyardName = ChatColor.translateAlternateColorCodes('&', graveyard.getDisplayName());
+					String respawnMessage = plugin.messageBuilder.compose(player, MessageId.DEFAULT_RESPAWN_TITLE)
+							.setMacro(Macro.GRAVEYARD, graveyard)
+							.setMacro(Macro.LOCATION, graveyard.getLocation())
+							.draft();
+					player.sendTitle(graveyardName, respawnMessage, 10, 70, 20);
+				}
+			}
+
 			// if graveyard has custom respawn message, send custom message to player
 			if (graveyard.getRespawnMessage() != null && !graveyard.getRespawnMessage().isEmpty()) {
 				player.sendMessage(ChatColor.translateAlternateColorCodes('&',
@@ -189,14 +208,14 @@ public final class PlayerEventListener implements Listener {
 			}
 			// else send default respawn message
 			else {
-				plugin.messageBuilder.build(player, MessageId.DEFAULT_RESPAWN)
+				plugin.messageBuilder.compose(player, MessageId.DEFAULT_RESPAWN)
 						.setMacro(Macro.GRAVEYARD, graveyard)
 						.setMacro(Macro.LOCATION, graveyard.getLocation())
 						.send();
 			}
 
 			// put player in safety cooldown map
-			plugin.safetyManager.putPlayer(player, graveyard.getSafetyTime());
+			plugin.safetyManager.putPlayer(player, graveyard);
 		}
 	}
 

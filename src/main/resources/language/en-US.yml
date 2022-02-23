@@ -215,70 +215,86 @@ MESSAGES:
     enabled: true
 
   COMMAND_HELP_TELEPORT:
-    string: '&eTeleport player to graveyard location.'
+    string: "&eTeleport player to graveyard location."
     enabled: true
 
   COMMAND_HELP_INVALID:
-    string: '&3[Graveyards]&c That is not a valid command!'
+    string: "&3[Graveyards]&c That is not a valid command!"
     enabled: true
 
   COMMAND_HELP_USAGE_HEADER:
-    string: '&eCommand usage:'
+    string: "&eCommand usage:"
     enabled: true
 
 
   DEFAULT_DISCOVERY:
-    string: '&3You have discovered %GRAVEYARD%!'
+    string: "&3You have discovered %GRAVEYARD%!"
+    enabled: false
+
+  DEFAULT_DISCOVERY_TITLE:
+    string: "&3Graveyard discovered!"
     enabled: true
 
   DEFAULT_RESPAWN:
-    string: '&3You''ve been resurrected at %GRAVEYARD%!'
+    string: "&3You've been resurrected at %GRAVEYARD%!"
     enabled: true
 
+  # Note: this title will not show if SAFETY_COOLDOWN_START_TITLE is also enabled
+  DEFAULT_RESPAWN_TITLE:
+    string: "&3You've been resurrected!"
+    enabled: true
 
   SAFETY_COOLDOWN_START:
-    string: '&3You are protected from monsters for %DURATION%.'
+    string: "&3You are protected from monsters for %DURATION%."
+    enabled: true
+
+  SAFETY_COOLDOWN_START_TITLE:
+    string: "&3Protected for %DURATION%."
     enabled: true
 
   SAFETY_COOLDOWN_END:
-    string: '&3You are no longer protected from monsters!'
+    string: "&3You are no longer protected from monsters!"
+    enabled: false
+
+  SAFETY_COOLDOWN_END_TITLE:
+    string: "&3Monster protection expired!"
     enabled: true
 
 
   PERMISSION_DENIED_CLOSEST:
-    string: '&cYou do not have permission to view the closest graveyard location!'
+    string: "&cYou do not have permission to view the closest graveyard location!"
     enabled: true
 
   PERMISSION_DENIED_CREATE:
-    string: '&cYou do not have permission to create graveyard locations!'
+    string: "&cYou do not have permission to create graveyard locations!"
     enabled: true
 
   PERMISSION_DENIED_DELETE:
-    string: '&cYou do not have permission to delete graveyards!'
+    string: "&cYou do not have permission to delete graveyards!"
     enabled: true
 
   PERMISSION_DENIED_HELP:
-    string: '&cYou do not have permission to view Graveyard help!'
+    string: "&cYou do not have permission to view Graveyard help!"
     enabled: true
 
   PERMISSION_DENIED_LIST:
-    string: '&cYou do not have permission to list graveyards!'
+    string: "&cYou do not have permission to list graveyards!"
     enabled: true
 
   PERMISSION_DENIED_OVERWRITE:
-    string: '&cYou do not have permission to overwrite graveyard locations!'
+    string: "&cYou do not have permission to overwrite graveyard locations!"
     enabled: true
 
   PERMISSION_DENIED_RELOAD:
-    string: '&cYou do not have permission to reload the configuration!'
+    string: "&cYou do not have permission to reload the configuration!"
     enabled: true
 
   PERMISSION_DENIED_SET_LOCATION:
-    string: '&cYou do not have permission to set graveyard locations!'
+    string: "&cYou do not have permission to set graveyard locations!"
     enabled: true
 
   PERMISSION_DENIED_SET_NAME:
-    string: '&cYou do not have permission to set graveyard display names!'
+    string: "&cYou do not have permission to set graveyard display names!"
     enabled: true
 
   PERMISSION_DENIED_SET_ENABLED:

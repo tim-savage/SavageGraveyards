@@ -41,5 +41,8 @@ list-page-size: 5
 # this should only be changed if you are experiencing a conflict with another plugin
 respawn-priority: NORMAL
 
+# display titles for discovery and respawn rather than chat message
+titles-enabled: true
+
 # play sound effects
 sound-effects: true
