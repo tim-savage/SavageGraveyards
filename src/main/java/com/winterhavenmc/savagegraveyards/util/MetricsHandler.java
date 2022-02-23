@@ -19,6 +19,7 @@ package com.winterhavenmc.savagegraveyards.util;
 
 import com.winterhavenmc.savagegraveyards.PluginMain;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
 import org.bstats.charts.SingleLineChart;
 
 public class MetricsHandler {
@@ -28,8 +29,11 @@ public class MetricsHandler {
 
 		Metrics metrics = new Metrics(plugin, 13924);
 
-		// get number of currently deployed chests
-		metrics.addCustomChart(new SingleLineChart("graveyard_count", () -> plugin.dataStore.selectGraveyardCount()));
+		// get total number of graveyards as single line chart
+		metrics.addCustomChart(new SingleLineChart("total_graveyards", () -> plugin.dataStore.selectGraveyardCount()));
+
+		// total number of graveyards as pie chart
+		metrics.addCustomChart(new SimplePie("graveyard_count", () -> String.valueOf(plugin.dataStore.selectGraveyardCount())));
 
 	}
 
