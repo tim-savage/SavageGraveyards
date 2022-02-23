@@ -79,7 +79,7 @@ public final class PluginMain extends JavaPlugin {
 
 		// run discovery task
 		discoveryTask = new DiscoveryTask(this)
-			.runTaskTimer(this, 0, getConfig().getInt("discovery-interval"));
+			.runTaskTimer(this, 0L, getConfig().getLong("discovery-interval"));
 
 		// bStats
 		new MetricsHandler(this);
