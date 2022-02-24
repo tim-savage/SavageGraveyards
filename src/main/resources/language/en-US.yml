@@ -257,7 +257,7 @@ MESSAGES:
     enabled: false
 
   SAFETY_COOLDOWN_END_TITLE:
-    string: "&3Monster protection expired!"
+    string: "&3Protection expired!"
     enabled: true
 
 
