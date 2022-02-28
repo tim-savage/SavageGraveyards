@@ -250,11 +250,11 @@ MESSAGES:
 
   SAFETY_COOLDOWN_START_TITLE:
     string: "&3Protected for %DURATION%."
-    enabled: true
+    enabled: false
 
   SAFETY_COOLDOWN_END:
     string: "&3You are no longer protected from monsters!"
-    enabled: true
+    enabled: false
 
   SAFETY_COOLDOWN_END_TITLE:
     string: "&3Mob protection expired!"
