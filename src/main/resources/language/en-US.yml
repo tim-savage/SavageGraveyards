@@ -241,7 +241,7 @@ MESSAGES:
 
   # Note: this title will not show if SAFETY_COOLDOWN_START_TITLE is also enabled
   DEFAULT_RESPAWN_TITLE:
-    string: "&3You've been resurrected!"
+    string: "" # blank string displays graveyard name only
     enabled: true
 
   SAFETY_COOLDOWN_START:
@@ -254,7 +254,7 @@ MESSAGES:
 
   SAFETY_COOLDOWN_END:
     string: "&3You are no longer protected from monsters!"
-    enabled: false
+    enabled: true
 
   SAFETY_COOLDOWN_END_TITLE:
     string: "&3Mob protection expired!"
