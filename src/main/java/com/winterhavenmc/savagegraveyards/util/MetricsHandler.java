@@ -35,6 +35,27 @@ public class MetricsHandler {
 		// total number of graveyards as pie chart
 		metrics.addCustomChart(new SimplePie("graveyard_count", () -> String.valueOf(plugin.dataStore.selectGraveyardCount())));
 
+		// pie chart of default enabled
+		metrics.addCustomChart(new SimplePie("default_enabled", () -> plugin.getConfig().getString("default-enabled")));
+
+		// pie chart of default hidden
+		metrics.addCustomChart(new SimplePie("default_hidden", () -> plugin.getConfig().getString("default-hidden")));
+
+		// pie chart of safety time
+		metrics.addCustomChart(new SimplePie("safety_time", () -> plugin.getConfig().getString("safety-time")));
+
+		// pie chart of discovery range
+		metrics.addCustomChart(new SimplePie("discovery_range", () -> plugin.getConfig().getString("discovery-range")));
+
+		// pie chart of discovery interval
+		metrics.addCustomChart(new SimplePie("discovery_interval", () -> plugin.getConfig().getString("discovery-interval")));
+
+		// pie chart of respawn listener priority
+		metrics.addCustomChart(new SimplePie("respawn_listener_priority", () -> plugin.getConfig().getString("respawn-priority")));
+
+		// pie chart of titles enabled
+		metrics.addCustomChart(new SimplePie("titles_enabled", () -> plugin.getConfig().getString("titles-enabled")));
+
 	}
 
 }

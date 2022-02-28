@@ -31,7 +31,7 @@ import java.util.Objects;
  * Status command implementation<br>
  * Display plugin settings
  */
-final class StatusCommand extends SubcommandAbstract implements Subcommand {
+final class StatusSubcommand extends SubcommandAbstract implements Subcommand {
 
 	private final PluginMain plugin;
 
@@ -40,7 +40,7 @@ final class StatusCommand extends SubcommandAbstract implements Subcommand {
 	 * Class constructor
 	 * @param plugin reference to plugin main class instance
 	 */
-	StatusCommand(final PluginMain plugin) {
+	StatusSubcommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "status";
 		this.usageString = "/graveyard status";

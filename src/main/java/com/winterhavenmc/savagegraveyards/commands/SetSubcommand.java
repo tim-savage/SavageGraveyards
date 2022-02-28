@@ -36,7 +36,7 @@ import static com.winterhavenmc.savagegraveyards.util.BukkitTime.SECONDS;
  * Set command implementation<br>
  * changes graveyard settings
  */
-final class SetCommand extends SubcommandAbstract implements Subcommand {
+final class SetSubcommand extends SubcommandAbstract implements Subcommand {
 
 	private final PluginMain plugin;
 
@@ -51,7 +51,7 @@ final class SetCommand extends SubcommandAbstract implements Subcommand {
 	 * Class constructor
 	 * @param plugin reference to plugin main class instance
 	 */
-	SetCommand(final PluginMain plugin) {
+	SetSubcommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "set";
 		this.usageString = "/graveyard set <graveyard> <attribute> <value>";

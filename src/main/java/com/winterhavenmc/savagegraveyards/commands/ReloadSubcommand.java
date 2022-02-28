@@ -31,7 +31,7 @@ import java.util.Objects;
  * Reload command implementation<br>
  * reloads plugin configuration
  */
-final class ReloadCommand extends SubcommandAbstract implements Subcommand {
+final class ReloadSubcommand extends SubcommandAbstract implements Subcommand {
 
 	private final PluginMain plugin;
 
@@ -40,7 +40,7 @@ final class ReloadCommand extends SubcommandAbstract implements Subcommand {
 	 * Class constructor
 	 * @param plugin reference to plugin main class instance
 	 */
-	ReloadCommand(final PluginMain plugin) {
+	ReloadSubcommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "reload";
 		this.usageString = "/graveyard reload";

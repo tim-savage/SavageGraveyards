@@ -35,7 +35,7 @@ import java.util.Objects;
  * Show command implementation<br>
  * displays graveyard settings
  */
-final class ShowCommand extends SubcommandAbstract implements Subcommand {
+final class ShowSubcommand extends SubcommandAbstract implements Subcommand {
 
 	private final PluginMain plugin;
 
@@ -44,7 +44,7 @@ final class ShowCommand extends SubcommandAbstract implements Subcommand {
 	 * Class constructor
 	 * @param plugin reference to plugin main class instance
 	 */
-	ShowCommand(final PluginMain plugin) {
+	ShowSubcommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "show";
 		this.usageString = "/graveyard show <graveyard>";

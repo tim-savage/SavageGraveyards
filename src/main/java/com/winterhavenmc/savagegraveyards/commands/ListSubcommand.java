@@ -32,7 +32,7 @@ import java.util.*;
  * List command implementation<br>
  * Displays listing of graveyards
  */
-final class ListCommand extends SubcommandAbstract implements Subcommand {
+final class ListSubcommand extends SubcommandAbstract implements Subcommand {
 
 	private final PluginMain plugin;
 
@@ -41,7 +41,7 @@ final class ListCommand extends SubcommandAbstract implements Subcommand {
 	 * Class constructor
 	 * @param plugin reference to plugin main class instance
 	 */
-	ListCommand(final PluginMain plugin) {
+	ListSubcommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "list";
 		this.usageString = "/graveyard list [page]";

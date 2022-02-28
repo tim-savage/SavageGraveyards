@@ -60,7 +60,7 @@ public final class CommandManager implements TabExecutor {
 		}
 
 		// register help command
-		subcommandRegistry.register(new HelpCommand(plugin, subcommandRegistry));
+		subcommandRegistry.register(new HelpSubcommand(plugin, subcommandRegistry));
 	}
 
 

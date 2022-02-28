@@ -33,7 +33,7 @@ import java.util.Objects;
  * Help command implementation<br>
  * displays help and usage messages for plugin commands
  */
-final class HelpCommand extends SubcommandAbstract implements Subcommand {
+final class HelpSubcommand extends SubcommandAbstract implements Subcommand {
 
 	private final PluginMain plugin;
 	private final SubcommandRegistry subcommandRegistry;
@@ -43,7 +43,7 @@ final class HelpCommand extends SubcommandAbstract implements Subcommand {
 	 * Class constructor
 	 * @param plugin reference to plugin main class instance
 	 */
-	HelpCommand(final PluginMain plugin, final SubcommandRegistry subcommandRegistry) {
+	HelpSubcommand(final PluginMain plugin, final SubcommandRegistry subcommandRegistry) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.subcommandRegistry = Objects.requireNonNull(subcommandRegistry);
 		this.name = "help";

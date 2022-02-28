@@ -34,7 +34,7 @@ import java.util.*;
  * Create command implementation<br>
  * Creates new graveyard at player location with given name
  */
-final class CreateCommand extends SubcommandAbstract implements Subcommand {
+final class CreateSubcommand extends SubcommandAbstract implements Subcommand {
 
 	private final PluginMain plugin;
 
@@ -43,7 +43,7 @@ final class CreateCommand extends SubcommandAbstract implements Subcommand {
 	 * Class constructor
 	 * @param plugin reference to plugin main class instance
 	 */
-	CreateCommand(final PluginMain plugin) {
+	CreateSubcommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "create";
 		this.usageString = "/graveyard create <graveyard name>";

@@ -34,7 +34,7 @@ import java.util.Objects;
  * Delete command implementation<br>
  * Removes graveyard record from datastore
  */
-final class DeleteCommand extends SubcommandAbstract implements Subcommand {
+final class DeleteSubcommand extends SubcommandAbstract implements Subcommand {
 
 	private final PluginMain plugin;
 
@@ -43,7 +43,7 @@ final class DeleteCommand extends SubcommandAbstract implements Subcommand {
 	 * Class constructor
 	 * @param plugin reference to plugin main class instance
 	 */
-	DeleteCommand(final PluginMain plugin) {
+	DeleteSubcommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "delete";
 		this.usageString = "/graveyard delete <graveyard name>";

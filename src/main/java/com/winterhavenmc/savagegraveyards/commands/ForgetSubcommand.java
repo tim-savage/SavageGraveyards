@@ -34,7 +34,7 @@ import java.util.*;
  * Forget command implementation<br>
  * Removes graveyard discovery record for player
  */
-final class ForgetCommand extends SubcommandAbstract implements Subcommand {
+final class ForgetSubcommand extends SubcommandAbstract implements Subcommand {
 
 	private final PluginMain plugin;
 
@@ -43,7 +43,7 @@ final class ForgetCommand extends SubcommandAbstract implements Subcommand {
 	 * Class constructor
 	 * @param plugin reference to plugin main class instance
 	 */
-	ForgetCommand(final PluginMain plugin) {
+	ForgetSubcommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "forget";
 		this.usageString = "/graveyard forget <player> <graveyard name>";
