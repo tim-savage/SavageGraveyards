@@ -257,7 +257,7 @@ MESSAGES:
     enabled: false
 
   SAFETY_COOLDOWN_END_TITLE:
-    string: "&3Protection expired!"
+    string: "&3Mob protection expired!"
     enabled: true
 
 
