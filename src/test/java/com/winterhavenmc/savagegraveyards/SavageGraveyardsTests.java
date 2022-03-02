@@ -93,8 +93,8 @@ public class SavageGraveyardsTests {
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class ConfigTests {
 
-        Configuration config = plugin.getConfig();
-        Set<String> enumConfigKeyStrings = new HashSet<>();
+        final Configuration config = plugin.getConfig();
+        final Set<String> enumConfigKeyStrings = new HashSet<>();
 
         public ConfigTests() {
             for (ConfigSetting configSetting : ConfigSetting.values()) {
@@ -144,7 +144,7 @@ public class SavageGraveyardsTests {
     class SoundTests {
 
         // collection of enum sound name strings
-        Collection<String> enumSoundNames = new HashSet<>();
+        final Collection<String> enumSoundNames = new HashSet<>();
 
         // class constructor
         SoundTests() {
@@ -160,8 +160,7 @@ public class SavageGraveyardsTests {
             Assertions.assertNotNull(plugin.soundConfig);
         }
 
-        @SuppressWarnings("unused")
-        Collection<String> GetConfigFileKeys() {
+        final Collection<String> GetConfigFileKeys() {
             return plugin.soundConfig.getSoundConfigKeys();
         }
 
