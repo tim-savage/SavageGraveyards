@@ -31,7 +31,6 @@ public class PluginMain extends JavaPlugin {
 	public DataStore dataStore;
 	public WorldManager worldManager;
 	public SoundConfiguration soundConfig;
-	public SafetyManager safetyManager;
 	private BukkitTask discoveryTask;
 
 
@@ -75,7 +74,7 @@ public class PluginMain extends JavaPlugin {
 		dataStore = DataStore.connect(this);
 
 		// instantiate safety manager
-		safetyManager = new SafetyManager(this);
+		new SafetyManager(this);
 
 		// instantiate player event listener
 		new PlayerEventListener(this);
