@@ -20,7 +20,6 @@ package com.winterhavenmc.savagegraveyards.commands;
 import com.winterhavenmc.savagegraveyards.messages.MessageId;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.permissions.Permission;
 
 import java.util.*;
 

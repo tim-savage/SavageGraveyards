@@ -20,10 +20,9 @@ package com.winterhavenmc.savagegraveyards.util;
 import com.winterhavenmc.savagegraveyards.PluginMain;
 import com.winterhavenmc.savagegraveyards.messages.Macro;
 import com.winterhavenmc.savagegraveyards.messages.MessageId;
-
 import com.winterhavenmc.savagegraveyards.storage.Graveyard;
 import com.winterhavenmc.savagegraveyards.tasks.SafetyTask;
-import org.bukkit.ChatColor;
+
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
