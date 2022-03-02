@@ -140,16 +140,13 @@ final class TeleportCommand extends SubcommandAbstract implements Subcommand {
 		// try to teleport player to graveyard location
 		if (player.teleport(destination, PlayerTeleportEvent.TeleportCause.PLUGIN)) {
 
-			// display graveyard name as title
-			if (plugin.getConfig().getBoolean("titles-enabled")) {
-				player.sendTitle(graveyard.getDisplayName(), "", 10, 70, 20);
-			}
-
 			// send successful teleport message
 			plugin.messageBuilder.build(sender, MessageId.COMMAND_SUCCESS_TELEPORT)
 					.setMacro(Macro.GRAVEYARD, graveyard)
 					.setMacro(Macro.LOCATION, graveyard.getLocation())
 					.send();
+
+			// play success sound
 			plugin.soundConfig.playSound(player, SoundId.TELEPORT_SUCCESS_ARRIVAL);
 		}
 		else {

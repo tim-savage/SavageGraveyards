@@ -35,13 +35,10 @@ public class SafetyTask extends BukkitRunnable {
 
 	public void run() {
 
+		// remove player from safety cooldown map
 		plugin.safetyManager.removePlayer(player);
-		if (plugin.getConfig().getBoolean("titles-enabled")) {
-			if (plugin.messageBuilder.isEnabled(MessageId.SAFETY_COOLDOWN_END_TITLE)) {
-				String safetyMessage = plugin.messageBuilder.compose(player, MessageId.SAFETY_COOLDOWN_END_TITLE).draft();
-				player.sendTitle(" ", safetyMessage, 10, 70, 20);
-			}
-		}
+
+		// send player message
 		plugin.messageBuilder.compose(player, MessageId.SAFETY_COOLDOWN_END).send();
 	}
 

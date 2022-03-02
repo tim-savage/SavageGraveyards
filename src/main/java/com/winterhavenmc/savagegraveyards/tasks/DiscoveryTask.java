@@ -97,40 +97,12 @@ public final class DiscoveryTask extends BukkitRunnable {
 						// set graveyard as discovered for player
 						plugin.dataStore.insertDiscovery(record);
 
-						// get discovery title
-						if (plugin.getConfig().getBoolean("titles-enabled")) {
-							if (plugin.messageBuilder.isEnabled(MessageId.DEFAULT_DISCOVERY_TITLE)) {
-
-								// get graveyard name with color codes translated
-								String graveyardName = ChatColor.translateAlternateColorCodes('&', graveyard.getDisplayName());
-
-								// get custom discovery message
-								String discoveryTitle = graveyard.getDiscoveryMessage();
-
-								// if no custom discovery message, get default discovery title from language file
-								if (discoveryTitle == null || discoveryTitle.isEmpty()) {
-
-									discoveryTitle = plugin.messageBuilder.compose(player, MessageId.DEFAULT_DISCOVERY_TITLE)
-											.setMacro(Macro.GRAVEYARD, graveyard)
-											.setMacro(Macro.LOCATION, graveyardLocation)
-											.draft();
-								}
-								if (!discoveryTitle.isEmpty()) {
-									player.sendTitle(graveyardName, discoveryTitle, 10, 70, 20);
-								}
-							}
-						}
-
-						// send discovery message to player
-						if (graveyard.getDiscoveryMessage() != null && !graveyard.getDiscoveryMessage().isEmpty()) {
-							player.sendMessage(ChatColor.translateAlternateColorCodes('&', graveyard.getDiscoveryMessage()));
-						}
-						else {
-							plugin.messageBuilder.compose(player, MessageId.DEFAULT_DISCOVERY)
-									.setMacro(Macro.GRAVEYARD, graveyard)
-									.setMacro(Macro.LOCATION, graveyardLocation)
-									.send();
-						}
+						// send player message
+						plugin.messageBuilder.compose(player, MessageId.DEFAULT_DISCOVERY)
+								.setAltMessage(graveyard.getDiscoveryMessage())
+								.setMacro(Macro.GRAVEYARD, graveyard)
+								.setMacro(Macro.LOCATION, graveyardLocation)
+								.send();
 
 						// call discovery event
 						DiscoveryEvent event = new DiscoveryEvent(player, graveyard);

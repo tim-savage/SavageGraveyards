@@ -82,17 +82,9 @@ public final class SafetyManager {
 			return;
 		}
 
-		if (plugin.getConfig().getBoolean("titles-enabled")) {
-			if (plugin.messageBuilder.isEnabled(MessageId.SAFETY_COOLDOWN_START_TITLE)) {
-				String graveyardName = ChatColor.translateAlternateColorCodes('&', graveyard.getDisplayName());
-				String safetyMessage = plugin.messageBuilder.compose(player, MessageId.SAFETY_COOLDOWN_START_TITLE)
-						.setMacro(Macro.DURATION, SECONDS.toMillis((safetyTime)))
-						.draft();
-				player.sendTitle(graveyardName, safetyMessage, 10, 150, 20);
-			}
-		}
-
+		// send player message
 		plugin.messageBuilder.compose(player, MessageId.SAFETY_COOLDOWN_START)
+				.setMacro(Macro.GRAVEYARD, graveyard)
 				.setMacro(Macro.DURATION, SECONDS.toMillis(safetyTime))
 				.send();
 

@@ -117,7 +117,8 @@ MESSAGES:
     enabled: true
 
   COMMAND_SUCCESS_TELEPORT:
-    string: '&3[Graveyards]&b Successfully teleported to %GRAVEYARD%.'
+    message: '&3[Graveyards]&b Successfully teleported to %GRAVEYARD%.'
+    title: "%GRAVEYARD%"
     enabled: true
 
 
@@ -228,36 +229,24 @@ MESSAGES:
 
 
   DEFAULT_DISCOVERY:
-    string: "&3You have discovered %GRAVEYARD%!"
-    enabled: false
-
-  DEFAULT_DISCOVERY_TITLE:
-    string: "&3Graveyard discovered!"
+    #message: "You have discovered %GRAVEYARD%!"
+    title: "%GRAVEYARD%"
+    subtitle: "&3%GRAVEYARD% discovered!"
     enabled: true
 
+  # Note: the title/subtitle of this message will be obscured if SAFETY_COOLDOWN_START title or subtitle is also used
   DEFAULT_RESPAWN:
-    string: "&3You've been resurrected at %GRAVEYARD%!"
-    enabled: true
-
-  # Note: this title will not show if SAFETY_COOLDOWN_START_TITLE is also enabled
-  DEFAULT_RESPAWN_TITLE:
-    string: "" # blank string displays graveyard name only
+    message: "&3You've been resurrected at %GRAVEYARD%!"
+    title: "%GRAVEYARD%"
     enabled: true
 
   SAFETY_COOLDOWN_START:
-    string: "&3You are protected from monsters for %DURATION%."
+    message: "&3You are protected from monsters for %DURATION%."
     enabled: true
 
-  SAFETY_COOLDOWN_START_TITLE:
-    string: "&3Protected for %DURATION%."
-    enabled: false
-
   SAFETY_COOLDOWN_END:
-    string: "&3You are no longer protected from monsters!"
-    enabled: false
-
-  SAFETY_COOLDOWN_END_TITLE:
-    string: "&3Mob protection expired!"
+    #message: "&3You are no longer protected from monsters!"
+    subtitle: "&3Mob protection expired!"
     enabled: true
 
 
