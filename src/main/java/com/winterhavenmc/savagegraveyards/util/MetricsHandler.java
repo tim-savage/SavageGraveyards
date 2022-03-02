@@ -53,6 +53,9 @@ public class MetricsHandler {
 		// pie chart of respawn listener priority
 		metrics.addCustomChart(new SimplePie("respawn_listener_priority", () -> plugin.getConfig().getString("respawn-priority")));
 
+		// pie chart of sound effects enabled
+		metrics.addCustomChart(new SimplePie("sound_effects_enabled", () -> plugin.getConfig().getString("sound-effects")));
+
 		// pie chart of titles enabled
 		metrics.addCustomChart(new SimplePie("titles_enabled", () -> plugin.getConfig().getString("titles-enabled")));
 
