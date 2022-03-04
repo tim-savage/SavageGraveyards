@@ -59,6 +59,9 @@ public class MetricsHandler {
 		// pie chart of titles enabled
 		metrics.addCustomChart(new SimplePie("titles_enabled", () -> plugin.getConfig().getString("titles-enabled")));
 
+		// pie chart of configured language
+		metrics.addCustomChart(new SimplePie("language", () -> plugin.getConfig().getString("language")));
+
 	}
 
 }
