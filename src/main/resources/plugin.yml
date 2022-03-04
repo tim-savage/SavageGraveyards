@@ -1,7 +1,7 @@
-name: ${project.name}
+name: '${project.name}'
 main: com.winterhavenmc.savagegraveyards.PluginMain
-author: ${project.author}
-version: ${project.version}
+author: '${project.author}'
+version: '${project.version}'
 softdepend: [Multiverse-Core]
 api-version: 1.16
 
