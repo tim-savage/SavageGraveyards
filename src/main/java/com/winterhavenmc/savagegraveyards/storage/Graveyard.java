@@ -114,6 +114,7 @@ public final class Graveyard {
 		private float yaw = 0;
 		private float pitch = 0;
 
+
 		/**
 		 * Builder class constructor
 		 */
@@ -124,7 +125,7 @@ public final class Graveyard {
 
 
 		/**
-		 * Builder class constructor
+		 * Builder class copy constructor
 		 *
 		 * @param graveyard existing graveyard object from which all values are copied
 		 */
