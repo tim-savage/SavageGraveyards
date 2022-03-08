@@ -31,8 +31,12 @@ import com.winterhavenmc.util.soundconfig.SoundConfiguration;
 import com.winterhavenmc.util.soundconfig.YamlSoundConfiguration;
 import com.winterhavenmc.util.worldmanager.WorldManager;
 
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.JavaPluginLoader;
 import org.bukkit.scheduler.BukkitTask;
+
+import java.io.File;
 
 
 /**
@@ -40,7 +44,7 @@ import org.bukkit.scheduler.BukkitTask;
  * will respawn on death. The nearest graveyard location that is valid
  * for the player will be chosen at the time of death.
  */
-public final class PluginMain extends JavaPlugin {
+public class PluginMain extends JavaPlugin {
 
 	public MessageBuilder<MessageId, Macro> messageBuilder;
 	public DataStore dataStore;
@@ -48,6 +52,24 @@ public final class PluginMain extends JavaPlugin {
 	public SoundConfiguration soundConfig;
 	public SafetyManager safetyManager;
 	private BukkitTask discoveryTask;
+
+
+	/**
+	 * Class constructor for testing
+	 */
+	@SuppressWarnings("unused")
+	public PluginMain() {
+		super();
+	}
+
+
+	/**
+	 * Class constructor for testing
+	 */
+	@SuppressWarnings("unused")
+	protected PluginMain(final JavaPluginLoader loader, final PluginDescriptionFile descriptionFile, final File dataFolder, final File file) {
+		super(loader, descriptionFile, dataFolder, file);
+	}
 
 
 	@Override
