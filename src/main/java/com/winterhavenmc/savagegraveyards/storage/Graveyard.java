@@ -95,13 +95,11 @@ public final class Graveyard {
 	 */
 	public final static class Builder {
 
-		private final JavaPlugin plugin = JavaPlugin.getProvidingPlugin(this.getClass());
-
 		private int primaryKey;
 		private String displayName;
 		private String searchKey;
-		private boolean enabled = plugin.getConfig().getBoolean("default-enabled");
-		private boolean hidden = plugin.getConfig().getBoolean("default-hidden");
+		private boolean enabled;
+		private boolean hidden;
 		private int discoveryRange = CONFIG_DEFAULT;
 		private String discoveryMessage = "";
 		private String respawnMessage = "";
@@ -119,7 +117,10 @@ public final class Graveyard {
 		/**
 		 * Builder class constructor
 		 */
-		public Builder() { }
+		public Builder(final JavaPlugin plugin) {
+			this.enabled = plugin.getConfig().getBoolean("default-enabled");
+			this.hidden = plugin.getConfig().getBoolean("default-hidden");
+		}
 
 
 		/**

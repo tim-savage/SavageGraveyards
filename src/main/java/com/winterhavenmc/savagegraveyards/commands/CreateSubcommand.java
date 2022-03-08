@@ -93,7 +93,7 @@ final class CreateSubcommand extends SubcommandAbstract implements Subcommand {
 		if (existingGraveyard == null) {
 
 			// create new graveyard object with passed display name and player location
-			Graveyard newGraveyard = new Graveyard.Builder()
+			Graveyard newGraveyard = new Graveyard.Builder(plugin)
 					.displayName(displayName)
 					.location(location)
 					.build();
@@ -118,7 +118,7 @@ final class CreateSubcommand extends SubcommandAbstract implements Subcommand {
 		if (player.hasPermission("graveyard.overwrite")) {
 
 			// create new graveyard object with passed display name and player location and existing primary key
-			Graveyard newGraveyard = new Graveyard.Builder()
+			Graveyard newGraveyard = new Graveyard.Builder(plugin)
 					.primaryKey(existingGraveyard.getPrimaryKey())
 					.displayName(displayName)
 					.location(location)

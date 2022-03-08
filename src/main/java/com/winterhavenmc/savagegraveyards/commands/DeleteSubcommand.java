@@ -94,7 +94,7 @@ final class DeleteSubcommand extends SubcommandAbstract implements Subcommand {
 		if (graveyard == null) {
 
 			// create dummy graveyard to send to message manager
-			Graveyard dummyGraveyard = new Graveyard.Builder().displayName(displayName).build();
+			Graveyard dummyGraveyard = new Graveyard.Builder(plugin).displayName(displayName).build();
 
 			// send message
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_NO_RECORD)

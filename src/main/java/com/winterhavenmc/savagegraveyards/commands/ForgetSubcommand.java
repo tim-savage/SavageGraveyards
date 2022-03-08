@@ -158,7 +158,7 @@ final class ForgetSubcommand extends SubcommandAbstract implements Subcommand {
 		if (graveyard == null) {
 
 			// create dummy graveyard for message
-			Graveyard dummyGraveyard = new Graveyard.Builder().displayName(searchKey).build();
+			Graveyard dummyGraveyard = new Graveyard.Builder(plugin).displayName(searchKey).build();
 
 			// send graveyard not found message
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_FORGET_INVALID_GRAVEYARD)

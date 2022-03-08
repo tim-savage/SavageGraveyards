@@ -369,7 +369,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 				}
 
 				// build graveyard object
-				Graveyard graveyard = new Graveyard.Builder()
+				Graveyard graveyard = new Graveyard.Builder(plugin)
 							.primaryKey(primaryKey)
 							.searchKey(rs.getString("SearchKey"))
 							.displayName(rs.getString("DisplayName"))
@@ -461,7 +461,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 				}
 
 				// create graveyard object
-				graveyard = new Graveyard.Builder()
+				graveyard = new Graveyard.Builder(plugin)
 						.primaryKey(rs.getInt("Key"))
 						.displayName(rs.getString("displayName"))
 						.searchKey(rs.getString("searchKey"))
@@ -544,7 +544,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 					continue;
 				}
 
-				Graveyard graveyard = new Graveyard.Builder()
+				Graveyard graveyard = new Graveyard.Builder(plugin)
 						.primaryKey(rs.getInt("Key"))
 						.searchKey(rs.getString("SearchKey"))
 						.displayName(rs.getString("DisplayName"))
@@ -683,7 +683,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 					continue;
 				}
 
-				Graveyard graveyard = new Graveyard.Builder()
+				Graveyard graveyard = new Graveyard.Builder(plugin)
 						.primaryKey(rs.getInt("Key"))
 						.searchKey(rs.getString("SearchKey"))
 						.displayName(rs.getString("DisplayName"))
