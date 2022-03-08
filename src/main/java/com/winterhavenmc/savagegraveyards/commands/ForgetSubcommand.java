@@ -115,14 +115,14 @@ final class ForgetSubcommand extends SubcommandAbstract implements Subcommand {
 
 		// check for permission
 		if (!sender.hasPermission(permission)) {
-			plugin.messageBuilder.build(sender, MessageId.PERMISSION_DENIED_FORGET).send();
+			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_FORGET).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check for minimum arguments
 		if (args.size() < minArgs) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER).send();
 			displayUsage(sender);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
@@ -144,7 +144,7 @@ final class ForgetSubcommand extends SubcommandAbstract implements Subcommand {
 
 		// if player not found, send message and return
 		if (player == null) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_FORGET_INVALID_PLAYER).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_FORGET_INVALID_PLAYER).send();
 			return true;
 		}
 
@@ -161,7 +161,7 @@ final class ForgetSubcommand extends SubcommandAbstract implements Subcommand {
 			Graveyard dummyGraveyard = new Graveyard.Builder().displayName(searchKey).build();
 
 			// send graveyard not found message
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_FORGET_INVALID_GRAVEYARD)
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_FORGET_INVALID_GRAVEYARD)
 					.setMacro(Macro.GRAVEYARD, dummyGraveyard)
 					.send();
 
@@ -174,7 +174,7 @@ final class ForgetSubcommand extends SubcommandAbstract implements Subcommand {
 		if (plugin.dataStore.deleteDiscovery(searchKey, player.getUniqueId())) {
 
 			// send success message
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_SUCCESS_FORGET)
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_SUCCESS_FORGET)
 					.setMacro(Macro.GRAVEYARD, graveyard)
 					.setMacro(Macro.TARGET_PLAYER, player)
 					.send();
@@ -184,7 +184,7 @@ final class ForgetSubcommand extends SubcommandAbstract implements Subcommand {
 		}
 		else {
 			// send failure message
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_FORGET)
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_FORGET)
 					.setMacro(Macro.GRAVEYARD, graveyard)
 					.setMacro(Macro.TARGET_PLAYER, player)
 					.send();

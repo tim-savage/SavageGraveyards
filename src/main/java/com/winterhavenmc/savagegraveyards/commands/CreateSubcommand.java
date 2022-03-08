@@ -58,20 +58,20 @@ final class CreateSubcommand extends SubcommandAbstract implements Subcommand {
 
 		// sender must be in game player
 		if (!(sender instanceof Player)) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_CONSOLE).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_CONSOLE).send();
 			return true;
 		}
 
 		// check for permission
 		if (!sender.hasPermission(permission)) {
-			plugin.messageBuilder.build(sender, MessageId.PERMISSION_DENIED_CREATE).send();
+			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_CREATE).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check minimum arguments
 		if (args.size() < minArgs) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
@@ -104,7 +104,7 @@ final class CreateSubcommand extends SubcommandAbstract implements Subcommand {
 			plugin.dataStore.insertGraveyards(insertSet);
 
 			// send success message
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_SUCCESS_CREATE)
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_SUCCESS_CREATE)
 					.setMacro(Macro.GRAVEYARD, newGraveyard)
 					.setMacro(Macro.LOCATION, location)
 					.send();
@@ -128,7 +128,7 @@ final class CreateSubcommand extends SubcommandAbstract implements Subcommand {
 			plugin.dataStore.updateGraveyard(newGraveyard);
 
 			// send success message
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_SUCCESS_CREATE)
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_SUCCESS_CREATE)
 					.setMacro(Macro.GRAVEYARD, newGraveyard)
 					.setMacro(Macro.LOCATION, newGraveyard.getLocation())
 					.send();
@@ -139,7 +139,7 @@ final class CreateSubcommand extends SubcommandAbstract implements Subcommand {
 		}
 
 		// send graveyard exists error message
-		plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_CREATE_EXISTS)
+		plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_CREATE_EXISTS)
 				.setMacro(Macro.GRAVEYARD, existingGraveyard)
 				.send();
 

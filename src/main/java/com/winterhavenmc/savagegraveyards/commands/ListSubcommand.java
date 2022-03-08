@@ -56,14 +56,14 @@ final class ListSubcommand extends SubcommandAbstract implements Subcommand {
 
 		// if command sender does not have permission to list graveyards, output error message and return true
 		if (!sender.hasPermission(permission)) {
-			plugin.messageBuilder.build(sender, MessageId.PERMISSION_DENIED_LIST).send();
+			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_LIST).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check maximum arguments
 		if (args.size() > maxArgs) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			displayUsage(sender);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
@@ -147,7 +147,7 @@ final class ListSubcommand extends SubcommandAbstract implements Subcommand {
 
 		// if display list is empty, output list empty message and return
 		if (displayRecords.isEmpty()) {
-			plugin.messageBuilder.build(sender, MessageId.LIST_EMPTY).send();
+			plugin.messageBuilder.compose(sender, MessageId.LIST_EMPTY).send();
 			return true;
 		}
 
@@ -164,7 +164,7 @@ final class ListSubcommand extends SubcommandAbstract implements Subcommand {
 		int itemNumber = startIndex;
 
 		// display list header
-		plugin.messageBuilder.build(sender, MessageId.LIST_HEADER)
+		plugin.messageBuilder.compose(sender, MessageId.LIST_HEADER)
 				.setMacro(Macro.PAGE_NUMBER, page)
 				.setMacro(Macro.PAGE_TOTAL, pageCount)
 				.send();
@@ -176,7 +176,7 @@ final class ListSubcommand extends SubcommandAbstract implements Subcommand {
 
 			// display invalid world list item
 			if (graveyard.getLocation() == null) {
-				plugin.messageBuilder.build(sender, MessageId.LIST_ITEM_INVALID_WORLD)
+				plugin.messageBuilder.compose(sender, MessageId.LIST_ITEM_INVALID_WORLD)
 						.setMacro(Macro.GRAVEYARD, graveyard)
 						.setMacro(Macro.ITEM_NUMBER, itemNumber)
 						.setMacro(Macro.INVALID_WORLD, graveyard.getWorldName())
@@ -187,7 +187,7 @@ final class ListSubcommand extends SubcommandAbstract implements Subcommand {
 			// display disabled list item
 			if (!graveyard.isEnabled()) {
 
-				plugin.messageBuilder.build(sender, MessageId.LIST_ITEM_DISABLED)
+				plugin.messageBuilder.compose(sender, MessageId.LIST_ITEM_DISABLED)
 						.setMacro(Macro.GRAVEYARD, graveyard)
 						.setMacro(Macro.ITEM_NUMBER, itemNumber)
 						.setMacro(Macro.LOCATION, graveyard.getLocation())
@@ -197,7 +197,7 @@ final class ListSubcommand extends SubcommandAbstract implements Subcommand {
 
 			// display undiscovered list item
 			if (graveyard.isHidden() && undiscoveredKeys.contains(graveyard.getSearchKey())) {
-				plugin.messageBuilder.build(sender, MessageId.LIST_ITEM_UNDISCOVERED)
+				plugin.messageBuilder.compose(sender, MessageId.LIST_ITEM_UNDISCOVERED)
 						.setMacro(Macro.GRAVEYARD, graveyard)
 						.setMacro(Macro.ITEM_NUMBER, itemNumber)
 						.setMacro(Macro.LOCATION, graveyard.getLocation())
@@ -206,7 +206,7 @@ final class ListSubcommand extends SubcommandAbstract implements Subcommand {
 			}
 
 			// display normal list item
-			plugin.messageBuilder.build(sender, MessageId.LIST_ITEM)
+			plugin.messageBuilder.compose(sender, MessageId.LIST_ITEM)
 					.setMacro(Macro.GRAVEYARD, graveyard)
 					.setMacro(Macro.ITEM_NUMBER, itemNumber)
 					.setMacro(Macro.LOCATION, graveyard.getLocation())
@@ -214,7 +214,7 @@ final class ListSubcommand extends SubcommandAbstract implements Subcommand {
 		}
 
 		// display list footer
-		plugin.messageBuilder.build(sender, MessageId.LIST_FOOTER)
+		plugin.messageBuilder.compose(sender, MessageId.LIST_FOOTER)
 				.setMacro(Macro.PAGE_NUMBER, page)
 				.setMacro(Macro.PAGE_TOTAL, pageCount)
 				.send();

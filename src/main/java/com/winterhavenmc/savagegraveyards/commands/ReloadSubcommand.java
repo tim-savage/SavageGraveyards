@@ -54,7 +54,7 @@ final class ReloadSubcommand extends SubcommandAbstract implements Subcommand {
 
 		// if sender does not have permission to reload config, send error message and return true
 		if (!sender.hasPermission(permission)) {
-			plugin.messageBuilder.build(sender, MessageId.PERMISSION_DENIED_RELOAD).send();
+			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_RELOAD).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -75,7 +75,7 @@ final class ReloadSubcommand extends SubcommandAbstract implements Subcommand {
 		DataStore.reload(plugin);
 
 		// send reload success message
-		plugin.messageBuilder.build(sender, MessageId.COMMAND_SUCCESS_RELOAD).send();
+		plugin.messageBuilder.compose(sender, MessageId.COMMAND_SUCCESS_RELOAD).send();
 
 		// player reload success message
 		plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_RELOAD);

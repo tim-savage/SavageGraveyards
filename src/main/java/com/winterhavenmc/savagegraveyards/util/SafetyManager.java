@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.winterhavenmc.savagegraveyards.util.BukkitTime.SECONDS;
+import static com.winterhavenmc.util.TimeUnit.SECONDS;
 
 
 /**

@@ -59,20 +59,20 @@ final class ClosestSubcommand extends SubcommandAbstract implements Subcommand {
 		// if command sender does not have permission to display the closest graveyard,
 		// output error message and return true
 		if (!sender.hasPermission(permission)) {
-			plugin.messageBuilder.build(sender, MessageId.PERMISSION_DENIED_CLOSEST).send();
+			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_CLOSEST).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// sender must be in game player
 		if (!(sender instanceof Player)) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_CONSOLE).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_CONSOLE).send();
 			return true;
 		}
 
 		// check maximum arguments
 		if (args.size() > maxArgs) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			displayUsage(sender);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
@@ -86,13 +86,13 @@ final class ClosestSubcommand extends SubcommandAbstract implements Subcommand {
 
 		// if no graveyard returned from datastore, send failure message and return
 		if (graveyard == null || graveyard.getLocation() == null) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_CLOSEST_NO_MATCH).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_CLOSEST_NO_MATCH).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// send success message
-		plugin.messageBuilder.build(sender, MessageId.COMMAND_SUCCESS_CLOSEST)
+		plugin.messageBuilder.compose(sender, MessageId.COMMAND_SUCCESS_CLOSEST)
 				.setMacro(Macro.GRAVEYARD, graveyard)
 				.setMacro(Macro.LOCATION, graveyard.getLocation())
 				.send();

@@ -71,14 +71,14 @@ final class DeleteSubcommand extends SubcommandAbstract implements Subcommand {
 
 		// check for permission
 		if (!sender.hasPermission(permission)) {
-			plugin.messageBuilder.build(sender, MessageId.PERMISSION_DENIED_DELETE).send();
+			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_DELETE).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check minimum arguments
 		if (args.size() < minArgs) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER).send();
 			displayUsage(sender);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
@@ -97,7 +97,9 @@ final class DeleteSubcommand extends SubcommandAbstract implements Subcommand {
 			Graveyard dummyGraveyard = new Graveyard.Builder().displayName(displayName).build();
 
 			// send message
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_NO_RECORD).setMacro(Macro.GRAVEYARD, dummyGraveyard).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_NO_RECORD)
+					.setMacro(Macro.GRAVEYARD, dummyGraveyard)
+					.send();
 
 			// play sound
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
@@ -105,7 +107,7 @@ final class DeleteSubcommand extends SubcommandAbstract implements Subcommand {
 		}
 
 		// send success message to player
-		plugin.messageBuilder.build(sender, MessageId.COMMAND_SUCCESS_DELETE)
+		plugin.messageBuilder.compose(sender, MessageId.COMMAND_SUCCESS_DELETE)
 				.setMacro(Macro.GRAVEYARD, graveyard)
 				.send();
 

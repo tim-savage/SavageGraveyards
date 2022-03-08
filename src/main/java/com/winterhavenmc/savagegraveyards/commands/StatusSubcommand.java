@@ -54,7 +54,7 @@ final class StatusSubcommand extends SubcommandAbstract implements Subcommand {
 
 		// if command sender does not have permission to view status, output error message and return true
 		if (!sender.hasPermission(permission)) {
-			plugin.messageBuilder.build(sender, MessageId.PERMISSION_DENIED_STATUS).send();
+			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_STATUS).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}

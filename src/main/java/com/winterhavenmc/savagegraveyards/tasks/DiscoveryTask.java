@@ -29,7 +29,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.google.common.collect.ImmutableList;
+import java.util.List;
 
 
 /**
@@ -55,7 +55,7 @@ public final class DiscoveryTask extends BukkitRunnable {
 	public void run() {
 
 		// iterate through online players
-		for (Player player : ImmutableList.copyOf(plugin.getServer().getOnlinePlayers())) {
+		for (Player player : List.copyOf(plugin.getServer().getOnlinePlayers())) {
 
 			// if player does not have discover permission, skip to next player
 			if (!player.hasPermission("graveyard.discover")) {
@@ -81,7 +81,7 @@ public final class DiscoveryTask extends BukkitRunnable {
 						|| graveyard.getGroup().isEmpty()
 						|| player.hasPermission("group." + graveyard.getGroup())) {
 
-					// get graveyard discovery range, or config default if null or negative
+					// get graveyard discovery range, or config default if negative
 					int discoveryRange = graveyard.getDiscoveryRange();
 					if (discoveryRange < 0) {
 						discoveryRange = plugin.getConfig().getInt("discovery-range");
