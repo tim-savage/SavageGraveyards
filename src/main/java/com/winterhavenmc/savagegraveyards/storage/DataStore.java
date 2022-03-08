@@ -37,6 +37,12 @@ public interface DataStore {
 	 */
 	void initialize() throws Exception;
 
+
+	/**
+	 * Check if datastore is initialized
+	 *
+	 * @return boolean true if datastore is initialized, false if not
+	 */
 	boolean isInitialized();
 
 
