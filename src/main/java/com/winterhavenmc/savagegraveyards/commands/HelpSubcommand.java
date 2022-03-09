@@ -92,25 +92,13 @@ final class HelpSubcommand extends SubcommandAbstract implements Subcommand {
 			return true;
 		}
 
-		// display help for subcommand
-		displayHelp(sender, args.get(0));
-		return true;
-	}
-
-
-	/**
-	 * Display help message and usage for a command
-	 *
-	 * @param sender the command sender
-	 * @param commandName the name of the command for which to show help and usage
-	 */
-	void displayHelp(final CommandSender sender, final String commandName) {
-
-		// send subcommand help message or invalid command message
-		subcommandRegistry.getCommand(commandName).ifPresentOrElse(
+		// display subcommand help message or invalid command message
+		subcommandRegistry.getCommand(args.get(0)).ifPresentOrElse(
 				subcommand -> sendCommandHelpMessage(sender, subcommand),
 				() -> sendCommandInvalidMessage(sender)
 		);
+
+		return true;
 	}
 
 
