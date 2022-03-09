@@ -22,11 +22,13 @@ import com.winterhavenmc.savagegraveyards.sounds.SoundId;
 import com.winterhavenmc.savagegraveyards.storage.Graveyard;
 import com.winterhavenmc.savagegraveyards.messages.Macro;
 import com.winterhavenmc.savagegraveyards.messages.MessageId;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -82,19 +84,25 @@ final class ClosestSubcommand extends SubcommandAbstract implements Subcommand {
 		Player player = (Player) sender;
 
 		// get nearest graveyard
-		Graveyard graveyard = plugin.dataStore.selectNearestGraveyard(player);
+		Optional<Graveyard> optionalGraveyard = plugin.dataStore.selectNearestGraveyard(player);
 
 		// if no graveyard returned from datastore, send failure message and return
-		if (graveyard == null || graveyard.getLocation() == null) {
+		if (optionalGraveyard.isEmpty() || optionalGraveyard.get().getLocation().isEmpty()) {
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_CLOSEST_NO_MATCH).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
+		// unwrap optional graveyard
+		Graveyard graveyard = optionalGraveyard.get();
+
+		// unwrap optional location
+		Location location = graveyard.getLocation().get();
+
 		// send success message
 		plugin.messageBuilder.compose(sender, MessageId.COMMAND_SUCCESS_CLOSEST)
 				.setMacro(Macro.GRAVEYARD, graveyard)
-				.setMacro(Macro.LOCATION, graveyard.getLocation())
+				.setMacro(Macro.LOCATION, location)
 				.send();
 		return true;
 	}

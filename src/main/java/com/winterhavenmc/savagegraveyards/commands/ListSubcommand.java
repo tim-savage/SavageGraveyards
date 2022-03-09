@@ -22,6 +22,7 @@ import com.winterhavenmc.savagegraveyards.sounds.SoundId;
 import com.winterhavenmc.savagegraveyards.storage.Graveyard;
 import com.winterhavenmc.savagegraveyards.messages.Macro;
 import com.winterhavenmc.savagegraveyards.messages.MessageId;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -104,7 +105,7 @@ final class ListSubcommand extends SubcommandAbstract implements Subcommand {
 		for (Graveyard graveyard : allRecords) {
 
 			// if graveyard has invalid location and sender has list disabled permission, add to display list
-			if (graveyard.getLocation() == null) {
+			if (graveyard.getLocation().isEmpty()) {
 				if (sender.hasPermission("graveyard.list.disabled")) {
 					displayRecords.add(graveyard);
 				}
@@ -175,7 +176,7 @@ final class ListSubcommand extends SubcommandAbstract implements Subcommand {
 			itemNumber++;
 
 			// display invalid world list item
-			if (graveyard.getLocation() == null) {
+			if (graveyard.getLocation().isEmpty()) {
 				plugin.messageBuilder.compose(sender, MessageId.LIST_ITEM_INVALID_WORLD)
 						.setMacro(Macro.GRAVEYARD, graveyard)
 						.setMacro(Macro.ITEM_NUMBER, itemNumber)
@@ -184,13 +185,15 @@ final class ListSubcommand extends SubcommandAbstract implements Subcommand {
 				continue;
 			}
 
+			// get unwrapped graveyard location
+			Location location = graveyard.getLocation().get();
+
 			// display disabled list item
 			if (!graveyard.isEnabled()) {
-
 				plugin.messageBuilder.compose(sender, MessageId.LIST_ITEM_DISABLED)
 						.setMacro(Macro.GRAVEYARD, graveyard)
 						.setMacro(Macro.ITEM_NUMBER, itemNumber)
-						.setMacro(Macro.LOCATION, graveyard.getLocation())
+						.setMacro(Macro.LOCATION, location)
 						.send();
 				continue;
 			}
@@ -200,7 +203,7 @@ final class ListSubcommand extends SubcommandAbstract implements Subcommand {
 				plugin.messageBuilder.compose(sender, MessageId.LIST_ITEM_UNDISCOVERED)
 						.setMacro(Macro.GRAVEYARD, graveyard)
 						.setMacro(Macro.ITEM_NUMBER, itemNumber)
-						.setMacro(Macro.LOCATION, graveyard.getLocation())
+						.setMacro(Macro.LOCATION, location)
 						.send();
 				continue;
 			}
@@ -209,7 +212,7 @@ final class ListSubcommand extends SubcommandAbstract implements Subcommand {
 			plugin.messageBuilder.compose(sender, MessageId.LIST_ITEM)
 					.setMacro(Macro.GRAVEYARD, graveyard)
 					.setMacro(Macro.ITEM_NUMBER, itemNumber)
-					.setMacro(Macro.LOCATION, graveyard.getLocation())
+					.setMacro(Macro.LOCATION, location)
 					.send();
 		}
 

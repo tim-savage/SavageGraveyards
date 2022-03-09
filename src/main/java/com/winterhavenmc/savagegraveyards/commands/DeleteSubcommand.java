@@ -28,6 +28,7 @@ import org.bukkit.command.CommandSender;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 
 /**
@@ -88,10 +89,10 @@ final class DeleteSubcommand extends SubcommandAbstract implements Subcommand {
 		String displayName = String.join(" ", args);
 
 		// delete graveyard record from storage
-		Graveyard graveyard = plugin.dataStore.deleteGraveyard(displayName);
+		Optional<Graveyard> optionalGraveyard = plugin.dataStore.deleteGraveyard(displayName);
 
-		// if graveyard is null, send not found error message
-		if (graveyard == null) {
+		// if graveyard did not exist in data store, send not found error message
+		if (optionalGraveyard.isEmpty()) {
 
 			// create dummy graveyard to send to message manager
 			Graveyard dummyGraveyard = new Graveyard.Builder(plugin).displayName(displayName).build();
@@ -105,6 +106,9 @@ final class DeleteSubcommand extends SubcommandAbstract implements Subcommand {
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
+
+		// unwrap optional graveyard
+		Graveyard graveyard = optionalGraveyard.get();
 
 		// send success message to player
 		plugin.messageBuilder.compose(sender, MessageId.COMMAND_SUCCESS_DELETE)

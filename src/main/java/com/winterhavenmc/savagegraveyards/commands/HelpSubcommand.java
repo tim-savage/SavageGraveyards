@@ -27,6 +27,7 @@ import org.bukkit.command.CommandSender;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 
 /**
@@ -105,21 +106,26 @@ final class HelpSubcommand extends SubcommandAbstract implements Subcommand {
 	 */
 	void displayHelp(final CommandSender sender, final String commandName) {
 
-		// get subcommand from map by name
-		Subcommand subcommand = subcommandRegistry.getCommand(commandName);
+		// get optional subcommand from map by name
+		Optional<Subcommand> optionalSubcommand = subcommandRegistry.getCommand(commandName);
 
-		// if subcommand found in map, display help message and usage
-		if (subcommand != null) {
-			plugin.messageBuilder.compose(sender, subcommand.getDescription()).send();
-			subcommand.displayUsage(sender);
-		}
+		optionalSubcommand.ifPresentOrElse(
+				subcommand -> sendCommandHelpMessage(sender, subcommand),
+				() -> sendCommandInvalidMessage(sender)
+		);
+	}
 
-		// else display invalid command help message and usage for all commands
-		else {
-			plugin.messageBuilder.compose(sender, MessageId.COMMAND_HELP_INVALID).send();
-			plugin.soundConfig.playSound(sender, SoundId.COMMAND_INVALID);
-			displayUsageAll(sender);
-		}
+
+	private void sendCommandHelpMessage(CommandSender sender, Subcommand subcommand) {
+		plugin.messageBuilder.compose(sender, subcommand.getDescription()).send();
+		subcommand.displayUsage(sender);
+	}
+
+
+	private void sendCommandInvalidMessage(CommandSender sender) {
+		plugin.messageBuilder.compose(sender, MessageId.COMMAND_HELP_INVALID).send();
+		plugin.soundConfig.playSound(sender, SoundId.COMMAND_INVALID);
+		displayUsageAll(sender);
 	}
 
 
@@ -132,9 +138,8 @@ final class HelpSubcommand extends SubcommandAbstract implements Subcommand {
 		plugin.messageBuilder.compose(sender, MessageId.COMMAND_HELP_USAGE_HEADER).send();
 
 		for (String subcommandName : subcommandRegistry.getKeys()) {
-			if (subcommandRegistry.getCommand(subcommandName) != null) {
-				subcommandRegistry.getCommand(subcommandName).displayUsage(sender);
-			}
+			Optional<Subcommand> optionalSubcommand = subcommandRegistry.getCommand(subcommandName);
+			optionalSubcommand.ifPresent(subcommand -> subcommand.displayUsage(sender));
 		}
 	}
 

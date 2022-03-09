@@ -28,10 +28,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -102,10 +99,10 @@ final class TeleportCommand extends SubcommandAbstract implements Subcommand {
 		String displayName = String.join(" ", args);
 
 		// get graveyard from datastore
-		Graveyard graveyard = plugin.dataStore.selectGraveyard(displayName);
+		Optional<Graveyard> optionalGraveyard = plugin.dataStore.selectGraveyard(displayName);
 
-		// if graveyard does not exist, send message and return
-		if (graveyard == null) {
+		// if graveyard does not exist in datastore, send message and return
+		if (optionalGraveyard.isEmpty()) {
 
 			// create dummy graveyard to send to message manager
 			Graveyard dummyGraveyard = new Graveyard.Builder(plugin).displayName(displayName).build();
@@ -120,11 +117,14 @@ final class TeleportCommand extends SubcommandAbstract implements Subcommand {
 			return true;
 		}
 
-		// get graveyard location
-		Location destination = graveyard.getLocation();
+		// unwrap optional graveyard
+		Graveyard graveyard = optionalGraveyard.get();
 
-		// if destination is null, send fail message and return
-		if (destination == null) {
+		// get optional graveyard location
+		Optional<Location> optionalDestination = graveyard.getLocation();
+
+		// if destination is empty, send fail message and return
+		if (optionalDestination.isEmpty()) {
 
 			// send message
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_TELEPORT_WORLD_INVALID)
@@ -136,6 +136,9 @@ final class TeleportCommand extends SubcommandAbstract implements Subcommand {
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
+
+		// unwrap optional destination
+		Location destination = optionalDestination.get();
 
 		// play teleport departure sound
 		plugin.soundConfig.playSound(player, SoundId.TELEPORT_SUCCESS_DEPARTURE);

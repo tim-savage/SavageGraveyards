@@ -151,48 +151,66 @@ final class ForgetSubcommand extends SubcommandAbstract implements Subcommand {
 		// get graveyard search key
 		String searchKey = String.join("_", args);
 
-		// get graveyard (for messages)
-		Graveyard graveyard = plugin.dataStore.selectGraveyard(searchKey);
+		// fetch graveyard from datastore
+		Optional<Graveyard> optionalGraveyard = plugin.dataStore.selectGraveyard(searchKey);
 
 		// if no matching graveyard found, send message and return
-		if (graveyard == null) {
-
-			// create dummy graveyard for message
-			Graveyard dummyGraveyard = new Graveyard.Builder(plugin).displayName(searchKey).build();
-
-			// send graveyard not found message
-			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_FORGET_INVALID_GRAVEYARD)
-					.setMacro(Macro.GRAVEYARD, dummyGraveyard)
-					.send();
-
-			// play command fail sound
-			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
-			return true;
-		}
-
-		// delete discovery record
-		if (plugin.dataStore.deleteDiscovery(searchKey, player.getUniqueId())) {
-
-			// send success message
-			plugin.messageBuilder.compose(sender, MessageId.COMMAND_SUCCESS_FORGET)
-					.setMacro(Macro.GRAVEYARD, graveyard)
-					.setMacro(Macro.TARGET_PLAYER, player)
-					.send();
-
-			// play success sound
-			plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_FORGET);
+		if (optionalGraveyard.isEmpty()) {
+			sendInvalidGraveyardMessage(sender, searchKey);
 		}
 		else {
-			// send failure message
-			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_FORGET)
-					.setMacro(Macro.GRAVEYARD, graveyard)
-					.setMacro(Macro.TARGET_PLAYER, player)
-					.send();
+			// get unwrapped optional graveyard from datastore
+			Graveyard graveyard = optionalGraveyard.get();
 
-			// send command fail sound
-			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
+			// delete discovery record
+			if (plugin.dataStore.deleteDiscovery(searchKey, player.getUniqueId())) {
+				sendForgetSuccessMessage(sender, player, graveyard);
+			}
+			else {
+				sendForgetFailedMessage(sender, player, graveyard);
+			}
 		}
-
 		return true;
+	}
+
+
+	private void sendForgetSuccessMessage(CommandSender sender, OfflinePlayer player, Graveyard graveyard) {
+
+		// send success message
+		plugin.messageBuilder.compose(sender, MessageId.COMMAND_SUCCESS_FORGET)
+				.setMacro(Macro.GRAVEYARD, graveyard)
+				.setMacro(Macro.TARGET_PLAYER, player)
+				.send();
+
+		// play success sound
+		plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_FORGET);
+	}
+
+
+	private void sendForgetFailedMessage(CommandSender sender, OfflinePlayer player, Graveyard graveyard) {
+
+		// send failure message
+		plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_FORGET)
+				.setMacro(Macro.GRAVEYARD, graveyard)
+				.setMacro(Macro.TARGET_PLAYER, player)
+				.send();
+
+		// send command fail sound
+		plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
+	}
+
+
+	private void sendInvalidGraveyardMessage(CommandSender sender, String searchKey) {
+
+		// create dummy graveyard for message
+		Graveyard dummyGraveyard = new Graveyard.Builder(plugin).displayName(searchKey).build();
+
+		// send graveyard not found message
+		plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_FORGET_INVALID_GRAVEYARD)
+				.setMacro(Macro.GRAVEYARD, dummyGraveyard)
+				.send();
+
+		// play command fail sound
+		plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 	}
 }

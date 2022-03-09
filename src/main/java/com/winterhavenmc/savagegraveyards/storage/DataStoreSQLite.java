@@ -415,14 +415,18 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 
 
 	@Override
-	public Graveyard selectGraveyard(final String displayName) {
+	public Optional<Graveyard> selectGraveyard(final String displayName) {
+
+		if (displayName == null) {
+			return Optional.empty();
+		}
 
 		// derive search key from displayName
 		String searchKey = Graveyard.createSearchKey(displayName);
 
-		// if key is null or empty, return null record
-		if (searchKey == null || searchKey.isEmpty()) {
-			return null;
+		// if key is empty, return empty optional record
+		if (searchKey.isEmpty()) {
+			return Optional.empty();
 		}
 
 		Graveyard graveyard = null;
@@ -494,18 +498,18 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 			if (plugin.getConfig().getBoolean("debug")) {
 				e.printStackTrace();
 			}
-			return null;
+			return Optional.empty();
 		}
-		return graveyard;
+		return Optional.ofNullable(graveyard);
 	}
 
 
 	@Override
-	public Graveyard selectNearestGraveyard(final Player player) {
+	public Optional<Graveyard> selectNearestGraveyard(final Player player) {
 
-		// if player is null, return null record
+		// if player is null, return empty optional graveyard record
 		if (player == null) {
-			return null;
+			return Optional.empty();
 		}
 
 		Location playerLocation = player.getLocation();
@@ -565,15 +569,27 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 						.pitch(rs.getFloat("Pitch"))
 						.build();
 
-				if (graveyard.getLocation() == null) {
+				// if graveyard optional location has no value, skip to next graveyard
+				if (graveyard.getLocation().isEmpty()) {
 					continue;
 				}
 
+				// unwrap graveyard optional location
+				Location location = graveyard.getLocation().get();
+
+				// check if graveyard has group and player is in group
 				if (groupName == null || groupName.isEmpty() || player.hasPermission("group." + groupName)) {
-					if (closest == null
-							|| graveyard.getLocation().distanceSquared(playerLocation)
-							< closest.getLocation().distanceSquared(playerLocation)) {
+
+					// if closest is null, set to this graveyard (first pass through loop)
+					if (closest == null) {
 						closest = graveyard;
+					}
+
+					// else if closest graveyard has valid location, check if graveyard is closer than current closest
+					else if (closest.getLocation().isPresent()) {
+						if (location.distanceSquared(playerLocation) < closest.getLocation().get().distanceSquared(playerLocation)) {
+							closest = graveyard;
+						}
 					}
 				}
 			}
@@ -592,7 +608,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 		}
 
 		// return closest result
-		return closest;
+		return Optional.ofNullable(closest);
 	}
 
 
@@ -1060,15 +1076,15 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 
 
 	@Override
-	public Graveyard deleteGraveyard(final String displayName) {
+	public Optional<Graveyard> deleteGraveyard(final String displayName) {
 
-		// if displayName is null, return null
+		// if displayName is null, return empty optional
 		if (displayName == null) {
-			return null;
+			return Optional.empty();
 		}
 
 		// get destination record to be deleted, for return
-		final Graveyard graveyard = this.selectGraveyard(displayName);
+		final Optional<Graveyard> graveyard = this.selectGraveyard(displayName);
 
 		new BukkitRunnable() {
 			@Override

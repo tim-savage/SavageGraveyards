@@ -30,6 +30,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -68,13 +69,16 @@ public final class DiscoveryTask extends BukkitRunnable {
 			// iterate through player's undiscovered graveyards
 			for (Graveyard graveyard : plugin.dataStore.selectUndiscoveredGraveyards(player)) {
 
-				// get graveyard location
-				Location graveyardLocation = graveyard.getLocation();
+				// get optional graveyard location
+				Optional<Location> optionalLocation = graveyard.getLocation();
 
-				// if graveyard location is null, skip to next graveyard
-				if (graveyardLocation == null) {
+				// if graveyard location is not valid, skip to next graveyard
+				if (optionalLocation.isEmpty()) {
 					continue;
 				}
+
+				// unwrap optional location
+				Location graveyardLocation = optionalLocation.get();
 
 				// check if player is in graveyard group
 				if (graveyard.getGroup() == null

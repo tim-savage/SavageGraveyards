@@ -23,6 +23,7 @@ import com.winterhavenmc.savagegraveyards.storage.Graveyard;
 import com.winterhavenmc.savagegraveyards.messages.Macro;
 import com.winterhavenmc.savagegraveyards.messages.MessageId;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -57,7 +58,7 @@ final class SetSubcommand extends SubcommandAbstract implements Subcommand {
 		this.usageString = "/graveyard set <graveyard> <attribute> <value>";
 		this.description = MessageId.COMMAND_HELP_SET;
 		this.permission = "graveyard.set";
-		this.minArgs = 3;
+		this.minArgs = 2;
 	}
 
 
@@ -101,10 +102,10 @@ final class SetSubcommand extends SubcommandAbstract implements Subcommand {
 		String displayName = args.remove(0);
 
 		// fetch graveyard from datastore
-		Graveyard graveyard = plugin.dataStore.selectGraveyard(displayName);
+		Optional<Graveyard> optionalGraveyard = plugin.dataStore.selectGraveyard(displayName);
 
 		// if graveyard not found in datastore, send failure message and return
-		if (graveyard == null) {
+		if (optionalGraveyard.isEmpty()) {
 
 			// create dummy graveyard to send to message manager
 			Graveyard dummyGraveyard = new Graveyard.Builder(plugin).displayName(displayName).build();
@@ -116,6 +117,9 @@ final class SetSubcommand extends SubcommandAbstract implements Subcommand {
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
+
+		// unwrap optional graveyard
+		Graveyard graveyard = optionalGraveyard.get();
 
 		// get attribute name and remove from arguments ArrayList
 		String attribute = args.remove(0);
@@ -457,11 +461,17 @@ final class SetSubcommand extends SubcommandAbstract implements Subcommand {
 				|| passedString.equalsIgnoreCase("current")) {
 
 			// if sender is player, use player's current distance
-			if (sender instanceof Player && graveyard.getLocation() != null) {
+			if (sender instanceof Player && graveyard.getLocation().isPresent()) {
+
+				// cast sender to player
 				Player player = (Player) sender;
+
+				// unwrap optional location
+				Location location = graveyard.getLocation().get();
+
 				// check that player is in same world as graveyard
 				if (player.getWorld().getUID().equals(graveyard.getWorldUid())) {
-					discoveryRange = (int) player.getLocation().distance(graveyard.getLocation());
+					discoveryRange = (int) player.getLocation().distance(location);
 				}
 			}
 		}

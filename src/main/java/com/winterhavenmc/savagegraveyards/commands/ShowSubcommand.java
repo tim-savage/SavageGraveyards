@@ -29,6 +29,7 @@ import org.bukkit.command.CommandSender;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 
 /**
@@ -89,10 +90,10 @@ final class ShowSubcommand extends SubcommandAbstract implements Subcommand {
 		String displayName = String.join(" ", args).trim();
 
 		// retrieve graveyard from data store
-		Graveyard graveyard = plugin.dataStore.selectGraveyard(displayName);
+		Optional<Graveyard> optionalGraveyard = plugin.dataStore.selectGraveyard(displayName);
 
-		// if retrieved graveyard is null, display error and usage messages and return
-		if (graveyard == null) {
+		// if graveyard is not in datastore, display error and usage messages and return
+		if (optionalGraveyard.isEmpty()) {
 
 			// create dummy graveyard to send to message manager
 			Graveyard dummyGraveyard = new Graveyard.Builder(plugin).displayName(displayName).build();
@@ -104,6 +105,9 @@ final class ShowSubcommand extends SubcommandAbstract implements Subcommand {
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
+
+		// get unwrapped optional graveyard from datastore
+		Graveyard graveyard = optionalGraveyard.get();
 
 		// display graveyard display name
 		sender.sendMessage(ChatColor.DARK_AQUA + "Name: "
@@ -159,7 +163,7 @@ final class ShowSubcommand extends SubcommandAbstract implements Subcommand {
 
 		// if world is invalid, set color to gray
 		ChatColor worldColor = ChatColor.AQUA;
-		if (graveyard.getLocation() == null) {
+		if (graveyard.getLocation().isEmpty()) {
 			worldColor = ChatColor.GRAY;
 		}
 

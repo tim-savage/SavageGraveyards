@@ -144,7 +144,7 @@ public interface DataStore {
 	 * @param displayName the name of the Graveyard to be retrieved
 	 * @return Graveyard object or null if no matching record
 	 */
-	Graveyard selectGraveyard(final String displayName);
+	Optional<Graveyard> selectGraveyard(final String displayName);
 
 
 	/**
@@ -171,7 +171,7 @@ public interface DataStore {
 	 * @param player the player for whom to retrieve the nearest Graveyard
 	 * @return Graveyard object
 	 */
-	Graveyard selectNearestGraveyard(final Player player);
+	Optional<Graveyard> selectNearestGraveyard(final Player player);
 
 
 	/**
@@ -223,7 +223,7 @@ public interface DataStore {
 	 * @param displayName display name or search key of record to be deleted
 	 * @return Deleted graveyard record
 	 */
-	Graveyard deleteGraveyard(final String displayName);
+	Optional<Graveyard> deleteGraveyard(final String displayName);
 
 
 	/**

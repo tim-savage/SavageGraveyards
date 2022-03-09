@@ -23,6 +23,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -503,23 +504,23 @@ public final class Graveyard {
 	 *
 	 * @return Location - location
 	 */
-	public Location getLocation() {
+	public Optional<Location> getLocation() {
 
-		// if worldUid is null, return null
+		// if worldUid is null, return empty optional
 		if (worldUid == null) {
-			return null;
+			return Optional.empty();
 		}
 
 		// get world by uid
 		World world = Bukkit.getServer().getWorld(worldUid);
 
-		// if world is null, return null
+		// if world is null, return empty optional
 		if (world == null) {
-			return null;
+			return Optional.empty();
 		}
 
 		// return new location
-		return new Location(world, x, y, z, yaw, pitch);
+		return Optional.of(new Location(world, x, y, z, yaw, pitch));
 	}
 
 

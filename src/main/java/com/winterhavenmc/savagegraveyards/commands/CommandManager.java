@@ -75,12 +75,15 @@ public final class CommandManager implements TabExecutor {
 		if (args.length > 1) {
 
 			// get subcommand from map
-			Subcommand subcommand = subcommandRegistry.getCommand(args[0]);
+			Optional<Subcommand> optionalSubcommand = subcommandRegistry.getCommand(args[0]);
 
 			// if no subcommand returned from map, return empty list
-			if (subcommand == null) {
+			if (optionalSubcommand.isEmpty()) {
 				return Collections.emptyList();
 			}
+
+			// unwrap optional subcommand
+			Subcommand subcommand = optionalSubcommand.get();
 
 			// return subcommand tab completer output
 			return subcommand.onTabComplete(sender, command, alias, args);
@@ -114,17 +117,19 @@ public final class CommandManager implements TabExecutor {
 		}
 
 		// get subcommand from map by name
-		Subcommand subcommand = subcommandRegistry.getCommand(subcommandName);
+		Optional<Subcommand> optionalSubcommand = subcommandRegistry.getCommand(subcommandName);
 
 		// if subcommand is null, get help command from map
-		if (subcommand == null) {
-			subcommand = subcommandRegistry.getCommand("help");
+		if (optionalSubcommand.isEmpty()) {
+			optionalSubcommand = subcommandRegistry.getCommand("help");
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_INVALID_COMMAND).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_INVALID);
 		}
 
 		// execute subcommand
-		 return subcommand.onCommand(sender, argsList);
+		optionalSubcommand.ifPresent( subcommand -> subcommand.onCommand(sender, argsList) );
+
+		return true;
 	}
 
 

@@ -22,6 +22,7 @@ import com.winterhavenmc.savagegraveyards.messages.Macro;
 import com.winterhavenmc.savagegraveyards.storage.Graveyard;
 import com.winterhavenmc.savagegraveyards.messages.MessageId;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -32,6 +33,7 @@ import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -176,17 +178,24 @@ public final class PlayerEventListener implements Listener {
 		}
 
 		// get nearest valid graveyard for player
-		Graveyard graveyard = plugin.dataStore.selectNearestGraveyard(player);
+		Optional<Graveyard> optionalGraveyard = plugin.dataStore.selectNearestGraveyard(player);
 
-		// if graveyard and graveyard location are not null, set respawn location
-		if (graveyard != null && graveyard.getLocation() != null) {
-			event.setRespawnLocation(graveyard.getLocation());
+		// if graveyard found in data store and graveyard location is valid, set respawn location
+		if (optionalGraveyard.isPresent() && optionalGraveyard.get().getLocation().isPresent()) {
+
+			// unwrap optional graveyard
+			Graveyard graveyard = optionalGraveyard.get();
+
+			// unwrap optional location
+			Location location = graveyard.getLocation().get();
+
+			event.setRespawnLocation(location);
 
 			// send player message
 			plugin.messageBuilder.compose(player, MessageId.DEFAULT_RESPAWN)
 					.setAltMessage(graveyard.getRespawnMessage())
 					.setMacro(Macro.GRAVEYARD, graveyard)
-					.setMacro(Macro.LOCATION, graveyard.getLocation())
+					.setMacro(Macro.LOCATION, location)
 					.send();
 
 			// put player in safety cooldown map
