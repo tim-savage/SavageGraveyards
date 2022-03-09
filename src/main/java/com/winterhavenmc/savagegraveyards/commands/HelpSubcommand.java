@@ -114,12 +114,23 @@ final class HelpSubcommand extends SubcommandAbstract implements Subcommand {
 	}
 
 
+	/**
+	 * Send help description for subcommand to command sender
+	 *
+	 * @param sender the command sender
+	 * @param subcommand the subcommand to display help description
+	 */
 	private void sendCommandHelpMessage(CommandSender sender, Subcommand subcommand) {
 		plugin.messageBuilder.compose(sender, subcommand.getDescription()).send();
 		subcommand.displayUsage(sender);
 	}
 
 
+	/**
+	 * Send invalid subcommand message to command sender
+	 *
+	 * @param sender the command sender
+	 */
 	private void sendCommandInvalidMessage(CommandSender sender) {
 		plugin.messageBuilder.compose(sender, MessageId.COMMAND_HELP_INVALID).send();
 		plugin.soundConfig.playSound(sender, SoundId.COMMAND_INVALID);
