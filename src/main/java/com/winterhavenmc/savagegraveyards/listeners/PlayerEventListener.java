@@ -189,6 +189,24 @@ public final class PlayerEventListener implements Listener {
 			// unwrap optional location
 			Location location = graveyard.getLocation().get();
 
+			// if bedspawn is closer, set respawn location to bedspawn
+			if (plugin.getConfig().getBoolean("consider-bedspawn")) {
+
+				// get player bedspawn location
+				Location bedSpawnLocation = player.getBedSpawnLocation();
+
+				// check bedspawn world is same as current world and closer than graveyard
+				if (bedSpawnLocation != null
+						&& bedSpawnLocation.getWorld() != null
+						&& bedSpawnLocation.getWorld().equals(player.getWorld())
+						&& bedSpawnLocation.distanceSquared(player.getLocation()) < location.distanceSquared(player.getLocation())) {
+
+					// set respawn location to bedspawn location
+					event.setRespawnLocation(bedSpawnLocation);
+					return;
+				}
+			}
+
 			event.setRespawnLocation(location);
 
 			// send player message

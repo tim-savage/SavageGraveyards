@@ -46,3 +46,6 @@ sound-effects: true
 
 # display titles as declared in language file
 titles-enabled: true
+
+# use player bedspawn if closer than the nearest graveyard
+consider-bedspawn: false

@@ -15,6 +15,7 @@ public enum ConfigSetting {
     RESPAWN_PRIORITY("NORMAL"),
     TITLES_ENABLED("true"),
     SOUND_EFFECTS("true"),
+    CONSIDER_BEDSPAWN("false")
     ;
 
     private final String value;
