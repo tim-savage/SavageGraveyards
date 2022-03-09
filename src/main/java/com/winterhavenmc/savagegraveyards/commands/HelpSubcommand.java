@@ -62,11 +62,11 @@ final class HelpSubcommand extends SubcommandAbstract implements Subcommand {
 
 		if (args.length == 2) {
 			if (args[0].equalsIgnoreCase("help")) {
-				for (String subcommand : subcommandRegistry.getKeys()) {
-					if (sender.hasPermission("graveyard." + subcommand)
-							&& subcommand.startsWith(args[1].toLowerCase())
-							&& !subcommand.equalsIgnoreCase("help")) {
-						returnList.add(subcommand);
+				for (String subcommandName : subcommandRegistry.getKeys()) {
+					if (sender.hasPermission("graveyard." + subcommandName)
+							&& subcommandName.startsWith(args[1].toLowerCase())
+							&& !subcommandName.equalsIgnoreCase("help")) {
+						returnList.add(subcommandName);
 					}
 				}
 			}
