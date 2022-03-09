@@ -149,8 +149,7 @@ final class HelpSubcommand extends SubcommandAbstract implements Subcommand {
 		plugin.messageBuilder.compose(sender, MessageId.COMMAND_HELP_USAGE_HEADER).send();
 
 		for (String subcommandName : subcommandRegistry.getKeys()) {
-			Optional<Subcommand> optionalSubcommand = subcommandRegistry.getCommand(subcommandName);
-			optionalSubcommand.ifPresent(subcommand -> subcommand.displayUsage(sender));
+			subcommandRegistry.getCommand(subcommandName).ifPresent(subcommand -> subcommand.displayUsage(sender));
 		}
 	}
 
