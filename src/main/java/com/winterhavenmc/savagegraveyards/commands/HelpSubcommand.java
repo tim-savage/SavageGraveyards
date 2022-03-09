@@ -42,6 +42,7 @@ final class HelpSubcommand extends SubcommandAbstract implements Subcommand {
 
 	/**
 	 * Class constructor
+	 *
 	 * @param plugin reference to plugin main class instance
 	 */
 	HelpSubcommand(final PluginMain plugin, final SubcommandRegistry subcommandRegistry) {
@@ -100,6 +101,7 @@ final class HelpSubcommand extends SubcommandAbstract implements Subcommand {
 
 	/**
 	 * Display help message and usage for a command
+	 *
 	 * @param sender the command sender
 	 * @param commandName the name of the command for which to show help and usage
 	 */
@@ -139,6 +141,7 @@ final class HelpSubcommand extends SubcommandAbstract implements Subcommand {
 
 	/**
 	 * Display usage message for all commands
+	 *
 	 * @param sender the command sender
 	 */
 	void displayUsageAll(final CommandSender sender) {
