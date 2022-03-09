@@ -51,7 +51,7 @@ final class SubcommandRegistry {
 	 */
 	Optional<Subcommand> getCommand(final String name) {
 
-		String key = name;
+		String key = name.toLowerCase();
 
 		if (aliasMap.containsKey(key)) {
 			key = aliasMap.get(key);
