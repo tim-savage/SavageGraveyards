@@ -106,10 +106,8 @@ final class HelpSubcommand extends SubcommandAbstract implements Subcommand {
 	 */
 	void displayHelp(final CommandSender sender, final String commandName) {
 
-		// get optional subcommand from map by name
-		Optional<Subcommand> optionalSubcommand = subcommandRegistry.getCommand(commandName);
-
-		optionalSubcommand.ifPresentOrElse(
+		// send subcommand help message or invalid command message
+		subcommandRegistry.getCommand(commandName).ifPresentOrElse(
 				subcommand -> sendCommandHelpMessage(sender, subcommand),
 				() -> sendCommandInvalidMessage(sender)
 		);
