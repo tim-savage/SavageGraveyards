@@ -59,6 +59,9 @@ final class ReloadSubcommand extends SubcommandAbstract implements Subcommand {
 			return true;
 		}
 
+		// copy default config if not present
+		plugin.saveDefaultConfig();
+
 		// reload main configuration
 		plugin.reloadConfig();
 
