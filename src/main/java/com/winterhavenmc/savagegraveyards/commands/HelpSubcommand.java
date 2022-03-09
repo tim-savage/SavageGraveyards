@@ -92,9 +92,8 @@ final class HelpSubcommand extends SubcommandAbstract implements Subcommand {
 			return true;
 		}
 
-		// get subcommand name
-		String subcommandName = args.get(0);
-		displayHelp(sender, subcommandName);
+		// display help for subcommand
+		displayHelp(sender, args.get(0));
 		return true;
 	}
 
