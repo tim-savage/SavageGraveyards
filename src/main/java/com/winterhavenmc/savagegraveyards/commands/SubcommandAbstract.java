@@ -30,6 +30,7 @@ abstract class SubcommandAbstract implements Subcommand {
 	protected Collection<String> aliases = new HashSet<>();
 	protected String usageString;
 	protected MessageId description;
+	protected String permission;
 	protected int minArgs;
 	protected int maxArgs;
 

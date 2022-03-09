@@ -13,6 +13,7 @@ public enum ConfigSetting {
     DISCOVERY_INTERVAL("40"),
     LIST_PAGE_SIZE("5"),
     RESPAWN_PRIORITY("NORMAL"),
+    TITLES_ENABLED("true"),
     SOUND_EFFECTS("true"),
     ;
 

@@ -28,13 +28,14 @@ import org.bukkit.command.CommandSender;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 
 /**
  * Delete command implementation<br>
  * Removes graveyard record from datastore
  */
-final class DeleteCommand extends SubcommandAbstract implements Subcommand {
+final class DeleteSubcommand extends SubcommandAbstract implements Subcommand {
 
 	private final PluginMain plugin;
 
@@ -43,11 +44,12 @@ final class DeleteCommand extends SubcommandAbstract implements Subcommand {
 	 * Class constructor
 	 * @param plugin reference to plugin main class instance
 	 */
-	DeleteCommand(final PluginMain plugin) {
+	DeleteSubcommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "delete";
 		this.usageString = "/graveyard delete <graveyard name>";
 		this.description = MessageId.COMMAND_HELP_DELETE;
+		this.permission = "graveyard.delete";
 		this.minArgs = 1;
 	}
 
@@ -69,15 +71,15 @@ final class DeleteCommand extends SubcommandAbstract implements Subcommand {
 	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// check for permission
-		if (!sender.hasPermission("graveyard.delete")) {
-			plugin.messageBuilder.build(sender, MessageId.PERMISSION_DENIED_DELETE).send();
+		if (!sender.hasPermission(permission)) {
+			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_DELETE).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check minimum arguments
 		if (args.size() < minArgs) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER).send();
 			displayUsage(sender);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
@@ -87,24 +89,29 @@ final class DeleteCommand extends SubcommandAbstract implements Subcommand {
 		String displayName = String.join(" ", args);
 
 		// delete graveyard record from storage
-		Graveyard graveyard = plugin.dataStore.deleteGraveyard(displayName);
+		Optional<Graveyard> optionalGraveyard = plugin.dataStore.deleteGraveyard(displayName);
 
-		// if graveyard is null, send not found error message
-		if (graveyard == null) {
+		// if graveyard did not exist in data store, send not found error message
+		if (optionalGraveyard.isEmpty()) {
 
 			// create dummy graveyard to send to message manager
-			Graveyard dummyGraveyard = new Graveyard.Builder().displayName(displayName).build();
+			Graveyard dummyGraveyard = new Graveyard.Builder(plugin).displayName(displayName).build();
 
 			// send message
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_NO_RECORD).setMacro(Macro.GRAVEYARD, dummyGraveyard).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_NO_RECORD)
+					.setMacro(Macro.GRAVEYARD, dummyGraveyard)
+					.send();
 
 			// play sound
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
+		// unwrap optional graveyard
+		Graveyard graveyard = optionalGraveyard.get();
+
 		// send success message to player
-		plugin.messageBuilder.build(sender, MessageId.COMMAND_SUCCESS_DELETE)
+		plugin.messageBuilder.compose(sender, MessageId.COMMAND_SUCCESS_DELETE)
 				.setMacro(Macro.GRAVEYARD, graveyard)
 				.send();
 

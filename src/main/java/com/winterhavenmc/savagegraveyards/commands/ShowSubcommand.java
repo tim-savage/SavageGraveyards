@@ -29,13 +29,14 @@ import org.bukkit.command.CommandSender;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 
 /**
  * Show command implementation<br>
  * displays graveyard settings
  */
-final class ShowCommand extends SubcommandAbstract implements Subcommand {
+final class ShowSubcommand extends SubcommandAbstract implements Subcommand {
 
 	private final PluginMain plugin;
 
@@ -44,11 +45,12 @@ final class ShowCommand extends SubcommandAbstract implements Subcommand {
 	 * Class constructor
 	 * @param plugin reference to plugin main class instance
 	 */
-	ShowCommand(final PluginMain plugin) {
+	ShowSubcommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "show";
 		this.usageString = "/graveyard show <graveyard>";
 		this.description = MessageId.COMMAND_HELP_SHOW;
+		this.permission = "graveyard.show";
 		this.minArgs = 1;
 	}
 
@@ -70,15 +72,15 @@ final class ShowCommand extends SubcommandAbstract implements Subcommand {
 	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// if command sender does not have permission to show graveyards, output error message and return true
-		if (!sender.hasPermission("graveyard.show")) {
-			plugin.messageBuilder.build(sender, MessageId.PERMISSION_DENIED_SHOW).send();
+		if (!sender.hasPermission(permission)) {
+			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_SHOW).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check minimum arguments
 		if (args.size() < minArgs) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER).send();
 			displayUsage(sender);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
@@ -88,21 +90,24 @@ final class ShowCommand extends SubcommandAbstract implements Subcommand {
 		String displayName = String.join(" ", args).trim();
 
 		// retrieve graveyard from data store
-		Graveyard graveyard = plugin.dataStore.selectGraveyard(displayName);
+		Optional<Graveyard> optionalGraveyard = plugin.dataStore.selectGraveyard(displayName);
 
-		// if retrieved graveyard is null, display error and usage messages and return
-		if (graveyard == null) {
+		// if graveyard is not in datastore, display error and usage messages and return
+		if (optionalGraveyard.isEmpty()) {
 
 			// create dummy graveyard to send to message manager
-			Graveyard dummyGraveyard = new Graveyard.Builder().displayName(displayName).build();
+			Graveyard dummyGraveyard = new Graveyard.Builder(plugin).displayName(displayName).build();
 
 			// send message
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_NO_RECORD).setMacro(Macro.GRAVEYARD, dummyGraveyard).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_NO_RECORD).setMacro(Macro.GRAVEYARD, dummyGraveyard).send();
 
 			// play sound
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
+
+		// get unwrapped optional graveyard from datastore
+		Graveyard graveyard = optionalGraveyard.get();
 
 		// display graveyard display name
 		sender.sendMessage(ChatColor.DARK_AQUA + "Name: "
@@ -158,7 +163,7 @@ final class ShowCommand extends SubcommandAbstract implements Subcommand {
 
 		// if world is invalid, set color to gray
 		ChatColor worldColor = ChatColor.AQUA;
-		if (graveyard.getLocation() == null) {
+		if (graveyard.getLocation().isEmpty()) {
 			worldColor = ChatColor.GRAY;
 		}
 

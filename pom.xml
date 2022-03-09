@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.winterhaven-mc</groupId>
 	<artifactId>SavageGraveyards</artifactId>
-	<version>1.18.4</version>
+	<version>1.18.5</version>
 	<name>SavageGraveyards</name>
 
 	<url>https://github.com/tim-savage/SavageGraveyards</url>
@@ -67,21 +67,21 @@
 		<dependency>
 			<groupId>org.bstats</groupId>
 			<artifactId>bstats-bukkit</artifactId>
-			<version>2.2.1</version>
+			<version>3.0.0</version>
 		</dependency>
 
 		<!-- MessageBuilderLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>message-builder-lib</artifactId>
-			<version>1.11.1</version>
+			<version>1.11.2</version>
 		</dependency>
 
 		<!-- SoundConfigLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>sound-config-lib</artifactId>
-			<version>1.11.0</version>
+			<version>1.11.1</version>
 		</dependency>
 
 		<!-- WorldManagerLib -->

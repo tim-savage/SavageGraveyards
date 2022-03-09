@@ -31,7 +31,7 @@ import java.util.Objects;
  * Status command implementation<br>
  * Display plugin settings
  */
-final class StatusCommand extends SubcommandAbstract implements Subcommand {
+final class StatusSubcommand extends SubcommandAbstract implements Subcommand {
 
 	private final PluginMain plugin;
 
@@ -40,11 +40,12 @@ final class StatusCommand extends SubcommandAbstract implements Subcommand {
 	 * Class constructor
 	 * @param plugin reference to plugin main class instance
 	 */
-	StatusCommand(final PluginMain plugin) {
+	StatusSubcommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "status";
 		this.usageString = "/graveyard status";
 		this.description = MessageId.COMMAND_HELP_STATUS;
+		this.permission = "graveyard.status";
 	}
 
 
@@ -52,8 +53,8 @@ final class StatusCommand extends SubcommandAbstract implements Subcommand {
 	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// if command sender does not have permission to view status, output error message and return true
-		if (!sender.hasPermission("graveyard.status")) {
-			plugin.messageBuilder.build(sender, MessageId.PERMISSION_DENIED_STATUS).send();
+		if (!sender.hasPermission(permission)) {
+			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_STATUS).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}

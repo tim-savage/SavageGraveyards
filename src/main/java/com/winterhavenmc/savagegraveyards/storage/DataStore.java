@@ -26,7 +26,7 @@ import java.util.*;
 
 
 /**
- * Abstract datastore class
+ * DataStore interface
  */
 public interface DataStore {
 
@@ -37,6 +37,12 @@ public interface DataStore {
 	 */
 	void initialize() throws Exception;
 
+
+	/**
+	 * Check if datastore is initialized
+	 *
+	 * @return boolean true if datastore is initialized, false if not
+	 */
 	boolean isInitialized();
 
 
@@ -104,6 +110,8 @@ public interface DataStore {
 
 	/**
 	 * Reload data store if configured type has changed
+	 *
+	 * @param plugin reference to plugin main class
 	 */
 	static void reload(final PluginMain plugin) {
 
@@ -136,7 +144,7 @@ public interface DataStore {
 	 * @param displayName the name of the Graveyard to be retrieved
 	 * @return Graveyard object or null if no matching record
 	 */
-	Graveyard selectGraveyard(final String displayName);
+	Optional<Graveyard> selectGraveyard(final String displayName);
 
 
 	/**
@@ -163,7 +171,7 @@ public interface DataStore {
 	 * @param player the player for whom to retrieve the nearest Graveyard
 	 * @return Graveyard object
 	 */
-	Graveyard selectNearestGraveyard(final Player player);
+	Optional<Graveyard> selectNearestGraveyard(final Player player);
 
 
 	/**
@@ -215,21 +223,22 @@ public interface DataStore {
 	 * @param displayName display name or search key of record to be deleted
 	 * @return Deleted graveyard record
 	 */
-	Graveyard deleteGraveyard(final String displayName);
+	Optional<Graveyard> deleteGraveyard(final String displayName);
 
 
 	/**
 	 * Delete discovery record
 	 *
 	 * @param displayName display name or search key of record to be deleted
-	 * @param playerUUID the player unique id
+	 * @param playerUid the player unique id
 	 * @return boolean - {@code true} if deletion was successful, {@code false} if not
 	 */
-	boolean deleteDiscovery(final String displayName, final UUID playerUUID);
+	boolean deleteDiscovery(final String displayName, final UUID playerUid);
 
 
 	/**
 	 * select graveyard keys that player has discovered
+	 *
 	 * @param playerUid the player uid to query
 	 * @return Collection of String - graveyard keys
 	 */
@@ -238,8 +247,17 @@ public interface DataStore {
 
 	/**
 	 * Select players who have discovered any graveyards
+	 *
 	 * @return Collection of String - player names with discovered graveyards
 	 */
 	Collection<String> selectPlayersWithDiscoveries();
+
+
+	/**
+	 * Select a count of graveyards in the datastore
+	 *
+	 * @return the count of graveyard records in the datastore
+	 */
+	int selectGraveyardCount();
 
 }

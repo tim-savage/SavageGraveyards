@@ -31,7 +31,7 @@ import java.util.Objects;
  * Reload command implementation<br>
  * reloads plugin configuration
  */
-final class ReloadCommand extends SubcommandAbstract implements Subcommand {
+final class ReloadSubcommand extends SubcommandAbstract implements Subcommand {
 
 	private final PluginMain plugin;
 
@@ -40,11 +40,12 @@ final class ReloadCommand extends SubcommandAbstract implements Subcommand {
 	 * Class constructor
 	 * @param plugin reference to plugin main class instance
 	 */
-	ReloadCommand(final PluginMain plugin) {
+	ReloadSubcommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "reload";
 		this.usageString = "/graveyard reload";
 		this.description = MessageId.COMMAND_HELP_RELOAD;
+		this.permission = "graveyard.reload";
 	}
 
 
@@ -52,8 +53,8 @@ final class ReloadCommand extends SubcommandAbstract implements Subcommand {
 	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// if sender does not have permission to reload config, send error message and return true
-		if (!sender.hasPermission("graveyard.reload")) {
-			plugin.messageBuilder.build(sender, MessageId.PERMISSION_DENIED_RELOAD).send();
+		if (!sender.hasPermission(permission)) {
+			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_RELOAD).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -73,8 +74,11 @@ final class ReloadCommand extends SubcommandAbstract implements Subcommand {
 		// reload datastore
 		DataStore.reload(plugin);
 
-		// send reloaded message
-		plugin.messageBuilder.build(sender, MessageId.COMMAND_SUCCESS_RELOAD).send();
+		// send reload success message
+		plugin.messageBuilder.compose(sender, MessageId.COMMAND_SUCCESS_RELOAD).send();
+
+		// player reload success message
+		plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_RELOAD);
 
 		// return true to suppress bukkit usage message
 		return true;

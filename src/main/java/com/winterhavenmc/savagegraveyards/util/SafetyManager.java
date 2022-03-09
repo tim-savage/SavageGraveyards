@@ -20,15 +20,17 @@ package com.winterhavenmc.savagegraveyards.util;
 import com.winterhavenmc.savagegraveyards.PluginMain;
 import com.winterhavenmc.savagegraveyards.messages.Macro;
 import com.winterhavenmc.savagegraveyards.messages.MessageId;
+import com.winterhavenmc.savagegraveyards.storage.Graveyard;
+import com.winterhavenmc.savagegraveyards.tasks.SafetyTask;
 
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
+
+import static com.winterhavenmc.util.TimeUnit.SECONDS;
 
 
 /**
@@ -40,7 +42,7 @@ public final class SafetyManager {
 	private final PluginMain plugin;
 
 	// safety cooldown map
-	private final Map<UUID, BukkitTask> safetyCooldownMap;
+	private final Map<UUID, BukkitRunnable> safetyCooldownMap;
 
 
 	/**
@@ -62,12 +64,12 @@ public final class SafetyManager {
 	 * Insert player uuid into safety cooldown map
 	 *
 	 * @param player   the player whose uuid will be used as key in the safety cooldown map
-	 * @param duration in seconds
+	 * @param graveyard the graveyard where the player has respawned
 	 */
-	public void putPlayer(final Player player, final long duration) {
+	public void putPlayer(final Player player, Graveyard graveyard) {
 
 		// get safety time from passed duration
-		long safetyTime = duration;
+		long safetyTime = graveyard.getSafetyTime();
 
 		// if safetyTime is negative, use configured default
 		if (safetyTime < 0L) {
@@ -79,19 +81,17 @@ public final class SafetyManager {
 			return;
 		}
 
-		// send safety message to player
-		plugin.messageBuilder.build(player, MessageId.SAFETY_COOLDOWN_START)
-				.setMacro(Macro.DURATION, TimeUnit.SECONDS.toMillis(safetyTime))
+		// send player message
+		plugin.messageBuilder.compose(player, MessageId.SAFETY_COOLDOWN_START)
+				.setMacro(Macro.GRAVEYARD, graveyard)
+				.setMacro(Macro.DURATION, SECONDS.toMillis(safetyTime))
 				.send();
 
-		// create task to remove player from map after safetyTime duration
-		BukkitTask task = new BukkitRunnable() {
-			@Override
-			public void run() {
-				removePlayer(player);
-				plugin.messageBuilder.build(player, MessageId.SAFETY_COOLDOWN_END).send();
-			}
-		}.runTaskLater(plugin, safetyTime * 20L);
+		// create task to display message and remove player from safety map after safetyTime duration
+		BukkitRunnable safetyTask = new SafetyTask(plugin, player);
+
+		// schedule task to display safety expired message after configured amount of time
+		safetyTask.runTaskLater(plugin, SECONDS.toTicks(safetyTime));
 
 		// if player is already in cooldown map, cancel existing task
 		if (isPlayerProtected(player)) {
@@ -99,7 +99,7 @@ public final class SafetyManager {
 		}
 
 		// add player to safety cooldown map
-		safetyCooldownMap.put(player.getUniqueId(), task);
+		safetyCooldownMap.put(player.getUniqueId(), safetyTask);
 	}
 
 
@@ -108,7 +108,7 @@ public final class SafetyManager {
 	 *
 	 * @param player the player to be removed from the safety cooldown map
 	 */
-	private void removePlayer(final Player player) {
+	public void removePlayer(final Player player) {
 		safetyCooldownMap.remove(player.getUniqueId());
 	}
 

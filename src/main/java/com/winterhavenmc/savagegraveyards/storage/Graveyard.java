@@ -23,6 +23,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -95,13 +96,11 @@ public final class Graveyard {
 	 */
 	public final static class Builder {
 
-		private final JavaPlugin plugin = JavaPlugin.getProvidingPlugin(this.getClass());
-
 		private int primaryKey;
 		private String displayName;
 		private String searchKey;
-		private boolean enabled = plugin.getConfig().getBoolean("default-enabled");
-		private boolean hidden = plugin.getConfig().getBoolean("default-hidden");
+		private boolean enabled;
+		private boolean hidden;
 		private int discoveryRange = CONFIG_DEFAULT;
 		private String discoveryMessage = "";
 		private String respawnMessage = "";
@@ -116,14 +115,18 @@ public final class Graveyard {
 		private float yaw = 0;
 		private float pitch = 0;
 
+
 		/**
 		 * Builder class constructor
 		 */
-		public Builder() { }
+		public Builder(final JavaPlugin plugin) {
+			this.enabled = plugin.getConfig().getBoolean("default-enabled");
+			this.hidden = plugin.getConfig().getBoolean("default-hidden");
+		}
 
 
 		/**
-		 * Builder class constructor
+		 * Builder class copy constructor
 		 *
 		 * @param graveyard existing graveyard object from which all values are copied
 		 */
@@ -501,23 +504,23 @@ public final class Graveyard {
 	 *
 	 * @return Location - location
 	 */
-	public Location getLocation() {
+	public Optional<Location> getLocation() {
 
-		// if worldUid is null, return null
+		// if worldUid is null, return empty optional
 		if (worldUid == null) {
-			return null;
+			return Optional.empty();
 		}
 
 		// get world by uid
 		World world = Bukkit.getServer().getWorld(worldUid);
 
-		// if world is null, return null
+		// if world is null, return empty optional
 		if (world == null) {
-			return null;
+			return Optional.empty();
 		}
 
 		// return new location
-		return new Location(world, x, y, z, yaw, pitch);
+		return Optional.of(new Location(world, x, y, z, yaw, pitch));
 	}
 
 

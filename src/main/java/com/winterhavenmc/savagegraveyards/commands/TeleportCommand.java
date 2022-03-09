@@ -49,6 +49,7 @@ final class TeleportCommand extends SubcommandAbstract implements Subcommand {
 		this.name = "teleport";
 		this.usageString = "/graveyard teleport <name>";
 		this.description = MessageId.COMMAND_HELP_TELEPORT;
+		this.permission = "graveyard.teleport";
 		this.aliases = Set.of("tp");
 		this.minArgs = 1;
 	}
@@ -56,7 +57,7 @@ final class TeleportCommand extends SubcommandAbstract implements Subcommand {
 
 	@Override
 	public List<String> onTabComplete(final CommandSender sender, final Command command,
-									  final String alias, final String[] args) {
+	                                  final String alias, final String[] args) {
 
 		if (args.length == 2) {
 			// return list of valid matching graveyard names
@@ -72,20 +73,20 @@ final class TeleportCommand extends SubcommandAbstract implements Subcommand {
 
 		// sender must be in game player
 		if (!(sender instanceof Player)) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_CONSOLE).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_CONSOLE).send();
 			return true;
 		}
 
 		// check for permission
-		if (!sender.hasPermission("graveyard.teleport")) {
-			plugin.messageBuilder.build(sender, MessageId.PERMISSION_DENIED_TELEPORT).send();
+		if (!sender.hasPermission(permission)) {
+			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_TELEPORT).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check minimum arguments
 		if (args.size() < minArgs) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER).send();
 			displayUsage(sender);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
@@ -98,16 +99,16 @@ final class TeleportCommand extends SubcommandAbstract implements Subcommand {
 		String displayName = String.join(" ", args);
 
 		// get graveyard from datastore
-		Graveyard graveyard = plugin.dataStore.selectGraveyard(displayName);
+		Optional<Graveyard> optionalGraveyard = plugin.dataStore.selectGraveyard(displayName);
 
-		// if graveyard does not exist, send message and return
-		if (graveyard == null) {
+		// if graveyard does not exist in datastore, send message and return
+		if (optionalGraveyard.isEmpty()) {
 
 			// create dummy graveyard to send to message manager
-			Graveyard dummyGraveyard = new Graveyard.Builder().displayName(displayName).build();
+			Graveyard dummyGraveyard = new Graveyard.Builder(plugin).displayName(displayName).build();
 
 			// send message
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_NO_RECORD)
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_NO_RECORD)
 					.setMacro(Macro.GRAVEYARD, dummyGraveyard)
 					.send();
 
@@ -116,14 +117,17 @@ final class TeleportCommand extends SubcommandAbstract implements Subcommand {
 			return true;
 		}
 
-		// get graveyard location
-		Location destination = graveyard.getLocation();
+		// unwrap optional graveyard
+		Graveyard graveyard = optionalGraveyard.get();
 
-		// if destination is null, send fail message and return
-		if (destination == null) {
+		// get optional graveyard location
+		Optional<Location> optionalDestination = graveyard.getLocation();
+
+		// if destination is empty, send fail message and return
+		if (optionalDestination.isEmpty()) {
 
 			// send message
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_TELEPORT_WORLD_INVALID)
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_TELEPORT_WORLD_INVALID)
 					.setMacro(Macro.GRAVEYARD, graveyard)
 					.setMacro(Macro.INVALID_WORLD, graveyard.getWorldName())
 					.send();
@@ -133,18 +137,27 @@ final class TeleportCommand extends SubcommandAbstract implements Subcommand {
 			return true;
 		}
 
+		// unwrap optional destination
+		Location destination = optionalDestination.get();
+
 		// play teleport departure sound
 		plugin.soundConfig.playSound(player, SoundId.TELEPORT_SUCCESS_DEPARTURE);
+
+		// try to teleport player to graveyard location
 		if (player.teleport(destination, PlayerTeleportEvent.TeleportCause.PLUGIN)) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_SUCCESS_TELEPORT)
+
+			// send successful teleport message
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_SUCCESS_TELEPORT)
 					.setMacro(Macro.GRAVEYARD, graveyard)
 					.setMacro(Macro.LOCATION, graveyard.getLocation())
 					.send();
+
+			// play success sound
 			plugin.soundConfig.playSound(player, SoundId.TELEPORT_SUCCESS_ARRIVAL);
 		}
 		else {
 			// send message
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_TELEPORT).setMacro(Macro.GRAVEYARD, graveyard).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_TELEPORT).setMacro(Macro.GRAVEYARD, graveyard).send();
 
 			// play sound
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);

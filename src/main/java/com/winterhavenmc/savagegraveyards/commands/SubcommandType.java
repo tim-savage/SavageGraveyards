@@ -25,63 +25,63 @@ enum SubcommandType {
 	CLOSEST() {
 		@Override
 		Subcommand create(final PluginMain plugin) {
-			return new ClosestCommand(plugin);
+			return new ClosestSubcommand(plugin);
 		}
 	},
 
 	CREATE() {
 		@Override
 		Subcommand create(final PluginMain plugin) {
-			return new CreateCommand(plugin);
+			return new CreateSubcommand(plugin);
 		}
 	},
 
 	DELETE() {
 		@Override
 		Subcommand create(final PluginMain plugin) {
-			return new DeleteCommand(plugin);
+			return new DeleteSubcommand(plugin);
 		}
 	},
 
 	FORGET() {
 		@Override
 		Subcommand create(final PluginMain plugin) {
-			return new ForgetCommand(plugin);
+			return new ForgetSubcommand(plugin);
 		}
 	},
 
 	LIST() {
 		@Override
 		Subcommand create(final PluginMain plugin) {
-			return new ListCommand(plugin);
+			return new ListSubcommand(plugin);
 		}
 	},
 
 	RELOAD() {
 		@Override
 		Subcommand create(final PluginMain plugin) {
-			return new ReloadCommand(plugin);
+			return new ReloadSubcommand(plugin);
 		}
 	},
 
 	SET() {
 		@Override
 		Subcommand create(final PluginMain plugin) {
-			return new SetCommand(plugin);
+			return new SetSubcommand(plugin);
 		}
 	},
 
 	SHOW() {
 		@Override
 		Subcommand create(final PluginMain plugin) {
-			return new ShowCommand(plugin);
+			return new ShowSubcommand(plugin);
 		}
 	},
 
 	STATUS() {
 		@Override
 		Subcommand create(final PluginMain plugin) {
-			return new StatusCommand(plugin);
+			return new StatusSubcommand(plugin);
 		}
 	},
 

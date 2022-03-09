@@ -22,9 +22,8 @@ import com.winterhavenmc.savagegraveyards.messages.MessageId;
 import com.winterhavenmc.savagegraveyards.sounds.SoundId;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
+import org.bukkit.command.TabExecutor;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -33,7 +32,7 @@ import java.util.*;
 /**
  * Implements command executor for SavageGraveyards commands.
  */
-public final class CommandManager implements CommandExecutor, TabCompleter {
+public final class CommandManager implements TabExecutor {
 
 	// reference to main class
 	private final PluginMain plugin;
@@ -61,7 +60,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		}
 
 		// register help command
-		subcommandRegistry.register(new HelpCommand(plugin, subcommandRegistry));
+		subcommandRegistry.register(new HelpSubcommand(plugin, subcommandRegistry));
 	}
 
 
@@ -76,12 +75,15 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		if (args.length > 1) {
 
 			// get subcommand from map
-			Subcommand subcommand = subcommandRegistry.getCommand(args[0]);
+			Optional<Subcommand> optionalSubcommand = subcommandRegistry.getCommand(args[0]);
 
 			// if no subcommand returned from map, return empty list
-			if (subcommand == null) {
+			if (optionalSubcommand.isEmpty()) {
 				return Collections.emptyList();
 			}
+
+			// unwrap optional subcommand
+			Subcommand subcommand = optionalSubcommand.get();
 
 			// return subcommand tab completer output
 			return subcommand.onTabComplete(sender, command, alias, args);
@@ -115,17 +117,19 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		}
 
 		// get subcommand from map by name
-		Subcommand subcommand = subcommandRegistry.getCommand(subcommandName);
+		Optional<Subcommand> optionalSubcommand = subcommandRegistry.getCommand(subcommandName);
 
 		// if subcommand is null, get help command from map
-		if (subcommand == null) {
-			subcommand = subcommandRegistry.getCommand("help");
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_INVALID_COMMAND).send();
+		if (optionalSubcommand.isEmpty()) {
+			optionalSubcommand = subcommandRegistry.getCommand("help");
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_INVALID_COMMAND).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_INVALID);
 		}
 
 		// execute subcommand
-		 return subcommand.onCommand(sender, argsList);
+		optionalSubcommand.ifPresent( subcommand -> subcommand.onCommand(sender, argsList) );
+
+		return true;
 	}
 
 

@@ -369,7 +369,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 				}
 
 				// build graveyard object
-				Graveyard graveyard = new Graveyard.Builder()
+				Graveyard graveyard = new Graveyard.Builder(plugin)
 							.primaryKey(primaryKey)
 							.searchKey(rs.getString("SearchKey"))
 							.displayName(rs.getString("DisplayName"))
@@ -415,14 +415,18 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 
 
 	@Override
-	public Graveyard selectGraveyard(final String displayName) {
+	public Optional<Graveyard> selectGraveyard(final String displayName) {
+
+		if (displayName == null) {
+			return Optional.empty();
+		}
 
 		// derive search key from displayName
 		String searchKey = Graveyard.createSearchKey(displayName);
 
-		// if key is null or empty, return null record
-		if (searchKey == null || searchKey.isEmpty()) {
-			return null;
+		// if key is empty, return empty optional record
+		if (searchKey.isEmpty()) {
+			return Optional.empty();
 		}
 
 		Graveyard graveyard = null;
@@ -461,7 +465,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 				}
 
 				// create graveyard object
-				graveyard = new Graveyard.Builder()
+				graveyard = new Graveyard.Builder(plugin)
 						.primaryKey(rs.getInt("Key"))
 						.displayName(rs.getString("displayName"))
 						.searchKey(rs.getString("searchKey"))
@@ -494,18 +498,18 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 			if (plugin.getConfig().getBoolean("debug")) {
 				e.printStackTrace();
 			}
-			return null;
+			return Optional.empty();
 		}
-		return graveyard;
+		return Optional.ofNullable(graveyard);
 	}
 
 
 	@Override
-	public Graveyard selectNearestGraveyard(final Player player) {
+	public Optional<Graveyard> selectNearestGraveyard(final Player player) {
 
-		// if player is null, return null record
+		// if player is null, return empty optional graveyard record
 		if (player == null) {
-			return null;
+			return Optional.empty();
 		}
 
 		Location playerLocation = player.getLocation();
@@ -544,7 +548,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 					continue;
 				}
 
-				Graveyard graveyard = new Graveyard.Builder()
+				Graveyard graveyard = new Graveyard.Builder(plugin)
 						.primaryKey(rs.getInt("Key"))
 						.searchKey(rs.getString("SearchKey"))
 						.displayName(rs.getString("DisplayName"))
@@ -565,15 +569,27 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 						.pitch(rs.getFloat("Pitch"))
 						.build();
 
-				if (graveyard.getLocation() == null) {
+				// if graveyard optional location has no value, skip to next graveyard
+				if (graveyard.getLocation().isEmpty()) {
 					continue;
 				}
 
+				// unwrap graveyard optional location
+				Location location = graveyard.getLocation().get();
+
+				// check if graveyard has group and player is in group
 				if (groupName == null || groupName.isEmpty() || player.hasPermission("group." + groupName)) {
-					if (closest == null
-							|| graveyard.getLocation().distanceSquared(playerLocation)
-							< closest.getLocation().distanceSquared(playerLocation)) {
+
+					// if closest is null, set to this graveyard (first pass through loop)
+					if (closest == null) {
 						closest = graveyard;
+					}
+
+					// else if closest graveyard has valid location, check if graveyard is closer than current closest
+					else if (closest.getLocation().isPresent()) {
+						if (location.distanceSquared(playerLocation) < closest.getLocation().get().distanceSquared(playerLocation)) {
+							closest = graveyard;
+						}
 					}
 				}
 			}
@@ -592,12 +608,17 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 		}
 
 		// return closest result
-		return closest;
+		return Optional.ofNullable(closest);
 	}
 
 
 	@Override
 	public List<String> selectMatchingGraveyardNames(final String match) {
+
+		// if match is null, return empty list
+		if (match == null) {
+			return Collections.emptyList();
+		}
 
 		// create empty return list
 		List<String> returnList = new ArrayList<>();
@@ -636,6 +657,11 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 	@Override
 	public Collection<Graveyard> selectUndiscoveredGraveyards(final Player player) {
 
+		// if player is null, return empty set
+		if (player == null) {
+			return Collections.emptySet();
+		}
+
 		// create empty set of Graveyard for return
 		Collection<Graveyard> returnSet = new HashSet<>();
 
@@ -673,7 +699,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 					continue;
 				}
 
-				Graveyard graveyard = new Graveyard.Builder()
+				Graveyard graveyard = new Graveyard.Builder(plugin)
 						.primaryKey(rs.getInt("Key"))
 						.searchKey(rs.getString("SearchKey"))
 						.displayName(rs.getString("DisplayName"))
@@ -717,6 +743,11 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 
 	@Override
 	public Collection<String> selectDiscoveredKeys(final UUID playerUid) {
+
+		// if playerUid is null, return empty set
+		if (playerUid == null) {
+			return Collections.emptySet();
+		}
 
 		// create empty set of Graveyard for return
 		Collection<String> returnSet = new HashSet<>();
@@ -803,6 +834,11 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 	@Override
 	public void insertDiscovery(final Discovery discovery) {
 
+		// if discovery is null, do nothing and return
+		if (discovery == null) {
+			return;
+		}
+
 		final UUID playerUid = discovery.getPlayerUid();
 		final String searchKey = discovery.getSearchKey();
 
@@ -845,6 +881,15 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 
 	@Override
 	public int insertDiscoveries(final Collection<Discovery> discoveries) {
+
+		// if discoveries is null, return int 0
+		if (discoveries == null) {
+			if (plugin.getConfig().getBoolean("debug")) {
+				plugin.getLogger().warning("Could not insert graveyard records in data store "
+						+ "because collection is null!");
+			}
+			return 0;
+		}
 
 		int count = 0;
 
@@ -1031,10 +1076,15 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 
 
 	@Override
-	public Graveyard deleteGraveyard(final String displayName) {
+	public Optional<Graveyard> deleteGraveyard(final String displayName) {
+
+		// if displayName is null, return empty optional
+		if (displayName == null) {
+			return Optional.empty();
+		}
 
 		// get destination record to be deleted, for return
-		final Graveyard graveyard = this.selectGraveyard(displayName);
+		final Optional<Graveyard> graveyard = this.selectGraveyard(displayName);
 
 		new BukkitRunnable() {
 			@Override
@@ -1225,7 +1275,12 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 
 
 	@Override
-	public boolean deleteDiscovery(final String displayName, final UUID playerUUID) {
+	public boolean deleteDiscovery(final String displayName, final UUID playerUid) {
+
+		// if parameter is null, return false
+		if (displayName == null || playerUid == null) {
+			return false;
+		}
 
 		int rowsAffected;
 		boolean result = true;
@@ -1239,8 +1294,8 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 				PreparedStatement preparedStatement =
 						connection.prepareStatement(Queries.getQuery("DeleteDiscovery"));
 
-				preparedStatement.setLong(1, playerUUID.getMostSignificantBits());
-				preparedStatement.setLong(2, playerUUID.getLeastSignificantBits());
+				preparedStatement.setLong(1, playerUid.getMostSignificantBits());
+				preparedStatement.setLong(2, playerUid.getLeastSignificantBits());
 				preparedStatement.setString(3, Graveyard.createSearchKey(displayName));
 
 				// execute prepared statement
@@ -1269,6 +1324,26 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 			}
 		}
 		return result;
+	}
+
+
+	@Override
+	public int selectGraveyardCount() {
+
+		int count = 0;
+
+		try {
+			PreparedStatement preparedStatement = connection.prepareStatement(Queries.getQuery("SelectGraveyardCount"));
+			ResultSet rs = preparedStatement.executeQuery();
+			if (rs.next()) {
+				count = rs.getInt("GraveyardCount");
+			}
+		}
+		catch (SQLException e) {
+			plugin.getLogger().warning("An error occurred while attempting to retrieve a count of all graveyard records.");
+			plugin.getLogger().warning(e.getLocalizedMessage());
+		}
+		return count;
 	}
 
 }

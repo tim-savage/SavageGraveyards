@@ -22,8 +22,8 @@ import java.util.*;
 
 final class SubcommandRegistry {
 
-	Map<String, Subcommand> subcommandMap = new LinkedHashMap<>();
-	Map<String, String> aliasMap = new HashMap<>();
+	final Map<String, Subcommand> subcommandMap = new LinkedHashMap<>();
+	final Map<String, String> aliasMap = new HashMap<>();
 
 
 	/**
@@ -49,7 +49,7 @@ final class SubcommandRegistry {
 	 * @param name the command to retrieve from the map
 	 * @return Subcommand - the subcommand instance, or null if no matching name
 	 */
-	Subcommand getCommand(final String name) {
+	Optional<Subcommand> getCommand(final String name) {
 
 		String key = name;
 
@@ -57,7 +57,7 @@ final class SubcommandRegistry {
 			key = aliasMap.get(key);
 		}
 
-		return (subcommandMap.get(key));
+		return Optional.ofNullable(subcommandMap.get(key));
 	}
 
 

@@ -22,6 +22,7 @@ import com.winterhavenmc.savagegraveyards.sounds.SoundId;
 import com.winterhavenmc.savagegraveyards.storage.Graveyard;
 import com.winterhavenmc.savagegraveyards.messages.Macro;
 import com.winterhavenmc.savagegraveyards.messages.MessageId;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -32,7 +33,7 @@ import java.util.*;
  * List command implementation<br>
  * Displays listing of graveyards
  */
-final class ListCommand extends SubcommandAbstract implements Subcommand {
+final class ListSubcommand extends SubcommandAbstract implements Subcommand {
 
 	private final PluginMain plugin;
 
@@ -41,11 +42,12 @@ final class ListCommand extends SubcommandAbstract implements Subcommand {
 	 * Class constructor
 	 * @param plugin reference to plugin main class instance
 	 */
-	ListCommand(final PluginMain plugin) {
+	ListSubcommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "list";
 		this.usageString = "/graveyard list [page]";
 		this.description = MessageId.COMMAND_HELP_LIST;
+		this.permission = "graveyard.list";
 		this.maxArgs = 1;
 	}
 
@@ -54,15 +56,15 @@ final class ListCommand extends SubcommandAbstract implements Subcommand {
 	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// if command sender does not have permission to list graveyards, output error message and return true
-		if (!sender.hasPermission("graveyard.list")) {
-			plugin.messageBuilder.build(sender, MessageId.PERMISSION_DENIED_LIST).send();
+		if (!sender.hasPermission(permission)) {
+			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_LIST).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check maximum arguments
 		if (args.size() > maxArgs) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			displayUsage(sender);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
@@ -103,7 +105,7 @@ final class ListCommand extends SubcommandAbstract implements Subcommand {
 		for (Graveyard graveyard : allRecords) {
 
 			// if graveyard has invalid location and sender has list disabled permission, add to display list
-			if (graveyard.getLocation() == null) {
+			if (graveyard.getLocation().isEmpty()) {
 				if (sender.hasPermission("graveyard.list.disabled")) {
 					displayRecords.add(graveyard);
 				}
@@ -146,7 +148,7 @@ final class ListCommand extends SubcommandAbstract implements Subcommand {
 
 		// if display list is empty, output list empty message and return
 		if (displayRecords.isEmpty()) {
-			plugin.messageBuilder.build(sender, MessageId.LIST_EMPTY).send();
+			plugin.messageBuilder.compose(sender, MessageId.LIST_EMPTY).send();
 			return true;
 		}
 
@@ -163,7 +165,7 @@ final class ListCommand extends SubcommandAbstract implements Subcommand {
 		int itemNumber = startIndex;
 
 		// display list header
-		plugin.messageBuilder.build(sender, MessageId.LIST_HEADER)
+		plugin.messageBuilder.compose(sender, MessageId.LIST_HEADER)
 				.setMacro(Macro.PAGE_NUMBER, page)
 				.setMacro(Macro.PAGE_TOTAL, pageCount)
 				.send();
@@ -174,8 +176,8 @@ final class ListCommand extends SubcommandAbstract implements Subcommand {
 			itemNumber++;
 
 			// display invalid world list item
-			if (graveyard.getLocation() == null) {
-				plugin.messageBuilder.build(sender, MessageId.LIST_ITEM_INVALID_WORLD)
+			if (graveyard.getLocation().isEmpty()) {
+				plugin.messageBuilder.compose(sender, MessageId.LIST_ITEM_INVALID_WORLD)
 						.setMacro(Macro.GRAVEYARD, graveyard)
 						.setMacro(Macro.ITEM_NUMBER, itemNumber)
 						.setMacro(Macro.INVALID_WORLD, graveyard.getWorldName())
@@ -183,37 +185,39 @@ final class ListCommand extends SubcommandAbstract implements Subcommand {
 				continue;
 			}
 
+			// get unwrapped graveyard location
+			Location location = graveyard.getLocation().get();
+
 			// display disabled list item
 			if (!graveyard.isEnabled()) {
-
-				plugin.messageBuilder.build(sender, MessageId.LIST_ITEM_DISABLED)
+				plugin.messageBuilder.compose(sender, MessageId.LIST_ITEM_DISABLED)
 						.setMacro(Macro.GRAVEYARD, graveyard)
 						.setMacro(Macro.ITEM_NUMBER, itemNumber)
-						.setMacro(Macro.LOCATION, graveyard.getLocation())
+						.setMacro(Macro.LOCATION, location)
 						.send();
 				continue;
 			}
 
 			// display undiscovered list item
 			if (graveyard.isHidden() && undiscoveredKeys.contains(graveyard.getSearchKey())) {
-				plugin.messageBuilder.build(sender, MessageId.LIST_ITEM_UNDISCOVERED)
+				plugin.messageBuilder.compose(sender, MessageId.LIST_ITEM_UNDISCOVERED)
 						.setMacro(Macro.GRAVEYARD, graveyard)
 						.setMacro(Macro.ITEM_NUMBER, itemNumber)
-						.setMacro(Macro.LOCATION, graveyard.getLocation())
+						.setMacro(Macro.LOCATION, location)
 						.send();
 				continue;
 			}
 
 			// display normal list item
-			plugin.messageBuilder.build(sender, MessageId.LIST_ITEM)
+			plugin.messageBuilder.compose(sender, MessageId.LIST_ITEM)
 					.setMacro(Macro.GRAVEYARD, graveyard)
 					.setMacro(Macro.ITEM_NUMBER, itemNumber)
-					.setMacro(Macro.LOCATION, graveyard.getLocation())
+					.setMacro(Macro.LOCATION, location)
 					.send();
 		}
 
 		// display list footer
-		plugin.messageBuilder.build(sender, MessageId.LIST_FOOTER)
+		plugin.messageBuilder.compose(sender, MessageId.LIST_FOOTER)
 				.setMacro(Macro.PAGE_NUMBER, page)
 				.setMacro(Macro.PAGE_TOTAL, pageCount)
 				.send();

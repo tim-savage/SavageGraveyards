@@ -43,3 +43,6 @@ respawn-priority: NORMAL
 
 # play sound effects
 sound-effects: true
+
+# display titles as declared in language file
+titles-enabled: true
