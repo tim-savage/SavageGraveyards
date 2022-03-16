@@ -56,15 +56,6 @@ public final class Graveyard {
 
 
 	/**
-	 * Private class constructor to prevent instantiation
-	 */
-	@SuppressWarnings("unused")
-	private Graveyard() {
-		throw new AssertionError();
-	}
-
-
-	/**
 	 * Private class constructor for use with static builder
 	 *
 	 * @param builder builder object
