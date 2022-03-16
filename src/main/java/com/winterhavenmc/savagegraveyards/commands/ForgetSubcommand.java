@@ -26,8 +26,11 @@ import com.winterhavenmc.savagegraveyards.sounds.SoundId;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Entity;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 
 /**
@@ -48,7 +51,7 @@ final class ForgetSubcommand extends SubcommandAbstract implements Subcommand {
 		this.name = "forget";
 		this.usageString = "/graveyard forget <player> <graveyard name>";
 		this.description = MessageId.COMMAND_HELP_FORGET;
-		this.permission = "graveyard.forget";
+		this.permissionNode = "graveyard.forget";
 		this.minArgs = 2;
 	}
 
@@ -57,56 +60,37 @@ final class ForgetSubcommand extends SubcommandAbstract implements Subcommand {
 	public List<String> onTabComplete(final CommandSender sender, final Command command,
 									  final String alias, final String[] args) {
 
-		List<String> returnList = new ArrayList<>();
+		List<String> resultList = new ArrayList<>();
 
 		if (args.length == 2) {
 
 			// get collection of players with discoveries
 			Collection<String> playerNames = plugin.dataStore.selectPlayersWithDiscoveries();
 
-			// add matching player names to return list
-			for (String playerName : playerNames) {
-				if (playerName != null && playerName.toLowerCase().startsWith(args[1].toLowerCase())) {
-					returnList.add(playerName);
-				}
-			}
+			Predicate<String> startsWith = string -> string.toLowerCase().startsWith(args[1].toLowerCase());
+
+			resultList = playerNames.stream().filter(startsWith).collect(Collectors.toList());
 		}
 
 		else if (args.length == 3) {
 
-			// get uid for player name in args[1]
-			String playerName = args[1];
+			// get player uuids from name
+			Set<UUID> matchedPlayerUids = plugin.getServer().matchPlayer(args[1]).stream()
+					.map(Entity::getUniqueId)
+					.collect(Collectors.toSet());
 
-			// get all offline players
-			Collection<OfflinePlayer> offlinePlayers = Set.of(plugin.getServer().getOfflinePlayers());
+			Collection<String> graveyardKeys = new HashSet<>();
 
-			UUID playerUid = null;
-
-			// iterate over offline players trying to match name
-			for (OfflinePlayer offlinePlayer : offlinePlayers) {
-				if (playerName.equalsIgnoreCase(offlinePlayer.getName())) {
-					playerUid = offlinePlayer.getUniqueId();
-					break;
-				}
+			for (UUID playerUid : matchedPlayerUids) {
+				graveyardKeys.addAll(plugin.dataStore.selectDiscoveredKeys(playerUid));
 			}
 
-			// if playerUid is null, return empty list
-			if (playerUid == null) {
-				return Collections.emptyList();
-			}
+			Predicate<String> startsWith = string -> string.toLowerCase().startsWith(args[2].toLowerCase());
 
-			// get graveyard keys discovered by player
-			Collection<String> graveyardKeys = plugin.dataStore.selectDiscoveredKeys(playerUid);
-
-			// iterate over graveyards
-			for (String graveyardKey : graveyardKeys) {
-				if (graveyardKey.startsWith(args[2])) {
-					returnList.add(graveyardKey);
-				}
-			}
+			resultList = graveyardKeys.stream().filter(startsWith).collect(Collectors.toList());
 		}
 
-		return returnList;
+		return resultList;
 	}
 
 
@@ -114,7 +98,7 @@ final class ForgetSubcommand extends SubcommandAbstract implements Subcommand {
 	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// check for permission
-		if (!sender.hasPermission(permission)) {
+		if (!sender.hasPermission(permissionNode)) {
 			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_FORGET).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
