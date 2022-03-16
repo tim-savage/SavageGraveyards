@@ -48,19 +48,25 @@ public class SavageGraveyardsTests {
     }
 
     @Nested
-    @DisplayName("Test mock objects.")
+    @DisplayName("Test mocking setup.")
     class MockingTests {
 
         @Test
-        @DisplayName("mock server not null.")
-        void MockServerNotNull() {
-            Assertions.assertNotNull(server);
+        @DisplayName("server is not null.")
+        void ServerNotNull() {
+            Assertions.assertNotNull(server, "server is null.");
         }
 
         @Test
-        @DisplayName("mock plugin not null.")
-        void MockPluginNotNull() {
-            Assertions.assertNotNull(plugin);
+        @DisplayName("plugin is not null.")
+        void PluginNotNull() {
+            Assertions.assertNotNull(plugin, "plugin is null.");
+        }
+
+        @Test
+        @DisplayName("plugin is enabled.")
+        void PluginEnabled() {
+            Assertions.assertTrue(plugin.isEnabled(),"plugin is not enabled.");
         }
     }
 
