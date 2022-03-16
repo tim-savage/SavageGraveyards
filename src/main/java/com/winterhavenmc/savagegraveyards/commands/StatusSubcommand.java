@@ -20,6 +20,7 @@ package com.winterhavenmc.savagegraveyards.commands;
 import com.winterhavenmc.savagegraveyards.PluginMain;
 import com.winterhavenmc.savagegraveyards.sounds.SoundId;
 import com.winterhavenmc.savagegraveyards.messages.MessageId;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -45,7 +46,7 @@ final class StatusSubcommand extends SubcommandAbstract implements Subcommand {
 		this.name = "status";
 		this.usageString = "/graveyard status";
 		this.description = MessageId.COMMAND_HELP_STATUS;
-		this.permission = "graveyard.status";
+		this.permissionNode = "graveyard.status";
 	}
 
 
@@ -53,7 +54,7 @@ final class StatusSubcommand extends SubcommandAbstract implements Subcommand {
 	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// if command sender does not have permission to view status, output error message and return true
-		if (!sender.hasPermission(permission)) {
+		if (!sender.hasPermission(permissionNode)) {
 			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_STATUS).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
@@ -71,9 +72,6 @@ final class StatusSubcommand extends SubcommandAbstract implements Subcommand {
 
 		sender.sendMessage(ChatColor.GREEN + "Language: "
 				+ ChatColor.RESET + plugin.getConfig().getString("language"));
-
-		sender.sendMessage(ChatColor.GREEN + "Storage type: "
-				+ ChatColor.RESET + plugin.dataStore.toString());
 
 		sender.sendMessage(ChatColor.GREEN + "Default discovery range: "
 				+ ChatColor.RESET + plugin.getConfig().getInt("discovery-range") + " blocks");

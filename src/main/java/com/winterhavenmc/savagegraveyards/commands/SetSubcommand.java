@@ -22,6 +22,7 @@ import com.winterhavenmc.savagegraveyards.sounds.SoundId;
 import com.winterhavenmc.savagegraveyards.storage.Graveyard;
 import com.winterhavenmc.savagegraveyards.messages.Macro;
 import com.winterhavenmc.savagegraveyards.messages.MessageId;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -57,7 +58,7 @@ final class SetSubcommand extends SubcommandAbstract implements Subcommand {
 		this.name = "set";
 		this.usageString = "/graveyard set <graveyard> <attribute> <value>";
 		this.description = MessageId.COMMAND_HELP_SET;
-		this.permission = "graveyard.set";
+		this.permissionNode = "graveyard.set";
 		this.minArgs = 2;
 	}
 

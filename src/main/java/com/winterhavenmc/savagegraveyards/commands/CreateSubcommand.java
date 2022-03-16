@@ -48,7 +48,7 @@ final class CreateSubcommand extends SubcommandAbstract implements Subcommand {
 		this.name = "create";
 		this.usageString = "/graveyard create <graveyard name>";
 		this.description = MessageId.COMMAND_HELP_CREATE;
-		this.permission = "graveyard.create";
+		this.permissionNode = "graveyard.create";
 		this.minArgs = 1;
 	}
 
@@ -63,7 +63,7 @@ final class CreateSubcommand extends SubcommandAbstract implements Subcommand {
 		}
 
 		// check for permission
-		if (!sender.hasPermission(permission)) {
+		if (!sender.hasPermission(permissionNode)) {
 			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_CREATE).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;

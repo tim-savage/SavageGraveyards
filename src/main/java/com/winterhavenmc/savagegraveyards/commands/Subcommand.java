@@ -34,6 +34,8 @@ interface Subcommand {
 
 	String getName();
 
+	String getPermissionNode();
+
 	Collection<String> getAliases();
 
 	@SuppressWarnings("unused")
