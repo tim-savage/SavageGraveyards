@@ -61,35 +61,67 @@ final class StatusSubcommand extends SubcommandAbstract implements Subcommand {
 		}
 
 		// output config settings
-		String versionString = plugin.getDescription().getVersion();
-
-		sender.sendMessage(ChatColor.DARK_AQUA
-				+ "[" + plugin.getName() + "] " + ChatColor.AQUA + "Version: " + ChatColor.RESET + versionString);
-
-		if (plugin.getConfig().getBoolean("debug")) {
-			sender.sendMessage(ChatColor.DARK_RED + "DEBUG: true");
-		}
-
-		sender.sendMessage(ChatColor.GREEN + "Language: "
-				+ ChatColor.RESET + plugin.getConfig().getString("language"));
-
-		sender.sendMessage(ChatColor.GREEN + "Default discovery range: "
-				+ ChatColor.RESET + plugin.getConfig().getInt("discovery-range") + " blocks");
-
-		sender.sendMessage(ChatColor.GREEN + "Default safety time: "
-				+ ChatColor.RESET + plugin.getConfig().getInt("safety-time") + " seconds");
-
-		sender.sendMessage(ChatColor.GREEN + "Discovery check interval: "
-				+ ChatColor.RESET + plugin.getConfig().getInt("discovery-interval") + " ticks");
-
-		sender.sendMessage(ChatColor.GREEN + "List items page size: "
-				+ ChatColor.RESET + plugin.getConfig().getInt("list-page-size") + " items");
-
-		sender.sendMessage(ChatColor.GREEN + "Enabled Words: "
-				+ ChatColor.RESET + plugin.worldManager.getEnabledWorldNames().toString());
+		showPluginVersion(sender);
+		showDebugSetting(sender);
+		showLanguageSetting(sender);
+		showDiscoveryRangeSetting(sender);
+		showSafetyTimeSetting(sender);
+		showDiscoveryIntervalSetting(sender);
+		showListItemPageSizeSetting(sender);
+		showEnabledWorlds(sender);
 
 		// always return true to suppress bukkit usage message
 		return true;
 	}
+
+
+	private void showPluginVersion(final CommandSender sender) {
+		sender.sendMessage(ChatColor.DARK_AQUA + "[" + plugin.getName() + "] " + ChatColor.AQUA + "Version: "
+				+ ChatColor.RESET + plugin.getDescription().getVersion());
+	}
+
+
+	private void showDebugSetting(final CommandSender sender) {
+		if (plugin.getConfig().getBoolean("debug")) {
+			sender.sendMessage(ChatColor.DARK_RED + "DEBUG: true");
+		}
+	}
+
+
+	private void showLanguageSetting(final CommandSender sender) {
+		sender.sendMessage(ChatColor.GREEN + "Language: "
+				+ ChatColor.RESET + plugin.getConfig().getString("language"));
+	}
+
+
+	private void showDiscoveryRangeSetting(final CommandSender sender) {
+		sender.sendMessage(ChatColor.GREEN + "Default discovery range: "
+				+ ChatColor.RESET + plugin.getConfig().getInt("discovery-range") + " blocks");
+	}
+
+
+	private void showSafetyTimeSetting(final CommandSender sender) {
+		sender.sendMessage(ChatColor.GREEN + "Default safety time: "
+				+ ChatColor.RESET + plugin.getConfig().getInt("safety-time") + " seconds");
+	}
+
+
+	private void showDiscoveryIntervalSetting(final CommandSender sender) {
+		sender.sendMessage(ChatColor.GREEN + "Discovery check interval: "
+				+ ChatColor.RESET + plugin.getConfig().getInt("discovery-interval") + " ticks");
+	}
+
+
+	private void showListItemPageSizeSetting(final CommandSender sender) {
+		sender.sendMessage(ChatColor.GREEN + "List items page size: "
+				+ ChatColor.RESET + plugin.getConfig().getInt("list-page-size") + " items");
+	}
+
+
+	private void showEnabledWorlds(final CommandSender sender) {
+		sender.sendMessage(ChatColor.GREEN + "Enabled Words: "
+				+ ChatColor.RESET + plugin.worldManager.getEnabledWorldNames().toString());
+	}
+
 
 }
