@@ -491,7 +491,7 @@ public final class Graveyard {
 	/**
 	 * Getter for location; returns new location object constructed from components.
 	 * If worldUid is null, or if world referenced by worldUid is invalid,
-	 * perhaps because it has been unloaded, the returned location will be null.
+	 * perhaps because it has been unloaded, the returned location will be an empty optional.
 	 *
 	 * @return Location - location
 	 */
