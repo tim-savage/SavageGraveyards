@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  * Forget command implementation<br>
  * Removes graveyard discovery record for player
  */
-final class ForgetSubcommand extends SubcommandAbstract implements Subcommand {
+final class ForgetSubcommand extends AbstractSubcommand implements Subcommand {
 
 	private final PluginMain plugin;
 

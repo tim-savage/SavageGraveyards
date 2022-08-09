@@ -37,7 +37,7 @@ import java.util.Optional;
  * Show command implementation<br>
  * displays graveyard settings
  */
-final class ShowSubcommand extends SubcommandAbstract implements Subcommand {
+final class ShowSubcommand extends AbstractSubcommand implements Subcommand {
 
 	private final PluginMain plugin;
 

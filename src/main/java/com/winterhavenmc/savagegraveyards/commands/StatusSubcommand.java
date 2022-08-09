@@ -32,7 +32,7 @@ import java.util.Objects;
  * Status command implementation<br>
  * Display plugin settings
  */
-final class StatusSubcommand extends SubcommandAbstract implements Subcommand {
+final class StatusSubcommand extends AbstractSubcommand implements Subcommand {
 
 	private final PluginMain plugin;
 

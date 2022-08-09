@@ -31,7 +31,7 @@ import java.util.Objects;
  * Reload command implementation<br>
  * reloads plugin configuration
  */
-final class ReloadSubcommand extends SubcommandAbstract implements Subcommand {
+final class ReloadSubcommand extends AbstractSubcommand implements Subcommand {
 
 	private final PluginMain plugin;
 

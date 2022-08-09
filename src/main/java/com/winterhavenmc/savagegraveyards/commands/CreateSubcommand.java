@@ -34,7 +34,7 @@ import java.util.*;
  * Create command implementation<br>
  * Creates new graveyard at player location with given name
  */
-final class CreateSubcommand extends SubcommandAbstract implements Subcommand {
+final class CreateSubcommand extends AbstractSubcommand implements Subcommand {
 
 	private final PluginMain plugin;
 

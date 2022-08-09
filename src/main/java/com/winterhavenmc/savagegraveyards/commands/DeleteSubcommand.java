@@ -36,7 +36,7 @@ import java.util.Optional;
  * Delete command implementation<br>
  * Removes graveyard record from datastore
  */
-final class DeleteSubcommand extends SubcommandAbstract implements Subcommand {
+final class DeleteSubcommand extends AbstractSubcommand implements Subcommand {
 
 	private final PluginMain plugin;
 

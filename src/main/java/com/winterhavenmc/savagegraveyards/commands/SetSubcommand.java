@@ -38,7 +38,7 @@ import static com.winterhavenmc.util.TimeUnit.SECONDS;
  * Set command implementation<br>
  * changes graveyard settings
  */
-final class SetSubcommand extends SubcommandAbstract implements Subcommand {
+final class SetSubcommand extends AbstractSubcommand implements Subcommand {
 
 	private final PluginMain plugin;
 

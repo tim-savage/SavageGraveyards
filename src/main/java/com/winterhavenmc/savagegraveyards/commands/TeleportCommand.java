@@ -36,7 +36,7 @@ import java.util.*;
  * Teleport command implementation<br>
  * teleports player to graveyard location
  */
-final class TeleportCommand extends SubcommandAbstract implements Subcommand {
+final class TeleportCommand extends AbstractSubcommand implements Subcommand {
 
 	private final PluginMain plugin;
 
