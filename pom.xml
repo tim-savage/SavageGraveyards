@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.winterhaven-mc</groupId>
 	<artifactId>SavageGraveyards</artifactId>
-	<version>1.19.0-SNAPSHOT</version>
+	<version>1.19.0</version>
 	<name>SavageGraveyards</name>
 
 	<url>https://github.com/tim-savage/SavageGraveyards</url>
