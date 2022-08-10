@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.winterhaven-mc</groupId>
 	<artifactId>SavageGraveyards</artifactId>
-	<version>1.18.6-SNAPSHOT</version>
+	<version>1.19.0-SNAPSHOT</version>
 	<name>SavageGraveyards</name>
 
 	<url>https://github.com/tim-savage/SavageGraveyards</url>
@@ -14,7 +14,7 @@
 	<properties>
 		<project.author>Tim Savage</project.author>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.release>11</maven.compiler.release>
+		<maven.compiler.release>17</maven.compiler.release>
 	</properties>
 
 	<licenses>
@@ -59,7 +59,7 @@
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
-			<version>1.18.1-R0.1-SNAPSHOT</version>
+			<version>1.19.2-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -103,7 +103,7 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
-			<version>5.8.2</version>
+			<version>5.9.0</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -111,7 +111,7 @@
 		<dependency>
 			<groupId>com.github.seeseemelk</groupId>
 			<artifactId>MockBukkit-v1.18</artifactId>
-			<version>1.24.1</version>
+			<version>2.85.2</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
