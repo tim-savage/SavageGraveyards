@@ -51,7 +51,7 @@ public final class PlayerEventListener implements Listener {
 	private final Set<UUID> deathTriggeredRespawn = ConcurrentHashMap.newKeySet();
 
 	// unmodifiable set of entity target cancel reasons
-	private final static Set<TargetReason> cancelReasons = Set.of(
+	private final static Set<TargetReason> CANCEL_REASONS = Set.of(
 			TargetReason.CLOSEST_PLAYER,
 			TargetReason.RANDOM_TARGET );
 
@@ -243,7 +243,7 @@ public final class PlayerEventListener implements Listener {
 				EntityTargetEvent.TargetReason reason = event.getReason();
 
 				// if reason is in cancelReasons list, cancel event
-				if (cancelReasons.contains(reason)) {
+				if (CANCEL_REASONS.contains(reason)) {
 					event.setCancelled(true);
 				}
 			}

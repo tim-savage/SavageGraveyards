@@ -56,15 +56,6 @@ public final class Graveyard {
 
 
 	/**
-	 * Private class constructor to prevent instantiation
-	 */
-	@SuppressWarnings("unused")
-	private Graveyard() {
-		throw new AssertionError();
-	}
-
-
-	/**
 	 * Private class constructor for use with static builder
 	 *
 	 * @param builder builder object
@@ -500,7 +491,7 @@ public final class Graveyard {
 	/**
 	 * Getter for location; returns new location object constructed from components.
 	 * If worldUid is null, or if world referenced by worldUid is invalid,
-	 * perhaps because it has been unloaded, the returned location will be null.
+	 * perhaps because it has been unloaded, the returned location will be an empty optional.
 	 *
 	 * @return Location - location
 	 */

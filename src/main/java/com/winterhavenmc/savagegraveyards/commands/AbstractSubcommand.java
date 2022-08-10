@@ -24,19 +24,24 @@ import org.bukkit.command.CommandSender;
 import java.util.*;
 
 
-abstract class SubcommandAbstract implements Subcommand {
+abstract class AbstractSubcommand implements Subcommand {
 
 	protected String name;
 	protected Collection<String> aliases = new HashSet<>();
 	protected String usageString;
 	protected MessageId description;
-	protected String permission;
+	protected String permissionNode;
 	protected int minArgs;
 	protected int maxArgs;
 
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public String getPermissionNode() {
+		return permissionNode;
 	}
 
 	@Override

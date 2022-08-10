@@ -314,8 +314,7 @@ final class DataStoreSQLite extends DataStoreAbstract implements DataStore {
 		final Collection<Graveyard> returnSet = new HashSet<>();
 
 		try {
-			PreparedStatement preparedStatement =
-					connection.prepareStatement(Queries.getQuery("SelectAllGraveyards"));
+			PreparedStatement preparedStatement = connection.prepareStatement(Queries.getQuery("SelectAllGraveyards"));
 
 			// execute sql query
 			ResultSet rs = preparedStatement.executeQuery();

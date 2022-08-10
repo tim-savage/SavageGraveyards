@@ -22,6 +22,7 @@ import com.winterhavenmc.savagegraveyards.sounds.SoundId;
 import com.winterhavenmc.savagegraveyards.storage.Graveyard;
 import com.winterhavenmc.savagegraveyards.messages.Macro;
 import com.winterhavenmc.savagegraveyards.messages.MessageId;
+
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -36,7 +37,7 @@ import java.util.Set;
  * Closest command implementation<br>
  * Returns name of closest graveyard to player position
  */
-final class ClosestSubcommand extends SubcommandAbstract implements Subcommand {
+final class ClosestSubcommand extends AbstractSubcommand implements Subcommand {
 
 	private final PluginMain plugin;
 
@@ -50,7 +51,7 @@ final class ClosestSubcommand extends SubcommandAbstract implements Subcommand {
 		this.name = "closest";
 		this.usageString = "/graveyard closest";
 		this.description = MessageId.COMMAND_HELP_CLOSEST;
-		this.permission = "graveyard.closest";
+		this.permissionNode = "graveyard.closest";
 		this.aliases = Set.of("nearest");
 	}
 
@@ -60,7 +61,7 @@ final class ClosestSubcommand extends SubcommandAbstract implements Subcommand {
 
 		// if command sender does not have permission to display the closest graveyard,
 		// output error message and return true
-		if (!sender.hasPermission(permission)) {
+		if (!sender.hasPermission(permissionNode)) {
 			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_CLOSEST).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;

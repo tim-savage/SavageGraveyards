@@ -22,6 +22,7 @@ import com.winterhavenmc.savagegraveyards.sounds.SoundId;
 import com.winterhavenmc.savagegraveyards.storage.Graveyard;
 import com.winterhavenmc.savagegraveyards.messages.Macro;
 import com.winterhavenmc.savagegraveyards.messages.MessageId;
+
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -35,7 +36,7 @@ import java.util.*;
  * Teleport command implementation<br>
  * teleports player to graveyard location
  */
-final class TeleportCommand extends SubcommandAbstract implements Subcommand {
+final class TeleportCommand extends AbstractSubcommand implements Subcommand {
 
 	private final PluginMain plugin;
 
@@ -49,7 +50,7 @@ final class TeleportCommand extends SubcommandAbstract implements Subcommand {
 		this.name = "teleport";
 		this.usageString = "/graveyard teleport <name>";
 		this.description = MessageId.COMMAND_HELP_TELEPORT;
-		this.permission = "graveyard.teleport";
+		this.permissionNode = "graveyard.teleport";
 		this.aliases = Set.of("tp");
 		this.minArgs = 1;
 	}
@@ -78,7 +79,7 @@ final class TeleportCommand extends SubcommandAbstract implements Subcommand {
 		}
 
 		// check for permission
-		if (!sender.hasPermission(permission)) {
+		if (!sender.hasPermission(permissionNode)) {
 			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_TELEPORT).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;

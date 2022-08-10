@@ -119,7 +119,7 @@ public final class CommandManager implements TabExecutor {
 		// get subcommand from map by name
 		Optional<Subcommand> optionalSubcommand = subcommandRegistry.getCommand(subcommandName);
 
-		// if subcommand is null, get help command from map
+		// if subcommand is empty, get help command from map
 		if (optionalSubcommand.isEmpty()) {
 			optionalSubcommand = subcommandRegistry.getCommand("help");
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_INVALID_COMMAND).send();
@@ -135,6 +135,7 @@ public final class CommandManager implements TabExecutor {
 
 	/**
 	 * Get matching list of subcommands for which sender has permission
+	 *
 	 * @param sender the command sender
 	 * @param matchString the string prefix to match against command names
 	 * @return List of String - command names that match prefix and sender has permission
@@ -143,10 +144,13 @@ public final class CommandManager implements TabExecutor {
 
 		List<String> returnList = new ArrayList<>();
 
-		for (String subcommand : subcommandRegistry.getKeys()) {
-			if (sender.hasPermission("graveyard." + subcommand)
-					&& subcommand.startsWith(matchString.toLowerCase())) {
-				returnList.add(subcommand);
+		for (String subcommandName : subcommandRegistry.getKeys()) {
+			Optional<Subcommand> subcommand = subcommandRegistry.getCommand(subcommandName);
+			if (subcommand.isPresent()) {
+				if (sender.hasPermission(subcommand.get().getPermissionNode())
+						&& subcommandName.startsWith(matchString.toLowerCase())) {
+					returnList.add(subcommandName);
+				}
 			}
 		}
 		return returnList;

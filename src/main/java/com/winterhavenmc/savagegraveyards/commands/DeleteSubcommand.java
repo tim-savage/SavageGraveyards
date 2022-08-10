@@ -22,6 +22,7 @@ import com.winterhavenmc.savagegraveyards.sounds.SoundId;
 import com.winterhavenmc.savagegraveyards.storage.Graveyard;
 import com.winterhavenmc.savagegraveyards.messages.Macro;
 import com.winterhavenmc.savagegraveyards.messages.MessageId;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -35,7 +36,7 @@ import java.util.Optional;
  * Delete command implementation<br>
  * Removes graveyard record from datastore
  */
-final class DeleteSubcommand extends SubcommandAbstract implements Subcommand {
+final class DeleteSubcommand extends AbstractSubcommand implements Subcommand {
 
 	private final PluginMain plugin;
 
@@ -49,7 +50,7 @@ final class DeleteSubcommand extends SubcommandAbstract implements Subcommand {
 		this.name = "delete";
 		this.usageString = "/graveyard delete <graveyard name>";
 		this.description = MessageId.COMMAND_HELP_DELETE;
-		this.permission = "graveyard.delete";
+		this.permissionNode = "graveyard.delete";
 		this.minArgs = 1;
 	}
 
@@ -71,7 +72,7 @@ final class DeleteSubcommand extends SubcommandAbstract implements Subcommand {
 	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// check for permission
-		if (!sender.hasPermission(permission)) {
+		if (!sender.hasPermission(permissionNode)) {
 			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_DELETE).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;

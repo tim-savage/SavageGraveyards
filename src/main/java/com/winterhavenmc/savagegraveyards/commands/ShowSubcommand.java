@@ -22,6 +22,7 @@ import com.winterhavenmc.savagegraveyards.sounds.SoundId;
 import com.winterhavenmc.savagegraveyards.storage.Graveyard;
 import com.winterhavenmc.savagegraveyards.messages.Macro;
 import com.winterhavenmc.savagegraveyards.messages.MessageId;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -36,7 +37,7 @@ import java.util.Optional;
  * Show command implementation<br>
  * displays graveyard settings
  */
-final class ShowSubcommand extends SubcommandAbstract implements Subcommand {
+final class ShowSubcommand extends AbstractSubcommand implements Subcommand {
 
 	private final PluginMain plugin;
 
@@ -50,7 +51,7 @@ final class ShowSubcommand extends SubcommandAbstract implements Subcommand {
 		this.name = "show";
 		this.usageString = "/graveyard show <graveyard>";
 		this.description = MessageId.COMMAND_HELP_SHOW;
-		this.permission = "graveyard.show";
+		this.permissionNode = "graveyard.show";
 		this.minArgs = 1;
 	}
 
@@ -72,7 +73,7 @@ final class ShowSubcommand extends SubcommandAbstract implements Subcommand {
 	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// if command sender does not have permission to show graveyards, output error message and return true
-		if (!sender.hasPermission(permission)) {
+		if (!sender.hasPermission(permissionNode)) {
 			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_SHOW).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
