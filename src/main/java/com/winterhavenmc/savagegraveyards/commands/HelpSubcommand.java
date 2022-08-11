@@ -93,7 +93,7 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand {
 		}
 
 		// display subcommand help message or invalid command message
-		subcommandRegistry.getCommand(args.get(0)).ifPresentOrElse(
+		subcommandRegistry.getSubcommand(args.get(0)).ifPresentOrElse(
 				subcommand -> sendCommandHelpMessage(sender, subcommand),
 				() -> sendCommandInvalidMessage(sender)
 		);
@@ -136,7 +136,7 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand {
 		plugin.messageBuilder.compose(sender, MessageId.COMMAND_HELP_USAGE_HEADER).send();
 
 		for (String subcommandName : subcommandRegistry.getKeys()) {
-			subcommandRegistry.getCommand(subcommandName).ifPresent(subcommand -> subcommand.displayUsage(sender));
+			subcommandRegistry.getSubcommand(subcommandName).ifPresent(subcommand -> subcommand.displayUsage(sender));
 		}
 	}
 
