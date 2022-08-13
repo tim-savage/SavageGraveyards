@@ -24,9 +24,8 @@ import com.winterhavenmc.savagegraveyards.sounds.SoundId;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -58,21 +57,17 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand {
 	public List<String> onTabComplete(final CommandSender sender, final Command command,
 									  final String alias, final String[] args) {
 
-		List<String> returnList = new ArrayList<>();
-
-		if (args.length == 2) {
-			if (args[0].equalsIgnoreCase("help")) {
-				for (String subcommandName : subcommandRegistry.getKeys()) {
-					if (sender.hasPermission("graveyard." + subcommandName)
-							&& subcommandName.startsWith(args[1].toLowerCase())
-							&& !subcommandName.equalsIgnoreCase("help")) {
-						returnList.add(subcommandName);
-					}
-				}
-			}
+		if (args.length == 2 && args[0].equalsIgnoreCase(this.name)) {
+			return subcommandRegistry.getKeys().stream()
+					.map(subcommandRegistry::getSubcommand)
+					.filter(Optional::isPresent)
+					.filter(subcommand -> sender.hasPermission(subcommand.get().getPermissionNode()))
+					.map(subcommand -> subcommand.get().getName())
+					.filter(subCommandName -> subCommandName.toLowerCase().startsWith(args[1].toLowerCase()))
+					.filter(subCommandName -> !subCommandName.equalsIgnoreCase(this.name))
+					.collect(Collectors.toList());
 		}
-
-		return returnList;
+		return Collections.emptyList();
 	}
 
 
@@ -103,19 +98,26 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand {
 
 
 	/**
-	 * Send help description for subcommand to command sender
+	 * Send help description for subcommand to command sender with subcommand permission node,
+	 * otherwise send invalid command message
 	 *
 	 * @param sender the command sender
 	 * @param subcommand the subcommand to display help description
 	 */
 	private void sendCommandHelpMessage(CommandSender sender, Subcommand subcommand) {
-		plugin.messageBuilder.compose(sender, subcommand.getDescription()).send();
-		subcommand.displayUsage(sender);
+		if (sender.hasPermission(subcommand.getPermissionNode())) {
+			plugin.messageBuilder.compose(sender, subcommand.getDescription()).send();
+			subcommand.displayUsage(sender);
+		}
+		else {
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_HELP_INVALID).send();
+			plugin.soundConfig.playSound(sender, SoundId.COMMAND_INVALID);
+		}
 	}
 
 
 	/**
-	 * Send invalid subcommand message to command sender
+	 * Send invalid subcommand message to command sender and display usage for all subcommands
 	 *
 	 * @param sender the command sender
 	 */
@@ -135,9 +137,11 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand {
 
 		plugin.messageBuilder.compose(sender, MessageId.COMMAND_HELP_USAGE_HEADER).send();
 
-		for (String subcommandName : subcommandRegistry.getKeys()) {
-			subcommandRegistry.getSubcommand(subcommandName).ifPresent(subcommand -> subcommand.displayUsage(sender));
-		}
+		subcommandRegistry.getKeys().stream()
+				.map(subcommandRegistry::getSubcommand)
+				.filter(Optional::isPresent)
+				.filter(subcommand -> sender.hasPermission(subcommand.get().getPermissionNode()))
+				.forEach(subcommand -> subcommand.get().displayUsage(sender));
 	}
 
 }
