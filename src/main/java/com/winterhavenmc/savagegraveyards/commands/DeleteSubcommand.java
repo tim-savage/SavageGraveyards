@@ -109,7 +109,7 @@ final class DeleteSubcommand extends AbstractSubcommand implements Subcommand {
 
 	private void sendNoGraveyardMessage(CommandSender sender, String displayName) {
 
-		// create dummy graveyard to send to message manager
+		// create dummy graveyard to send to message builder
 		Graveyard dummyGraveyard = new Graveyard.Builder(plugin).displayName(displayName).build();
 
 		// send message
