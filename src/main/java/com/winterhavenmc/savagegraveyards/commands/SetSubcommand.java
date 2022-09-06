@@ -180,13 +180,10 @@ final class SetSubcommand extends AbstractSubcommand implements Subcommand {
 		Objects.requireNonNull(graveyard);
 
 		// sender must be in game player
-		if (!(sender instanceof Player)) {
+		if (!(sender instanceof Player player)) {
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_CONSOLE).send();
 			return true;
 		}
-
-		// cast sender to player
-		Player player = (Player) sender;
 
 		// check player permission
 		if (!player.hasPermission("graveyard.set.location")) {
@@ -462,10 +459,7 @@ final class SetSubcommand extends AbstractSubcommand implements Subcommand {
 				|| passedString.equalsIgnoreCase("current")) {
 
 			// if sender is player, use player's current distance
-			if (sender instanceof Player && graveyard.getLocation().isPresent()) {
-
-				// cast sender to player
-				Player player = (Player) sender;
+			if (sender instanceof Player player && graveyard.getLocation().isPresent()) {
 
 				// unwrap optional location
 				Location location = graveyard.getLocation().get();

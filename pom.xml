@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.winterhaven-mc</groupId>
 	<artifactId>SavageGraveyards</artifactId>
-	<version>1.19.0</version>
+	<version>1.19.1-SNAPSHOT</version>
 	<name>SavageGraveyards</name>
 
 	<url>https://github.com/tim-savage/SavageGraveyards</url>
@@ -74,28 +74,28 @@
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>message-builder-lib</artifactId>
-			<version>1.11.5</version>
+			<version>1.17.0</version>
 		</dependency>
 
 		<!-- SoundConfigLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>sound-config-lib</artifactId>
-			<version>1.11.1</version>
+			<version>1.17.0</version>
 		</dependency>
 
 		<!-- WorldManagerLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>world-manager-lib</artifactId>
-			<version>1.11.0</version>
+			<version>1.17.0</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
 		<dependency>
 			<groupId>org.xerial</groupId>
 			<artifactId>sqlite-jdbc</artifactId>
-			<version>3.36.0.3</version>
+			<version>3.39.2.1</version>
 			<scope>test</scope>
 		</dependency>
 

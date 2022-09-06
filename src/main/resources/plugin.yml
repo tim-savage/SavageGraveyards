@@ -2,7 +2,7 @@ name: '${project.name}'
 main: com.winterhavenmc.savagegraveyards.PluginMain
 author: '${project.author}'
 version: '${project.version}'
-softdepend: [Multiverse-Core]
+softdepend: [ Iris, Multiverse-Core, My_Worlds ]
 api-version: 1.18
 
 commands:

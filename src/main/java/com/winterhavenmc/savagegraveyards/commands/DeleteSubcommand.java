@@ -26,10 +26,7 @@ import com.winterhavenmc.savagegraveyards.messages.MessageId;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 
 /**
@@ -90,35 +87,39 @@ final class DeleteSubcommand extends AbstractSubcommand implements Subcommand {
 		String displayName = String.join(" ", args);
 
 		// delete graveyard record from storage
-		Optional<Graveyard> optionalGraveyard = plugin.dataStore.deleteGraveyard(displayName);
+		plugin.dataStore.deleteGraveyard(displayName).ifPresentOrElse(
+				graveyard -> sendGraveyardDeletedMessage(sender, graveyard),
+				() -> sendNoGraveyardMessage(sender, displayName));
 
-		// if graveyard did not exist in data store, send not found error message
-		if (optionalGraveyard.isEmpty()) {
+		return true;
+	}
 
-			// create dummy graveyard to send to message manager
-			Graveyard dummyGraveyard = new Graveyard.Builder(plugin).displayName(displayName).build();
 
-			// send message
-			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_NO_RECORD)
-					.setMacro(Macro.GRAVEYARD, dummyGraveyard)
-					.send();
-
-			// play sound
-			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
-			return true;
-		}
-
-		// unwrap optional graveyard
-		Graveyard graveyard = optionalGraveyard.get();
+	private void sendGraveyardDeletedMessage(CommandSender sender, Graveyard graveyard) {
 
 		// send success message to player
 		plugin.messageBuilder.compose(sender, MessageId.COMMAND_SUCCESS_DELETE)
 				.setMacro(Macro.GRAVEYARD, graveyard)
 				.send();
 
-		// play sound effect
+		// play successful delete sound
 		plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_DELETE);
-		return true;
 	}
+
+
+	private void sendNoGraveyardMessage(CommandSender sender, String displayName) {
+
+		// create dummy graveyard to send to message builder
+		Graveyard dummyGraveyard = new Graveyard.Builder(plugin).displayName(displayName).build();
+
+		// send message
+		plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_NO_RECORD)
+				.setMacro(Macro.GRAVEYARD, dummyGraveyard)
+				.send();
+
+		// play command fail sound
+		plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
+	}
+
 
 }

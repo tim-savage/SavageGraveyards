@@ -57,7 +57,7 @@ final class CreateSubcommand extends AbstractSubcommand implements Subcommand {
 	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// sender must be in game player
-		if (!(sender instanceof Player)) {
+		if (!(sender instanceof Player player)) {
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_CONSOLE).send();
 			return true;
 		}
@@ -76,9 +76,6 @@ final class CreateSubcommand extends AbstractSubcommand implements Subcommand {
 			displayUsage(sender);
 			return true;
 		}
-
-		// cast sender to player
-		Player player = (Player) sender;
 
 		// get player location
 		Location location = player.getLocation();

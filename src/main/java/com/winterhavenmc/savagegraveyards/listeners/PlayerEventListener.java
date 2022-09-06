@@ -231,10 +231,7 @@ public final class PlayerEventListener implements Listener {
 	void onEntityTargetLivingEntity(final EntityTargetLivingEntityEvent event) {
 
 		// check that target is a player
-		if (event.getTarget() != null && event.getTarget() instanceof Player) {
-
-			// get targeted player
-			Player player = (Player) event.getTarget();
+		if (event.getTarget() != null && event.getTarget() instanceof Player player) {
 
 			// if player is in safety cooldown, cancel event
 			if (plugin.safetyManager.isPlayerProtected(player)) {
