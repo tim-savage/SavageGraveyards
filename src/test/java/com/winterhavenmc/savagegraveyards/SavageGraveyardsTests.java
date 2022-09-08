@@ -129,7 +129,7 @@ public class SavageGraveyardsTests {
         @ParameterizedTest
         @DisplayName("file config key is contained in ConfigSetting enum.")
         @MethodSource("configFileKeys")
-        void ConfigFileKeyNotNull(String key) {
+        void configFileKeyNotNull(String key) {
             Assertions.assertNotNull(key);
             Assertions.assertTrue(enumConfigKeyStrings.contains(key),
                     "file config key is not contained in ConfigSetting enum.");
@@ -155,8 +155,8 @@ public class SavageGraveyardsTests {
         // class constructor
         SoundTests() {
             // add all SoundId enum values to collection
-            for (com.winterhavenmc.savagegraveyards.sounds.SoundId SoundId : SoundId.values()) {
-                enumSoundNames.add(SoundId.name());
+            for (SoundId soundId : SoundId.values()) {
+                enumSoundNames.add(soundId.name());
             }
         }
 
@@ -166,7 +166,7 @@ public class SavageGraveyardsTests {
             Assertions.assertNotNull(plugin.soundConfig);
         }
 
-        final Collection<String> GetConfigFileKeys() {
+        final Collection<String> getConfigFileKeys() {
             return plugin.soundConfig.getSoundConfigKeys();
         }
 
@@ -179,7 +179,7 @@ public class SavageGraveyardsTests {
         }
 
         @ParameterizedTest
-        @MethodSource("GetConfigFileKeys")
+        @MethodSource("getConfigFileKeys")
         @DisplayName("config file key has matching key in enum sound names")
         void soundConfigEnumContainsAllFileSounds(String key) {
             Assertions.assertTrue(enumSoundNames.contains(key),
@@ -187,7 +187,7 @@ public class SavageGraveyardsTests {
         }
 
         @ParameterizedTest
-        @MethodSource("GetConfigFileKeys")
+        @MethodSource("getConfigFileKeys")
         @DisplayName("sound file key has valid bukkit sound name")
         void soundConfigFileHasValidBukkitSound(String key) {
             String bukkitSoundName = plugin.soundConfig.getBukkitSoundName(key);
