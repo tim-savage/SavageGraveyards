@@ -1,3 +1,5 @@
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/1d378b88c90147399d3b56db6984f0e4)](https://www.codacy.com/gh/tim-savage/SavageGraveyards/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=tim-savage/SavageGraveyards&amp;utm_campaign=Badge_Grade)
+
 ### Description
 
 This plugin implements discoverable graveyards. Players will respawn at the nearest graveyard location that they have previously discovered, with temporary immunity from mob attack.
