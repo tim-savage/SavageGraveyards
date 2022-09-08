@@ -53,19 +53,19 @@ public class SavageGraveyardsTests {
 
         @Test
         @DisplayName("server is not null.")
-        void ServerNotNull() {
+        void serverNotNull() {
             Assertions.assertNotNull(server, "server is null.");
         }
 
         @Test
         @DisplayName("plugin is not null.")
-        void PluginNotNull() {
+        void pluginNotNull() {
             Assertions.assertNotNull(plugin, "plugin is null.");
         }
 
         @Test
         @DisplayName("plugin is enabled.")
-        void PluginEnabled() {
+        void pluginEnabled() {
             Assertions.assertTrue(plugin.isEnabled(),"plugin is not enabled.");
         }
     }
@@ -75,20 +75,20 @@ public class SavageGraveyardsTests {
     @DisplayName("Test plugin main objects.")
     class PluginTests {
         @Test
-        @DisplayName("language manager not null.")
-        void LanguageManagerNotNull() {
+        @DisplayName("message builder not null.")
+        void messageBuilderNotNull() {
             Assertions.assertNotNull(plugin.messageBuilder);
         }
 
         @Test
         @DisplayName("world manager not null.")
-        void WorldManagerNotNull() {
+        void worldManagerNotNull() {
             Assertions.assertNotNull(plugin.worldManager);
         }
 
         @Test
         @DisplayName("sound config not null.")
-        void SoundConfigNotNull() {
+        void soundConfigNotNull() {
             Assertions.assertNotNull(plugin.soundConfig);
         }
     }
@@ -110,25 +110,25 @@ public class SavageGraveyardsTests {
 
         @Test
         @DisplayName("config not null.")
-        void ConfigNotNull() {
+        void configNotNull() {
             Assertions.assertNotNull(config);
         }
 
         @Test
         @DisplayName("test configured language.")
-        void GetLanguage() {
+        void getLanguage() {
             Assertions.assertEquals("en-US", config.getString("language"),
                     "configured language does not match en-US");
         }
 
         @SuppressWarnings("unused")
-        Set<String> ConfigFileKeys() {
+        Set<String> configFileKeys() {
             return plugin.getConfig().getKeys(false);
         }
 
         @ParameterizedTest
         @DisplayName("file config key is contained in ConfigSetting enum.")
-        @MethodSource("ConfigFileKeys")
+        @MethodSource("configFileKeys")
         void ConfigFileKeyNotNull(String key) {
             Assertions.assertNotNull(key);
             Assertions.assertTrue(enumConfigKeyStrings.contains(key),
@@ -138,7 +138,7 @@ public class SavageGraveyardsTests {
         @ParameterizedTest
         @EnumSource(ConfigSetting.class)
         @DisplayName("ConfigSetting enum matches config file key/value pairs.")
-        void ConfigFileKeysContainsEnumKey(ConfigSetting configSetting) {
+        void configFileKeysContainsEnumKey(ConfigSetting configSetting) {
             Assertions.assertEquals(configSetting.getValue(), plugin.getConfig().getString(configSetting.getKey()));
         }
     }
@@ -162,7 +162,7 @@ public class SavageGraveyardsTests {
 
         @Test
         @DisplayName("Sounds config is not null.")
-        void SoundConfigNotNull() {
+        void soundConfigNotNull() {
             Assertions.assertNotNull(plugin.soundConfig);
         }
 
@@ -173,7 +173,7 @@ public class SavageGraveyardsTests {
         @ParameterizedTest
         @EnumSource(SoundId.class)
         @DisplayName("enum member soundId is contained in getConfig() keys.")
-        void FileKeysContainsEnumValue(SoundId soundId) {
+        void fileKeysContainsEnumValue(SoundId soundId) {
             Assertions.assertTrue(plugin.soundConfig.isValidSoundConfigKey(soundId.name()),
                     "Enum value '" + soundId.name() + "' does not have matching key in sounds.yml.");
         }
@@ -181,7 +181,7 @@ public class SavageGraveyardsTests {
         @ParameterizedTest
         @MethodSource("GetConfigFileKeys")
         @DisplayName("config file key has matching key in enum sound names")
-        void SoundConfigEnumContainsAllFileSounds(String key) {
+        void soundConfigEnumContainsAllFileSounds(String key) {
             Assertions.assertTrue(enumSoundNames.contains(key),
                     "File key does not have matching key in enum sound names.");
         }
@@ -189,7 +189,7 @@ public class SavageGraveyardsTests {
         @ParameterizedTest
         @MethodSource("GetConfigFileKeys")
         @DisplayName("sound file key has valid bukkit sound name")
-        void SoundConfigFileHasValidBukkitSound(String key) {
+        void soundConfigFileHasValidBukkitSound(String key) {
             String bukkitSoundName = plugin.soundConfig.getBukkitSoundName(key);
             Assertions.assertTrue(plugin.soundConfig.isValidBukkitSoundName(bukkitSoundName),
                     "File key '" + key + "' has invalid bukkit sound name: " + bukkitSoundName);
