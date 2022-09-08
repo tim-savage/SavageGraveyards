@@ -1,8 +1,10 @@
-### Description:
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/1d378b88c90147399d3b56db6984f0e4)](https://www.codacy.com/gh/tim-savage/SavageGraveyards/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=tim-savage/SavageGraveyards&amp;utm_campaign=Badge_Grade)
+
+### Description
 
 This plugin implements discoverable graveyards. Players will respawn at the nearest graveyard location that they have previously discovered, with temporary immunity from mob attack.
 
-### Features:
+### Features
 
 *   Create hidden graveyards that require discovery, or unhidden that are always available.
 *   Enable or disable graveyards individually, without deleting them (to make a graveyard temporarily unavailable, for instance).
@@ -18,14 +20,14 @@ This plugin implements discoverable graveyards. Players will respawn at the near
 *   Uses sqlite for persistent storage.
 *   A perfect compliment to [SavageDeathChest](https://github.com/tim-savage/SavageDeathChest) and [SavageDeathCompass](https://github.com/tim-savage/SavageDeathCompass).
 
-### Permissions:
+### Permissions
 
 Player's are granted all necessary permissions by default.  
 All admin permissions are granted with `graveyard.admin`  
 
 [Permission Nodes](https://github.com/tim-savage/SavageGraveyards/wiki/Permission-Nodes)
 
-### Commands:
+### Commands
 
 [Command Reference](https://github.com/tim-savage/SavageGraveyards/wiki/Command-Summary)
 
