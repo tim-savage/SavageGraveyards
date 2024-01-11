@@ -55,7 +55,7 @@ public class PluginMain extends JavaPlugin {
 
 
 	/**
-	 * Class constructor for testing
+	 * Class constructor for MockBukkit testing
 	 */
 	@SuppressWarnings("unused")
 	public PluginMain() {
@@ -64,7 +64,7 @@ public class PluginMain extends JavaPlugin {
 
 
 	/**
-	 * Class constructor for testing
+	 * Class constructor for MockBukkit testing
 	 */
 	@SuppressWarnings("unused")
 	protected PluginMain(final JavaPluginLoader loader, final PluginDescriptionFile descriptionFile, final File dataFolder, final File file) {

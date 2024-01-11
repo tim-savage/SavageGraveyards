@@ -81,15 +81,27 @@ public class SavageGraveyardsTests {
         }
 
         @Test
+        @DisplayName("sound config not null.")
+        void soundConfigNotNull() {
+            Assertions.assertNotNull(plugin.soundConfig);
+        }
+
+        @Test
         @DisplayName("world manager not null.")
         void worldManagerNotNull() {
             Assertions.assertNotNull(plugin.worldManager);
         }
 
         @Test
-        @DisplayName("sound config not null.")
-        void soundConfigNotNull() {
-            Assertions.assertNotNull(plugin.soundConfig);
+        @DisplayName("datastore config not null.")
+        void dataStoreNotNull() {
+            Assertions.assertNotNull(plugin.dataStore);
+        }
+
+        @Test
+        @DisplayName("safetyManager not null.")
+        void safetyManagerNotNull() {
+            Assertions.assertNotNull(plugin.safetyManager);
         }
     }
 
