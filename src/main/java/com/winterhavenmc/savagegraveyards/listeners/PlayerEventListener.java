@@ -27,7 +27,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTargetEvent.TargetReason;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -55,6 +54,8 @@ public final class PlayerEventListener implements Listener {
 			TargetReason.CLOSEST_PLAYER,
 			TargetReason.RANDOM_TARGET );
 
+	private final static String RESPAWN_PRIORITY = "respawn-priority";
+
 
 	/**
 	 * constructor method for {@code PlayerEventListener} class
@@ -68,6 +69,11 @@ public final class PlayerEventListener implements Listener {
 
 		// register events in this class
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
+	}
+
+
+	private String getConfigSetting() {
+		return plugin.getConfig().getString(RESPAWN_PRIORITY);
 	}
 
 
@@ -91,7 +97,7 @@ public final class PlayerEventListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.LOWEST)
 	void onPlayerRespawnLOWEST(final PlayerRespawnEvent event) {
-		if ("LOWEST".equalsIgnoreCase(plugin.getConfig().getString("respawn-priority"))) {
+		if ("LOWEST".equalsIgnoreCase(getConfigSetting())) {
 			onPlayerRespawnHandler(event);
 		}
 	}
@@ -104,7 +110,7 @@ public final class PlayerEventListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.LOW)
 	void onPlayerRespawnLOW(final PlayerRespawnEvent event) {
-		if ("LOW".equalsIgnoreCase(plugin.getConfig().getString("respawn-priority"))) {
+		if ("LOW".equalsIgnoreCase(getConfigSetting())) {
 			onPlayerRespawnHandler(event);
 		}
 	}
@@ -117,7 +123,7 @@ public final class PlayerEventListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
 	void onPlayerRespawnNORMAL(final PlayerRespawnEvent event) {
-		if ("NORMAL".equalsIgnoreCase(plugin.getConfig().getString("respawn-priority"))) {
+		if ("NORMAL".equalsIgnoreCase(getConfigSetting())) {
 			onPlayerRespawnHandler(event);
 		}
 	}
@@ -130,7 +136,7 @@ public final class PlayerEventListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.HIGH)
 	void onPlayerRespawnHIGH(final PlayerRespawnEvent event) {
-		if ("HIGH".equalsIgnoreCase(plugin.getConfig().getString("respawn-priority"))) {
+		if ("HIGH".equalsIgnoreCase(getConfigSetting())) {
 			onPlayerRespawnHandler(event);
 		}
 	}
@@ -143,7 +149,7 @@ public final class PlayerEventListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
 	void onPlayerRespawnHIGHEST(final PlayerRespawnEvent event) {
-		if ("HIGHEST".equalsIgnoreCase(plugin.getConfig().getString("respawn-priority"))) {
+		if ("HIGHEST".equalsIgnoreCase(getConfigSetting())) {
 			onPlayerRespawnHandler(event);
 		}
 	}
@@ -236,11 +242,8 @@ public final class PlayerEventListener implements Listener {
 			// if player is in safety cooldown, cancel event
 			if (plugin.safetyManager.isPlayerProtected(player)) {
 
-				// get target reason
-				EntityTargetEvent.TargetReason reason = event.getReason();
-
-				// if reason is in cancelReasons list, cancel event
-				if (CANCEL_REASONS.contains(reason)) {
+				// if event reason is in CANCEL_REASONS list, cancel event
+				if (CANCEL_REASONS.contains(event.getReason())) {
 					event.setCancelled(true);
 				}
 			}
