@@ -39,7 +39,11 @@ import java.util.Optional;
  */
 public final class DiscoveryTask extends BukkitRunnable {
 
+	// reference to plugin main class
 	private final PluginMain plugin;
+
+	// config setting key
+	private final static String DISCOVERY_RANGE = "discovery-range";
 
 
 	/**
@@ -88,7 +92,7 @@ public final class DiscoveryTask extends BukkitRunnable {
 					// get graveyard discovery range, or config default if negative
 					int discoveryRange = graveyard.getDiscoveryRange();
 					if (discoveryRange < 0) {
-						discoveryRange = plugin.getConfig().getInt("discovery-range");
+						discoveryRange = plugin.getConfig().getInt(DISCOVERY_RANGE);
 					}
 
 					// check if player is within discovery range of graveyard

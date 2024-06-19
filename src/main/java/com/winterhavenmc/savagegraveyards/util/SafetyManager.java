@@ -44,6 +44,9 @@ public final class SafetyManager {
 	// safety cooldown map
 	private final Map<UUID, BukkitRunnable> safetyCooldownMap;
 
+	// safety time config key
+	private final static String SAFETY_TIME = "safety-time";
+
 
 	/**
 	 * Class constructor
@@ -73,7 +76,7 @@ public final class SafetyManager {
 
 		// if safetyTime is negative, use configured default
 		if (safetyTime < 0L) {
-			safetyTime = plugin.getConfig().getLong("safety-time");
+			safetyTime = plugin.getConfig().getLong(SAFETY_TIME);
 		}
 
 		// if safetyTime is zero, do nothing and return
